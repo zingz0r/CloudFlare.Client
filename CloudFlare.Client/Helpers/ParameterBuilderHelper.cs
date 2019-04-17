@@ -5,6 +5,13 @@ namespace CloudFlare.Client.Helpers
 {
     public static class ParameterBuilderHelper
     {
+        /// <summary>
+        /// Inserts value into the referenced string builder.
+        /// </summary>
+        /// <typeparam name="T">Generic type of insertable data</typeparam>
+        /// <param name="parameterBuilder">String builder reference</param>
+        /// <param name="key">Key string</param>
+        /// <param name="value">Value</param>
         public static void InsertValue<T>(ref StringBuilder parameterBuilder, string key, T value)
         {
             if (value == null)

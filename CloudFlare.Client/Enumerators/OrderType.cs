@@ -1,4 +1,7 @@
 ﻿namespace CloudFlare.Client.Enumerators
 {
-    public enum OrderType { Asc, Desc}
+    /// <summary>
+    /// Represents the Order direction
+    /// </summary>
+    public enum OrderType { Asc, Desc }
 }

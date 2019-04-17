@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 
