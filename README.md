@@ -9,7 +9,10 @@
 
 .NET client for communication with the CloudFlare service API.
 
-## Install through nuget
+> **_Info:_**  The library currently only targets `.Net Core 2.1` because of the missing functions in the older frameworks.
+> For example missing [`PatchAsync`](https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.patchasync?view=netstandard-2.1) in HTTPClient. `.Net Core 2.2`, `.Net Core 3.0` and  `.NET Standard 2.1` will be supported soon. 
+
+## Installation
 
 ```bash
     PM> Install-Package CloudFlare.Client -Version 1.1.0
