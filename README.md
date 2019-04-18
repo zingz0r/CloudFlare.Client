@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![Licence](https://img.shields.io/badge/licanse-CC%20BY--NC--ND%204.0-yellowgreen.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt)
 
-.NET client for communication with the Cloudflare service API.
+.NET client for communication with the CloudFlare service API.
 
 ## Install through nuget
 
