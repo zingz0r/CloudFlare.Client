@@ -1,4 +1,5 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zgmode%40gmail.com&currency_code=USD&source=url)
+![Nuget](https://img.shields.io/nuget/v/CloudFlare.Client.svg)
 
 # CloudFlare.Client
 .NET client for communication with the Cloudflare service API.
