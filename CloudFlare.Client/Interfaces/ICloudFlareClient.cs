@@ -95,7 +95,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="name">A domain name</param>
         /// <param name="status">Status of the zone</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status);
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status);
 
         /// <summary>
         /// List, search, sort, and filter zones
@@ -104,7 +104,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="status">Status of the zone</param>
         /// <param name="page">Page number of paginated results</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page);
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page);
 
         /// <summary>
         /// List, search, sort, and filter zones
@@ -114,8 +114,8 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="page">Page number of paginated results</param>
         /// <param name="perPage">Number of DNS records per page</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page,
-            int perPage);
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page,
+            int? perPage);
 
         /// <summary>
         /// List, search, sort, and filter zones
@@ -126,8 +126,8 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="perPage">Number of DNS records per page</param>
         /// <param name="order">Field to order records by</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page,
-            int perPage, OrderType order);
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page,
+            int? perPage, OrderType? order);
 
         /// <summary>
         /// List, search, sort, and filter zones
@@ -348,9 +348,18 @@ namespace CloudFlare.Client.Interfaces
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="fileInfo">FileInfo of the file</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo);
+
+        /// <summary>
+        /// Import your BIND config through this endpoint.
+        /// Notice: SOA DNS record type is not supported by CloudFlare
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="fileInfo">FileInfo of the file</param>
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
-        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null);
+        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied);
 
         #endregion
 

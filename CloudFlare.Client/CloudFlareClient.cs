@@ -127,22 +127,22 @@ namespace CloudFlare.Client
             return GetZonesAsync(name, null, null, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status)
         {
             return GetZonesAsync(name, status, null, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page)
         {
             return GetZonesAsync(name, status, page, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage)
         {
             return GetZonesAsync(name, status, page, perPage, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage, OrderType order)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage, OrderType? order)
         {
             return GetZonesAsync(name, status, page, perPage, order, null);
         }
@@ -399,13 +399,24 @@ namespace CloudFlare.Client
 
         #region ImportDnsRecordsAsync
 
-        public async Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null)
+        public Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo)
+        {
+            return ImportDnsRecordsAsync(zoneId, fileInfo, null);
+        }
+
+        public async Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied)
         {
             try
             {
-                MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(proxied.ToString()), ApiParameter.Proxied);
-                form.Add(new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0, Convert.ToInt32(fileInfo.Length)), "file", "hello1.jpg");
+                var form = new MultipartFormDataContent
+                {
+                    {new StringContent(proxied.ToString()), ApiParameter.Proxied},
+                    {
+                        new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0,
+                            Convert.ToInt32(fileInfo.Length)),
+                        "file", "upload.txt"
+                    }
+                };
 
 
                 var response = await _httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form);
