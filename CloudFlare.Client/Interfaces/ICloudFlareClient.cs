@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.DnsRecord;
@@ -8,9 +9,11 @@ using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Interfaces
 {
-    public interface ICloudFlareClient
+    public interface ICloudFlareClient : IDisposable
     {
         #region Zone
+
+        #region CreateZoneAsync
 
         /// <summary>
         /// Create a new zone
@@ -29,7 +32,35 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="account">Information about the account the zone belongs to</param>
         /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart);
+        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool? jumpStart);
+
+        #endregion
+
+        #region EditZoneAsync
+
+        /// <summary>
+        /// Only one zone property can be changed at a time
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId);
+
+        /// <summary>
+        /// Only one zone property can be changed at a time
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="paused">Indicates if the zone is only using CloudFlare DNS services. A true value means the zone will not receive security or performance benefits.</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused);
+
+        /// <summary>
+        /// Only one zone property can be changed at a time
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="paused">Indicates if the zone is only using CloudFlare DNS services. A true value means the zone will not receive security or performance benefits.</param>
+        /// <param name="vanityNameServers">An array of domains used for custom name servers. This is only available for Business and Enterprise plans.</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers);
 
         /// <summary>
         /// Only one zone property can be changed at a time
@@ -39,7 +70,9 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="vanityNameServers">An array of domains used for custom name servers. This is only available for Business and Enterprise plans.</param>
         /// <param name="planId">The desired plan for the zone. Changing this value will create/cancel associated subscriptions. To view available plans for this zone, see Zone Plans</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool paused = false, IEnumerable<string> vanityNameServers = null, int? planId = null);
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers, int? planId);
+
+        #endregion
 
         #region GetZonesAsync
 
@@ -111,12 +144,16 @@ namespace CloudFlare.Client.Interfaces
 
         #endregion
 
+        #region GetZoneDetailsAsync
+
         /// <summary>
         /// Get all details of the specified zone
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId);
+
+        #endregion
 
         #endregion
 

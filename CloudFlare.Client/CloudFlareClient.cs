@@ -53,12 +53,14 @@ namespace CloudFlare.Client
 
         #region Zone
 
+        #region CreateZoneAsync
+
         public Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account)
         {
-            return CreateZoneAsync(name, type, account, false);
+            return CreateZoneAsync(name, type, account, null);
         }
 
-        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart)
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool? jumpStart)
         {
             try
             {
@@ -67,7 +69,7 @@ namespace CloudFlare.Client
                     Name = name,
                     Account = account,
                     Type = type,
-                    JumpStart = jumpStart
+                    JumpStart = jumpStart ?? false
                 };
 
                 var response = await _httpClient.PostAsJsonAsync($"zones/", postZone);
@@ -85,19 +87,36 @@ namespace CloudFlare.Client
             }
         }
 
-        public async Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool paused = false, IEnumerable<string> vanityNameServers = null, int? planId = null)
-        {
-            //curl - X PATCH "https://api.cloudflare.com/client/v4/zones/023e105f4ecef8ad9ca31a8372d0c353" \
-            //-H "X-Auth-Email: user@example.com" \
-            //-H "X-Auth-Key: c2547eb745079dac9320b638f5e225cf483cc5cfdda41" \
-            //-H "Content-Type: application/json" \
-            //--data '{"paused":false,"vanity_name_servers":["ns1.example.com","ns2.example.com"],"plan":{"id":"e592fd9519420ba7405e1307bff33214"}}'
+        #endregion
 
+        #region EditZoneAsync
+        // TODO!
+        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId)
+        {
+            return EditZoneAsync(zoneId, null, null, null);
+        }
+
+        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused)
+        {
+            return EditZoneAsync(zoneId, paused, null, null);
+
+        }
+
+        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers)
+        {
+            return EditZoneAsync(zoneId, paused, vanityNameServers, null);
+
+        }
+
+        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers, int? planId)
+        {
             throw new NotImplementedException();
         }
 
+        #endregion
+
         #region GetZonesAsync
-        
+
         public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync()
         {
             return GetZonesAsync(null, null, null, null, null, null);
@@ -160,6 +179,8 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region GetZoneDetailsAsync
+
         public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
             try
@@ -178,6 +199,8 @@ namespace CloudFlare.Client
 
             }
         }
+
+        #endregion
 
         #endregion
 
@@ -353,6 +376,18 @@ namespace CloudFlare.Client
                 throw new PersistenceUnavailableException(ex);
 
             }
+        }
+
+        #endregion
+
+        #region Dispose
+
+        /// <summary>
+        /// Dispose coz if IDisposable pattern
+        /// </summary>
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
         }
 
         #endregion
