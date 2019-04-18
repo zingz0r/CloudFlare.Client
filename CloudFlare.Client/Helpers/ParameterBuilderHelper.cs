@@ -14,10 +14,10 @@ namespace CloudFlare.Client.Helpers
         /// <param name="value">Value</param>
         public static StringBuilder InsertValue<T>(StringBuilder parameterBuilder, string key, T value)
         {
-            if (value == null)
+            if (Equals(value, default(T)))
                 return parameterBuilder;
 
-            if (typeof(T) == typeof(string) && string.IsNullOrEmpty((string)(object)value))
+            if (typeof(T) == typeof(string) && string.IsNullOrEmpty(value as string))
                 return parameterBuilder;
 
             parameterBuilder.Append("&");

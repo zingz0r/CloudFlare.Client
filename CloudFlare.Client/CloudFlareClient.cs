@@ -188,7 +188,7 @@ namespace CloudFlare.Client
         {
             try
             {
-                var newDnsRecord = new DnsRecord()
+                var newDnsRecord = new DnsRecord
                 {
                     Content = content,
                     Type = type,
@@ -331,7 +331,7 @@ namespace CloudFlare.Client
         {
             try
             {
-                var updatedDnsRecord = new DnsRecord()
+                var updatedDnsRecord = new DnsRecord
                 {
                     Content = content,
                     Type = type,
