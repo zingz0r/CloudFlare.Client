@@ -12,7 +12,7 @@
 ## Install through nuget
 
 ```bash
-    PM> Install-Package CloudFlare.Client -Version 1.0.0
+    PM> Install-Package CloudFlare.Client -Version 1.1.0
 ```
 
 ## Usage
