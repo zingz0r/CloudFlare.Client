@@ -53,7 +53,12 @@ namespace CloudFlare.Client
 
         #region Zone
 
-        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart = false)
+        public Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account)
+        {
+            return CreateZoneAsync(name, type, account, false);
+        }
+
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart)
         {
             try
             {
@@ -78,6 +83,17 @@ namespace CloudFlare.Client
                 throw new PersistenceUnavailableException(ex);
 
             }
+        }
+
+        public async Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool paused = false, IEnumerable<string> vanityNameServers = null, int? planId = null)
+        {
+            //curl - X PATCH "https://api.cloudflare.com/client/v4/zones/023e105f4ecef8ad9ca31a8372d0c353" \
+            //-H "X-Auth-Email: user@example.com" \
+            //-H "X-Auth-Key: c2547eb745079dac9320b638f5e225cf483cc5cfdda41" \
+            //-H "Content-Type: application/json" \
+            //--data '{"paused":false,"vanity_name_servers":["ns1.example.com","ns2.example.com"],"plan":{"id":"e592fd9519420ba7405e1307bff33214"}}'
+
+            throw new NotImplementedException();
         }
 
         public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null, int? perPage = null,

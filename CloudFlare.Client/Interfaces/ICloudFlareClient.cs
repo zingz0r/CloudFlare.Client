@@ -21,8 +21,19 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="account">Information about the account the zone belongs to</param>
         /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart = false);
+        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account);
+        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart);
 
+        /// <summary>
+        /// Only one zone property can be changed at a time
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="paused">Indicates if the zone is only using CloudFlare DNS services. A true value means the zone will not receive security or performance benefits.</param>
+        /// <param name="vanityNameServers">An array of domains used for custom name servers. This is only available for Business and Enterprise plans.</param>
+        /// <param name="planId">The desired plan for the zone. Changing this value will create/cancel associated subscriptions. To view available plans for this zone, see Zone Plans</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool paused = false, IEnumerable<string> vanityNameServers = null, int? planId = null);
+        
         /// <summary>
         /// List, search, sort, and filter zones
         /// </summary>
