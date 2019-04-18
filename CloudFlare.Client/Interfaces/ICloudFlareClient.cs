@@ -9,6 +9,8 @@ namespace CloudFlare.Client.Interfaces
 {
     public interface ICloudFlareClient
     {
+        #region DNS Records for a Zone
+
         /// <summary>
         /// Create a new DNS record for a zone. See the record object definitions for required attributes for each record type
         /// </summary>
@@ -81,5 +83,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
         Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl = null, bool? proxied = null);
+        
+        #endregion
     }
 }

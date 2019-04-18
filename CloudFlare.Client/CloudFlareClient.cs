@@ -49,6 +49,8 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region DNS Records for a Zone
+
         public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl = null, int? priority = null,
             bool? proxied = null)
         {
@@ -63,13 +65,13 @@ namespace CloudFlare.Client
                     Priority = priority ?? 0,
                     Proxied = proxied
                 };
-                
+
                 var response = await _httpClient.PostAsJsonAsync($"zones/{zoneId}/dns_records/", newDnsRecord);
                 if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
                 }
-                
+
                 throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
             }
             catch (Exception ex)
@@ -174,7 +176,7 @@ namespace CloudFlare.Client
                 form.Add(new StringContent(proxied.ToString()), ApiParameter.Proxied);
                 form.Add(new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0, Convert.ToInt32(fileInfo.Length)), "file", "hello1.jpg");
 
-            
+
                 var response = await _httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form);
 
                 if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
@@ -210,7 +212,7 @@ namespace CloudFlare.Client
                 {
                     return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
                 }
-                
+
                 throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
             }
             catch (Exception ex)
@@ -219,5 +221,7 @@ namespace CloudFlare.Client
 
             }
         }
+        
+        #endregion
     }
 }
