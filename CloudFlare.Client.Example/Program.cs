@@ -16,6 +16,8 @@ namespace CloudFlare.Client.Example
 
             CloudFlareClient cloudFlareClient = new CloudFlareClient(email, globalApiKey);
 
+            var detailsZone = cloudFlareClient.GetZoneDetailsAsync(zoneId).Result;
+
             var zones = cloudFlareClient.GetZonesAsync().Result;
 
             var account = zones.Result.FirstOrDefault().Account;

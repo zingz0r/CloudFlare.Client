@@ -35,7 +35,14 @@ namespace CloudFlare.Client.Interfaces
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null,
             int? perPage = null, OrderType? order = null, bool? match = null);
-        
+
+        /// <summary>
+        /// Get all details of the specified zone
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId);
+
         #endregion
 
         #region DNS Records for a Zone

@@ -110,6 +110,25 @@ namespace CloudFlare.Client
             }
         }
 
+        public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"zones/{zoneId}");
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
+                }
+
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+
+            }
+        }
+
         #endregion
 
         #region DNS Records for a Zone
