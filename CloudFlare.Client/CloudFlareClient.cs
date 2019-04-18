@@ -96,8 +96,40 @@ namespace CloudFlare.Client
             throw new NotImplementedException();
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null, int? perPage = null,
-            OrderType? order = null, bool? match = null)
+        #region GetZonesAsync
+        
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync()
+        {
+            return GetZonesAsync(null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name)
+        {
+            return GetZonesAsync(name, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status)
+        {
+            return GetZonesAsync(name, status, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page)
+        {
+            return GetZonesAsync(name, status, page, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage)
+        {
+            return GetZonesAsync(name, status, page, perPage, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage, OrderType order)
+        {
+            return GetZonesAsync(name, status, page, perPage, order, null);
+        }
+
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
+            OrderType? order, bool? match)
         {
             var parameterBuilder = new StringBuilder();
             ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Name, name);
@@ -125,6 +157,8 @@ namespace CloudFlare.Client
 
             }
         }
+
+        #endregion
 
         public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {

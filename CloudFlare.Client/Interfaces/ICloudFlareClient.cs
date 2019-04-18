@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
@@ -19,9 +18,17 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="name">The domain name</param>
         /// <param name="type">Zone type</param>
         /// <param name="account">Information about the account the zone belongs to</param>
-        /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account);
+
+        /// <summary>
+        /// Create a new zone
+        /// </summary>
+        /// <param name="name">The domain name</param>
+        /// <param name="type">Zone type</param>
+        /// <param name="account">Information about the account the zone belongs to</param>
+        /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
+        /// <returns></returns>
         Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart);
 
         /// <summary>
@@ -33,7 +40,62 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="planId">The desired plan for the zone. Changing this value will create/cancel associated subscriptions. To view available plans for this zone, see Zone Plans</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool paused = false, IEnumerable<string> vanityNameServers = null, int? planId = null);
-        
+
+        #region GetZonesAsync
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync();
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name);
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <param name="status">Status of the zone</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status);
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <param name="status">Status of the zone</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page);
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <param name="status">Status of the zone</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page,
+            int perPage);
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <param name="status">Status of the zone</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <param name="order">Field to order records by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page,
+            int perPage, OrderType order);
+
         /// <summary>
         /// List, search, sort, and filter zones
         /// </summary>
@@ -44,8 +106,10 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="order">Field to order records by</param>
         /// <param name="match">Whether to match all search requirements or at least one</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null,
-            int? perPage = null, OrderType? order = null, bool? match = null);
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page,
+            int? perPage, OrderType? order, bool? match);
+
+        #endregion
 
         /// <summary>
         /// Get all details of the specified zone
