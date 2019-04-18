@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Models
+namespace CloudFlare.Client.Api.DnsRecord
 {
     public class DnsRecord
     {
@@ -87,7 +86,7 @@ namespace CloudFlare.Client.Models
         /// Last modification date
         /// </summary>
         [JsonProperty("modified_on")]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
 
         /// <summary>

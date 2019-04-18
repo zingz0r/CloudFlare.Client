@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Models
+namespace CloudFlare.Client.Api.Result
 {
     public class ResultInfo
     {

@@ -48,6 +48,11 @@
         public static string Proxied => "proxied";
 
         /// <summary>
+        /// Status representation on CloudFlare
+        /// </summary>
+        public static string Status => "status";
+
+        /// <summary>
         /// Ttl representation on CloudFlare
         /// </summary>
         public static string Ttl => "ttl";

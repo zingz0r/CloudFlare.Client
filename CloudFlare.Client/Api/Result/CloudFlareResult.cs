@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using CloudFlare.Client.Models;
+using CloudFlare.Client.Api.Error;
 
-namespace CloudFlare.Client.Api
+namespace CloudFlare.Client.Api.Result
 {
     public class CloudFlareResult<T>
     {

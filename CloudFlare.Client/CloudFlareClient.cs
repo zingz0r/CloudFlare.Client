@@ -7,11 +7,13 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.DnsRecord;
+using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Interfaces;
-using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client
 {
@@ -45,6 +47,40 @@ namespace CloudFlare.Client
 
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Email", emailAddress);
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Key", globalApiKey);
+        }
+
+        #endregion
+
+        #region Zone
+
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null, int? perPage = null,
+            OrderType? order = null, bool? match = null)
+        {
+            var parameterBuilder = new StringBuilder();
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Name, name);
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Status, status);
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Page, page);
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.PerPage, perPage);
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Order, order);
+            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Match, match);
+
+            var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"zones/{parameterString}");
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<IEnumerable<Zone>>>();
+                }
+
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+
+            }
         }
 
         #endregion

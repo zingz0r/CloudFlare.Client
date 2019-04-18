@@ -32,6 +32,9 @@ CRUD (+Import/Export) for DNS zones</PackageReleaseNotes>
   <!-- net framework 4.6 -->  
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <Reference Include="System.Web" />
+  </ItemGroup>  
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

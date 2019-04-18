@@ -2,13 +2,32 @@
 using System.IO;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.DnsRecord;
+using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Interfaces
 {
     public interface ICloudFlareClient
     {
+        #region Zone
+
+        /// <summary>
+        /// List, search, sort, and filter zones
+        /// </summary>
+        /// <param name="name">A domain name</param>
+        /// <param name="status">Status of the zone</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <param name="order">Field to order records by</param>
+        /// <param name="match">Whether to match all search requirements or at least one</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null,
+            int? perPage = null, OrderType? order = null, bool? match = null);
+        
+        #endregion
+
         #region DNS Records for a Zone
 
         /// <summary>
@@ -20,9 +39,10 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="content">DNS record content</param>
         /// <param name="ttl">Time to live for DNS record. Value of 1 is 'automatic'</param>
         /// <param name="priority">Used with some records like MX and SRV to determine priority. If you do not supply a priority for an MX record, a default value of 0 will be set</param>
-        /// <param name="proxied">Whether the record is receiving the performance and security benefits of Cloudflare</param>
+        /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl = null, int? priority = null, bool? proxied = null);
+        Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content,
+            int? ttl = null, int? priority = null, bool? proxied = null);
 
         /// <summary>
         /// Delete DNS record
@@ -40,7 +60,7 @@ namespace CloudFlare.Client.Interfaces
         Task<string> ExportDnsRecordsAsync(string zoneId);
 
         /// <summary>
-        /// List, search, sort, and filter a zones' DNS records.
+        /// List, search, sort, and filter a zone's DNS records.
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="type">DNS record type</param>
@@ -51,7 +71,8 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="order">Field to order records by</param>
         /// <param name="match">Whether to match all search requirements or at least one</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type = null, string name = "", string content = "", int? page = null, int? perPage = null, OrderType? order = null, bool? match = null);
+        Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type = null, string name = "", 
+            string content = "", int? page = null, int? perPage = null, OrderType? order = null, bool? match = null);
 
         /// <summary>
         /// Get all details of the specified dns record
@@ -70,7 +91,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
         Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null);
-        
+
         /// <summary>
         /// Update DNS record
         /// </summary>
@@ -82,8 +103,9 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="ttl">The new Time to live for DNS record. Value of 1 is 'automatic'</param>
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl = null, bool? proxied = null);
-        
+        Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, 
+            string content, int? ttl = null, bool? proxied = null);
+
         #endregion
     }
 }

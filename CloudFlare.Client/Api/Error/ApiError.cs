@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api
+namespace CloudFlare.Client.Api.Error
 {
     public class ApiError
     {

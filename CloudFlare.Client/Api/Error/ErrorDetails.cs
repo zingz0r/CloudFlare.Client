@@ -1,4 +1,4 @@
-﻿namespace CloudFlare.Client.Api
+﻿namespace CloudFlare.Client.Api.Error
 {
     public class ErrorDetails
     {
