@@ -1,12 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net45;net46;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
+    <Authors>Tamás Tóth</Authors>
+    <Company>TothNET</Company>
+    <Description>.NET client for communication with the Cloudflare service API.</Description>
+    <Copyright>Copyright © 2019 - CC BY-NC-ND 4.0</Copyright>
+    <PackageLicenseUrl>https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/zingz0r/CloudFlare.Client</PackageProjectUrl>
+    <PackageIconUrl>&gt;https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
+    <PackageReleaseNotes>version: 1.0.0.0
+CRUD (+Import/Export) for DNS zones</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <!-- net framework 4.5 -->  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <!-- net framework 4.6 -->  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+    <Reference Include="System.Web" />
   </ItemGroup>
 
 </Project>
