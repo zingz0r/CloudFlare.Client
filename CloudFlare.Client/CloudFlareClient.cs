@@ -98,34 +98,34 @@ namespace CloudFlare.Client
 
         #region GetZonesAsync
         
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync()
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync()
         {
-            return await GetZonesAsync(null, null, null, null, null, null);
+            return GetZonesAsync(null, null, null, null, null, null);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name)
         {
-            return await GetZonesAsync(name, null, null, null, null, null);
+            return GetZonesAsync(name, null, null, null, null, null);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status)
         {
-            return await GetZonesAsync(name, status, null, null, null, null);
+            return GetZonesAsync(name, status, null, null, null, null);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page)
         {
-            return await GetZonesAsync(name, status, page, null, null, null);
+            return GetZonesAsync(name, status, page, null, null, null);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage)
         {
-            return await GetZonesAsync(name, status, page, perPage, null, null);
+            return GetZonesAsync(name, status, page, perPage, null, null);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage, OrderType order)
+        public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus status, int page, int perPage, OrderType order)
         {
-            return await GetZonesAsync(name, status, page, perPage, order, null);
+            return GetZonesAsync(name, status, page, perPage, order, null);
         }
 
         public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
