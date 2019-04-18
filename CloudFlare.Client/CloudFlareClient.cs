@@ -40,7 +40,7 @@ namespace CloudFlare.Client
                 throw new AuthenticationException();
             }
 
-            _httpClient = new HttpClient()
+            _httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://api.cloudflare.com/client/v4/")
             };
@@ -62,7 +62,7 @@ namespace CloudFlare.Client
         {
             try
             {
-                PostZone postZone = new PostZone()
+                var postZone = new PostZone()
                 {
                     Name = name,
                     Account = account,
