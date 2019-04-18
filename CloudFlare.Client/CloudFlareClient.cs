@@ -485,12 +485,16 @@ namespace CloudFlare.Client
 
         #region Dispose
 
-        /// <summary>
-        /// Dispose coz if IDisposable pattern
-        /// </summary>
-        public void Dispose()
+        protected virtual void Dispose(Boolean disposing)
         {
             _httpClient?.Dispose();
+
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion
