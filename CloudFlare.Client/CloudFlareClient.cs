@@ -484,19 +484,13 @@ namespace CloudFlare.Client
         #endregion
 
         #region Dispose
-
-        protected virtual void Dispose(Boolean disposing)
-        {
-            _httpClient?.Dispose();
-
-        }
-
+    
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _httpClient?.Dispose();
         }
 
         #endregion
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
