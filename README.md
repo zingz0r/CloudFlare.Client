@@ -4,6 +4,9 @@
 # CloudFlare.Client
 .NET client for communication with the Cloudflare service API.
 
+## Install through nuget
+    PM> Install-Package CloudFlare.Client -Version 1.0.0
+    
 ## Implemented functionality
 ### Zone
 - [x] List Zones
