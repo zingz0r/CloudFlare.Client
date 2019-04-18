@@ -6,9 +6,9 @@
     <Company>TothNET</Company>
     <Description>.NET client for communication with the Cloudflare service API.</Description>
     <Copyright>Copyright © 2019 - CC BY-NC-ND 4.0</Copyright>
-    <PackageLicenseUrl>https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/zingz0r/CloudFlare.Client/blob/master/LICENCE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/zingz0r/CloudFlare.Client</PackageProjectUrl>
-    <PackageIconUrl>&gt;https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
