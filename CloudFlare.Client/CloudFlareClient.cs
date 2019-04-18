@@ -62,7 +62,7 @@ namespace CloudFlare.Client
         {
             try
             {
-                var postZone = new PostZone()
+                var postZone = new PostZone
                 {
                     Name = name,
                     Account = account,
