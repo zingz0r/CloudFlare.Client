@@ -14,6 +14,16 @@ namespace CloudFlare.Client.Interfaces
         #region Zone
 
         /// <summary>
+        /// Create a new zone
+        /// </summary>
+        /// <param name="name">The domain name</param>
+        /// <param name="type">Zone type</param>
+        /// <param name="account">Information about the account the zone belongs to</param>
+        /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart = false);
+
+        /// <summary>
         /// List, search, sort, and filter zones
         /// </summary>
         /// <param name="name">A domain name</param>

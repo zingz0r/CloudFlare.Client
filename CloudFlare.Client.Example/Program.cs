@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Example
@@ -17,11 +18,14 @@ namespace CloudFlare.Client.Example
 
             var zones = cloudFlareClient.GetZonesAsync().Result;
 
+            var account = zones.Result.FirstOrDefault().Account;
+            var createZone = cloudFlareClient.CreateZoneAsync("curvefever.io", ZoneType.Full, account, true).Result;
+
             var file = new FileInfo(savePath);
             var importedResult = cloudFlareClient.ImportDnsRecordsAsync(zoneId, file, true).Result;
 
             var exportedDataBytes = cloudFlareClient.ExportDnsRecordsAsync(zoneId).Result;
-            
+
             using (var fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
             {
                 TextWriter tw = new StreamWriter(fs);

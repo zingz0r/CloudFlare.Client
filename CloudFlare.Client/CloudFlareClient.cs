@@ -53,6 +53,33 @@ namespace CloudFlare.Client
 
         #region Zone
 
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool jumpStart = false)
+        {
+            try
+            {
+                PostZone postZone = new PostZone()
+                {
+                    Name = name,
+                    Account = account,
+                    Type = type,
+                    JumpStart = jumpStart
+                };
+
+                var response = await _httpClient.PostAsJsonAsync($"zones/", postZone);
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
+                }
+
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+
+            }
+        }
+
         public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name = "", ZoneStatus? status = null, int? page = null, int? perPage = null,
             OrderType? order = null, bool? match = null)
         {
@@ -87,8 +114,8 @@ namespace CloudFlare.Client
 
         #region DNS Records for a Zone
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl = null, int? priority = null,
-            bool? proxied = null)
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl = null,
+            int? priority = null, bool? proxied = null)
         {
             try
             {
@@ -155,7 +182,8 @@ namespace CloudFlare.Client
             }
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type = null, string name = "", string content = "", int? page = null, int? perPage = null, OrderType? order = null, bool? match = null)
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type = null, string name = "", string content = "",
+            int? page = null, int? perPage = null, OrderType? order = null, bool? match = null)
         {
             var parameterBuilder = new StringBuilder();
             ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.DnsRecordType, type);
@@ -229,8 +257,8 @@ namespace CloudFlare.Client
             }
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl = null,
-            bool? proxied = null)
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type,
+            string name, string content, int? ttl = null, bool? proxied = null)
         {
             try
             {
@@ -257,7 +285,7 @@ namespace CloudFlare.Client
 
             }
         }
-        
+
         #endregion
     }
 }
