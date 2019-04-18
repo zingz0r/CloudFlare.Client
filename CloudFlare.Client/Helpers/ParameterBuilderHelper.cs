@@ -8,22 +8,24 @@ namespace CloudFlare.Client.Helpers
         /// <summary>
         /// Inserts value into the referenced string builder.
         /// </summary>
-        /// <typeparam name="T">Generic type of insertable data</typeparam>
+        /// <typeparam name="T">Generic type of incoming data</typeparam>
         /// <param name="parameterBuilder">String builder reference</param>
         /// <param name="key">Key string</param>
         /// <param name="value">Value</param>
-        public static void InsertValue<T>(ref StringBuilder parameterBuilder, string key, T value)
+        public static StringBuilder InsertValue<T>(StringBuilder parameterBuilder, string key, T value)
         {
             if (value == null)
-                return;
+                return parameterBuilder;
 
             if (typeof(T) == typeof(string) && string.IsNullOrEmpty((string)(object)value))
-                return;
+                return parameterBuilder;
 
             parameterBuilder.Append("&");
             parameterBuilder.Append(key);
             parameterBuilder.Append("=");
             parameterBuilder.Append(HttpUtility.UrlEncode(value.ToString()));
+
+            return parameterBuilder;
         }
     }
 }

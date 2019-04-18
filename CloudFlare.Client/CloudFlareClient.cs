@@ -132,12 +132,12 @@ namespace CloudFlare.Client
             OrderType? order, bool? match)
         {
             var parameterBuilder = new StringBuilder();
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Name, name);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Status, status);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Page, page);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.PerPage, perPage);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Order, order);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Match, match);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Name, name);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Status, status);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Page, page);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.PerPage, perPage);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Order, order);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Match, match);
 
             var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
 
@@ -255,13 +255,13 @@ namespace CloudFlare.Client
             int? page = null, int? perPage = null, OrderType? order = null, bool? match = null)
         {
             var parameterBuilder = new StringBuilder();
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.DnsRecordType, type);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Name, name);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Content, content);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Page, page);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.PerPage, perPage);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Order, order);
-            ParameterBuilderHelper.InsertValue(ref parameterBuilder, ApiParameter.Match, match);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.DnsRecordType, type);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Name, name);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Content, content);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Page, page);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.PerPage, perPage);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Order, order);
+            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Match, match);
 
             var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
 
