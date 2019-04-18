@@ -206,8 +206,27 @@ namespace CloudFlare.Client
 
         #region DNS Records for a Zone
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl = null,
-            int? priority = null, bool? proxied = null)
+        #region CreateDnsRecordAsync
+
+        public Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content)
+        {
+            return CreateDnsRecordAsync(zoneId, type, name, content, null, null, null);
+
+        }
+
+        public Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl)
+        {
+            return CreateDnsRecordAsync(zoneId, type, name, content, ttl, null, null);
+
+        }
+
+        public Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl, int? priority)
+        {
+            return CreateDnsRecordAsync(zoneId, type, name, content, ttl, priority, null);
+        }
+
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl,
+            int? priority, bool? proxied)
         {
             try
             {
@@ -236,6 +255,10 @@ namespace CloudFlare.Client
             }
         }
 
+        #endregion
+
+        #region DeleteDnsRecordAsync
+
         public async Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
         {
             try
@@ -254,6 +277,10 @@ namespace CloudFlare.Client
 
             }
         }
+
+        #endregion
+
+        #region ExportDnsRecordsAsync
 
         public async Task<string> ExportDnsRecordsAsync(string zoneId)
         {
@@ -274,8 +301,48 @@ namespace CloudFlare.Client
             }
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type = null, string name = "", string content = "",
-            int? page = null, int? perPage = null, OrderType? order = null, bool? match = null)
+        #endregion
+
+        #region GetDnsRecordsAsync
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId)
+        {
+            return GetDnsRecordsAsync(zoneId, null, null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type)
+        {
+            return GetDnsRecordsAsync(zoneId, type, null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name)
+        {
+            return GetDnsRecordsAsync(zoneId, type, name, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content)
+        {
+            return GetDnsRecordsAsync(zoneId, type, name, content, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page)
+        {
+            return GetDnsRecordsAsync(zoneId, type, name, content, page, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page, int? perPage)
+        {
+            return GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page, int? perPage,
+            OrderType? order)
+        {
+            return GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, order, null);
+        }
+
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content,
+            int? page, int? perPage, OrderType? order, bool? match)
         {
             var parameterBuilder = new StringBuilder();
             parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.DnsRecordType, type);
@@ -305,6 +372,10 @@ namespace CloudFlare.Client
             }
         }
 
+        #endregion
+
+        #region GetDnsRecordDetailsAsync
+
         public async Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
         {
             try
@@ -323,6 +394,10 @@ namespace CloudFlare.Client
 
             }
         }
+
+        #endregion
+
+        #region ImportDnsRecordsAsync
 
         public async Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null)
         {
@@ -349,8 +424,23 @@ namespace CloudFlare.Client
             }
         }
 
+        #endregion
+
+        #region UpdateDnsRecordAsync
+
+        public Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content)
+        {
+            return UpdateDnsRecordAsync(zoneId, identifier, type, name, content, null, null);
+
+        }
+
+        public Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl)
+        {
+            return UpdateDnsRecordAsync(zoneId, identifier, type, name, content, ttl, null);
+        }
+
         public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type,
-            string name, string content, int? ttl = null, bool? proxied = null)
+            string name, string content, int? ttl, bool? proxied)
         {
             try
             {
@@ -377,6 +467,8 @@ namespace CloudFlare.Client
 
             }
         }
+
+        #endregion
 
         #endregion
 
