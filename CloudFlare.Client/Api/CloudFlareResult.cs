@@ -23,11 +23,16 @@ namespace CloudFlare.Client.Api
         /// <summary>
         /// Additional messages
         /// </summary>
-        public IEnumerable<string> Messages { get; set; } // TODO!
+        public IEnumerable<ErrorDetails> Messages { get; set; }
 
         /// <summary>
         /// Array of potential errors
         /// </summary>
         public IEnumerable<ApiError> Errors { get; set; }
+
+        /// <summary>
+        /// Time info of procession
+        /// </summary>
+        public TimingInfo Timing { get; set; }
     }
 }

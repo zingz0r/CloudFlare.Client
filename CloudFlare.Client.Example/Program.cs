@@ -13,7 +13,12 @@ namespace CloudFlare.Client.Example
             var zoneId = "secret";
             var savePath = @"C:\Users\zingz0r\Desktop\exportBindTest.txt";
 
+
+
             CloudFlareClient cloudFlareClient = new CloudFlareClient(email, globalApiKey);
+
+            var file = new FileInfo(savePath);
+            var importedResult = cloudFlareClient.ImportDnsRecordsAsync(zoneId, file, true).Result;
 
             var exportedDataBytes = cloudFlareClient.ExportDnsRecordsAsync(zoneId).Result;
             

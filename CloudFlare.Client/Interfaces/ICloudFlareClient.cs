@@ -31,7 +31,7 @@ namespace CloudFlare.Client.Interfaces
         Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier);
 
         /// <summary>
-        /// You can export your BIND config through this endpoint.
+        /// Export your BIND config through this endpoint.
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <returns></returns>
@@ -60,6 +60,16 @@ namespace CloudFlare.Client.Interfaces
         Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier);
 
         /// <summary>
+        /// Import your BIND config through this endpoint.
+        /// Notice: SOA DNS record type is not supported by CloudFlare
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="fileInfo">FileInfo of the file</param>
+        /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null);
+        
+        /// <summary>
         /// Update DNS record
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
@@ -68,7 +78,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="name">The new DNS record name</param>
         /// <param name="content">The new DNS record content</param>
         /// <param name="ttl">The new Time to live for DNS record. Value of 1 is 'automatic'</param>
-        /// <param name="proxied">Whether the record is receiving the performance and security benefits of Cloudflare</param>
+        /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
         Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl = null, bool? proxied = null);
     }

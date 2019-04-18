@@ -12,7 +12,6 @@ using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Interfaces;
 using CloudFlare.Client.Models;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client
 {
@@ -156,6 +155,31 @@ namespace CloudFlare.Client
                 if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
+                }
+
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+
+            }
+        }
+
+        public async Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied = null)
+        {
+            try
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(proxied.ToString()), ApiParameter.Proxied);
+                form.Add(new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0, Convert.ToInt32(fileInfo.Length)), "file", "hello1.jpg");
+
+            
+                var response = await _httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form);
+
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<ImportResult>>();
                 }
 
                 throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
