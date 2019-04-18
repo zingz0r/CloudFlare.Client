@@ -14,6 +14,8 @@ using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client
 {
@@ -89,28 +91,52 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region DeleteZoneAsync
+
+        public async Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"zones/{zoneId}");
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
+                }
+
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+
+            }
+        }
+
+        #endregion
+
         #region EditZoneAsync
-        // TODO!
-        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId)
+
+        public async Task<CloudFlareResult<Zone>> EditZoneAsync<T>(string zoneId, string key, T newValue)
         {
-            return EditZoneAsync(zoneId, null, null, null);
-        }
+            var jsonString = new JObject {[key] = JsonConvert.SerializeObject(newValue)};
+            var content = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");
 
-        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused)
-        {
-            return EditZoneAsync(zoneId, paused, null, null);
 
-        }
+            try
+            {
+                var response = await _httpClient.PatchAsync($"zones/{zoneId}", content);
+                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
+                }
 
-        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers)
-        {
-            return EditZoneAsync(zoneId, paused, vanityNameServers, null);
+                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
 
-        }
-
-        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, bool? paused, IEnumerable<string> vanityNameServers, int? planId)
-        {
-            throw new NotImplementedException();
+            }
         }
 
         #endregion

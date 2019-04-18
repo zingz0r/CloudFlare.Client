@@ -22,8 +22,8 @@
 -   [x] List Zones
 -   [x] Create Zone
 -   [x] Zone Details
--   [ ] Edit Zone
--   [ ] Delete Zone
+-   [x] Edit Zone
+-   [x] Delete Zone
 -   [ ] Zone Activation Check
 -   [ ] Purge All Files
 -   [ ] Purge Files by URL

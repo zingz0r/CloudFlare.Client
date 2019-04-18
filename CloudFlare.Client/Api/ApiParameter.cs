@@ -33,6 +33,11 @@
         public static string Page => "page";
 
         /// <summary>
+        /// Paused representation on CloudFlare
+        /// </summary>
+        public static string Paused => "paused";
+
+        /// <summary>
         /// PerPage representation on CloudFlare
         /// </summary>
         public static string PerPage => "per_page";
