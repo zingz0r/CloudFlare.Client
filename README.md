@@ -15,6 +15,20 @@
     PM> Install-Package CloudFlare.Client -Version 1.0.0
 ```
 
+## Usage
+
+```csharp
+    using (var client = new CloudFlareClient("address@example.com","globalApiKeyFromCF"))
+    {
+        var zones = client.GetZonesAsync().Result;
+
+        foreach (var zone in zones.Result)
+        {
+            Console.WriteLine(zone.Name);
+        }
+    }
+```
+
 ## Implemented functionality
 
 ### Zone
