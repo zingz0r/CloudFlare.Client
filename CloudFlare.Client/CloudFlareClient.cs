@@ -273,7 +273,7 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/{parameterString}"));
+            return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/?{parameterString}"));
         }
 
         #endregion
@@ -354,7 +354,7 @@ namespace CloudFlare.Client
         {
             try
             {
-                var response = await request;
+                var response = await request.ConfigureAwait(false);
                 if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     return await response.Content.ReadAsAsync<T>();

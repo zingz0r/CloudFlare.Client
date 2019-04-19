@@ -1,10 +1,13 @@
 ﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CloudFlare.Client.Enumerators
 {
     /// <summary>
     /// Represents DNS record types
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum DnsRecordType
     {
         [EnumMember(Value = "A")]

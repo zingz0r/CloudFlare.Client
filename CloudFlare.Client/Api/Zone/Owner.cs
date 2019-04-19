@@ -27,7 +27,6 @@ namespace CloudFlare.Client.Api.Zone
         /// Type of the owner
         /// </summary>
         [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public OwnerType Type { get; set; }
 
     }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
 using System.Web;
-using CloudFlare.Client.Api;
+using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Helpers
 {
@@ -32,7 +31,7 @@ namespace CloudFlare.Client.Helpers
         {
             if (!EqualityComparer<T>.Default.Equals(value, default(T)))
             {
-                ParameterCollection[key] = HttpUtility.UrlDecode(value.ToString().ToLowerInvariant());
+                ParameterCollection[key] = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
             }
 
             return this;

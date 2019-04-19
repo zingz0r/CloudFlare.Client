@@ -28,7 +28,6 @@ namespace CloudFlare.Client.Api.Zone
         /// A full zone implies that DNS is hosted with CloudFlare. A partial zone is typically a partner-hosted zone or a CNAME setup.
         /// </summary>
         [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public ZoneType Type { get; set; }
 
         /// <summary>

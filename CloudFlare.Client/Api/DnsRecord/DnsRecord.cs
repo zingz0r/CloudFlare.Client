@@ -17,7 +17,6 @@ namespace CloudFlare.Client.Api.DnsRecord
         /// DNS record type
         /// </summary>
         [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DnsRecordType Type { get; set; }
 
         /// <summary>

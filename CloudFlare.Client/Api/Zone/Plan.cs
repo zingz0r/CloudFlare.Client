@@ -40,7 +40,6 @@ namespace CloudFlare.Client.Api.Zone
         /// Legacy id
         /// </summary>
         [JsonProperty("legacy_id")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public LegacyType LegacyId { get; set; }
 
         /// <summary>
