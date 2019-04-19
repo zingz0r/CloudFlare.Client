@@ -21,12 +21,18 @@
 ## Usage
 
 ```csharp
-    using (var client = new CloudFlareClient("address@example.com","globalApiKeyFromCF"))
+    using (var client = new CloudFlareClient("address@example.com", "globalApiKeyFromCF"))
     {
-        var zones = client.GetZonesAsync().Result;
+        var zonesQueryResult = client.GetZonesAsync().Result;
 
-        foreach (var zone in zones.Result)
+        foreach (var zone in zonesQueryResult.Result)
         {
+            var dnsRecordQueryResult = client.GetDnsRecordsAsync(zone.Id).Result;
+            foreach (var dnsRecord in dnsRecordQueryResult.Result)
+            {
+                Console.WriteLine(dnsRecord.Name);
+            }
+
             Console.WriteLine(zone.Name);
         }
     }
