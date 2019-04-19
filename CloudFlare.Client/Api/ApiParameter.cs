@@ -2,6 +2,8 @@
 {
     public static class ApiParameter
     {
+        public static string BaseUrl => "https://api.cloudflare.com/client/v4/";
+
         /// <summary>
         /// Content representation on CloudFlare
         /// </summary>

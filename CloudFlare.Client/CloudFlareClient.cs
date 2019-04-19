@@ -8,6 +8,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
@@ -24,7 +25,7 @@ namespace CloudFlare.Client
     {
         #region Fields
 
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         #endregion
 
@@ -33,23 +34,37 @@ namespace CloudFlare.Client
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
+        /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
+        public CloudFlareClient(CloudFlareAuthentication cloudFlareAuthentication)
+        {
+            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey);
+        }
+
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
         /// <param name="emailAddress">Email address</param>
-        /// <param name="globalApiKey">CloudFlare Global API Key</param>
-        public CloudFlareClient(string emailAddress, string globalApiKey)
+        /// <param name="apiKey">CloudFlare API Key</param>
+        public CloudFlareClient(string emailAddress, string apiKey)
+        {
+            Initialize(emailAddress, apiKey);
+        }
+
+        private void Initialize(string emailAddress, string apiKey)
         {
             if (string.IsNullOrEmpty(emailAddress)
-                || string.IsNullOrEmpty(globalApiKey))
+                || string.IsNullOrEmpty(apiKey))
             {
                 throw new AuthenticationException();
             }
 
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://api.cloudflare.com/client/v4/")
+                BaseAddress = new Uri(ApiParameter.BaseUrl)
             };
 
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Email", emailAddress);
-            _httpClient.DefaultRequestHeaders.Add("X-Auth-Key", globalApiKey);
+            _httpClient.DefaultRequestHeaders.Add("X-Auth-Key", apiKey);
         }
 
         #endregion
