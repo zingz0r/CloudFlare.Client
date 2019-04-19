@@ -64,29 +64,15 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool? jumpStart)
         {
-            try
+            var postZone = new PostZone
             {
-                var postZone = new PostZone
-                {
-                    Name = name,
-                    Account = account,
-                    Type = type,
-                    JumpStart = jumpStart ?? false
-                };
+                Name = name,
+                Account = account,
+                Type = type,
+                JumpStart = jumpStart ?? false
+            };
 
-                var response = await _httpClient.PostAsJsonAsync($"zones/", postZone);
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync($"zones/", postZone));
         }
 
         #endregion
@@ -95,21 +81,7 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
         {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"zones/{zoneId}");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.DeleteAsync($"zones/{zoneId}"));
         }
 
         #endregion
@@ -121,22 +93,7 @@ namespace CloudFlare.Client
             var jsonString = new JObject { [key] = JsonConvert.SerializeObject(newValue) };
             var content = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");
 
-
-            try
-            {
-                var response = await _httpClient.PatchAsync($"zones/{zoneId}", content);
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync($"zones/{zoneId}", content));
         }
 
         #endregion
@@ -186,21 +143,7 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
 
-            try
-            {
-                var response = await _httpClient.GetAsync($"zones/{parameterString}");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<IEnumerable<Zone>>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync($"zones/{parameterString}"));
         }
 
         #endregion
@@ -209,21 +152,7 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"zones/{zoneId}");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<Zone>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.GetAsync($"zones/{zoneId}"));
         }
 
         #endregion
@@ -254,31 +183,17 @@ namespace CloudFlare.Client
         public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl,
             int? priority, bool? proxied)
         {
-            try
+            var newDnsRecord = new DnsRecord
             {
-                var newDnsRecord = new DnsRecord
-                {
-                    Content = content,
-                    Type = type,
-                    Name = name,
-                    Ttl = ttl ?? 1,
-                    Priority = priority ?? 0,
-                    Proxied = proxied
-                };
+                Content = content,
+                Type = type,
+                Name = name,
+                Ttl = ttl ?? 1,
+                Priority = priority ?? 0,
+                Proxied = proxied
+            };
 
-                var response = await _httpClient.PostAsJsonAsync($"zones/{zoneId}/dns_records/", newDnsRecord);
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PostAsJsonAsync($"zones/{zoneId}/dns_records/", newDnsRecord));
         }
 
         #endregion
@@ -287,21 +202,7 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
         {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"zones/{zoneId}/dns_records/{identifier}/");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.DeleteAsync($"zones/{zoneId}/dns_records/{identifier}/"));
         }
 
         #endregion
@@ -310,21 +211,7 @@ namespace CloudFlare.Client
 
         public async Task<string> ExportDnsRecordsAsync(string zoneId)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"zones/{zoneId}/dns_records/export/");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<string>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/export/"));
         }
 
         #endregion
@@ -381,21 +268,7 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
 
-            try
-            {
-                var response = await _httpClient.GetAsync($"zones/{zoneId}/dns_records/{parameterString}");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<IEnumerable<DnsRecord>>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/{parameterString}"));
         }
 
         #endregion
@@ -404,21 +277,7 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"zones/{zoneId}/dns_records/{identifier}");
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
-                }
-
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/{identifier}"));
         }
 
         #endregion
@@ -432,33 +291,17 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied)
         {
-            try
+            var form = new MultipartFormDataContent
             {
-                var form = new MultipartFormDataContent
+                {new StringContent(proxied.ToString()), ApiParameter.Proxied},
                 {
-                    {new StringContent(proxied.ToString()), ApiParameter.Proxied},
-                    {
-                        new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0,
-                            Convert.ToInt32(fileInfo.Length)),
-                        "file", "upload.txt"
-                    }
-                };
-
-
-                var response = await _httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form);
-
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<ImportResult>>();
+                    new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0,
+                        Convert.ToInt32(fileInfo.Length)),
+                    "file", "upload.txt"
                 }
+            };
 
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
+            return await SendRequestAsync<CloudFlareResult<ImportResult>>(_httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form));
         }
 
         #endregion
@@ -468,7 +311,6 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content)
         {
             return UpdateDnsRecordAsync(zoneId, identifier, type, name, content, null, null);
-
         }
 
         public Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl)
@@ -479,21 +321,38 @@ namespace CloudFlare.Client
         public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type,
             string name, string content, int? ttl, bool? proxied)
         {
+            var updatedDnsRecord = new DnsRecord
+            {
+                Content = content,
+                Type = type,
+                Name = name,
+                Ttl = ttl ?? 1,
+                Proxied = proxied
+            };
+
+            return await SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PutAsJsonAsync($"zones/{zoneId}/dns_records/{identifier}/", updatedDnsRecord));
+        }
+
+        #endregion
+
+        #endregion
+
+        #region SendRequestAsync
+
+        /// <summary>
+        /// Sends the request async with HttpClient and parses response in the given type
+        /// </summary>
+        /// <typeparam name="T">Will parse response in to this type</typeparam>
+        /// <param name="request">The request task. Don't await before this func.</param>
+        /// <returns></returns>
+        private static async Task<T> SendRequestAsync<T>(Task<HttpResponseMessage> request)
+        {
             try
             {
-                var updatedDnsRecord = new DnsRecord
-                {
-                    Content = content,
-                    Type = type,
-                    Name = name,
-                    Ttl = ttl ?? 1,
-                    Proxied = proxied
-                };
-
-                var response = await _httpClient.PutAsJsonAsync($"zones/{zoneId}/dns_records/{identifier}/", updatedDnsRecord);
+                var response = await request;
                 if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return await response.Content.ReadAsAsync<CloudFlareResult<DnsRecord>>();
+                    return await response.Content.ReadAsAsync<T>();
                 }
 
                 throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
@@ -504,8 +363,6 @@ namespace CloudFlare.Client
 
             }
         }
-
-        #endregion
 
         #endregion
 
