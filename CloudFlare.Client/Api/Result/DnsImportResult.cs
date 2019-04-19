@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.DnsRecord
+namespace CloudFlare.Client.Api.Result
 {
-    public class ImportResult
+    public class DnsImportResult
     {
         /// <summary>
         /// Number of the imported records

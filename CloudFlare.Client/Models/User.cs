@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.User
+namespace CloudFlare.Client.Models
 {
     public class User
     {

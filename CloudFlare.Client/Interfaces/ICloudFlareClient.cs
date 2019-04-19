@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
-using CloudFlare.Client.Api.User;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Interfaces
 {
     public interface ICloudFlareClient
     {
         #region User
+
+        #region GetUserAsync
+
+
+        /// <summary>
+        /// Change user data
+        /// </summary>
+        /// <param name="editedUser">The edited user details</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<User>> EditUserAsync(User editedUser);
+
+        #endregion
 
         #region GetUserAsync
         /// <summary>
@@ -67,10 +77,9 @@ namespace CloudFlare.Client.Interfaces
         /// Change key zone property with new value 
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
-        /// <param name="key">The key of the property</param>
-        /// <param name="newValue">The new value</param>
+        /// <param name="patchZone">The modified zone values</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> EditZoneAsync<T>(string zoneId, string key, T newValue);
+        Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone);
 
         #endregion
 
@@ -372,7 +381,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="fileInfo">FileInfo of the file</param>
         /// <returns></returns>
-        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo);
+        Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo);
 
         /// <summary>
         /// Import your BIND config through this endpoint.
@@ -382,7 +391,7 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="fileInfo">FileInfo of the file</param>
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <returns></returns>
-        Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied);
+        Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied);
 
         #endregion
 

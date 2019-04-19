@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Zone
+namespace CloudFlare.Client.Models
 {
     public class Account
     {
@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Api.Zone
         /// Account name
         /// </summary>
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
     }
 }

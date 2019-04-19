@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Api.Zone
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Zone
+namespace CloudFlare.Client.Models
 {
     public class Zone
     {

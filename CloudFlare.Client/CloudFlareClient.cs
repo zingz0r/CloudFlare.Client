@@ -8,15 +8,13 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
-using CloudFlare.Client.Api.Authentication;
-using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
-using CloudFlare.Client.Api.User;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Interfaces;
+using CloudFlare.Client.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -36,7 +34,7 @@ namespace CloudFlare.Client
         /// Initialize CloudFlare Client
         /// </summary>
         /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
-        public CloudFlareClient(CloudFlareAuthentication cloudFlareAuthentication)
+        public CloudFlareClient(Authentication cloudFlareAuthentication)
         {
             Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey);
         }
@@ -51,6 +49,11 @@ namespace CloudFlare.Client
             Initialize(emailAddress, apiKey);
         }
 
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
+        /// <param name="emailAddress">Email address</param>
+        /// <param name="apiKey">CloudFlare API Key</param>
         private void Initialize(string emailAddress, string apiKey)
         {
             if (string.IsNullOrEmpty(emailAddress)
@@ -61,16 +64,35 @@ namespace CloudFlare.Client
 
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri(ApiParameter.BaseUrl)
+                BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
             };
 
-            _httpClient.DefaultRequestHeaders.Add("X-Auth-Email", emailAddress);
-            _httpClient.DefaultRequestHeaders.Add("X-Auth-Key", apiKey);
+            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
+            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
         }
 
         #endregion
 
         #region User
+
+        #region EditUserAsync
+
+        public Task<CloudFlareResult<User>> EditUserAsync(User editedUser)
+        {
+            var correctUserProps = new User
+            {
+                FirstName = editedUser.FirstName,
+                LastName = editedUser.LastName,
+                Telephone = editedUser.Telephone,
+                Country = editedUser.Country,
+                Zipcode = editedUser.Zipcode
+            };
+
+            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.PatchAsync($"user/", CreatePatchContent(correctUserProps)));
+        }
+
+
+        #endregion
 
         #region GetUserAsync
 
@@ -118,12 +140,9 @@ namespace CloudFlare.Client
 
         #region EditZoneAsync
 
-        public Task<CloudFlareResult<Zone>> EditZoneAsync<T>(string zoneId, string key, T newValue)
+        public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone)
         {
-            var jsonString = new JObject { [key] = JsonConvert.SerializeObject(newValue) };
-            var content = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");
-
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync($"zones/{zoneId}", content));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync($"zones/{zoneId}", CreatePatchContent(patchZone)));
         }
 
         #endregion
@@ -166,12 +185,12 @@ namespace CloudFlare.Client
             var parameterBuilder = new ParameterBuilderHelper();
 
             parameterBuilder
-                .InsertValue(ApiParameter.Name, name)
-                .InsertValue(ApiParameter.Status, status)
-                .InsertValue(ApiParameter.Page, page)
-                .InsertValue(ApiParameter.PerPage, perPage)
-                .InsertValue(ApiParameter.Order, order)
-                .InsertValue(ApiParameter.Match, match);
+                .InsertValue(ApiParameter.Filtering.Name, name)
+                .InsertValue(ApiParameter.Filtering.Status, status)
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, order)
+                .InsertValue(ApiParameter.Filtering.Match, match);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
@@ -193,7 +212,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything)
         {
-            var content = new NameValueCollection {{ApiParameter.PurgeEverything, purgeEverything.ToString()}};
+            var content = new NameValueCollection { { ApiParameter.Outgoing.PurgeEverything, purgeEverything.ToString() } };
 
             return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync($"zones/{zoneId}/purge_cache", content));
         }
@@ -204,7 +223,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync($"zones/{zoneId}/activation_check",null));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync($"zones/{zoneId}/activation_check", null));
         }
 
         #endregion
@@ -312,13 +331,13 @@ namespace CloudFlare.Client
             var parameterBuilder = new ParameterBuilderHelper();
 
             parameterBuilder
-                .InsertValue(ApiParameter.DnsRecordType, type)
-                .InsertValue(ApiParameter.Name, name)
-                .InsertValue(ApiParameter.Content, content)
-                .InsertValue(ApiParameter.Page, page)
-                .InsertValue(ApiParameter.PerPage, perPage)
-                .InsertValue(ApiParameter.Order, order)
-                .InsertValue(ApiParameter.Match, match);
+                .InsertValue(ApiParameter.Filtering.DnsRecordType, type)
+                .InsertValue(ApiParameter.Filtering.Name, name)
+                .InsertValue(ApiParameter.Filtering.Content, content)
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, order)
+                .InsertValue(ApiParameter.Filtering.Match, match);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
@@ -338,16 +357,16 @@ namespace CloudFlare.Client
 
         #region ImportDnsRecordsAsync
 
-        public Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo)
+        public Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo)
         {
             return ImportDnsRecordsAsync(zoneId, fileInfo, null);
         }
 
-        public Task<CloudFlareResult<ImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied)
+        public Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied)
         {
             var form = new MultipartFormDataContent
             {
-                {new StringContent(proxied.ToString()), ApiParameter.Proxied},
+                {new StringContent(proxied.ToString()), ApiParameter.Filtering.Proxied},
                 {
                     new ByteArrayContent(File.ReadAllBytes(fileInfo.FullName), 0,
                         Convert.ToInt32(fileInfo.Length)),
@@ -355,7 +374,7 @@ namespace CloudFlare.Client
                 }
             };
 
-            return SendRequestAsync<CloudFlareResult<ImportResult>>(_httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form));
+            return SendRequestAsync<CloudFlareResult<DnsImportResult>>(_httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form));
         }
 
         #endregion
@@ -416,6 +435,16 @@ namespace CloudFlare.Client
                 throw new PersistenceUnavailableException(ex);
 
             }
+        }
+
+        #endregion
+
+        #region CreatePatchContent
+
+        private static StringContent CreatePatchContent<T>(T value)
+        {
+            return new StringContent(JsonConvert.SerializeObject(value, 
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
         }
 
         #endregion

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CloudFlare.Client.Api.Error;
 
 namespace CloudFlare.Client.Api.Result
 {

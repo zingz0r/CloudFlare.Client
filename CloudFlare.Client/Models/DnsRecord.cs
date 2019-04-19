@@ -1,9 +1,8 @@
 ﻿using System;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Api.DnsRecord
+namespace CloudFlare.Client.Models
 {
     public class DnsRecord
     {

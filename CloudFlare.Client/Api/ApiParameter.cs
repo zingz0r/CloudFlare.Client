@@ -2,71 +2,88 @@
 {
     public static class ApiParameter
     {
-        public static string BaseUrl => "https://api.cloudflare.com/client/v4/";
+        /// <summary>
+        /// CloudFlare specific configuration strings
+        /// </summary>
+        public static class Config
+        {
+            /// <summary>
+            /// Base CloudFlare api url
+            /// </summary>
+            public static string BaseUrl => "https://api.cloudflare.com/client/v4/";
+
+            public static string AuthEmailHeader => "X-Auth-Email";
+            public static string AuthKeyHeader => "X-Auth-Key";
+        }
+
+        public static class Endpoints
+        {
+           // public static string  { get; set; }
+        }
 
         /// <summary>
-        /// Content representation on CloudFlare
+        /// Filtering parameter names on CloudFlare
         /// </summary>
-        public static string Content => "content";
+        public static class Filtering
+        {
+            /// <summary>
+            /// Name representation on CloudFlare
+            /// </summary>
+            public static string Name => "name";
+
+            /// <summary>
+            /// Content representation on CloudFlare
+            /// </summary>
+            public static string Content => "content";
+
+            /// <summary>
+            /// DnsRecordType representation on CloudFlare
+            /// </summary>
+            public static string DnsRecordType => "type";
+
+            /// <summary>
+            /// Proxied representation on CloudFlare
+            /// </summary>
+            public static string Proxied => "proxied";
+
+            /// <summary>
+            /// Ttl representation on CloudFlare
+            /// </summary>
+            public static string Ttl => "ttl";
+
+            /// <summary>
+            /// Match representation on CloudFlare
+            /// </summary>
+            public static string Match => "match";
+
+            /// <summary>
+            /// Order representation on CloudFlare
+            /// </summary>
+            public static string Order => "order";
+
+            /// <summary>
+            /// Page representation on CloudFlare
+            /// </summary>
+            public static string Page => "page";
+
+            /// <summary>
+            /// PerPage representation on CloudFlare
+            /// </summary>
+            public static string PerPage => "per_page";
+
+            /// <summary>
+            /// Status representation on CloudFlare
+            /// </summary>
+            public static string Status => "status";
+        }
 
         /// <summary>
-        /// DnsRecordType representation on CloudFlare
+        /// Outgoing parameter names for CloudFlare
         /// </summary>
-        public static string DnsRecordType => "type";
+        public static class Outgoing
+        {
+            public static string PurgeEverything => "purge_everything";
+        }
 
-        /// <summary>
-        /// Match representation on CloudFlare
-        /// </summary>
-        public static string Match => "match";
-
-        /// <summary>
-        /// Name representation on CloudFlare
-        /// </summary>
-        public static string Name => "name";
-
-        /// <summary>
-        /// Order representation on CloudFlare
-        /// </summary>
-        public static string Order => "order";
-
-        /// <summary>
-        /// Page representation on CloudFlare
-        /// </summary>
-        public static string Page => "page";
-
-        /// <summary>
-        /// Paused representation on CloudFlare
-        /// </summary>
-        public static string Paused => "paused";
-
-        /// <summary>
-        /// PerPage representation on CloudFlare
-        /// </summary>
-        public static string PerPage => "per_page";
-
-        /// <summary>
-        /// Priority representation on CloudFlare
-        /// </summary>
-        public static string Priority => "priority";
-
-        /// <summary>
-        /// Proxied representation on CloudFlare
-        /// </summary>
-        public static string Proxied => "proxied";
-
-        /// <summary>
-        /// Purge everything representation on CloudFlare
-        /// </summary>
-        public static string PurgeEverything => "purge_everything";
-
-        /// <summary>
-        /// Status representation on CloudFlare
-        /// </summary>
-        public static string Status => "status";
-
-        /// <summary>
-        /// Ttl representation on CloudFlare
-        /// </summary>
-        public static string Ttl => "ttl";
     }
 }
