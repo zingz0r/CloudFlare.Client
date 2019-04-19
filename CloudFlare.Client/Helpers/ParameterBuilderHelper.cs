@@ -32,7 +32,7 @@ namespace CloudFlare.Client.Helpers
         {
             if (!EqualityComparer<T>.Default.Equals(value, default(T)))
             {
-                ParameterCollection[key] = HttpUtility.UrlDecode(value.ToString().ToLower());
+                ParameterCollection[key] = HttpUtility.UrlDecode(value.ToString().ToLowerInvariant());
             }
 
             return this;
