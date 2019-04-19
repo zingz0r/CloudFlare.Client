@@ -6,13 +6,13 @@ using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 
-namespace CloudFlare.Client.Interfaces
+namespace CloudFlare.Client
 {
     public interface ICloudFlareClient
     {
         #region User
 
-        #region GetUserAsync
+        #region GetUserDetailsAsync
 
 
         /// <summary>
@@ -24,12 +24,12 @@ namespace CloudFlare.Client.Interfaces
 
         #endregion
 
-        #region GetUserAsync
+        #region GetUserDetailsAsync
         /// <summary>
         /// The currently logged in/authenticated User
         /// </summary>
         /// <returns></returns>
-        Task<CloudFlareResult<User>> GetUserAsync();
+        Task<CloudFlareResult<User>> GetUserDetailsAsync();
 
         #endregion
 

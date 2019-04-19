@@ -13,10 +13,8 @@ using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
-using CloudFlare.Client.Interfaces;
 using CloudFlare.Client.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client
 {
@@ -95,9 +93,9 @@ namespace CloudFlare.Client
 
         #endregion
 
-        #region GetUserAsync
+        #region GetUserDetailsAsync
 
-        public Task<CloudFlareResult<User>> GetUserAsync()
+        public Task<CloudFlareResult<User>> GetUserDetailsAsync()
         {
             return SendRequestAsync<CloudFlareResult<User>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.UserBase}/"));
