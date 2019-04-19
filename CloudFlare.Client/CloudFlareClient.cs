@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
@@ -133,17 +134,19 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
             OrderType? order, bool? match)
         {
-            var parameterBuilder = new StringBuilder();
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Name, name);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Status, status);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Page, page);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.PerPage, perPage);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Order, order);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Match, match);
+            var parameterBuilder = new ParameterBuilderHelper();
 
-            var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
+            parameterBuilder
+                .InsertValue(ApiParameter.Name, name)
+                .InsertValue(ApiParameter.Status, status)
+                .InsertValue(ApiParameter.Page, page)
+                .InsertValue(ApiParameter.PerPage, perPage)
+                .InsertValue(ApiParameter.Order, order)
+                .InsertValue(ApiParameter.Match, match);
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync($"zones/{parameterString}"));
+            var parameterString = parameterBuilder.ParameterCollection;
+
+            return SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync($"zones/?{parameterString}"));
         }
 
         #endregion
@@ -257,16 +260,18 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content,
             int? page, int? perPage, OrderType? order, bool? match)
         {
-            var parameterBuilder = new StringBuilder();
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.DnsRecordType, type);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Name, name);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Content, content);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Page, page);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.PerPage, perPage);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Order, order);
-            parameterBuilder = ParameterBuilderHelper.InsertValue(parameterBuilder, ApiParameter.Match, match);
+            var parameterBuilder = new ParameterBuilderHelper();
 
-            var parameterString = parameterBuilder.Length != 0 ? parameterBuilder.ToString() : "";
+            parameterBuilder
+                .InsertValue(ApiParameter.DnsRecordType, type)
+                .InsertValue(ApiParameter.Name, name)
+                .InsertValue(ApiParameter.Content, content)
+                .InsertValue(ApiParameter.Page, page)
+                .InsertValue(ApiParameter.PerPage, perPage)
+                .InsertValue(ApiParameter.Order, order)
+                .InsertValue(ApiParameter.Match, match);
+
+            var parameterString = parameterBuilder.ParameterCollection;
 
             return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/{parameterString}"));
         }
