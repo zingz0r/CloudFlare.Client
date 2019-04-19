@@ -48,7 +48,7 @@ namespace CloudFlare.Client.Interfaces
         #endregion
 
         #region EditZoneAsync
- 
+
         /// <summary>
         /// Change key zone property with new value 
         /// </summary>
@@ -138,6 +138,17 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="zoneId">Zone identifier</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId);
+
+        #endregion
+
+        #region ZoneActivationCheckAsync
+
+        /// <summary>
+        /// Initiate another zone activation check
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId);
 
         #endregion
 

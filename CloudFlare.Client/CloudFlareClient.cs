@@ -160,6 +160,15 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region ZoneActivationCheckAsync
+
+        public Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
+        {
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync($"zones/{zoneId}/activation_check",null));
+        }
+
+        #endregion
+
         #endregion
 
         #region DNS Records for a Zone
