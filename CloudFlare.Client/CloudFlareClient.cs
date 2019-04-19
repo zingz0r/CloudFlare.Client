@@ -443,8 +443,7 @@ namespace CloudFlare.Client
 
         private static StringContent CreatePatchContent<T>(T value)
         {
-            return new StringContent(JsonConvert.SerializeObject(value, 
-                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
+            return new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
         }
 
         #endregion
