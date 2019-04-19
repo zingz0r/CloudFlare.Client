@@ -19,7 +19,7 @@ using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client
 {
-    public class CloudFlareClient : ICloudFlareClient
+    public class CloudFlareClient : ICloudFlareClient, IDisposable
     {
         #region Fields
 
@@ -118,7 +118,7 @@ namespace CloudFlare.Client
 
         public async Task<CloudFlareResult<Zone>> EditZoneAsync<T>(string zoneId, string key, T newValue)
         {
-            var jsonString = new JObject {[key] = JsonConvert.SerializeObject(newValue)};
+            var jsonString = new JObject { [key] = JsonConvert.SerializeObject(newValue) };
             var content = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");
 
 
@@ -510,10 +510,19 @@ namespace CloudFlare.Client
         #endregion
 
         #region Dispose
-    
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _httpClient?.Dispose();
+            }
+        }
+
         public void Dispose()
         {
-            _httpClient?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion

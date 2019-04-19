@@ -9,7 +9,7 @@ using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Interfaces
 {
-    public interface ICloudFlareClient : IDisposable
+    public interface ICloudFlareClient
     {
         #region Zone
 
