@@ -41,8 +41,8 @@
 -   [x] Zone Details
 -   [x] Edit Zone
 -   [x] Delete Zone
--   [ ] Zone Activation Check
--   [ ] Purge All Files
+-   [x] Zone Activation Check
+-   [x] Purge All Files
 -   [ ] Purge Files by URL
 -   [ ] Purge Files by Cache-Tags or Host  
 
