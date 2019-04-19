@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
     <Authors>Tamás Tóth</Authors>
     <Company>TothNET</Company>
-    <Description>.NET client for communication with the Cloudflare service API.</Description>
+    <Description>.NET library for communication with the Cloudflare service API.</Description>
     <Copyright>Copyright © 2019 - CC BY-NC-ND 4.0</Copyright>
     <PackageLicenseUrl>https://github.com/zingz0r/CloudFlare.Client/blob/master/LICENCE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/zingz0r/CloudFlare.Client</PackageProjectUrl>
@@ -12,20 +12,24 @@
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
-    <PackageReleaseNotes>version 1.1.2
-Target .NET Core 2.1 and .NET Core 2.2
+    <PackageReleaseNotes>version 1.1.3
+- Extended zone functionality
+- CloudFlareAuth class for easyer auth when parsing data from env or cfg
+
+version 1.1.2
+- Target .NET Core 2.1 and .NET Core 2.2
 
 version: 1.1.0
-CRUD for DNS zones
+- CRUD for DNS zones
 
 version: 1.0.0
-CRUD (+Import/Export) for DNS records</PackageReleaseNotes>
+- CRUD (+Import/Export) for DNS records</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.2.0</AssemblyVersion>
-    <FileVersion>1.1.2.0</FileVersion>
-    <Version>1.1.2</Version>
+    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <FileVersion>1.1.3.0</FileVersion>
+    <Version>1.1.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
