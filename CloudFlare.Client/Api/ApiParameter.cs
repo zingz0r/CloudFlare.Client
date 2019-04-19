@@ -53,6 +53,11 @@
         public static string Proxied => "proxied";
 
         /// <summary>
+        /// Purge everything representation on CloudFlare
+        /// </summary>
+        public static string PurgeEverything => "purge_everything";
+
+        /// <summary>
         /// Status representation on CloudFlare
         /// </summary>
         public static string Status => "status";

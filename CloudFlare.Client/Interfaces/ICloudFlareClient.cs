@@ -141,6 +141,18 @@ namespace CloudFlare.Client.Interfaces
 
         #endregion
 
+        #region PurgeAllFilesAsync
+
+        /// <summary>
+        /// Remove ALL files from CloudFlare's cache
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="purgeEverything">A flag that indicates all resources in CloudFlare's cache should be removed. Note: This may have dramatic affects on your origin server load after performing this action.</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything);
+
+        #endregion
+
         #region ZoneActivationCheckAsync
 
         /// <summary>

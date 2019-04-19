@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
@@ -156,6 +156,17 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
             return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.GetAsync($"zones/{zoneId}"));
+        }
+
+        #endregion
+
+        #region PurgeAllFilesAsync
+
+        public Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything)
+        {
+            var content = new NameValueCollection {{ApiParameter.PurgeEverything, purgeEverything.ToString()}};
+
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync($"zones/{zoneId}/purge_cache", content));
         }
 
         #endregion
