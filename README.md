@@ -34,12 +34,12 @@
 
 ## Implemented functionality
 
-### User
+#### User
 
 -   [x] User Details
 -   [x] Edit User
 
-### Zone
+#### Zone
 
 -   [x] List Zones
 -   [x] Create Zone
@@ -51,7 +51,7 @@
 -   [ ] Purge Files by URL
 -   [ ] Purge Files by Cache-Tags or Host  
 
-### DNS Records for a Zone
+#### DNS Records for a Zone
 
 -   [x] List DNS Records
 -   [x] Create DNS Record
