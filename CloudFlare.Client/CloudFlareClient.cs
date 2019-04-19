@@ -88,7 +88,8 @@ namespace CloudFlare.Client
                 Zipcode = editedUser.Zipcode
             };
 
-            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.PatchAsync($"user/", CreatePatchContent(correctUserProps)));
+            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.PatchAsync(
+                $"{ApiParameter.Endpoints.UserBase}/", CreatePatchContent(correctUserProps)));
         }
 
 
@@ -98,7 +99,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<User>> GetUserAsync()
         {
-            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.GetAsync($"user/"));
+            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.UserBase}/"));
         }
 
         #endregion
@@ -124,7 +126,8 @@ namespace CloudFlare.Client
                 JumpStart = jumpStart ?? false
             };
 
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync($"zones/", postZone));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/", postZone));
         }
 
         #endregion
@@ -133,7 +136,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.DeleteAsync($"zones/{zoneId}"));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
         }
 
         #endregion
@@ -142,7 +146,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync($"zones/{zoneId}", CreatePatchContent(patchZone)));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}", CreatePatchContent(patchZone)));
         }
 
         #endregion
@@ -194,7 +199,8 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync($"zones/?{parameterString}"));
+            return SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/?{parameterString}"));
         }
 
         #endregion
@@ -203,7 +209,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.GetAsync($"zones/{zoneId}"));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
         }
 
         #endregion
@@ -214,7 +221,8 @@ namespace CloudFlare.Client
         {
             var content = new NameValueCollection { { ApiParameter.Outgoing.PurgeEverything, purgeEverything.ToString() } };
 
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync($"zones/{zoneId}/purge_cache", content));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
         }
 
         #endregion
@@ -223,7 +231,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync($"zones/{zoneId}/activation_check", null));
+            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null));
         }
 
         #endregion
@@ -264,7 +273,8 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PostAsJsonAsync($"zones/{zoneId}/dns_records/", newDnsRecord));
+            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/", newDnsRecord));
         }
 
         #endregion
@@ -273,7 +283,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
         {
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.DeleteAsync($"zones/{zoneId}/dns_records/{identifier}/"));
+            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/"));
         }
 
         #endregion
@@ -282,7 +293,8 @@ namespace CloudFlare.Client
 
         public Task<string> ExportDnsRecordsAsync(string zoneId)
         {
-            return SendRequestAsync<string>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/export/"));
+            return SendRequestAsync<string>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Export}/"));
         }
 
         #endregion
@@ -341,7 +353,8 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/?{parameterString}"));
+            return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(
+                _httpClient.GetAsync($"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/?{parameterString}"));
         }
 
         #endregion
@@ -350,7 +363,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
         {
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.GetAsync($"zones/{zoneId}/dns_records/{identifier}"));
+            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}"));
         }
 
         #endregion
@@ -374,7 +388,8 @@ namespace CloudFlare.Client
                 }
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsImportResult>>(_httpClient.PostAsync($"zones/{zoneId}/dns_records/import/", form));
+            return SendRequestAsync<CloudFlareResult<DnsImportResult>>(_httpClient.PostAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Import}/", form));
         }
 
         #endregion
@@ -403,7 +418,8 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PutAsJsonAsync($"zones/{zoneId}/dns_records/{identifier}/", updatedDnsRecord));
+            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PutAsJsonAsync(
+                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/", updatedDnsRecord));
         }
 
         #endregion
@@ -441,6 +457,12 @@ namespace CloudFlare.Client
 
         #region CreatePatchContent
 
+        /// <summary>
+        /// Creates StringContent which can be send with PatchAsync
+        /// </summary>
+        /// <typeparam name="T">Type of the incoming value</typeparam>
+        /// <param name="value">Content to convert to sendable object</param>
+        /// <returns></returns>
         private static StringContent CreatePatchContent<T>(T value)
         {
             return new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");

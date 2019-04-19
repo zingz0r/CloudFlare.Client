@@ -18,7 +18,22 @@
 
         public static class Endpoints
         {
-           // public static string  { get; set; }
+            public static string UserBase => "user";
+
+            public static string ZoneBase => "zones";
+            public static string DnsRecordBase => "dns_records";
+
+            public static class DnsRecord
+            {
+                public static string Export => "export";
+                public static string Import => "import";
+            }
+
+            public static class Zone
+            {
+                public static string PurgeCache => "purge_cache";
+                public static string ActivationCheck => "activation_check";
+            }
         }
 
         /// <summary>
