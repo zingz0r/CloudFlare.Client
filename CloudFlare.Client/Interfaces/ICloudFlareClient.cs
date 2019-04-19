@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.User;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 
@@ -11,6 +12,19 @@ namespace CloudFlare.Client.Interfaces
 {
     public interface ICloudFlareClient
     {
+        #region User
+
+        #region GetUserAsync
+        /// <summary>
+        /// The currently logged in/authenticated User
+        /// </summary>
+        /// <returns></returns>
+        Task<CloudFlareResult<User>> GetUserAsync();
+
+        #endregion
+
+        #endregion
+
         #region Zone
 
         #region CreateZoneAsync

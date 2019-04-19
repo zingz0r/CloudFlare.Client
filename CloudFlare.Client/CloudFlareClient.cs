@@ -11,6 +11,7 @@ using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.DnsRecord;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.User;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
@@ -66,6 +67,19 @@ namespace CloudFlare.Client
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Email", emailAddress);
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Key", apiKey);
         }
+
+        #endregion
+
+        #region User
+
+        #region GetUserAsync
+
+        public Task<CloudFlareResult<User>> GetUserAsync()
+        {
+            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.GetAsync($"user/"));
+        }
+
+        #endregion
 
         #endregion
 
