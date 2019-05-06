@@ -11,6 +11,12 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum LegacyType
     {
+        [EnumMember(Value = "business")]
+        Business, 
+
+        [EnumMember(Value = "enterprise")]
+        Enterprise,
+
         [EnumMember(Value = "free")]
         Free,
 
