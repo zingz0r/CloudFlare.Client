@@ -18,8 +18,8 @@
 
         public static class Endpoints
         {
+            public static string MembershipBase => "memberships";
             public static string UserBase => "user";
-
             public static string ZoneBase => "zones";
             public static string DnsRecordBase => "dns_records";
 
@@ -42,6 +42,11 @@
         public static class Filtering
         {
             /// <summary>
+            /// Account name representation on CloudFlare
+            /// </summary>
+            public static string AccountName => "account.name";
+
+            /// <summary>
             /// Name representation on CloudFlare
             /// </summary>
             public static string Name => "name";
@@ -50,6 +55,11 @@
             /// Content representation on CloudFlare
             /// </summary>
             public static string Content => "content";
+
+            /// <summary>
+            /// Direction representation on CloudFlare
+            /// </summary>
+            public static string Direction => "direction";
 
             /// <summary>
             /// DnsRecordType representation on CloudFlare

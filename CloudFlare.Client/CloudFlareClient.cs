@@ -105,6 +105,66 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region User's Account Memberships
+
+        #region GetMemberships
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships()
+        {
+            return GetMemberships(null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status)
+        {
+            return GetMemberships(status, null, null, null, null, null);
+
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName)
+        {
+            return GetMemberships(status, accountName, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page)
+        {
+            return GetMemberships(status, accountName, page, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage)
+        {
+            return GetMemberships(status, accountName, page, perPage, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage,
+            MembershipOrder? membershipOrder)
+        {
+            return GetMemberships(status, accountName, page, perPage, membershipOrder, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage,
+            MembershipOrder? membershipOrder, OrderType? order)
+        {
+            var parameterBuilder = new ParameterBuilderHelper();
+
+            parameterBuilder
+                .InsertValue(ApiParameter.Filtering.Status, status)
+                .InsertValue(ApiParameter.Filtering.AccountName, accountName)
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, membershipOrder)
+                .InsertValue(ApiParameter.Filtering.Direction, order);
+
+            var parameterString = parameterBuilder.ParameterCollection;
+
+
+            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.MembershipBase}/?{parameterString}"));
+        }
+
+        #endregion
+
+        #endregion
+
         #region Zone
 
         #region CreateZoneAsync

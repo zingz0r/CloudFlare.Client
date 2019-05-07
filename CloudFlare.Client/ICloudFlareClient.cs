@@ -35,6 +35,82 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region User's Account Memberships
+
+        #region GetMemberships
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships();
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status);
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="accountName"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName);
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="accountName"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page);
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="accountName"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+            int? perPage);
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="accountName"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <param name="membershipOrder"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+            int? perPage, MembershipOrder? membershipOrder);
+
+        /// <summary>
+        /// List memberships of accounts the user can access
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="accountName"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <param name="membershipOrder"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+            int? perPage, MembershipOrder? membershipOrder, OrderType? order);
+
+        #endregion
+
+
+        #endregion
+
         #region Zone
 
         #region CreateZoneAsync

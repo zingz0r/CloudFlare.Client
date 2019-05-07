@@ -16,5 +16,10 @@ namespace CloudFlare.Client.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Account settings
+        /// </summary>
+        [JsonProperty("settings")]
+        public AccountSettings Settings { get; set; }
     }
 }
