@@ -43,7 +43,7 @@
 ### User's Account Memberships
 
 -   [x] List Memberships
--   [ ] Membership Details
+-   [x] Membership Details
 -   [ ] Update Membership
 -   [ ] Delete Membership
 
