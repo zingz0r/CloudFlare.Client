@@ -12,7 +12,11 @@
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
-    <PackageReleaseNotes>version 1.1.4
+    <PackageReleaseNotes>version 1.1.5
+Fixed errors when using a business or enterprise account.
+List of memberships of account
+
+version 1.1.4
 - Get/Edit user implementation
 - Small improvements
 
@@ -31,9 +35,9 @@ version: 1.0.0
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.4.0</AssemblyVersion>
+    <AssemblyVersion>1.1.5.0</AssemblyVersion>
     <FileVersion>1.1.4.0</FileVersion>
-    <Version>1.1.4</Version>
+    <Version>1.1.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
