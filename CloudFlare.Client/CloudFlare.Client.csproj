@@ -13,8 +13,8 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
     <PackageReleaseNotes>version 1.1.5
-Fixed errors when using a business or enterprise account.
-List of memberships of account
+- Fixed errors when using a business or enterprise account.
+- List of memberships of account
 
 version 1.1.4
 - Get/Edit user implementation
@@ -36,7 +36,7 @@ version: 1.0.0
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.1.5.0</AssemblyVersion>
-    <FileVersion>1.1.4.0</FileVersion>
+    <FileVersion>1.1.5.0</FileVersion>
     <Version>1.1.5</Version>
   </PropertyGroup>
 
