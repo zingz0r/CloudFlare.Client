@@ -37,77 +37,86 @@ namespace CloudFlare.Client
 
         #region User's Account Memberships
 
-        #region GetMemberships
+        #region GetMembershipsAsync
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships();
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync();
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
+        /// <param name="status">Status of this membership</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status);
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status);
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="accountName"></param>
+        /// <param name="status">Status of this membership</param>
+        /// <param name="accountName">Account name</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName);
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName);
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="accountName"></param>
-        /// <param name="page"></param>
+        /// <param name="status">Status of this membership</param>
+        /// <param name="accountName">Account name</param>
+        /// <param name="page">Page number of paginated results</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page);
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page);
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="accountName"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
+        /// <param name="status">Status of this membership</param>
+        /// <param name="accountName">Account name</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of memberships per page</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage);
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="accountName"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <param name="membershipOrder"></param>
+        /// <param name="status">Status of this membership</param>
+        /// <param name="accountName">Account name</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of memberships per page</param>
+        /// <param name="membershipOrder">Field to order memberships by</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder);
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="accountName"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <param name="membershipOrder"></param>
-        /// <param name="order"></param>
+        /// <param name="status">Status of this membership</param>
+        /// <param name="accountName">Account name</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of memberships per page</param>
+        /// <param name="membershipOrder">Field to order memberships by</param>
+        /// <param name="order">Direction to order memberships</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder, OrderType? order);
 
         #endregion
 
+        #region GetMembershipDetailsAsync
+
+        /// <summary>
+        /// Get a specific membership
+        /// </summary>
+        /// <param name="id">Membership identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string id);
+        
+        #endregion
 
         #endregion
 

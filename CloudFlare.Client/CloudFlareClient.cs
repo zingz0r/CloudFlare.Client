@@ -107,41 +107,41 @@ namespace CloudFlare.Client
 
         #region User's Account Memberships
 
-        #region GetMemberships
+        #region GetMembershipsAsync
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships()
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync()
         {
-            return GetMemberships(null, null, null, null, null, null);
+            return GetMembershipsAsync(null, null, null, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status)
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status)
         {
-            return GetMemberships(status, null, null, null, null, null);
+            return GetMembershipsAsync(status, null, null, null, null, null);
 
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName)
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName)
         {
-            return GetMemberships(status, accountName, null, null, null, null);
+            return GetMembershipsAsync(status, accountName, null, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page)
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page)
         {
-            return GetMemberships(status, accountName, page, null, null, null);
+            return GetMembershipsAsync(status, accountName, page, null, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage)
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage)
         {
-            return GetMemberships(status, accountName, page, perPage, null, null);
+            return GetMembershipsAsync(status, accountName, page, perPage, null, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage,
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage,
             MembershipOrder? membershipOrder)
         {
-            return GetMemberships(status, accountName, page, perPage, membershipOrder, null);
+            return GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, null);
         }
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMemberships(MembershipStatus? status, string accountName, int? page, int? perPage,
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage,
             MembershipOrder? membershipOrder, OrderType? order)
         {
             var parameterBuilder = new ParameterBuilderHelper();
@@ -159,6 +159,16 @@ namespace CloudFlare.Client
 
             return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.MembershipBase}/?{parameterString}"));
+        }
+
+        #endregion
+
+        #region GetMembershipDetailsAsync
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string id)
+        {
+            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.MembershipBase}/?{id}"));
         }
 
         #endregion
