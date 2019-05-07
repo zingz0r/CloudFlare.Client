@@ -40,6 +40,13 @@
 
 ## Implemented functionality
 
+### User's Account Memberships
+
+-   [x] List Memberships
+-   [ ] Membership Details
+-   [ ] Update Membership
+-   [ ] Delete Membership
+
 ### User
 
 -   [x] User Details
