@@ -8,7 +8,7 @@ jobs:
      - run:
          name: Restore packages
          command:
-            dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj -c Release
+            dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
      - run:
          name: Build App
          command:
