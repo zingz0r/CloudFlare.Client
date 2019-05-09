@@ -40,6 +40,11 @@
 
 ## Implemented functionality
 
+### User
+
+-   [x] User Details
+-   [x] Edit User
+
 ### User's Account Memberships
 
 -   [x] List Memberships
@@ -47,10 +52,11 @@
 -   [x] Update Membership
 -   [x] Delete Membership
 
-### User
+### Accounts
 
--   [x] User Details
--   [x] Edit User
+-   [x] List Accounts
+-   [x] Account Details
+-   [x] Update Account
 
 ### Zone
 
