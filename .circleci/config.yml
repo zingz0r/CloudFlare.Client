@@ -2,7 +2,7 @@ version: 2.0
 jobs:
  build:
    docker:
-     - image: microsoft/aspnetcore-build:2.1
+     - image: microsoft/dotnet:2.2-sdk
    steps:
      - checkout
      - run:
