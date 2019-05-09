@@ -45,7 +45,7 @@ namespace CloudFlare.Client
         /// <param name="membershipId">Membership identifier tag</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId);
-
+        
         #endregion
 
         #region GetMembershipsAsync
