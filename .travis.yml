@@ -1,7 +1,7 @@
 dist: bionic
 mono: none
-dotnet: 2.1.0
-dotnet: 2.2.0
+dotnet: 2.1.300
+dotnet: 2.2.105
 addons:
   snaps:
   - name: dotnet-sdk
