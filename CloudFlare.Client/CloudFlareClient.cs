@@ -93,21 +93,6 @@ namespace CloudFlare.Client
 
         #endregion
 
-        #region EditMembershipAsync
-
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status)
-        {
-            var data = new Dictionary<string, SetMembershipStatus>
-            {
-                {ApiParameter.Filtering.Status, status}
-            };
-
-            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}", data));
-        }
-
-        #endregion
-
         #region GetUserDetailsAsync
 
         public Task<CloudFlareResult<User>> GetUserDetailsAsync()
@@ -121,6 +106,15 @@ namespace CloudFlare.Client
         #endregion
 
         #region User's Account Memberships
+
+        #region DeleteMembershipAsync
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId)
+        {
+            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}"));
+        }
+
+        #endregion
 
         #region GetMembershipsAsync
 
@@ -180,10 +174,25 @@ namespace CloudFlare.Client
 
         #region GetMembershipDetailsAsync
 
-        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string id)
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId)
         {
             return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/?{id}"));
+                $"{ApiParameter.Endpoints.MembershipBase}/?{membershipId}"));
+        }
+
+        #endregion
+
+        #region UpdateMembershipAsync
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status)
+        {
+            var data = new Dictionary<string, SetMembershipStatus>
+            {
+                {ApiParameter.Filtering.Status, status}
+            };
+
+            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.PutAsJsonAsync(
+                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}", data));
         }
 
         #endregion

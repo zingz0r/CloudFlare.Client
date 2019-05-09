@@ -37,16 +37,15 @@ namespace CloudFlare.Client
 
         #region User's Account Memberships
 
-        #region EditMembershipAsync
+        #region DeleteMembershipAsync
 
         /// <summary>
-        /// Accept or reject this account invitation
+        /// Remove the associated member from an account
         /// </summary>
         /// <param name="membershipId">Membership identifier tag</param>
-        /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status);
-
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId);
+        
         #endregion
 
         #region GetMembershipsAsync
@@ -126,7 +125,19 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="id">Membership identifier tag</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string id);
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId);
+
+        #endregion
+
+        #region UpdateMembershipAsync
+
+        /// <summary>
+        /// Accept or reject this account invitation
+        /// </summary>
+        /// <param name="membershipId">Membership identifier tag</param>
+        /// <param name="status">Whether to accept or reject this account invitation</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status);
 
         #endregion
 
