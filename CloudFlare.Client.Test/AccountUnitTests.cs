@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsFact]
         private void TestGetAccountsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
 
             var accounts = client.GetAccountsAsync().Result;
             Assert.NotNull(accounts);

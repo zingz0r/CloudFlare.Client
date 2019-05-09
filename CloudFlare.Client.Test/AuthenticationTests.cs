@@ -18,7 +18,7 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsFact]
         private void TestClientWithAuthentication()
         {
-            Assert.NotNull(new CloudFlareClient(Credentials.Authentication));
+            Assert.NotNull(new CloudFlareClient(Credentials.Credentials.Authentication));
         }
     }
 }

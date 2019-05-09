@@ -1,6 +1,6 @@
 ﻿using CloudFlare.Client.Models;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.Credentials
 {
     public static class Credentials
     {
