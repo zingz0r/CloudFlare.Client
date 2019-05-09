@@ -1,8 +1,15 @@
 dist: xenial
+mono: none
+dotnet: 2.1.0
+dotnet: 2.2.0
 addons:
   snaps:
   - name: dotnet-sdk
     classic: true
     channel: latest/beta
+sudo: required
+script:
+  - sudo snap alias dotnet-sdk.dotnet dotnet
+  - dotnet --version
 language: csharp
 solution: CloudFlare.Client.sln
