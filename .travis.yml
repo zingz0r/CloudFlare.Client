@@ -13,3 +13,5 @@ script:
   - dotnet --version
 language: csharp
 solution: CloudFlare.Client.sln
+
+script: dotnet test .\CloudFlare.Client.Test\CloudFlare.Client.Test.csproj
