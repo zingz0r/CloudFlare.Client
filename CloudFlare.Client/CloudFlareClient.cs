@@ -93,6 +93,21 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region EditMembershipAsync
+
+        public Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status)
+        {
+            var data = new Dictionary<string, SetMembershipStatus>
+            {
+                {ApiParameter.Filtering.Status, status}
+            };
+
+            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.PutAsJsonAsync(
+                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}", data));
+        }
+
+        #endregion
+
         #region GetUserDetailsAsync
 
         public Task<CloudFlareResult<User>> GetUserDetailsAsync()
