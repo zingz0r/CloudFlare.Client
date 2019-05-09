@@ -8,7 +8,7 @@ dotnet: 2.2.105
 
 install:
   - dotnet --info
-  - dotnet restore --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
+  - dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
   
 script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
