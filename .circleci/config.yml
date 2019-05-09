@@ -9,10 +9,8 @@ jobs:
      - run:
          name: Restore packages
          command:
-            print_title "restore packages"
             dotnet restore $CONFIG_SOLUTION /p:Configuration=Release
      - run:
          name: Build App
          command:
-            print_title "dotnet build"
             dotnet build $CONFIG_SOLUTION -c Release
