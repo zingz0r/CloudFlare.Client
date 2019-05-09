@@ -1,17 +1,15 @@
-dist: bionic
-mono: none
-dotnet: 2.1.300
-dotnet: 2.2.105
-addons:
-  snaps:
-  - name: dotnet-sdk
-    classic: true
-    channel: latest/beta
-sudo: required
-script:
-  - sudo snap alias dotnet-sdk.dotnet dotnet
-  - dotnet --version
-language: csharp
-solution: CloudFlare.Client.sln
+dist: trusty
 
-script: dotnet test .\CloudFlare.Client.Test\CloudFlare.Client.Test.csproj
+language: csharp
+solution: WeihanLi.AspNetMvc.MvcSimplePager.sln
+
+mono: none
+dotnet: 2.2.105
+
+install:
+  - dotnet --info
+  - dotnet restore
+  
+script:
+  - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
+  - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
