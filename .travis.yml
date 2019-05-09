@@ -1,2 +1,8 @@
+dist: xenial
+addons:
+  snaps:
+  - name: dotnet-sdk
+    classic: true
+    channel: latest/beta
 language: csharp
 solution: CloudFlare.Client.sln

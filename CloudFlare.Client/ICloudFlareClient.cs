@@ -441,7 +441,7 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <returns></returns>
-        Task<string> ExportDnsRecordsAsync(string zoneId);
+        Task<CloudFlareResult<string>> ExportDnsRecordsAsync(string zoneId);
 
         #endregion
 

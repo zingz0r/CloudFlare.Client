@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
@@ -57,7 +58,7 @@ namespace CloudFlare.Client
             if (string.IsNullOrEmpty(emailAddress)
                 || string.IsNullOrEmpty(apiKey))
             {
-                throw new AuthenticationException();
+                throw new AuthenticationException("Empty credentials!");
             }
 
             _httpClient = new HttpClient
@@ -67,6 +68,11 @@ namespace CloudFlare.Client
 
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
+
+            if (GetUserDetailsAsync().Result == null)
+            {
+                throw new AuthenticationException("User doesn't exists!");
+            }
         }
 
         #endregion
@@ -86,7 +92,7 @@ namespace CloudFlare.Client
                 Zipcode = editedUser.Zipcode
             };
 
-            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.PatchAsync(
+            return SendRequestAsync<User>(_httpClient.PatchAsync(
                 $"{ApiParameter.Endpoints.UserBase}/", CreatePatchContent(correctUserProps)));
         }
 
@@ -97,7 +103,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<User>> GetUserDetailsAsync()
         {
-            return SendRequestAsync<CloudFlareResult<User>>(_httpClient.GetAsync(
+            return SendRequestAsync<User>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.UserBase}/"));
         }
 
@@ -110,7 +116,7 @@ namespace CloudFlare.Client
         #region DeleteMembershipAsync
         public Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId)
         {
-            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.DeleteAsync(
+            return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.DeleteAsync(
                 $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}"));
         }
 
@@ -166,7 +172,7 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
+            return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.MembershipBase}/?{parameterString}"));
         }
 
@@ -176,7 +182,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId)
         {
-            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.GetAsync(
+            return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.MembershipBase}/?{membershipId}"));
         }
 
@@ -191,7 +197,7 @@ namespace CloudFlare.Client
                 {ApiParameter.Filtering.Status, status}
             };
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<UserMembership>>>(_httpClient.PutAsJsonAsync(
+            return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.PutAsJsonAsync(
                 $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}", data));
         }
 
@@ -233,7 +239,7 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<Account>>>(_httpClient.GetAsync(
+            return SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.AccountBase}/?{parameterString}"));
         }
 
@@ -243,7 +249,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId)
         {
-            return SendRequestAsync<CloudFlareResult<IEnumerable<Account>>>(_httpClient.GetAsync(
+            return SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.AccountBase}/?{accountId}"));
         }
 
@@ -266,7 +272,7 @@ namespace CloudFlare.Client
                 Settings = settings
             };
 
-            return SendRequestAsync<CloudFlareResult<Account>>(_httpClient.PutAsJsonAsync(
+            return SendRequestAsync<Account>(_httpClient.PutAsJsonAsync(
                 $"{ApiParameter.Endpoints.AccountBase}/{accountId}", updatedAccount));
         }
 
@@ -293,7 +299,7 @@ namespace CloudFlare.Client
                 JumpStart = jumpStart ?? false
             };
 
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync(
+            return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/", postZone));
         }
 
@@ -303,7 +309,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.DeleteAsync(
+            return SendRequestAsync<Zone>(_httpClient.DeleteAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
         }
 
@@ -313,7 +319,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PatchAsync(
+            return SendRequestAsync<Zone>(_httpClient.PatchAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}", CreatePatchContent(patchZone)));
         }
 
@@ -366,7 +372,7 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<Zone>>>(_httpClient.GetAsync(
+            return SendRequestAsync<IEnumerable<Zone>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/?{parameterString}"));
         }
 
@@ -376,7 +382,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.GetAsync(
+            return SendRequestAsync<Zone>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
         }
 
@@ -388,7 +394,7 @@ namespace CloudFlare.Client
         {
             var content = new NameValueCollection { { ApiParameter.Outgoing.PurgeEverything, purgeEverything.ToString() } };
 
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PostAsJsonAsync(
+            return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
         }
 
@@ -398,7 +404,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
         {
-            return SendRequestAsync<CloudFlareResult<Zone>>(_httpClient.PutAsync(
+            return SendRequestAsync<Zone>(_httpClient.PutAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null));
         }
 
@@ -440,7 +446,7 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PostAsJsonAsync(
+            return SendRequestAsync<DnsRecord>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/", newDnsRecord));
         }
 
@@ -450,15 +456,14 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
         {
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.DeleteAsync(
+            return SendRequestAsync<DnsRecord>(_httpClient.DeleteAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/"));
         }
 
         #endregion
 
         #region ExportDnsRecordsAsync
-
-        public Task<string> ExportDnsRecordsAsync(string zoneId)
+        public Task<CloudFlareResult<string>> ExportDnsRecordsAsync(string zoneId)
         {
             return SendRequestAsync<string>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Export}/"));
@@ -520,7 +525,7 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return SendRequestAsync<CloudFlareResult<IEnumerable<DnsRecord>>>(
+            return SendRequestAsync<IEnumerable<DnsRecord>>(
                 _httpClient.GetAsync($"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/?{parameterString}"));
         }
 
@@ -530,7 +535,7 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
         {
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.GetAsync(
+            return SendRequestAsync<DnsRecord>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}"));
         }
 
@@ -555,7 +560,7 @@ namespace CloudFlare.Client
                 }
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsImportResult>>(_httpClient.PostAsync(
+            return SendRequestAsync<DnsImportResult>(_httpClient.PostAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Import}/", form));
         }
 
@@ -585,7 +590,7 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return SendRequestAsync<CloudFlareResult<DnsRecord>>(_httpClient.PutAsJsonAsync(
+            return SendRequestAsync<DnsRecord>(_httpClient.PutAsJsonAsync(
                 $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/", updatedDnsRecord));
         }
 
@@ -601,17 +606,22 @@ namespace CloudFlare.Client
         /// <typeparam name="T">Will parse response in to this type</typeparam>
         /// <param name="request">The request task. Don't await before this func.</param>
         /// <returns></returns>
-        private static async Task<T> SendRequestAsync<T>(Task<HttpResponseMessage> request)
+        private static async Task<CloudFlareResult<T>> SendRequestAsync<T>(Task<HttpResponseMessage> request)
         {
             try
             {
                 var response = await request.ConfigureAwait(false);
-                if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    return await response.Content.ReadAsAsync<T>();
-                }
+                var content = await response.Content.ReadAsAsync<CloudFlareResult<T>>();
+                
 
-                throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.Unauthorized:
+                        throw new AuthenticationException(string.Join(Environment.NewLine, content.Errors.Select(x => x.Message)));
+                    default:
+                        return content;
+                }
             }
             catch (Exception ex)
             {
