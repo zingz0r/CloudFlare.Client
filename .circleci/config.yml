@@ -1,0 +1,15 @@
+version: 2.0
+jobs:
+ build:
+   docker:
+     - image: aparker/circleci-dotnet-mono:latest
+   steps:
+     - checkout
+     - run:
+         name: Restore packages
+         command:
+            dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
+     - run:
+         name: Build App
+         command:
+            dotnet build /CloudFlare.Client/CloudFlare.Client.csproj -c Release
