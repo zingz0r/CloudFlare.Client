@@ -123,7 +123,7 @@ namespace CloudFlare.Client
         /// <summary>
         /// Get a specific membership
         /// </summary>
-        /// <param name="id">Membership identifier tag</param>
+        /// <param name="membershipId">Membership identifier tag</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId);
 

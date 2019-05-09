@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <Authors>Tamás Tóth</Authors>
     <Company>TothNET</Company>
     <Description>.NET library for communication with the Cloudflare service API.</Description>
@@ -12,7 +12,10 @@
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
-    <PackageReleaseNotes>version 1.1.6
+    <PackageReleaseNotes>version 1.1.7
+- Support for .Net Core 3.0 and .NET Standard 2.1
+
+version 1.1.6
 - Membership Details
 - Update Membership
 - Delete Membership
@@ -40,9 +43,9 @@ version: 1.0.0
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.6.0</AssemblyVersion>
-    <FileVersion>1.1.6.0</FileVersion>
-    <Version>1.1.6</Version>
+    <AssemblyVersion>1.1.7.0</AssemblyVersion>
+    <FileVersion>1.1.7.0</FileVersion>
+    <Version>1.1.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
