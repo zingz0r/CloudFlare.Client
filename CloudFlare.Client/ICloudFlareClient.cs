@@ -45,7 +45,7 @@ namespace CloudFlare.Client
         /// <param name="membershipId">Membership identifier tag</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId);
-        
+
         #endregion
 
         #region GetMembershipsAsync
@@ -138,6 +138,76 @@ namespace CloudFlare.Client
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status);
+
+        #endregion
+
+        #endregion
+
+        #region Accounts
+
+        #region GetAccountsAsync
+
+        /// <summary>
+        /// List all accounts you have ownership or verified access to
+        /// </summary>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync();
+
+        /// <summary>
+        /// List all accounts you have ownership or verified access to
+        /// </summary>
+        /// <param name="page">Page number of paginated results</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page);
+
+        /// <summary>
+        /// List all accounts you have ownership or verified access to
+        /// </summary>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage);
+
+        /// <summary>
+        /// List all accounts you have ownership or verified access to
+        /// </summary>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <param name="order">Field to order records by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order);
+
+        #endregion
+
+        #region GetAccountDetailsAsync
+
+        /// <summary>
+        /// Get information about a specific account that you are a member of
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId);
+
+        #endregion
+
+        #region UpdateAccount
+
+        /// <summary>
+        /// Update an existing Account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="name">Account name</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name);
+
+        /// <summary>
+        /// Update an existing Account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="name">Account name</param>
+        /// <param name="settings">Account settings</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name, AccountSettings settings);
 
         #endregion
 

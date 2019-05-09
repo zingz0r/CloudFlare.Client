@@ -199,6 +199,81 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region Accounts
+
+        #region GetAccountsAsync
+
+        public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync()
+        {
+            return GetAccountsAsync(null, null, null);
+        }
+
+
+        public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page)
+        {
+            return GetAccountsAsync(page, null, null);
+        }
+
+
+        public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage)
+        {
+            return GetAccountsAsync(page, perPage, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order)
+        {
+            var parameterBuilder = new ParameterBuilderHelper();
+
+            parameterBuilder
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, order)
+                .InsertValue(ApiParameter.Filtering.Direction, order);
+
+            var parameterString = parameterBuilder.ParameterCollection;
+
+
+            return SendRequestAsync<CloudFlareResult<IEnumerable<Account>>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.AccountBase}/?{parameterString}"));
+        }
+
+        #endregion
+
+        #region GetAccountDetailsAsync
+
+        public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId)
+        {
+            return SendRequestAsync<CloudFlareResult<IEnumerable<Account>>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.AccountBase}/?{accountId}"));
+        }
+
+        #endregion
+
+        #region UpdateAccount
+
+        public Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name)
+        {
+            return UpdateAccountAsync(accountId, name, null);
+        }
+
+        public Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name,
+            AccountSettings settings)
+        {
+            var updatedAccount = new Account
+            {
+                Id = accountId,
+                Name = name,
+                Settings = settings
+            };
+
+            return SendRequestAsync<CloudFlareResult<Account>>(_httpClient.PutAsJsonAsync(
+                $"{ApiParameter.Endpoints.AccountBase}/{accountId}", updatedAccount));
+        }
+
+        #endregion
+
+        #endregion
+
         #region Zone
 
         #region CreateZoneAsync
