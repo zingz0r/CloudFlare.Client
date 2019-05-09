@@ -2,15 +2,14 @@ version: 2.0
 jobs:
  build:
    docker:
-     - image: microsoft/aspnetcore-build:2.0
+     - image: microsoft/aspnetcore-build:2.1
    steps:
      - checkout
-     - run: eval $(parse_yaml ./.circleci/app-config.yml "CONFIG_")
      - run:
          name: Restore packages
          command:
-            dotnet restore $CONFIG_SOLUTION /p:Configuration=Release
+            dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj -c Release
      - run:
          name: Build App
          command:
-            dotnet build $CONFIG_SOLUTION -c Release
+            dotnet build /CloudFlare.Client/CloudFlare.Client.csproj -c Release
