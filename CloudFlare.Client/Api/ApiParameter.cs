@@ -18,6 +18,7 @@
 
         public static class Endpoints
         {
+            public static string AccountBase => "accounts";
             public static string MembershipBase => "memberships";
             public static string UserBase => "user";
             public static string ZoneBase => "zones";
