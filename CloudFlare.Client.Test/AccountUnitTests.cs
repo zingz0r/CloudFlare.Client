@@ -9,27 +9,28 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsFact]
         private void TestGetAccountsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            {
+                var accounts = client.GetAccountsAsync().Result;
+                Assert.NotNull(accounts);
+                Assert.Empty(accounts.Errors);
 
-            var accounts = client.GetAccountsAsync().Result;
-            Assert.NotNull(accounts);
-            Assert.Empty(accounts.Errors);
+                accounts = client.GetAccountsAsync(0).Result;
+                Assert.NotNull(accounts);
+                Assert.Empty(accounts.Errors);
 
-            accounts = client.GetAccountsAsync(0).Result;
-            Assert.NotNull(accounts);
-            Assert.Empty(accounts.Errors);
+                accounts = client.GetAccountsAsync(0, 100).Result;
+                Assert.NotNull(accounts);
+                Assert.Empty(accounts.Errors);
 
-            accounts = client.GetAccountsAsync(0, 100).Result;
-            Assert.NotNull(accounts);
-            Assert.Empty(accounts.Errors);
+                accounts = client.GetAccountsAsync(0, 100, OrderType.Desc).Result;
+                Assert.NotNull(accounts);
+                Assert.Empty(accounts.Errors);
 
-            accounts = client.GetAccountsAsync(0, 100, OrderType.Desc).Result;
-            Assert.NotNull(accounts);
-            Assert.Empty(accounts.Errors);
-
-            accounts = client.GetAccountsAsync(0, 100, OrderType.Asc).Result;
-            Assert.NotNull(accounts);
-            Assert.Empty(accounts.Errors);
+                accounts = client.GetAccountsAsync(0, 100, OrderType.Asc).Result;
+                Assert.NotNull(accounts);
+                Assert.Empty(accounts.Errors);
+            }
         }
     }
 }
