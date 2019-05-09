@@ -1,4 +1,4 @@
-dist: trusty
+dist: bionic
 
 language: csharp
 solution: WeihanLi.AspNetMvc.MvcSimplePager.sln
