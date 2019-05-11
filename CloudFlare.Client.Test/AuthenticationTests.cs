@@ -5,10 +5,10 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public class AuthenticationTests
+    public static class AuthenticationTests
     {
         [Fact]
-        private void TestClientWithoutAuthentication()
+        private static void TestClientWithoutAuthentication()
         {
             Assert.Throws<AuthenticationException>(() => new CloudFlareClient(new Authentication("", "")));
 
@@ -16,7 +16,7 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        private void TestClientWithAuthentication()
+        private static void TestClientWithAuthentication()
         {
             Assert.NotNull(new CloudFlareClient(Credentials.Credentials.Authentication));
         }
