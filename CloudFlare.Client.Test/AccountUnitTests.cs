@@ -4,10 +4,10 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public class AccountUnitTests
+    public static class AccountUnitTests
     {
         [IgnoreOnEmptyCredentialsFact]
-        private void TestGetAccountsAsync()
+        private static void TestGetAccountsAsync()
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
