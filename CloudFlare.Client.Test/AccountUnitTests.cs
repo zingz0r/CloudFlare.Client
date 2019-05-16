@@ -9,10 +9,10 @@ namespace CloudFlare.Client.Test
     public static class AccountUnitTests
     {
         [IgnoreOnEmptyCredentialsTheory]
-        [InlineData(0, 100, OrderType.Desc)]
-        [InlineData(0, 100, OrderType.Asc)]
-        [InlineData(0, 100, null)]
         [InlineData(0, null, null)]
+        [InlineData(null, 100, null)]
+        [InlineData(null, null, OrderType.Asc)]
+        [InlineData(null, null, OrderType.Desc)]
         [InlineData(null, null, null)]
         public static void TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
         {
