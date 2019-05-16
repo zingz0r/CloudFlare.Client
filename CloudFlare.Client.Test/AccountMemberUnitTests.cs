@@ -51,5 +51,20 @@ namespace CloudFlare.Client.Test
                 Assert.True(false, "TODO Delete");
             }
         }
+
+        [IgnoreOnEmptyCredentialsFact]
+        public static void TestGetAccountMemberDetailsAsync()
+        {
+            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            {
+                var accounts = client.GetAccountsAsync().Result;
+                var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id).Result;
+                var accountMemberDetails = client.GetAccountMemberDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
+
+                Assert.NotNull(accountMemberDetails);
+                Assert.Empty(accountMemberDetails.Errors);
+                Assert.True(accountMemberDetails.Success);
+            }
+        }
     }
 }

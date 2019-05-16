@@ -276,6 +276,18 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region GetAccountMemberDetailsAsync
+
+        /// <summary>
+        /// Get information about a specific member of an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId, string memberId);
+
+        #endregion
+
         #endregion
 
         #region Roles

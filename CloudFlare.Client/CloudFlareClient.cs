@@ -341,6 +341,16 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region GetAccountMemberDetailsAsync
+
+        public Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId, string memberId)
+        {
+            return SendRequestAsync<AccountMember>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}"));
+        }
+
+        #endregion
+
         #endregion
 
         #region Roles
@@ -749,7 +759,7 @@ namespace CloudFlare.Client
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         #endregion
 
     }
