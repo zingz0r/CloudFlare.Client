@@ -19,6 +19,18 @@ namespace CloudFlare.Client.Enumerators
     }
 
     /// <summary>
+    /// Status of the membership when adding member
+    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum AddMembershipStatus
+    {
+        [EnumMember(Value = "accepted")]
+        Accepted,
+        [EnumMember(Value = "pending")]
+        Pending
+    }
+
+    /// <summary>
     /// Status of this membership
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]

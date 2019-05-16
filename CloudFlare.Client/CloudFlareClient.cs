@@ -69,9 +69,10 @@ namespace CloudFlare.Client
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
 
-            if (GetUserDetailsAsync().Result == null)
+            var testTheUserOnAuth = GetUserDetailsAsync().Result;
+            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
             {
-                throw new AuthenticationException("User doesn't exists!");
+                throw new AuthenticationException("Authentication error!");
             }
         }
 
@@ -281,6 +282,16 @@ namespace CloudFlare.Client
 
         #region Account Members
 
+        #region AddAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles,
+            AddMembershipStatus? status)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region GetAccountMembersAsync
 
         public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId)
@@ -314,7 +325,7 @@ namespace CloudFlare.Client
             return SendRequestAsync<IEnumerable<AccountMember>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/?{parameterString}"));
         }
-
+        
         #endregion
 
         #endregion

@@ -1,46 +1,51 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Models;
 using CloudFlare.Client.Test.FactAttributes;
+using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public class AccountMemberUnitTests
+    public static class AccountMemberUnitTests
     {
-        [IgnoreOnEmptyCredentialsFact]
-        private static void TestGetAccountsAsync()
+        [IgnoreOnEmptyCredentialsTheory]
+        [InlineData(0, 100, OrderType.Desc)]
+        [InlineData(0, 100, OrderType.Asc)]
+        [InlineData(0, 100, null)]
+        [InlineData(0, null, null)]
+        [InlineData(null, null, null)]
+        public static void TestGetAccountMembersAsync(int? page, int? perPage, OrderType? order)
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
+
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
                 Assert.True(accounts.Success);
 
-                var accountMember = client.GetAccountMembersAsync(accounts.Result.First().Id).Result;
-                Assert.NotNull(accountMember);
-                Assert.True(accountMember.Success);
-                Assert.Empty(accountMember.Errors);
+                var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order).Result;
 
-                var accountMemberPage = client.GetAccountMembersAsync(accounts.Result.First().Id, 0).Result;
-                Assert.NotNull(accountMemberPage);
-                Assert.Empty(accountMemberPage.Errors);
-                Assert.True(accountMemberPage.Success);
+                Assert.NotNull(accountMembers);
+                Assert.Empty(accountMembers.Errors);
+                Assert.True(accountMembers.Success);
+            }
+        }
 
-                var accountMemberPagePerPage = client.GetAccountMembersAsync(accounts.Result.First().Id, 0, 100).Result;
-                Assert.NotNull(accountMemberPagePerPage);
-                Assert.Empty(accountMemberPagePerPage.Errors);
-                Assert.True(accountMemberPagePerPage.Success);
+        [IgnoreOnEmptyCredentialsTheory]
+        //[InlineData("test@email.com", null, AddMembershipStatus.Accepted)]
+        [InlineData("test@email.com", null, AddMembershipStatus.Pending)]
+        public static void TestAddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status)
+        {
+            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            {
+                var addedAccountMember = client.AddAccountMemberAsync(emailAddress, roles, status).Result;
 
-                var accountMemberPagePerPageOrderDesc = client.GetAccountMembersAsync(accounts.Result.First().Id, 0, 100, OrderType.Desc).Result;
-                Assert.NotNull(accountMemberPagePerPageOrderDesc);
-                Assert.Empty(accountMemberPagePerPageOrderDesc.Errors);
-                Assert.True(accountMemberPagePerPageOrderDesc.Success);
-
-                var accountMemberPagePerPageOrderAsc = client.GetAccountMembersAsync(accounts.Result.First().Id, 0, 100, OrderType.Asc).Result;
-                Assert.NotNull(accountMemberPagePerPageOrderAsc);
-                Assert.Empty(accountMemberPagePerPageOrderAsc.Errors);
-                Assert.True(accountMemberPagePerPageOrderAsc.Success);
+                Assert.NotNull(addedAccountMember);
+                Assert.Empty(addedAccountMember.Errors);
+                Assert.True(addedAccountMember.Success);
             }
         }
     }

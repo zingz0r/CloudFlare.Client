@@ -215,6 +215,19 @@ namespace CloudFlare.Client
 
         #region Account Members
 
+        #region AddAccountMemberAsync
+
+        /// <summary>
+        /// Add a user to the list of members for this account
+        /// </summary>
+        /// <param name="emailAddress">Your contact email address</param>
+        /// <param name="roles">Array of roles associated with this member</param>
+        /// <param name="status">A member's status in the account</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status);
+
+        #endregion
+
         #region GetAccountMembersAsync
 
         /// <summary>
@@ -252,7 +265,7 @@ namespace CloudFlare.Client
         Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage, OrderType? order);
 
         #endregion
-
+        
         #endregion
 
         #region Zone
