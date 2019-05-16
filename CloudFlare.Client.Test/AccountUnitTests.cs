@@ -16,25 +16,25 @@ namespace CloudFlare.Client.Test
                 Assert.Empty(accounts.Errors);
                 Assert.True(accounts.Success);
 
-                accounts = client.GetAccountsAsync(0).Result;
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
+                var accountsPage = client.GetAccountsAsync(0).Result;
+                Assert.NotNull(accountsPage);
+                Assert.Empty(accountsPage.Errors);
+                Assert.True(accountsPage.Success);
 
-                accounts = client.GetAccountsAsync(0, 100).Result;
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
+                var accountsPagePerPage = client.GetAccountsAsync(0, 100).Result;
+                Assert.NotNull(accountsPagePerPage);
+                Assert.Empty(accountsPagePerPage.Errors);
+                Assert.True(accountsPagePerPage.Success);
 
-                accounts = client.GetAccountsAsync(0, 100, OrderType.Desc).Result;
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
+                var accountsPagePerPageOrderDesc = client.GetAccountsAsync(0, 100, OrderType.Desc).Result;
+                Assert.NotNull(accountsPagePerPageOrderDesc);
+                Assert.Empty(accountsPagePerPageOrderDesc.Errors);
+                Assert.True(accountsPagePerPageOrderDesc.Success);
 
-                accounts = client.GetAccountsAsync(0, 100, OrderType.Asc).Result;
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
+                var accountsPagePerPageOrderAsc = client.GetAccountsAsync(0, 100, OrderType.Asc).Result;
+                Assert.NotNull(accountsPagePerPageOrderAsc);
+                Assert.Empty(accountsPagePerPageOrderAsc.Errors);
+                Assert.True(accountsPagePerPageOrderAsc.Success);
             }
         }
     }

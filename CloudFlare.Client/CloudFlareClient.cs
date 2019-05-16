@@ -279,10 +279,25 @@ namespace CloudFlare.Client
 
         #endregion
 
-
         #region Account Members
 
         #region GetAccountMembersAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId)
+        {
+            return GetAccountMembersAsync(accountId, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page)
+        {
+            return GetAccountMembersAsync(accountId, page, null, null);
+
+        }
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage)
+        {
+            return GetAccountMembersAsync(accountId, page, perPage, null);
+        }
 
         public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage,
             OrderType? order)

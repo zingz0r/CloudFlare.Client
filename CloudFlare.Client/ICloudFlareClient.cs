@@ -221,6 +221,30 @@ namespace CloudFlare.Client
         /// List all members of an account
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId);
+
+        /// <summary>
+        /// List all members of an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page);
+
+        /// <summary>
+        /// List all members of an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage);
+
+        /// <summary>
+        /// List all members of an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="page">Page number of paginated results</param>
         /// <param name="perPage">Number of DNS records per page</param>
         /// <param name="order">Field to order records by</param>
