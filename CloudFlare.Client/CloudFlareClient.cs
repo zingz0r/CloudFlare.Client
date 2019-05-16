@@ -284,10 +284,15 @@ namespace CloudFlare.Client
 
         #region AddAccountMemberAsync
 
+        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles)
+        {
+            return AddAccountMemberAsync(accountId, emailAddress, roles, null);
+        }
+
         public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles,
             AddMembershipStatus? status)
         {
-            var addAccountMember = new PostAccount()
+            var addAccountMember = new PostAccount
             {
                 EmailAddress = emailAddress,
                 Roles = roles,
@@ -744,7 +749,7 @@ namespace CloudFlare.Client
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
+        
         #endregion
 
     }

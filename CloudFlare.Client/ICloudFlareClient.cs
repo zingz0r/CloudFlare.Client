@@ -223,6 +223,15 @@ namespace CloudFlare.Client
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="emailAddress">Your contact email address</param>
         /// <param name="roles">Array of roles associated with this member</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles);
+
+        /// <summary>
+        /// Add a user to the list of members for this account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="emailAddress">Your contact email address</param>
+        /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="status">A member's status in the account</param>
         /// <returns></returns>
         Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status);
