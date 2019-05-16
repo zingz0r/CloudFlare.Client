@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 CloudFlare\.Client\.Test/Credentials/Credentials\.cs
+/CloudFlare.Client.Test/Properties/launchSettings.json
