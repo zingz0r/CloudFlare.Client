@@ -14,22 +14,27 @@ namespace CloudFlare.Client.Test
                 var accounts = client.GetAccountsAsync().Result;
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
+                Assert.True(accounts.Success);
 
                 accounts = client.GetAccountsAsync(0).Result;
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
+                Assert.True(accounts.Success);
 
                 accounts = client.GetAccountsAsync(0, 100).Result;
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
+                Assert.True(accounts.Success);
 
                 accounts = client.GetAccountsAsync(0, 100, OrderType.Desc).Result;
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
+                Assert.True(accounts.Success);
 
                 accounts = client.GetAccountsAsync(0, 100, OrderType.Asc).Result;
                 Assert.NotNull(accounts);
                 Assert.Empty(accounts.Errors);
+                Assert.True(accounts.Success);
             }
         }
     }

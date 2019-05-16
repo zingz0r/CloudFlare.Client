@@ -18,20 +18,33 @@
 
         public static class Endpoints
         {
-            public static string AccountBase => "accounts";
-            public static string MembershipBase => "memberships";
-            public static string UserBase => "user";
-            public static string ZoneBase => "zones";
-            public static string DnsRecordBase => "dns_records";
+            public static class Account
+            {
+                public static string Base => "accounts";
+                public static string Members => "members";
+                public static string Role => "role";
+            }
 
             public static class DnsRecord
             {
+                public static string Base => "dns_records";
                 public static string Export => "export";
                 public static string Import => "import";
             }
 
+            public static class Membership
+            {
+                public static string Base => "memberships";
+            }
+
+            public static class User
+            {
+                public static string Base => "user";
+            }
+
             public static class Zone
             {
+                public static string Base => "zones";
                 public static string PurgeCache => "purge_cache";
                 public static string ActivationCheck => "activation_check";
             }

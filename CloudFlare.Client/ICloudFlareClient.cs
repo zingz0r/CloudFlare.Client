@@ -45,7 +45,7 @@ namespace CloudFlare.Client
         /// <param name="membershipId">Membership identifier tag</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId);
-        
+
         #endregion
 
         #region GetMembershipsAsync
@@ -208,6 +208,24 @@ namespace CloudFlare.Client
         /// <param name="settings">Account settings</param>
         /// <returns></returns>
         Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name, AccountSettings settings);
+
+        #endregion
+
+        #endregion
+
+        #region Account Members
+
+        #region GetAccountMembersAsync
+
+        /// <summary>
+        /// List all members of an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <param name="order">Field to order records by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage, OrderType? order);
 
         #endregion
 
