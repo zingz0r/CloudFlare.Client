@@ -5,9 +5,9 @@ namespace CloudFlare.Client.Test.Credentials
 {
     public static class Credentials
     {
-        private static string ApiKey => Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.User);
+        private static string ApiKey => Environment.GetEnvironmentVariable("ApiKey");
 
-        private static string EmailAddress => Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.User);
+        private static string EmailAddress => Environment.GetEnvironmentVariable("EmailAddress");
 
         public static Authentication Authentication => new Authentication(EmailAddress, ApiKey);
     }
