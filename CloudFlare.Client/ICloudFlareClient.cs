@@ -14,7 +14,6 @@ namespace CloudFlare.Client
 
         #region GetUserDetailsAsync
 
-
         /// <summary>
         /// Change user data
         /// </summary>
@@ -25,6 +24,7 @@ namespace CloudFlare.Client
         #endregion
 
         #region GetUserDetailsAsync
+       
         /// <summary>
         /// The currently logged in/authenticated User
         /// </summary>
@@ -220,11 +220,12 @@ namespace CloudFlare.Client
         /// <summary>
         /// Add a user to the list of members for this account
         /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="emailAddress">Your contact email address</param>
         /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="status">A member's status in the account</param>
         /// <returns></returns>
-        Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status);
+        Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status);
 
         #endregion
 
@@ -265,7 +266,34 @@ namespace CloudFlare.Client
         Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage, OrderType? order);
 
         #endregion
-        
+
+        #endregion
+
+        #region Roles
+
+        #region GetRolesAsync
+
+        /// <summary>
+        /// Get all available roles for an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId);
+
+        #endregion
+
+        #region GetRoleDetailsAsync
+
+        /// <summary>
+        /// Get information about a specific role for an account
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="roleId">Role identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId, string roleId);
+
+        #endregion
+
         #endregion
 
         #region Zone

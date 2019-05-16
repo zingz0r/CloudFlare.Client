@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null)]
         [InlineData("", "")]
         [InlineData("WronngEmail", "WrongKey")]
-        private static void TestClientAuthentication(string emailAddress, string apiKey)
+        public static void TestClientAuthentication(string emailAddress, string apiKey)
         {
             Assert.Throws<AuthenticationException>(() => new CloudFlareClient(emailAddress, apiKey));
         }

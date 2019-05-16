@@ -21,11 +21,6 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
-
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
-
                 var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order).Result;
 
                 Assert.NotNull(accountMembers);
@@ -35,17 +30,25 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsTheory]
-        //[InlineData("test@email.com", null, AddMembershipStatus.Accepted)]
-        [InlineData("test@email.com", null, AddMembershipStatus.Pending)]
-        public static void TestAddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status)
+        [InlineData("accepted@notexistingemail.lan", AddMembershipStatus.Accepted)]
+        [InlineData("pending@notexistingemail.lan", AddMembershipStatus.Pending)]
+        public static void TestAddAccountMemberAsync(string emailAddress, AddMembershipStatus? status)
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
-                var addedAccountMember = client.AddAccountMemberAsync(emailAddress, roles, status).Result;
+                var accounts = client.GetAccountsAsync().Result;
+                var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
+                var addedAccountMember = client.AddAccountMemberAsync(accounts.Result.First().Id, emailAddress, roles.Result, status).Result;
 
                 Assert.NotNull(addedAccountMember);
-                Assert.Empty(addedAccountMember.Errors);
-                Assert.True(addedAccountMember.Success);
+
+                if (!addedAccountMember.Errors.Select(x => x.Code).Contains(429))
+                {
+                    Assert.Empty(addedAccountMember.Errors);
+                    Assert.True(addedAccountMember.Success);
+                }
+
+                Assert.True(false, "TODO Delete");
             }
         }
     }

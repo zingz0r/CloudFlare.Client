@@ -284,10 +284,18 @@ namespace CloudFlare.Client
 
         #region AddAccountMemberAsync
 
-        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string emailAddress, IEnumerable<AccountRole> roles,
+        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles,
             AddMembershipStatus? status)
         {
-            throw new NotImplementedException();
+            var addAccountMember = new PostAccount()
+            {
+                EmailAddress = emailAddress,
+                Roles = roles,
+                Status = status ?? AddMembershipStatus.Pending
+            };
+
+            return SendRequestAsync<AccountMember>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}", addAccountMember));
         }
 
         #endregion
@@ -325,7 +333,31 @@ namespace CloudFlare.Client
             return SendRequestAsync<IEnumerable<AccountMember>>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/?{parameterString}"));
         }
-        
+
+        #endregion
+
+        #endregion
+
+        #region Roles
+
+        #region GetRolesAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId)
+        {
+            return SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}"));
+        }
+
+        #endregion
+
+        #region GetRoleDetailsAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId, string roleId)
+        {
+            return SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}"));
+        }
+
         #endregion
 
         #endregion
@@ -662,7 +694,7 @@ namespace CloudFlare.Client
             {
                 var response = await request.ConfigureAwait(false);
                 var content = await response.Content.ReadAsAsync<CloudFlareResult<T>>();
-                
+
 
                 switch (response.StatusCode)
                 {

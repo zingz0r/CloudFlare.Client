@@ -32,11 +32,6 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
-
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
-
                 var accountDetails = client.GetAccountDetailsAsync(accounts.Result.First().Id).Result;
 
                 Assert.NotNull(accountDetails);
@@ -51,11 +46,6 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
-
-                Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
-                Assert.True(accounts.Success);
-
                 var updatedAccount = client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name).Result;
 
                 Assert.NotNull(updatedAccount);

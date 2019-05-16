@@ -24,11 +24,6 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var userDetails = client.GetUserDetailsAsync().Result;
-
-                Assert.NotNull(userDetails);
-                Assert.Empty(userDetails.Errors);
-                Assert.True(userDetails.Success);
-
                 var editedUser = client.EditUserAsync(userDetails.Result).Result;
 
                 Assert.NotNull(editedUser);

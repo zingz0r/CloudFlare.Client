@@ -22,7 +22,7 @@
             {
                 public static string Base => "accounts";
                 public static string Members => "members";
-                public static string Role => "role";
+                public static string Roles => "roles";
             }
 
             public static class DnsRecord

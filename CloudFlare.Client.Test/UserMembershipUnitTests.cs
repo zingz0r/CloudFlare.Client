@@ -64,10 +64,6 @@ namespace CloudFlare.Client.Test
             {
                 var userMembership = client.GetMembershipsAsync().Result;
 
-                Assert.NotNull(userMembership);
-                Assert.Empty(userMembership.Errors);
-                Assert.True(userMembership.Success);
-
                 if (userMembership.Result.First().Status == MembershipStatus.Accepted)
                 {
                     var updateUserMembershipStatus = client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status).Result;
@@ -85,11 +81,6 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var userMembership = client.GetMembershipsAsync().Result;
-
-                Assert.NotNull(userMembership);
-                Assert.Empty(userMembership.Errors);
-                Assert.True(userMembership.Success);
-
                 var deletedMembership = client.DeleteMembershipAsync(userMembership.Result.First().Id).Result;
 
                 Assert.NotNull(deletedMembership);
