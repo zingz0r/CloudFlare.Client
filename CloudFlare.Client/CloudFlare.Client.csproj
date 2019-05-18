@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
@@ -13,7 +13,10 @@
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
-    <PackageReleaseNotes>version 1.1.7
+    <PackageReleaseNotes>version 1.1.8
+- Implementation for Account Members and Account Roles
+
+version 1.1.7
 - Support for .Net Core 3.0 and .NET Standard 2.1
 
 version 1.1.6
@@ -44,9 +47,9 @@ version: 1.0.0
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.7.0</AssemblyVersion>
-    <FileVersion>1.1.7.0</FileVersion>
-    <Version>1.1.7</Version>
+    <AssemblyVersion>1.1.8.0</AssemblyVersion>
+    <FileVersion>1.1.8.0</FileVersion>
+    <Version>1.1.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
