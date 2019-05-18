@@ -13,4 +13,4 @@ script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
   - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
   - dotnet tool install -g coveralls.net --version 1.0.0
-  - mono csmacnz.coveralls --help
+  - csmacnz.coveralls --help
