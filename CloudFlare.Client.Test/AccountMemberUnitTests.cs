@@ -46,16 +46,17 @@ namespace CloudFlare.Client.Test
                     1004, // Account member already exists for email address
                 };
 
-                if (addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code))) return;
+                if (!addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code)))
+                {
+                    Assert.Empty(addedAccountMember.Errors);
+                    Assert.True(addedAccountMember.Success);
 
-                Assert.Empty(addedAccountMember.Errors);
-                Assert.True(addedAccountMember.Success);
+                    var deletedAccountMember = client.DeleteAccountMemberAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
 
-                var deletedAccountMember = client.DeleteAccountMemberAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
-
-                Assert.NotNull(deletedAccountMember);
-                Assert.Empty(deletedAccountMember.Errors);
-                Assert.True(deletedAccountMember.Success);
+                    Assert.NotNull(deletedAccountMember);
+                    Assert.Empty(deletedAccountMember.Errors);
+                    Assert.True(deletedAccountMember.Success);
+                }
             }
         }
 
@@ -94,10 +95,11 @@ namespace CloudFlare.Client.Test
                     1001, // super user?
                 };
 
-                if (updatedMember.Errors.Any(x => notAvailable.Contains(x.Code))) return;
-
-                Assert.Empty(updatedMember.Errors);
-                Assert.True(updatedMember.Success);
+                if (!updatedMember.Errors.Any(x => notAvailable.Contains(x.Code)))
+                {
+                    Assert.Empty(updatedMember.Errors);
+                    Assert.True(updatedMember.Success);
+                }
             }
         }
     }
