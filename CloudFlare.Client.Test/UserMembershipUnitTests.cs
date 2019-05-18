@@ -16,7 +16,6 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
         [InlineData(null, null, null, null, MembershipOrder.AccountName, null)]
-        [InlineData(null, null, null, null, MembershipOrder.Id, null)]
         [InlineData(null, null, null, null, MembershipOrder.Status, null)]
         [InlineData(null, null, null, null, null, OrderType.Asc)]
         [InlineData(null, null, null, null, null, OrderType.Desc)]
