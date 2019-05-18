@@ -10,10 +10,14 @@ before_script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
 
 install:
-  - dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
+  - dotnet restore
   
 script:
-  - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
-  - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+  - dotnet build --configuration Release --framework:netcoreapp2.2
+  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --configuration Release --logger trx
   - dotnet tool install -g coveralls.net --version 1.0.0
-  - csmacnz.Coveralls --opencover -i ./CloudFlare.Client.Test/coverage.opencover.xml --repoTokenVariable repo_token --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID --useRelativePaths
+  - ls ./
+  - ls ./CloudFlare.Client.Test
+  - ls ./CloudFlare.Client.Test/TestResults
+
+  - csmacnz.Coveralls --opencover -i ./CloudFlare.Client.Test/coverage.opencover.xml --repoTokenVariable $REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID --useRelativePaths
