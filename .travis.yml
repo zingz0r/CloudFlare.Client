@@ -13,3 +13,6 @@ install:
 script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
   - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
+
+script: "sbt clean coverage test"
+after_success: "sbt coveralls"
