@@ -6,10 +6,14 @@ solution: WeihanLi.AspNetMvc.MvcSimplePager.sln
 mono: none
 dotnet: 2.2.105
 
+before_script:
+  - export PATH="$PATH:$HOME/.dotnet/tools"
+
 install:
-  - dotnet --info
   - dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
   
 script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
-  - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
+  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Configuration=Release --logger "trx;LogFileName=./coverage.opencover.xml" ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
+  - dotnet tool install -g coveralls.net --version 1.0.0
+  - csmacnz.Coveralls --opencover -i ./CloudFlare.Client.Test/TestResults/coverage.opencover.xml --repoTokenVariable repo_token --useRelativePaths

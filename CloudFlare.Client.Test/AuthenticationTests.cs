@@ -7,16 +7,26 @@ namespace CloudFlare.Client.Test
 {
     public static class AuthenticationTests
     {
-        [Fact]
-        private static void TestClientWithoutAuthentication()
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", "")]
+        [InlineData("WronngEmail", "WrongKey")]
+        public static void TestClientAuthentication(string emailAddress, string apiKey)
         {
-            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(new Authentication("", "")));
+            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(emailAddress, apiKey));
+        }
 
-            Assert.Throws<AuthenticationException>(() => new CloudFlareClient("", ""));
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", "")]
+        [InlineData("WronngEmail", "WrongKey")]
+        public static void TestClientAuthenticationWithAuthenticationObject(string emailAddress, string apiKey)
+        {
+            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(new Authentication(emailAddress, apiKey)));
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        private static void TestClientWithAuthentication()
+        public static void TestClientAuthenticationWithCredentials()
         {
             Assert.NotNull(new CloudFlareClient(Credentials.Credentials.Authentication));
         }

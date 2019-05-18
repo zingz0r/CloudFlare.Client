@@ -10,8 +10,6 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MembershipOrder
     {
-        [EnumMember(Value = "id")]
-        Id,
         [EnumMember(Value = "account.name")]
         AccountName,
         [EnumMember(Value = "status")]

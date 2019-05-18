@@ -69,9 +69,10 @@ namespace CloudFlare.Client
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
             _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
 
-            if (GetUserDetailsAsync().Result == null)
+            var testTheUserOnAuth = GetUserDetailsAsync().Result;
+            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
             {
-                throw new AuthenticationException("User doesn't exists!");
+                throw new AuthenticationException("Authentication error!");
             }
         }
 
@@ -93,7 +94,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<User>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.UserBase}/", CreatePatchContent(correctUserProps)));
+                $"{ApiParameter.Endpoints.User.Base}/", CreatePatchContent(correctUserProps)));
         }
 
 
@@ -104,7 +105,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<User>> GetUserDetailsAsync()
         {
             return SendRequestAsync<User>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.UserBase}/"));
+                $"{ApiParameter.Endpoints.User.Base}/"));
         }
 
         #endregion
@@ -117,7 +118,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId)
         {
             return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}"));
+                $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}"));
         }
 
         #endregion
@@ -173,7 +174,7 @@ namespace CloudFlare.Client
 
 
             return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/?{parameterString}"));
+                $"{ApiParameter.Endpoints.Membership.Base}/?{parameterString}"));
         }
 
         #endregion
@@ -183,7 +184,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId)
         {
             return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/?{membershipId}"));
+                $"{ApiParameter.Endpoints.Membership.Base}/?{membershipId}"));
         }
 
         #endregion
@@ -198,7 +199,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.MembershipBase}/{membershipId}", data));
+                $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", data));
         }
 
         #endregion
@@ -233,14 +234,13 @@ namespace CloudFlare.Client
             parameterBuilder
                 .InsertValue(ApiParameter.Filtering.Page, page)
                 .InsertValue(ApiParameter.Filtering.PerPage, perPage)
-                .InsertValue(ApiParameter.Filtering.Order, order)
                 .InsertValue(ApiParameter.Filtering.Direction, order);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
 
             return SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.AccountBase}/?{parameterString}"));
+                $"{ApiParameter.Endpoints.Account.Base}/?{parameterString}"));
         }
 
         #endregion
@@ -250,7 +250,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId)
         {
             return SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.AccountBase}/?{accountId}"));
+                $"{ApiParameter.Endpoints.Account.Base}/?{accountId}"));
         }
 
         #endregion
@@ -273,7 +273,146 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<Account>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.AccountBase}/{accountId}", updatedAccount));
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}", updatedAccount));
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Account Members
+
+        #region AddAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles)
+        {
+            var addAccountMember = new PostAccount
+            {
+                EmailAddress = emailAddress,
+                Roles = roles,
+                Status = AddMembershipStatus.Pending
+            };
+
+            return SendRequestAsync<AccountMember>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}", addAccountMember));
+        }
+
+        #endregion
+
+        #region DeleteAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId, string memberId)
+        {
+            return SendRequestAsync<AccountMember>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}"));
+        }
+
+        #endregion
+
+        #region GetAccountMembersAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId)
+        {
+            return GetAccountMembersAsync(accountId, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page)
+        {
+            return GetAccountMembersAsync(accountId, page, null, null);
+
+        }
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage)
+        {
+            return GetAccountMembersAsync(accountId, page, perPage, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage,
+            OrderType? order)
+        {
+            var parameterBuilder = new ParameterBuilderHelper();
+
+            parameterBuilder
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Direction, order);
+
+            var parameterString = parameterBuilder.ParameterCollection;
+
+            return SendRequestAsync<IEnumerable<AccountMember>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/?{parameterString}"));
+        }
+
+        #endregion
+
+        #region GetAccountMemberDetailsAsync
+
+        public Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId, string memberId)
+        {
+            return SendRequestAsync<AccountMember>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}"));
+        }
+
+        #endregion
+
+        #region UpdateAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null);
+
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null);
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null);
+
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status)
+        {
+            var updatedAccountMember = new AccountMember
+            {
+                Code = code,
+                User = user,
+                Roles = roles,
+            };
+
+            if (status.HasValue)
+            {
+                updatedAccountMember.Status = status.Value;
+            }
+
+            return SendRequestAsync<AccountMember>(_httpClient.PutAsJsonAsync($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", updatedAccountMember));
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Roles
+
+        #region GetRolesAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId)
+        {
+            return SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}"));
+        }
+
+        #endregion
+
+        #region GetRoleDetailsAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId, string roleId)
+        {
+            return SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}"));
         }
 
         #endregion
@@ -300,7 +439,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/", postZone));
+                $"{ApiParameter.Endpoints.Zone.Base}/", postZone));
         }
 
         #endregion
@@ -310,7 +449,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
         {
             return SendRequestAsync<Zone>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}"));
         }
 
         #endregion
@@ -320,7 +459,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone)
         {
             return SendRequestAsync<Zone>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}", CreatePatchContent(patchZone)));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchZone)));
         }
 
         #endregion
@@ -373,7 +512,7 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
             return SendRequestAsync<IEnumerable<Zone>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/?{parameterString}"));
+                $"{ApiParameter.Endpoints.Zone.Base}/?{parameterString}"));
         }
 
         #endregion
@@ -383,7 +522,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
             return SendRequestAsync<Zone>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}"));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}"));
         }
 
         #endregion
@@ -395,7 +534,7 @@ namespace CloudFlare.Client
             var content = new NameValueCollection { { ApiParameter.Outgoing.PurgeEverything, purgeEverything.ToString() } };
 
             return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
         }
 
         #endregion
@@ -405,7 +544,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
         {
             return SendRequestAsync<Zone>(_httpClient.PutAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null));
         }
 
         #endregion
@@ -447,7 +586,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<DnsRecord>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/", newDnsRecord));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/", newDnsRecord));
         }
 
         #endregion
@@ -457,7 +596,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
         {
             return SendRequestAsync<DnsRecord>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/"));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/"));
         }
 
         #endregion
@@ -466,7 +605,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<string>> ExportDnsRecordsAsync(string zoneId)
         {
             return SendRequestAsync<string>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Export}/"));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Export}/"));
         }
 
         #endregion
@@ -526,7 +665,7 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
             return SendRequestAsync<IEnumerable<DnsRecord>>(
-                _httpClient.GetAsync($"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/?{parameterString}"));
+                _httpClient.GetAsync($"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/?{parameterString}"));
         }
 
         #endregion
@@ -536,7 +675,7 @@ namespace CloudFlare.Client
         public Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
         {
             return SendRequestAsync<DnsRecord>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}"));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}"));
         }
 
         #endregion
@@ -561,7 +700,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<DnsImportResult>(_httpClient.PostAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{ApiParameter.Endpoints.DnsRecord.Import}/", form));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Import}/", form));
         }
 
         #endregion
@@ -591,7 +730,7 @@ namespace CloudFlare.Client
             };
 
             return SendRequestAsync<DnsRecord>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.ZoneBase}/{zoneId}/{ApiParameter.Endpoints.DnsRecordBase}/{identifier}/", updatedDnsRecord));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/", updatedDnsRecord));
         }
 
         #endregion
@@ -612,7 +751,7 @@ namespace CloudFlare.Client
             {
                 var response = await request.ConfigureAwait(false);
                 var content = await response.Content.ReadAsAsync<CloudFlareResult<T>>();
-                
+
 
                 switch (response.StatusCode)
                 {

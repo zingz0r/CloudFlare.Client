@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models
 {
-    public class UserMembership
+    public class AccountMember
     {
         /// <summary>
         /// Membership identifier tag
@@ -19,7 +19,7 @@ namespace CloudFlare.Client.Models
         public string Code { get; set; }
 
         /// <summary>
-        /// Status of this membership
+        /// A member's status in the account
         /// </summary>
         [JsonProperty("status")]
         public MembershipStatus Status { get; set; }
@@ -27,19 +27,13 @@ namespace CloudFlare.Client.Models
         /// <summary>
         /// Account information
         /// </summary>
-        [JsonProperty("account")]
-        public Account Account { get; set; }
+        [JsonProperty("user")]
+        public User User { get; set; }
 
         /// <summary>
-        /// List of role names for the User at the Account
+        /// Roles assigned to a member
         /// </summary>
         [JsonProperty("roles")]
-        public IEnumerable<string> Roles { get; set; }
-
-        /// <summary>
-        /// All access permissions for the User at the Account
-        /// </summary>
-        [JsonProperty("permissions")]
-        public IDictionary<string,Permission> Permissions { get; set; }
+        public IEnumerable<AccountRole> Roles { get; set; }
     }
 }

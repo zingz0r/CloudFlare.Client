@@ -16,7 +16,7 @@
 ## Installation
 
 ```bash
-    PM> Install-Package CloudFlare.Client -Version 1.1.7
+    PM> Install-Package CloudFlare.Client -Version 1.1.8
 ```
 
 ## Usage
@@ -58,6 +58,19 @@
 -   [x] List Accounts
 -   [x] Account Details
 -   [x] Update Account
+
+### Account Members
+
+-   [x] List Members
+-   [x] Add Member
+-   [x] Member Details
+-   [x] Update Member
+-   [x] Remove Member
+
+### Account Roles
+
+-   [x] List Roles
+-   [x] Role Details
 
 ### Zone
 
