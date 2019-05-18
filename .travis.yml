@@ -7,12 +7,10 @@ mono: none
 dotnet: 2.2.105
 
 install:
-  - dotnet --info
   - dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
   
 script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
   - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
-
-script: "sbt clean coverage test"
-after_success: "sbt coveralls"
+  - dotnet tool install -g coveralls.net --version 1.0.0
+  - mono csmacnz.coveralls --help
