@@ -14,6 +14,6 @@ install:
   
 script:
   - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
-  - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
+  - dotnet test ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
   - dotnet tool install -g coveralls.net --version 1.0.0
-  - csmacnz.coveralls --opencover
+  - csmacnz.Coveralls --opencover -i ./CloudFlare.Client.Test/coverage.opencover.xml --repoTokenVariable repo_token --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID --useRelativePaths
