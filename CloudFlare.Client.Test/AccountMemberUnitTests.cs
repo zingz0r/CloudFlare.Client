@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Models;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
@@ -30,25 +29,33 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsTheory]
-        [InlineData("accepted@notexistingemail.lan", AddMembershipStatus.Accepted)]
-        [InlineData("pending@notexistingemail.lan", AddMembershipStatus.Pending)]
-        public static void TestAddAccountMemberAsync(string emailAddress, AddMembershipStatus? status)
+        [InlineData("test@notexistingemail.lan")]
+        public static void TestAddAndDeleteAccountMemberAsync(string emailAddress)
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
                 var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
-                var addedAccountMember = client.AddAccountMemberAsync(accounts.Result.First().Id, emailAddress, roles.Result, status).Result;
+                var addedAccountMember = client.AddAccountMemberAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
 
                 Assert.NotNull(addedAccountMember);
 
-                if (!addedAccountMember.Errors.Select(x => x.Code).Contains(429))
+                var notAvailable = new List<int>
                 {
-                    Assert.Empty(addedAccountMember.Errors);
-                    Assert.True(addedAccountMember.Success);
-                }
+                    429, // add limit reached
+                    1004, // Account member already exists for email address
+                };
 
-                Assert.True(false, "TODO Delete");
+                if (addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code))) return;
+
+                Assert.Empty(addedAccountMember.Errors);
+                Assert.True(addedAccountMember.Success);
+
+                var deletedAccountMember = client.DeleteAccountMemberAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
+
+                Assert.NotNull(deletedAccountMember);
+                Assert.Empty(deletedAccountMember.Errors);
+                Assert.True(deletedAccountMember.Success);
             }
         }
 
@@ -64,6 +71,33 @@ namespace CloudFlare.Client.Test
                 Assert.NotNull(accountMemberDetails);
                 Assert.Empty(accountMemberDetails.Errors);
                 Assert.True(accountMemberDetails.Success);
+            }
+        }
+
+        [IgnoreOnEmptyCredentialsFact]
+        public static void TestUpdateAccountMemberAsync()
+        {
+            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            {
+                var accounts = client.GetAccountsAsync().Result;
+                var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id).Result;
+
+                var firstAccountMember = accountMembers.Result.First();
+
+                var updatedMember = client.UpdateAccountMemberAsync(accounts.Result.First().Id, firstAccountMember.Id,
+                    firstAccountMember.Roles, firstAccountMember.Code, firstAccountMember.User, MembershipStatus.Accepted).Result;
+
+                Assert.NotNull(updatedMember);
+
+                var notAvailable = new List<int>
+                {
+                    1001, // super user?
+                };
+
+                if (updatedMember.Errors.Any(x => notAvailable.Contains(x.Code))) return;
+
+                Assert.Empty(updatedMember.Errors);
+                Assert.True(updatedMember.Success);
             }
         }
     }

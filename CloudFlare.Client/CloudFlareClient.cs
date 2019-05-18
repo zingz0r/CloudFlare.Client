@@ -286,21 +286,25 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles)
         {
-            return AddAccountMemberAsync(accountId, emailAddress, roles, null);
-        }
-
-        public Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles,
-            AddMembershipStatus? status)
-        {
             var addAccountMember = new PostAccount
             {
                 EmailAddress = emailAddress,
                 Roles = roles,
-                Status = status ?? AddMembershipStatus.Pending
+                Status = AddMembershipStatus.Pending
             };
 
             return SendRequestAsync<AccountMember>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}", addAccountMember));
+        }
+
+        #endregion
+
+        #region DeleteAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId, string memberId)
+        {
+            return SendRequestAsync<AccountMember>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}"));
         }
 
         #endregion
@@ -347,6 +351,44 @@ namespace CloudFlare.Client
         {
             return SendRequestAsync<AccountMember>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}"));
+        }
+
+        #endregion
+
+        #region UpdateAccountMemberAsync
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null);
+
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null);
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user)
+        {
+            return UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null);
+
+        }
+
+        public Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status)
+        {
+            var updatedAccountMember = new AccountMember
+            {
+                Code = code,
+                User = user,
+                Roles = roles,
+            };
+
+            if (status.HasValue)
+            {
+                updatedAccountMember.Status = status.Value;
+            }
+
+            return SendRequestAsync<AccountMember>(_httpClient.PutAsJsonAsync($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", updatedAccountMember));
         }
 
         #endregion

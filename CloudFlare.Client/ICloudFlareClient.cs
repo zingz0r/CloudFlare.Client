@@ -24,7 +24,7 @@ namespace CloudFlare.Client
         #endregion
 
         #region GetUserDetailsAsync
-       
+
         /// <summary>
         /// The currently logged in/authenticated User
         /// </summary>
@@ -216,7 +216,7 @@ namespace CloudFlare.Client
         #region Account Members
 
         #region AddAccountMemberAsync
-
+        
         /// <summary>
         /// Add a user to the list of members for this account
         /// </summary>
@@ -226,15 +226,17 @@ namespace CloudFlare.Client
         /// <returns></returns>
         Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles);
 
+        #endregion
+
+        #region DeleteAccountMemberAsync
+
         /// <summary>
-        /// Add a user to the list of members for this account
+        /// Remove a member from an account
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
-        /// <param name="emailAddress">Your contact email address</param>
-        /// <param name="roles">Array of roles associated with this member</param>
-        /// <param name="status">A member's status in the account</param>
+        /// <param name="memberId">Membership identifier tag</param>
         /// <returns></returns>
-        Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles, AddMembershipStatus? status);
+        Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId, string memberId);
 
         #endregion
 
@@ -285,6 +287,52 @@ namespace CloudFlare.Client
         /// <param name="memberId">Membership identifier tag</param>
         /// <returns></returns>
         Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId, string memberId);
+
+        #endregion
+
+        #region UpdateAccountMemberAsync
+
+        /// <summary>
+        /// Modify an account member
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
+        /// <param name="roles">Roles assigned to this member</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles);
+
+        /// <summary>
+        /// Modify an account member
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
+        /// <param name="roles">Roles assigned to this member</param>
+        /// <param name="code">The unique activation code for the account membership</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code);
+
+        /// <summary>
+        /// Modify an account member
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
+        /// <param name="roles">Roles assigned to this member</param>
+        /// <param name="code">The unique activation code for the account membership</param>
+        /// <param name="user">User object</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user);
+
+        /// <summary>
+        /// Modify an account member
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
+        /// <param name="roles">Roles assigned to this member</param>
+        /// <param name="code">The unique activation code for the account membership</param>
+        /// <param name="user">User object</param>
+        /// <param name="status">A member's status in the account</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status);
 
         #endregion
 
