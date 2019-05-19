@@ -30,5 +30,5 @@ steps:
   displayName: 'Build with .Net Core 2.1 framework'
   inputs:
     command: build
-    projects: '**/*.csproj'
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
     arguments: '--framework:netcoreapp2.1 --configuration Release'
