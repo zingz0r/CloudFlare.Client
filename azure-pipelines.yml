@@ -22,28 +22,13 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 2.1'
+  displayName: 'Install .Net Core 2.1 framework'
   inputs:
     version: 2.1.505
 
-- task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 2.2'
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 2.1 framework'
   inputs:
-    version: 2.2.105
-
-- task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 3.0'
-  inputs:
-    version: 3.0.100-preview3-010431
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--framework:netcoreapp2.1 --configuration Release'
