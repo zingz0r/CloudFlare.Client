@@ -13,7 +13,7 @@ install:
   - dotnet restore ./CloudFlare.Client/CloudFlare.Client.csproj
   
 script:
-  - dotnet build /p:Configuration=Release --framework:netcoreapp2.2 ./CloudFlare.Client/CloudFlare.Client.csproj
-  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Configuration=Release --logger "trx;LogFileName=./coverage.opencover.xml" ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
+  - dotnet build --framework:netcoreapp2.2 /p:Configuration=Release ./CloudFlare.Client/CloudFlare.Client.csproj
+  - dotnet test --framework:netcoreapp2.2 /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Configuration=Release --logger "trx;LogFileName=./coverage.opencover.xml" ./CloudFlare.Client.Test/CloudFlare.Client.Test.csproj
   - dotnet tool install -g coveralls.net --version 1.0.0
   - csmacnz.Coveralls --opencover -i ./CloudFlare.Client.Test/TestResults/coverage.opencover.xml --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
