@@ -33,8 +33,29 @@ steps:
 - script: dotnet restore
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Standard 2.1 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netstandard2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.1 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
     arguments: '--framework:netcoreapp2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 2.2 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp2.2 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 3.0 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp3.0 --configuration Release'
