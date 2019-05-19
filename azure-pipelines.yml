@@ -15,20 +15,76 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@0
-
-- task: NuGetCommand@2
+- task: DotNetCoreInstaller@0
+  displayName: 'Install .Net Core 2.1 framework'
   inputs:
-    restoreSolution: '$(solution)'
+    version: 2.1.505
 
-- task: VSBuild@1
+- task: DotNetCoreInstaller@0
+  displayName: 'Install .Net Core 2.2 framework'
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    version: 2.2.105
 
-- task: VSTest@2
+- task: DotNetCoreInstaller@0
+  displayName: 'Install .Net Core 3.0 framework'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    version: 3.0.100-preview3-010431
+
+- script: dotnet restore
+  displayName: Restore nuget packages
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Standard 2.1 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netstandard2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Standard 2.1 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netstandard2.1 --configuration Release --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 2.1 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 2.1 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp2.1 --configuration Release --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 2.2 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp2.2 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 2.2 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp2.2 --configuration Release --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 3.0 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp3.0 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 3.0 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj --collect "Code coverage"'
+    arguments: '--framework:netcoreapp3.0 --configuration Release'
