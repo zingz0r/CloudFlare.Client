@@ -45,7 +45,7 @@ steps:
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netstandard2.1 --configuration Release'
+    arguments: '--framework:netstandard2.1 --configuration Release --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.1 framework'
@@ -59,7 +59,7 @@ steps:
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp2.1 --configuration Release'
+    arguments: '--framework:netcoreapp2.1 --configuration Release --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.2 framework'
@@ -73,7 +73,7 @@ steps:
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp2.2 --configuration Release'
+    arguments: '--framework:netcoreapp2.2 --configuration Release --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 3.0 framework'
@@ -86,5 +86,5 @@ steps:
   displayName: 'Test with .Net Core 3.0 framework'
   inputs:
     command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj --collect "Code coverage"'
     arguments: '--framework:netcoreapp3.0 --configuration Release'
