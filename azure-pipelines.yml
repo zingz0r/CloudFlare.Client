@@ -13,8 +13,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  EmailAddress: '$(EmailAddress)'
-  ApiKey: '$(ApiKey)'
+  EmailAddress: '$(EmailAddressPipeLine)'
+  ApiKey: '$(ApiKeyPipeLine)'
 
 steps:
 - task: DotNetCoreInstaller@0
