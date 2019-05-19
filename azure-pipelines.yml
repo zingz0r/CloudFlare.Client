@@ -21,6 +21,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: DotNetCoreInstaller@0
+  displayName: 'Use .NET Core SDK Tool Installer'
+  inputs:
+    version: 2.2.105
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
