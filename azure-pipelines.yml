@@ -41,13 +41,6 @@ steps:
     arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Test with .Net Standard 2.1 framework'
-  inputs:
-    command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
-
-- task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.1 framework'
   inputs:
     command: build
