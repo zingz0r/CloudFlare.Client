@@ -6,6 +6,7 @@
 [![Build Status](https://travis-ci.org/zingz0r/CloudFlare.Client.svg?branch=master)](https://travis-ci.org/zingz0r/CloudFlare.Client)
 [![Codacy grade](https://img.shields.io/codacy/grade/0ad1b06d9bbd4c849715223677667ddf.svg)](https://app.codacy.com/app/zingz0r/CloudFlare.Client/commits)
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/zingz0r/CloudFlare.Client.svg)
 [![Licence](https://img.shields.io/badge/licanse-CC%20BY--NC--ND%204.0-yellowgreen.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt)
 
 .NET client for communication with the CloudFlare service API.
