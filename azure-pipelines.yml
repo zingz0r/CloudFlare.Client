@@ -13,13 +13,10 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  EmailAddress: '$(EmailAddress)'
+  ApiKey: '$(ApiKey)'
 
 steps:
-- script: |
-    echo %MYSECRET%
-  env:
-    MySecret: ${EmailAddress}
-
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.1 framework'
   inputs:
