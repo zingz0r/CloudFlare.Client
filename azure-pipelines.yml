@@ -21,22 +21,30 @@ steps:
     version: 2.1.505
 
 - task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 2.2'
+  displayName: 'Install .Net Core 2.2 framework'
   inputs:
     version: 2.2.105
 
 - task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 3.0'
+  displayName: 'Install .Net Core 3.0 framework'
   inputs:
     version: 3.0.100-preview3-010431
 
 - script: dotnet restore
+  displayName: Restore nuget packages
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Standard 2.1 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netstandard2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Standard 2.1 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
     arguments: '--framework:netstandard2.1 --configuration Release'
 
 - task: DotNetCoreCLI@2
@@ -47,6 +55,13 @@ steps:
     arguments: '--framework:netcoreapp2.1 --configuration Release'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 2.1 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp2.1 --configuration Release'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.2 framework'
   inputs:
     command: build
@@ -54,8 +69,22 @@ steps:
     arguments: '--framework:netcoreapp2.2 --configuration Release'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 2.2 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp2.2 --configuration Release'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 3.0 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp3.0 --configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 3.0 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
     arguments: '--framework:netcoreapp3.0 --configuration Release'
