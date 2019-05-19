@@ -15,6 +15,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: |
+    echo %MYSECRET%
+  env:
+    MySecret: ${EmailAddress}
+
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.1 framework'
   inputs:
@@ -38,53 +43,53 @@ steps:
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netstandard2.1 --configuration Release'
+    arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test with .Net Standard 2.1 framework'
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netstandard2.1 --configuration Release --collect "Code coverage"'
+    arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.1 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp2.1 --configuration Release'
+    arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test with .Net Core 2.1 framework'
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp2.1 --configuration Release --collect "Code coverage"'
+    arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 2.2 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp2.2 --configuration Release'
+    arguments: '--framework:netcoreapp2.2 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test with .Net Core 2.2 framework'
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp2.2 --configuration Release --collect "Code coverage"'
+    arguments: '--framework:netcoreapp2.2 --configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build with .Net Core 3.0 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp3.0 --configuration Release'
+    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test with .Net Core 3.0 framework'
   inputs:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj --collect "Code coverage"'
-    arguments: '--framework:netcoreapp3.0 --configuration Release'
+    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
