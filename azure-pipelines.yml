@@ -81,3 +81,13 @@ steps:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
     arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Create NuGet package'
+  inputs:
+    feedsToUse: 'select'
+    command: 'pack'
+    configuration: '$(buildConfiguration)'
+    versioningScheme: 'off'
+    packagesToPack: '**/*.csproj'
+
