@@ -90,4 +90,5 @@ steps:
     configuration: '$(buildConfiguration)'
     versioningScheme: 'off'
     packagesToPack: '**/*.csproj'
-
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+ 
