@@ -79,5 +79,5 @@ steps:
   displayName: 'Test with .Net Core 3.0 framework'
   inputs:
     command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj --collect "Code coverage"'
-    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
