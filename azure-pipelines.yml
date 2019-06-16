@@ -28,7 +28,7 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 3.0 framework'
   inputs:
-    version: 3.0.100-preview3-010431
+    version: 3.0.100-preview6-012264
 
 - script: dotnet restore
   displayName: Restore nuget packages
