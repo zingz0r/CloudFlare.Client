@@ -395,6 +395,20 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region Account Subscriptions
+
+        #region GetAccountSubscriptionsAsync
+
+        public Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId)
+        {
+            return SendRequestAsync<IEnumerable<AccountSubscription>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Subscriptions}"));
+        }
+
+        #endregion
+
+        #endregion
+
         #region Roles
 
         #region GetRolesAsync

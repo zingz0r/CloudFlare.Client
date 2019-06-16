@@ -216,7 +216,7 @@ namespace CloudFlare.Client
         #region Account Members
 
         #region AddAccountMemberAsync
-        
+
         /// <summary>
         /// Add a user to the list of members for this account
         /// </summary>
@@ -333,6 +333,21 @@ namespace CloudFlare.Client
         /// <param name="status">A member's status in the account</param>
         /// <returns></returns>
         Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status);
+
+        #endregion
+
+        #endregion
+
+        #region Account Subscriptions
+
+        #region GetAccountSubscriptionsAsync
+
+        /// <summary>
+        /// Lists all an account's subscriptions
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
 
         #endregion
 
