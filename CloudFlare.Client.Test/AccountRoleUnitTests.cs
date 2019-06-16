@@ -4,7 +4,7 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class RoleUnitTests
+    public static class AccountRoleUnitTests
     {
         [IgnoreOnEmptyCredentialsFact]
         public static void TestGetRolesAsync()
