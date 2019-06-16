@@ -3,8 +3,8 @@
 [![Donate](https://img.shields.io/badge/donate-PayPal-blueviolet.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zgmode%40gmail.com&currency_code=USD&source=url)
 [![Nuget](https://img.shields.io/nuget/v/CloudFlare.Client.svg)](https://www.nuget.org/packages/CloudFlare.Client/)
 [![Nuget](https://img.shields.io/nuget/dt/Cloudflare.Client.svg)](https://www.nuget.org/packages/CloudFlare.Client/)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/zingz0r/CloudFlare.Client.svg)
-[![GitHub issues](https://libraries.io/github/zingz0r/CloudFlare.Client)](https://github.com/zingz0r/CloudFlare.Client/issues)
+[![Libraries.io](https://img.shields.io/librariesio/github/zingz0r/CloudFlare.Client.svg)](https://libraries.io/github/zingz0r/CloudFlare.Client)
+[![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![Licence](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-orange.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt)
 
 [![Codacy grade](https://img.shields.io/codacy/grade/0ad1b06d9bbd4c849715223677667ddf.svg)](https://app.codacy.com/app/zingz0r/CloudFlare.Client/commits)
