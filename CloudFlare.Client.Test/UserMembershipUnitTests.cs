@@ -30,8 +30,11 @@ namespace CloudFlare.Client.Test
                     .GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order).Result;
 
                 Assert.NotNull(userMembership);
-                Assert.Empty(userMembership.Errors);
                 Assert.True(userMembership.Success);
+                if (userMembership.Errors != null)
+                {
+                    Assert.Empty(userMembership.Errors);
+                }
             }
         }
 
@@ -43,14 +46,20 @@ namespace CloudFlare.Client.Test
                 var userMembership = client.GetMembershipsAsync().Result;
 
                 Assert.NotNull(userMembership);
-                Assert.Empty(userMembership.Errors);
                 Assert.True(userMembership.Success);
+                if (userMembership.Errors != null)
+                {
+                    Assert.Empty(userMembership.Errors);
+                }
 
                 var userMembershipDetails = client.GetMembershipDetailsAsync(userMembership.Result.First().Id).Result;
 
                 Assert.NotNull(userMembershipDetails);
-                Assert.Empty(userMembershipDetails.Errors);
                 Assert.True(userMembershipDetails.Success);
+                if (userMembershipDetails.Errors != null)
+                {
+                    Assert.Empty(userMembershipDetails.Errors);
+                }
             }
         }
 
@@ -83,8 +92,11 @@ namespace CloudFlare.Client.Test
                 var deletedMembership = client.DeleteMembershipAsync(userMembership.Result.First().Id).Result;
 
                 Assert.NotNull(deletedMembership);
-                Assert.Empty(deletedMembership.Errors);
                 Assert.True(deletedMembership.Success);
+                if (deletedMembership.Errors != null)
+                {
+                    Assert.Empty(deletedMembership.Errors);
+                }
             }
         }
     }

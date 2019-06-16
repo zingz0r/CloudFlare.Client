@@ -12,11 +12,14 @@ namespace CloudFlare.Client.Test
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
                 var accounts = client.GetAccountsAsync().Result;
-                var roles = client.GetAccountSubscriptionsAsync(accounts.Result.First().Id).Result;
+                var subscriptions = client.GetAccountSubscriptionsAsync(accounts.Result.First().Id).Result;
 
-                Assert.NotNull(roles);
-                Assert.Empty(roles.Errors);
-                Assert.True(roles.Success);
+                Assert.NotNull(subscriptions);
+                Assert.True(subscriptions.Success);
+                if (subscriptions.Errors != null)
+                {
+                    Assert.Empty(subscriptions.Errors);
+                }
             }
         }
     }
