@@ -35,7 +35,7 @@ namespace CloudFlare.Client
         /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
         public CloudFlareClient(Authentication cloudFlareAuthentication)
         {
-            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey);
+            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey, cloudFlareAuthentication.ApiToken);
         }
 
         /// <summary>
@@ -45,7 +45,16 @@ namespace CloudFlare.Client
         /// <param name="apiKey">CloudFlare API Key</param>
         public CloudFlareClient(string emailAddress, string apiKey)
         {
-            Initialize(emailAddress, apiKey);
+            Initialize(emailAddress, apiKey, null);
+        }
+
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        public CloudFlareClient(string apiToken)
+        {
+            Initialize(null, null, apiToken);
         }
 
         /// <summary>
@@ -53,12 +62,14 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="emailAddress">Email address</param>
         /// <param name="apiKey">CloudFlare API Key</param>
-        private void Initialize(string emailAddress, string apiKey)
+        /// <param name="apiToken">CloudFlare API token</param>
+        private void Initialize(string emailAddress, string apiKey, string apiToken)
         {
-            if (string.IsNullOrEmpty(emailAddress)
+            if ((string.IsNullOrEmpty(emailAddress)
                 || string.IsNullOrEmpty(apiKey))
+                && string.IsNullOrEmpty(apiToken))
             {
-                throw new AuthenticationException("Empty credentials!");
+                throw new AuthenticationException("Empty credentials! You must use email address/apikey or only api token combination.");
             }
 
             _httpClient = new HttpClient
@@ -66,19 +77,47 @@ namespace CloudFlare.Client
                 BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
             };
 
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
-
-            var testTheUserOnAuth = GetUserDetailsAsync().Result;
-            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+            if (!string.IsNullOrEmpty(apiToken))
             {
-                throw new AuthenticationException("Authentication error!");
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiToken);
+
+                var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
+                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+                {
+                    throw new AuthenticationException("Authentication error!");
+                }
+            }
+            else
+            {
+                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
+                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
+
+                var testTheUserOnAuth = GetUserDetailsAsync().GetAwaiter().GetResult();
+                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+                {
+                    throw new AuthenticationException("Authentication error!");
+                }
             }
         }
 
         #endregion
 
         #region User
+
+        #region Verify Token
+
+        /// <summary>
+        /// Verify API token
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <returns></returns>
+        public Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync()
+        {
+            return SendRequestAsync<VerifyToken>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}"));
+        }
+
+        #endregion
 
         #region EditUserAsync
 

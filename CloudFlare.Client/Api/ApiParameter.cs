@@ -48,6 +48,11 @@
                 public static string PurgeCache => "purge_cache";
                 public static string ActivationCheck => "activation_check";
             }
+
+            public static class Tokens {
+                public static string Base => "user/tokens";
+                public static string Verify => "verify";
+            }
         }
 
         /// <summary>

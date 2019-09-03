@@ -8,21 +8,24 @@ namespace CloudFlare.Client.Test
     public static class AuthenticationTests
     {
         [Theory]
-        [InlineData(null, null)]
-        [InlineData("", "")]
-        [InlineData("WronngEmail", "WrongKey")]
-        public static void TestClientAuthentication(string emailAddress, string apiKey)
+        [InlineData(null, null, null)]
+        [InlineData("", "", "")]
+        [InlineData("WrongEmail", "WrongKey", null)]
+        [InlineData(null, null, "WrongToken")]
+        public static void TestClientAuthentication(string emailAddress, string apiKey, string apiToken)
         {
             Assert.Throws<AuthenticationException>(() => new CloudFlareClient(emailAddress, apiKey));
+            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(apiToken));
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData("", "")]
-        [InlineData("WronngEmail", "WrongKey")]
-        public static void TestClientAuthenticationWithAuthenticationObject(string emailAddress, string apiKey)
+        [InlineData(null, null, null)]
+        [InlineData("", "", "")]
+        [InlineData("WrongEmail", "WrongKey", null)]
+        [InlineData(null, null, "WrongToken")]
+        public static void TestClientAuthenticationWithAuthenticationObject(string emailAddress, string apiKey, string apiToken)
         {
-            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(new Authentication(emailAddress, apiKey)));
+            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(new Authentication(emailAddress, apiKey, apiToken)));
         }
 
         [IgnoreOnEmptyCredentialsFact]

@@ -12,6 +12,17 @@ namespace CloudFlare.Client
     {
         #region User
 
+        #region VerifyTokenAsync
+
+        /// <summary>
+        /// Verify API token
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync();
+
+        #endregion
+
         #region GetUserDetailsAsync
 
         /// <summary>
@@ -216,7 +227,7 @@ namespace CloudFlare.Client
         #region Account Members
 
         #region AddAccountMemberAsync
-        
+
         /// <summary>
         /// Add a user to the list of members for this account
         /// </summary>
