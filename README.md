@@ -20,7 +20,7 @@
 ## Installation
 
 ```bash
-    PM> Install-Package CloudFlare.Client -Version 1.1.8
+    PM> Install-Package CloudFlare.Client -Version 1.1.9
 ```
 
 ## Usage
