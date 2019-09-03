@@ -104,7 +104,7 @@ namespace CloudFlare.Client
 
         #region User
 
-        #region Verify Token
+        #region VerifyTokenAsync
 
         /// <summary>
         /// Verify API token
