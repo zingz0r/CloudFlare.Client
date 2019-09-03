@@ -103,22 +103,7 @@ namespace CloudFlare.Client
         #endregion
 
         #region User
-
-        #region VerifyTokenAsync
-
-        /// <summary>
-        /// Verify API token
-        /// </summary>
-        /// <param name="apiToken">API token</param>
-        /// <returns></returns>
-        public Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync()
-        {
-            return SendRequestAsync<VerifyToken>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}"));
-        }
-
-        #endregion
-
+        
         #region EditUserAsync
 
         public Task<CloudFlareResult<User>> EditUserAsync(User editedUser)
@@ -145,6 +130,20 @@ namespace CloudFlare.Client
         {
             return SendRequestAsync<User>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.User.Base}/"));
+        }
+
+        #endregion
+
+        #region VerifyTokenAsync
+
+        /// <summary>
+        /// Verify API token
+        /// </summary>
+        /// <returns></returns>
+        public Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync()
+        {
+            return SendRequestAsync<VerifyToken>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}"));
         }
 
         #endregion

@@ -12,18 +12,7 @@ namespace CloudFlare.Client
     {
         #region User
 
-        #region VerifyTokenAsync
-
-        /// <summary>
-        /// Verify API token
-        /// </summary>
-        /// <param name="apiToken">API token</param>
-        /// <returns></returns>
-        Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync();
-
-        #endregion
-
-        #region GetUserDetailsAsync
+        #region EditUserAsync
 
         /// <summary>
         /// Change user data
@@ -41,6 +30,16 @@ namespace CloudFlare.Client
         /// </summary>
         /// <returns></returns>
         Task<CloudFlareResult<User>> GetUserDetailsAsync();
+
+        #endregion
+
+        #region VerifyTokenAsync
+
+        /// <summary>
+        /// Verify API token
+        /// </summary>
+        /// <returns></returns>
+        Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync();
 
         #endregion
 
