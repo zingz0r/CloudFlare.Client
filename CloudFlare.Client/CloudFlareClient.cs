@@ -9,6 +9,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
@@ -842,5 +843,40 @@ namespace CloudFlare.Client
 
         #endregion
 
+        public Task<CloudFlareResult<CustomHostname>> CreateCustomHostname(string zoneId, string hostname, PostCustomHostnameSsl ssl)
+        {
+            var postCustomHostname = new PostCustomHostname
+            {
+                Hostname = hostname,
+                Ssl = ssl
+            };
+
+            return SendRequestAsync<CustomHostname>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/custom_hostnames", postCustomHostname));
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId)
+        {
+            return SendRequestAsync<IEnumerable<CustomHostname>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/custom_hostnames"));
+        }
+
+        public Task<CloudFlareResult<CustomHostname>> GetCustomHostnameAsync(string zoneId, string customHostnameId)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/custom_hostnames/{customHostnameId}"));
+        }
+
+        public Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, PatchCustomHostname patchCustomHostname)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.PatchAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchCustomHostname)));
+        }
+
+        public Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId, string customHostnameId)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/custom_hostnames/{customHostnameId}"));
+        }
     }
 }
