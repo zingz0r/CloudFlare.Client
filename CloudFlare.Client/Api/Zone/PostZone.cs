@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Api.Zone
         /// Information about the account the zone belongs to
         /// </summary>
         [JsonProperty("account")]
-        public Account Account { get; set; }
+        public Models.Account Account { get; set; }
 
         /// <summary>
         /// A full zone implies that DNS is hosted with CloudFlare. A partial zone is typically a partner-hosted zone or a CNAME setup.

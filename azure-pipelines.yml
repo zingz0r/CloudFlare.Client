@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+- '*'
 
 pool:
   vmImage: 'windows-latest'
@@ -18,17 +18,17 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.1 framework'
   inputs:
-    version: 2.1.505
+    version: 2.1.802
 
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.2 framework'
   inputs:
-    version: 2.2.105
+    version: 2.2.402
 
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 3.0 framework'
   inputs:
-    version: 3.0.100-preview6-012264
+    version: 3.0.100
 
 - script: dotnet restore
   displayName: Restore nuget packages

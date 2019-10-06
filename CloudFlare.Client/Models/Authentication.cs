@@ -1,6 +1,4 @@
-﻿using System.Security.Authentication;
-
-namespace CloudFlare.Client.Models
+﻿namespace CloudFlare.Client.Models
 {
     public class Authentication
     {
@@ -14,10 +12,16 @@ namespace CloudFlare.Client.Models
         /// </summary>
         public string ApiKey { get; set; }
 
-        public Authentication(string emailAddress, string apiKey)
+        /// <summary>
+        /// CloudFlare API Token
+        /// </summary>
+        public string ApiToken { get; set; }
+
+        public Authentication(string emailAddress, string apiKey, string apiToken)
         {
             Email = emailAddress;
             ApiKey = apiKey;
+            ApiToken = apiToken;
         }
     }
 }

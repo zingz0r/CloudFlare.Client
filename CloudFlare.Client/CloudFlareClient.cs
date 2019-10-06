@@ -9,6 +9,8 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.Account;
+using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
@@ -24,6 +26,7 @@ namespace CloudFlare.Client
         #region Fields
 
         private HttpClient _httpClient;
+        private static string AuthenticationErrorMessage => "Authentication error!";
 
         #endregion
 
@@ -35,7 +38,7 @@ namespace CloudFlare.Client
         /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
         public CloudFlareClient(Authentication cloudFlareAuthentication)
         {
-            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey);
+            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey, cloudFlareAuthentication.ApiToken);
         }
 
         /// <summary>
@@ -45,7 +48,16 @@ namespace CloudFlare.Client
         /// <param name="apiKey">CloudFlare API Key</param>
         public CloudFlareClient(string emailAddress, string apiKey)
         {
-            Initialize(emailAddress, apiKey);
+            Initialize(emailAddress, apiKey, null);
+        }
+
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        public CloudFlareClient(string apiToken)
+        {
+            Initialize(null, null, apiToken);
         }
 
         /// <summary>
@@ -53,12 +65,14 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="emailAddress">Email address</param>
         /// <param name="apiKey">CloudFlare API Key</param>
-        private void Initialize(string emailAddress, string apiKey)
+        /// <param name="apiToken">CloudFlare API token</param>
+        private void Initialize(string emailAddress, string apiKey, string apiToken)
         {
-            if (string.IsNullOrEmpty(emailAddress)
+            if ((string.IsNullOrEmpty(emailAddress)
                 || string.IsNullOrEmpty(apiKey))
+                && string.IsNullOrEmpty(apiToken))
             {
-                throw new AuthenticationException("Empty credentials!");
+                throw new AuthenticationException("Empty credentials! You must use email address/apikey or only api token combination.");
             }
 
             _httpClient = new HttpClient
@@ -66,13 +80,26 @@ namespace CloudFlare.Client
                 BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
             };
 
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
-
-            var testTheUserOnAuth = GetUserDetailsAsync().Result;
-            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+            if (!string.IsNullOrEmpty(apiToken))
             {
-                throw new AuthenticationException("Authentication error!");
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiToken);
+
+                var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
+                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+                {
+                    throw new AuthenticationException(AuthenticationErrorMessage);
+                }
+            }
+            else
+            {
+                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
+                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
+
+                var testTheUserOnAuth = GetUserDetailsAsync().GetAwaiter().GetResult();
+                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+                {
+                    throw new AuthenticationException(AuthenticationErrorMessage);
+                }
             }
         }
 
@@ -106,6 +133,20 @@ namespace CloudFlare.Client
         {
             return SendRequestAsync<User>(_httpClient.GetAsync(
                 $"{ApiParameter.Endpoints.User.Base}/"));
+        }
+
+        #endregion
+
+        #region VerifyTokenAsync
+
+        /// <summary>
+        /// Verify API token
+        /// </summary>
+        /// <returns></returns>
+        public Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync()
+        {
+            return SendRequestAsync<VerifyToken>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}"));
         }
 
         #endregion
@@ -751,6 +792,161 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region Custom Hostname for a Zone
+
+        #region CreateCustomHostnameAsync
+
+        public Task<CloudFlareResult<CustomHostname>> CreateCustomHostnameAsync(string zoneId, string hostname, CustomHostnameSsl ssl)
+        {
+            var postCustomHostname = new PostCustomHostname
+            {
+                Hostname = hostname,
+                Ssl = ssl
+            };
+
+            return SendRequestAsync<CustomHostname>(_httpClient.PostAsJsonAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}", postCustomHostname));
+        }
+
+        #endregion
+
+        #region GetCustomHostnamesAsync
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId)
+        {
+            return GetCustomHostnamesAsync(zoneId, null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname)
+        {
+            return GetCustomHostnamesAsync(zoneId, hostname, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page)
+        {
+            return GetCustomHostnamesAsync(zoneId, hostname, page, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage)
+        {
+            return GetCustomHostnamesAsync(zoneId, hostname, page, perPage, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
+            CustomHostnameOrderType? type)
+        {
+            return GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
+            CustomHostnameOrderType? type, OrderType? order)
+        {
+            return GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
+            CustomHostnameOrderType? type, OrderType? order, bool? ssl)
+        {
+            var parameterBuilder = new ParameterBuilderHelper();
+
+            parameterBuilder
+                .InsertValue(ApiParameter.Filtering.Hostname, hostname)
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, type)
+                .InsertValue(ApiParameter.Filtering.Direction, order)
+                .InsertValue(ApiParameter.Filtering.Ssl, ssl ?? false ? 1 : 0);
+
+            var parameterString = parameterBuilder.ParameterCollection;
+
+            return SendRequestAsync<IEnumerable<CustomHostname>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}"));
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, null, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, id, null, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id, int? page)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, id, page, null, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id, int? page, int? perPage)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, null, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id, int? page, int? perPage, CustomHostnameOrderType? type)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, type, null, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id, int? page, int? perPage, CustomHostnameOrderType? type,
+            OrderType? order)
+        {
+            return GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, type, order, null);
+        }
+
+        public Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string id, int? page, int? perPage, CustomHostnameOrderType? type,
+            OrderType? order, bool? ssl)
+        {
+            var parameterBuilder = new ParameterBuilderHelper();
+
+            parameterBuilder
+                .InsertValue(ApiParameter.Filtering.Id, id)
+                .InsertValue(ApiParameter.Filtering.Page, page)
+                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
+                .InsertValue(ApiParameter.Filtering.Order, type)
+                .InsertValue(ApiParameter.Filtering.Direction, order)
+                .InsertValue(ApiParameter.Filtering.Ssl, ssl ?? false ? 1 : 0);
+
+            var parameterString = parameterBuilder.ParameterCollection;
+
+            return SendRequestAsync<IEnumerable<CustomHostname>>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}"));
+        }
+
+        #endregion
+
+        #region GetCustomHostnameDetailsAsync
+
+        public Task<CloudFlareResult<CustomHostname>> GetCustomHostnameDetailsAsync(string zoneId, string customHostnameId)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.GetAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}"));
+        }
+
+        #endregion
+
+        #region EditCustomHostnameAsync
+
+        public Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, PatchCustomHostname patchCustomHostname)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.PatchAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchCustomHostname)));
+        }
+
+        #endregion
+
+        #region DeleteCustomHostnameAsync
+
+        public Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId, string customHostnameId)
+        {
+            return SendRequestAsync<CustomHostname>(_httpClient.DeleteAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}"));
+        }
+
+        #endregion
+
+        #endregion
+
         #region SendRequestAsync
 
         /// <summary>
@@ -764,16 +960,17 @@ namespace CloudFlare.Client
             try
             {
                 var response = await request.ConfigureAwait(false);
-                var content = await response.Content.ReadAsAsync<CloudFlareResult<T>>();
+                var content = await response.Content.ReadAsStringAsync();
 
 
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
                     case HttpStatusCode.Unauthorized:
-                        throw new AuthenticationException(string.Join(Environment.NewLine, content.Errors.Select(x => x.Message)));
+                        var errorResult = JsonConvert.DeserializeObject<CloudFlareResult<object>>(content);
+                        throw new AuthenticationException(string.Join(Environment.NewLine, errorResult.Errors.Select(x => x.Message)));
                     default:
-                        return content;
+                        return JsonConvert.DeserializeObject<CloudFlareResult<T>>(content);
                 }
             }
             catch (Exception ex)
@@ -817,6 +1014,5 @@ namespace CloudFlare.Client
         }
 
         #endregion
-
     }
 }

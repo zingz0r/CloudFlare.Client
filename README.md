@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![Licence](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-orange.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt)
 
-[![Codacy grade](https://img.shields.io/codacy/grade/0ad1b06d9bbd4c849715223677667ddf.svg)](https://app.codacy.com/app/zingz0r/CloudFlare.Client/commits)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ad1b06d9bbd4c849715223677667ddf)](https://www.codacy.com/app/zingz0r/CloudFlare.Client?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zingz0r/CloudFlare.Client&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://zingzor.visualstudio.com/CloudFlare.Client/_apis/build/status/zingz0r.CloudFlare.Client?branchName=master)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
 [![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/zingzor/CloudFlare.Client/1.svg)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
 [![Azure DevOps tests](https://img.shields.io/azure-devops/tests/zingzor/CloudFlare.Client/1.svg)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
@@ -20,7 +20,7 @@
 ## Installation
 
 ```bash
-    PM> Install-Package CloudFlare.Client -Version 1.1.8
+    PM> Install-Package CloudFlare.Client -Version 1.1.9
 ```
 
 ## Usage
