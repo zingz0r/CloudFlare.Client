@@ -361,7 +361,7 @@ namespace CloudFlare.Client
         Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
 
         #endregion
-
+        
         #endregion
 
         #region Roles
