@@ -44,4 +44,4 @@
 ```
 
 ## Implemented functionality
-Check the implemented functionality [Wiki](../../wiki//Implemented-functionality) page.
+Check the implemented functionality [wiki](../../wiki//Implemented-functionality) page.
