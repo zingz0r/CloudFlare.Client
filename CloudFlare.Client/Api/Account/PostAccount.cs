@@ -3,7 +3,7 @@ using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Zone
+namespace CloudFlare.Client.Api.Account
 {
     public class PostAccount
     {

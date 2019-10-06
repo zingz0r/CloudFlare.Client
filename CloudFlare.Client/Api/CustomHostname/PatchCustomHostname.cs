@@ -1,4 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Models;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.CustomHostname
@@ -10,54 +13,6 @@ namespace CloudFlare.Client.Api.CustomHostname
         /// </summary>
         [JsonProperty("ssl", NullValueHandling = NullValueHandling.Ignore)]
         [DataMember(EmitDefaultValue = false)]
-        public PatchCustomHostnameSsl Ssl { get; set; }
-    }
-
-    public class PatchCustomHostnameSsl
-    {
-        /// <summary>
-        /// Domain control validation (DCV) method used for this hostname
-        /// </summary>
-        [JsonProperty("method")]
-        public string Method { get; set; }
-
-        /// <summary>
-        /// Level of validation to be used for this hostname. Domain validation (dv) must be used
-        /// </summary>
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// SSL specific settings
-        /// </summary>
-        [JsonProperty("settings")]
-        public PatchCustomHostnameSslSettings Settings { get; set; }
-    }
-
-    public class PatchCustomHostnameSslSettings
-    {
-        /// <summary>
-        /// Whether or not HTTP2 is enabled
-        /// </summary>
-        [JsonProperty("http2")]
-        public string Http2 { get; set; }
-
-        /// <summary>
-        /// The minimum TLS version supported
-        /// </summary>
-        [JsonProperty("min_tls_version")]
-        public string MinTlsVersion { get; set; }
-
-        /// <summary>
-        /// Whether or not TLS 1.3 is enabled
-        /// </summary>
-        [JsonProperty("tls_1_3")]
-        public string Tls13 { get; set; }
-
-        /// <summary>
-        /// A whitelist of ciphers for TLS termination. These ciphers must be in the BoringSSL format
-        /// </summary>
-        [JsonProperty("ciphers")]
-        public string[] Ciphers { get; set; }
+        public CustomHostnameSsl Ssl { get; set; }
     }
 }

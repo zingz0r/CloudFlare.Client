@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
@@ -775,6 +776,226 @@ namespace CloudFlare.Client
         /// <returns></returns>
         Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name,
             string content, int? ttl, bool? proxied);
+
+        #endregion
+
+        #endregion
+
+        #region Custom Hostname for a Zone
+
+        #region CreateCustomHostnameAsync
+
+        /// <summary>
+        /// Add a new custom hostname and request that an SSL certificate be issued for it. One of three validation methods—http,
+        /// cname, email—should be used, with 'http' recommended if the CNAME is already in place (or will be soon). Specifying 'email'
+        /// will send an email to the WHOIS contacts on file for the base domain plus hostmaster, postmaster, webmaster, admin, administrator.
+        /// Specifying 'cname' will return a CNAME that needs to be placed. If http is used and the domain is not already pointing to the Managed CNAME host,
+        /// the PATCH method must be used once it is (to complete validation).
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">The custom hostname that will point to your hostname via CNAME</param>
+        /// <param name="ssl">SSL properties used when creating the custom hostname</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<CustomHostname>> CreateCustomHostnameAsync(string zoneId, string hostname,
+            CustomHostnameSsl ssl);
+
+        #endregion
+
+        #region GetCustomHostnamesAsync
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname);
+
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page,
+            int? perPage);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page,
+            int? perPage, CustomHostnameOrderType? type);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <param name="order">Direction to order hostnames</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page,
+            int? perPage, CustomHostnameOrderType? type, OrderType? order);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="hostname">Fully qualified domain name to match against. This parameter cannot be used with the 'id' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <param name="order">Direction to order hostnames</param>
+        /// <param name="ssl">Whether to filter hostnames based on if they have SSL enabled</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page,
+            int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId);
+
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId);
+        
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page,
+            int? perPage);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page,
+            int? perPage, CustomHostnameOrderType? type);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <param name="order">Direction to order hostnames</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page,
+            int? perPage, CustomHostnameOrderType? type, OrderType? order);
+
+        /// <summary>
+        /// List, search, sort, and filter all of your custom hostnames
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Hostname ID to match against. This ID was generated and returned during the initial custom_hostname creation.
+        /// This parameter cannot be used with the 'hostname' parameter</param>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of hostnames per page</param>
+        /// <param name="type">Field to order hostnames by</param>
+        /// <param name="order">Direction to order hostnames</param>
+        /// <param name="ssl">Whether to filter hostnames based on if they have SSL enabled</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page,
+            int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl);
+
+        #endregion
+
+        #region GetCustomHostnameDetailsAsync
+
+        /// <summary>
+        /// Get all details of the specified custom hostname
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId"></param>
+        /// <returns></returns>
+        Task<CloudFlareResult<CustomHostname>> GetCustomHostnameDetailsAsync(string zoneId, string customHostnameId);
+
+        #endregion
+
+        #region EditCustomHostnameAsync
+
+        /// <summary>
+        /// Modify SSL configuration for a custom hostname. When sent with SSL config that matches existing config,
+        /// used to indicate that hostname should pass domain control validation (DCV). Can also be used to change validation type,
+        /// e.g., from 'http' to 'email'.
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="patchCustomHostname">SSL properties used when creating the custom hostname</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, PatchCustomHostname patchCustomHostname);
+
+        #endregion
+
+        #region DeleteCustomHostnameAsync
+
+        /// <summary>
+        /// Delete Custom Hostname (and any issued SSL certificates)
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Custom hostname identifier</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId, string customHostnameId);
 
         #endregion
 

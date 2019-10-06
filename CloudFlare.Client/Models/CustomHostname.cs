@@ -1,4 +1,5 @@
 ﻿using System;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models
@@ -9,7 +10,7 @@ namespace CloudFlare.Client.Models
         /// Custom hostname identifier tag
         /// </summary>
         [JsonProperty("id")]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The custom hostname that will point to your hostname via CNAME
@@ -36,13 +37,13 @@ namespace CloudFlare.Client.Models
         /// Domain control validation (DCV) method used for this hostname
         /// </summary>
         [JsonProperty("method")]
-        public string Method { get; set; }
+        public MethodType Method { get; set; }
 
         /// <summary>
         /// Level of validation to be used for this hostname. Domain validation (dv) must be used
         /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public DomainValidationType Type { get; set; }
 
         /// <summary>
         /// The value that must be returned when the CNAME (cname) is queried during domain validation
