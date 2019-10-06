@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models
@@ -9,7 +10,7 @@ namespace CloudFlare.Client.Models
         /// The rate plan identifier tag
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public LegacyType Id { get; set; }
 
         /// <summary>
         /// The public name of the rate plan
