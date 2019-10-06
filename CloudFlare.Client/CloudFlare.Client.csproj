@@ -6,9 +6,7 @@
     <Company>TothNET</Company>
     <Description>.NET library for communication with the Cloudflare service API.</Description>
     <Copyright>Copyright © 2019 - CC BY-NC-ND 4.0</Copyright>
-    <PackageLicenseUrl>https://github.com/zingz0r/CloudFlare.Client/blob/master/LICENCE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/zingz0r/CloudFlare.Client</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
@@ -20,11 +18,26 @@ List account subscriptions</PackageReleaseNotes>
     <AssemblyVersion>1.1.10.0</AssemblyVersion>
     <FileVersion>1.1.10.0</FileVersion>
     <Version>1.1.10</Version>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <PackageIcon>nuget_logo.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENCE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+      <None Include="..\CloudFlare.Client\Resources\nuget_logo.png">
+          <Pack>True</Pack>
+          <PackagePath></PackagePath>
+      </None>
   </ItemGroup>
 
 </Project>
