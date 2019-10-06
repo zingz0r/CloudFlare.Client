@@ -12,8 +12,6 @@
 [![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/zingzor/CloudFlare.Client/1.svg)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
 [![Azure DevOps tests](https://img.shields.io/azure-devops/tests/zingzor/CloudFlare.Client/1.svg)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
 
-.NET client for communication with the CloudFlare service API.
-
 > **_Info:_**  The library currently targets `.Net Core 2.1`, `.Net Core 2.2`, `.Net Core 3.0` and `.NET Standard 2.1` because of the missing functions in the older frameworks.
 > For example coz of [`PatchAsync`](https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.patchasync?view=netstandard-2.1) in HTTPClient.
 
