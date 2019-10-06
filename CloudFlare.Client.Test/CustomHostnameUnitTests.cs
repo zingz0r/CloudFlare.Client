@@ -110,5 +110,20 @@ namespace CloudFlare.Client.Test
                 Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
             }
         }
+
+        [Fact(Skip = "Would cause deleted membership")]
+        public static void TestDeleteCustomHostnameAsync()
+        {
+            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            {
+                var zoneId = client.GetZonesAsync().Result.Result.First().Id;
+                var customHostname = client.GetCustomHostnamesAsync(zoneId).Result.Result.First();
+                var deleteCustomHostname = client.DeleteCustomHostnameAsync(zoneId, customHostname.Hostname).Result;
+
+                Assert.NotNull(deleteCustomHostname);
+                Assert.Empty(deleteCustomHostname.Errors);
+                Assert.True(deleteCustomHostname.Success);
+            }
+        }
     }
 }
