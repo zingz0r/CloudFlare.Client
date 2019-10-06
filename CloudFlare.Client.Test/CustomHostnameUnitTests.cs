@@ -5,14 +5,13 @@ using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
-using Microsoft.VisualBasic;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public static class CustomHostnameUnitTests
     {
-        [IgnoreOnEmptyCredentialsTheory]
+        [MultiTheory(typeof(IgnoreOnEmptyCredentialsTheoryAttribute), typeof(MinimumPlanEnterpriseTheoryAttribute))]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -34,7 +33,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsTheory]
+        [MultiTheory(typeof(IgnoreOnEmptyCredentialsTheoryAttribute), typeof(MinimumPlanEnterpriseTheoryAttribute))]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -57,7 +56,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute))]
         public static void TestGetCustomHostnameDetailsAsync()
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
@@ -71,8 +70,8 @@ namespace CloudFlare.Client.Test
                 Assert.True(customHostnameDetails.Success);
             }
         }
-        
-        [IgnoreOnEmptyCredentialsFact]
+
+        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute))]
         public static void TestEditCustomHostnameAsync()
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))

@@ -349,6 +349,21 @@ namespace CloudFlare.Client
 
         #endregion
 
+        #region Account Subscriptions
+
+        #region GetAccountSubscriptionsAsync
+
+        /// <summary>
+        /// Lists all an account's subscriptions
+        /// </summary>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
+
+        #endregion
+        
+        #endregion
+
         #region Roles
 
         #region GetRolesAsync

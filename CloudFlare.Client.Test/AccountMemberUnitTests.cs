@@ -23,8 +23,12 @@ namespace CloudFlare.Client.Test
                 var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order).Result;
 
                 Assert.NotNull(accountMembers);
-                Assert.Empty(accountMembers.Errors);
                 Assert.True(accountMembers.Success);
+
+                if (accountMembers.Errors != null)
+                {
+                    Assert.Empty(accountMembers.Errors);
+                }
             }
         }
 
@@ -48,14 +52,20 @@ namespace CloudFlare.Client.Test
 
                 if (!addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code)))
                 {
-                    Assert.Empty(addedAccountMember.Errors);
                     Assert.True(addedAccountMember.Success);
+                    if (addedAccountMember.Errors != null)
+                    {
+                        Assert.Empty(addedAccountMember.Errors);
+                    }
 
                     var deletedAccountMember = client.DeleteAccountMemberAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
 
                     Assert.NotNull(deletedAccountMember);
-                    Assert.Empty(deletedAccountMember.Errors);
                     Assert.True(deletedAccountMember.Success);
+                    if (addedAccountMember.Errors != null)
+                    {
+                        Assert.Empty(addedAccountMember.Errors);
+                    }
                 }
             }
         }
@@ -70,8 +80,11 @@ namespace CloudFlare.Client.Test
                 var accountMemberDetails = client.GetAccountMemberDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
 
                 Assert.NotNull(accountMemberDetails);
-                Assert.Empty(accountMemberDetails.Errors);
                 Assert.True(accountMemberDetails.Success);
+                if (accountMemberDetails.Errors != null)
+                {
+                    Assert.Empty(accountMemberDetails.Errors);
+                }
             }
         }
 
@@ -97,8 +110,11 @@ namespace CloudFlare.Client.Test
 
                 if (!updatedMember.Errors.Any(x => notAvailable.Contains(x.Code)))
                 {
-                    Assert.Empty(updatedMember.Errors);
                     Assert.True(updatedMember.Success);
+                    if (updatedMember.Errors != null)
+                    {
+                        Assert.Empty(updatedMember.Errors);
+                    }
                 }
             }
         }

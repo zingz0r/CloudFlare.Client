@@ -15,8 +15,11 @@ namespace CloudFlare.Client.Test
                 var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
 
                 Assert.NotNull(roles);
-                Assert.Empty(roles.Errors);
                 Assert.True(roles.Success);
+                if (roles.Errors != null)
+                {
+                    Assert.Empty(roles.Errors);
+                }
             }
         }
 
@@ -30,8 +33,11 @@ namespace CloudFlare.Client.Test
                 var roleDetails = client.GetRoleDetailsAsync(accounts.Result.First().Id, roles.Result.First().Id).Result;
 
                 Assert.NotNull(roleDetails);
-                Assert.Empty(roleDetails.Errors);
                 Assert.True(roleDetails.Success);
+                if (roleDetails.Errors != null)
+                {
+                    Assert.Empty(roleDetails.Errors);
+                }
             }
         }
     }

@@ -21,8 +21,11 @@ namespace CloudFlare.Client.Test
                 var accounts = client.GetAccountsAsync(page, perPage, order).Result;
 
                 Assert.NotNull(accounts);
-                Assert.Empty(accounts.Errors);
                 Assert.True(accounts.Success);
+                if (accounts.Errors != null)
+                {
+                    Assert.Empty(accounts.Errors);
+                }
             }
         }
 
@@ -35,8 +38,11 @@ namespace CloudFlare.Client.Test
                 var accountDetails = client.GetAccountDetailsAsync(accounts.Result.First().Id).Result;
 
                 Assert.NotNull(accountDetails);
-                Assert.Empty(accountDetails.Errors);
                 Assert.True(accountDetails.Success);
+                if (accountDetails.Errors != null)
+                {
+                    Assert.Empty(accountDetails.Errors);
+                }
             }
         }
 
@@ -49,8 +55,11 @@ namespace CloudFlare.Client.Test
                 var updatedAccount = client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name).Result;
 
                 Assert.NotNull(updatedAccount);
-                Assert.Empty(updatedAccount.Errors);
                 Assert.True(updatedAccount.Success);
+                if (updatedAccount.Errors != null)
+                {
+                    Assert.Empty(updatedAccount.Errors);
+                }
             }
         }
     }
