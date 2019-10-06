@@ -25,6 +25,11 @@
                 public static string Roles => "roles";
             }
 
+            public static class CustomHostname
+            {
+                public static string Base => "custom_hostnames";
+            }
+
             public static class DnsRecord
             {
                 public static string Base => "dns_records";
@@ -66,11 +71,6 @@
             public static string AccountName => "account.name";
 
             /// <summary>
-            /// Name representation on CloudFlare
-            /// </summary>
-            public static string Name => "name";
-
-            /// <summary>
             /// Content representation on CloudFlare
             /// </summary>
             public static string Content => "content";
@@ -86,19 +86,24 @@
             public static string DnsRecordType => "type";
 
             /// <summary>
-            /// Proxied representation on CloudFlare
+            /// Hostname representation on CloudFlare
             /// </summary>
-            public static string Proxied => "proxied";
+            public static string Hostname => "hostname";
 
             /// <summary>
-            /// Ttl representation on CloudFlare
+            /// Identifier representation on CloudFlare
             /// </summary>
-            public static string Ttl => "ttl";
+            public static string Id => "id";
 
             /// <summary>
             /// Match representation on CloudFlare
             /// </summary>
             public static string Match => "match";
+
+            /// <summary>
+            /// Name representation on CloudFlare
+            /// </summary>
+            public static string Name => "name";
 
             /// <summary>
             /// Order representation on CloudFlare
@@ -114,6 +119,16 @@
             /// PerPage representation on CloudFlare
             /// </summary>
             public static string PerPage => "per_page";
+
+            /// <summary>
+            /// Proxied representation on CloudFlare
+            /// </summary>
+            public static string Proxied => "proxied";
+
+            /// <summary>
+            /// Ssl representation on CloudFlare
+            /// </summary>
+            public static string Ssl => "ssl";
 
             /// <summary>
             /// Status representation on CloudFlare
