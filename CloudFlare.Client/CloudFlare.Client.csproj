@@ -13,7 +13,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
     <PackageReleaseNotes>Custom hostnames - thanks to Jing Wu
-list account subscriptions</PackageReleaseNotes>
+List account subscriptions</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
