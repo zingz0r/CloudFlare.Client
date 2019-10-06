@@ -18,17 +18,17 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.1 framework'
   inputs:
-    version: 2.1.*
+    version: 2.1.x
 
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 2.2 framework'
   inputs:
-    version: 2.2.*
+    version: 2.2.x
 
 - task: DotNetCoreInstaller@0
   displayName: 'Install .Net Core 3.0 framework'
   inputs:
-    version: 3.0.*
+    version: 3.0.x
 
 - script: dotnet restore
   displayName: Restore nuget packages
