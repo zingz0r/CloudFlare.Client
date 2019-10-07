@@ -83,7 +83,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [Fact(Skip = "Would cause deleted membership")]
+        [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted membership")]
         public static void TestDeleteMembershipAsync()
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))

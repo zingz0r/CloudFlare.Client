@@ -33,7 +33,7 @@ namespace CloudFlare.Client.Models
         /// How often the subscription is renewed automatically
         /// </summary>
         [JsonProperty("frequency")]
-        public string Frequency { get; set; }
+        public Frequency Frequency { get; set; }
 
         /// <summary>
         /// Legacy id
