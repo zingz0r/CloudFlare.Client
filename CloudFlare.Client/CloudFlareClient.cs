@@ -586,8 +586,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything)
         {
-            var content = new NameValueCollection { { ApiParameter.Outgoing.PurgeEverything, purgeEverything.ToString() } };
-
+            var content = new Dictionary<string, bool> {{ApiParameter.Outgoing.PurgeEverything, purgeEverything}};
+            
             return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
         }
