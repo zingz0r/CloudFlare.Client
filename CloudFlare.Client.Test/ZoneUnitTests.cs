@@ -121,8 +121,20 @@ namespace CloudFlare.Client.Test
                 var zoneActivationCheckQueryResult = client.ZoneActivationCheckAsync(zonesQueryResult.Id).Result;
 
                 Assert.NotNull(zoneActivationCheckQueryResult);
-                Assert.Empty(zoneActivationCheckQueryResult.Errors);
-                Assert.True(zoneActivationCheckQueryResult.Success);
+
+                var notAvailable = new List<int>
+                {
+                    1224, // You may only perform this action once per hour.
+                };
+
+                if (!zoneActivationCheckQueryResult.Messages.Any(x => notAvailable.Contains(x.Code)))
+                {
+                    Assert.True(zoneActivationCheckQueryResult.Success);
+                    if (zoneActivationCheckQueryResult.Errors != null)
+                    {
+                        Assert.Empty(zoneActivationCheckQueryResult.Errors);
+                    }
+                }
             }
         }
 
