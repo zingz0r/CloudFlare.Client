@@ -127,7 +127,7 @@ namespace CloudFlare.Client.Test
                     1224, // You may only perform this action once per hour.
                 };
 
-                if (!zoneActivationCheckQueryResult.Messages.Any(x => notAvailable.Contains(x.Code)))
+                if (!zoneActivationCheckQueryResult.Errors.Any(x => notAvailable.Contains(x.Code)))
                 {
                     Assert.True(zoneActivationCheckQueryResult.Success);
                     if (zoneActivationCheckQueryResult.Errors != null)
