@@ -71,7 +71,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute))]
+        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute), Skip = "Would cause edited hostname")]
         public static void TestEditCustomHostnameAsync()
         {
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
