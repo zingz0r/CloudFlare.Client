@@ -996,9 +996,10 @@ namespace CloudFlare.Client
         /// e.g., from 'http' to 'email'.
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
+        /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="patchCustomHostname">SSL properties used when creating the custom hostname</param>
         /// <returns></returns>
-        Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, PatchCustomHostname patchCustomHostname);
+        Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, string customHostnameId, PatchCustomHostname patchCustomHostname);
 
         #endregion
 

@@ -927,10 +927,10 @@ namespace CloudFlare.Client
 
         #region EditCustomHostnameAsync
 
-        public Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, PatchCustomHostname patchCustomHostname)
+        public Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, string customHostnameId, PatchCustomHostname patchCustomHostname)
         {
             return SendRequestAsync<CustomHostname>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchCustomHostname)));
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}", CreatePatchContent(patchCustomHostname)));
         }
 
         #endregion
