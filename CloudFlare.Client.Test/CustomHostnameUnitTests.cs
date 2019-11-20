@@ -98,7 +98,7 @@ namespace CloudFlare.Client.Test
                     }
                 };
 
-                var editCustomHostname = client.EditCustomHostnameAsync(zoneId, patchData).Result;
+                var editCustomHostname = client.EditCustomHostnameAsync(zoneId, customHostname.Id, patchData).Result;
                 
                 Assert.NotNull(editCustomHostname);
                 Assert.Empty(editCustomHostname.Errors);
