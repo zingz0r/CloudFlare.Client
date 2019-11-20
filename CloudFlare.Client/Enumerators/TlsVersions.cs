@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace CloudFlare.Client.Enumerators
@@ -12,25 +13,25 @@ namespace CloudFlare.Client.Enumerators
         /// <summary>
         /// TLS version 1.0
         /// </summary>
-        [JsonProperty("1.0")]
+        [EnumMember(Value = "1.0")]
         Tls10,
 
         /// <summary>
         /// TLS version 1.1
         /// </summary>
-        [JsonProperty("1.1")]
+        [EnumMember(Value = "1.1")]
         Tls11,
 
         /// <summary>
         /// TLS version 1.2
         /// </summary>
-        [JsonProperty("1.2")]
+        [EnumMember(Value = "1.2")]
         Tls12,
 
         /// <summary>
         /// TLS version 1.3
         /// </summary>
-        [JsonProperty("1.3")]
+        [EnumMember(Value = "1.3")]
         Tls13
     }
 }

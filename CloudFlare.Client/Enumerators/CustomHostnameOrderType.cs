@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace CloudFlare.Client.Enumerators
@@ -9,10 +10,10 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum CustomHostnameOrderType
     {
-        [JsonProperty("ssl")]
+        [EnumMember(Value = "ssl")]
         Ssl,
 
-        [JsonProperty("ssl_status")]
+        [EnumMember(Value = "ssl_status")]
         SslStatus
     }
 }
