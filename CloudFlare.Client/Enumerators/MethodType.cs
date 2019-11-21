@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace CloudFlare.Client.Enumerators
@@ -9,13 +10,13 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MethodType
     {
-        [JsonProperty("http")]
+        [EnumMember(Value = "http")]
         Http,
 
-        [JsonProperty("email")]
+        [EnumMember(Value = "email")]
         Email,
 
-        [JsonProperty("cname")]
+        [EnumMember(Value = "cname")]
         Cname
     }
 }
