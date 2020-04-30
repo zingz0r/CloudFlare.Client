@@ -23,5 +23,10 @@
             ApiKey = apiKey;
             ApiToken = apiToken;
         }
+
+        public Authentication()
+        {
+            
+        }
     }
 }

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
@@ -16,50 +16,44 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, null)]
         public static void TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var accounts = client.GetAccountsAsync(page, perPage, order).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var accounts = client.GetAccountsAsync(page, perPage, order).Result;
 
-                Assert.NotNull(accounts);
-                Assert.True(accounts.Success);
-                if (accounts.Errors != null)
-                {
-                    Assert.Empty(accounts.Errors);
-                }
+            Assert.NotNull(accounts);
+            Assert.True(accounts.Success);
+            if (accounts.Errors != null)
+            {
+                Assert.Empty(accounts.Errors);
             }
         }
 
         [IgnoreOnEmptyCredentialsFact]
         public static void TestGetAccountDetailsAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var accounts = client.GetAccountsAsync().Result;
-                var accountDetails = client.GetAccountDetailsAsync(accounts.Result.First().Id).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var accounts = client.GetAccountsAsync().Result;
+            var accountDetails = client.GetAccountDetailsAsync(accounts.Result.First().Id).Result;
 
-                Assert.NotNull(accountDetails);
-                Assert.True(accountDetails.Success);
-                if (accountDetails.Errors != null)
-                {
-                    Assert.Empty(accountDetails.Errors);
-                }
+            Assert.NotNull(accountDetails);
+            Assert.True(accountDetails.Success);
+            if (accountDetails.Errors != null)
+            {
+                Assert.Empty(accountDetails.Errors);
             }
         }
 
         [IgnoreOnEmptyCredentialsFact]
         public static void UpdateAccountAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var accounts = client.GetAccountsAsync().Result;
-                var updatedAccount = client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var accounts = client.GetAccountsAsync().Result;
+            var updatedAccount = client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name).Result;
 
-                Assert.NotNull(updatedAccount);
-                Assert.True(updatedAccount.Success);
-                if (updatedAccount.Errors != null)
-                {
-                    Assert.Empty(updatedAccount.Errors);
-                }
+            Assert.NotNull(updatedAccount);
+            Assert.True(updatedAccount.Success);
+            if (updatedAccount.Errors != null)
+            {
+                Assert.Empty(updatedAccount.Errors);
             }
         }
     }

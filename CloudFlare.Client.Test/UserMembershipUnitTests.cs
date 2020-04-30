@@ -24,42 +24,38 @@ namespace CloudFlare.Client.Test
             int? perPage,
             MembershipOrder? membershipOrder, OrderType? order)
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var userMembership = client
-                    .GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var userMembership = client
+                .GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order).Result;
 
-                Assert.NotNull(userMembership);
-                Assert.True(userMembership.Success);
-                if (userMembership.Errors != null)
-                {
-                    Assert.Empty(userMembership.Errors);
-                }
+            Assert.NotNull(userMembership);
+            Assert.True(userMembership.Success);
+            if (userMembership.Errors != null)
+            {
+                Assert.Empty(userMembership.Errors);
             }
         }
 
         [IgnoreOnEmptyCredentialsFact]
         public static void TestGetMembershipDetailsAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var userMembership = client.GetMembershipsAsync().Result;
+
+            Assert.NotNull(userMembership);
+            Assert.True(userMembership.Success);
+            if (userMembership.Errors != null)
             {
-                var userMembership = client.GetMembershipsAsync().Result;
+                Assert.Empty(userMembership.Errors);
+            }
 
-                Assert.NotNull(userMembership);
-                Assert.True(userMembership.Success);
-                if (userMembership.Errors != null)
-                {
-                    Assert.Empty(userMembership.Errors);
-                }
+            var userMembershipDetails = client.GetMembershipDetailsAsync(userMembership.Result.First().Id).Result;
 
-                var userMembershipDetails = client.GetMembershipDetailsAsync(userMembership.Result.First().Id).Result;
-
-                Assert.NotNull(userMembershipDetails);
-                Assert.True(userMembershipDetails.Success);
-                if (userMembershipDetails.Errors != null)
-                {
-                    Assert.Empty(userMembershipDetails.Errors);
-                }
+            Assert.NotNull(userMembershipDetails);
+            Assert.True(userMembershipDetails.Success);
+            if (userMembershipDetails.Errors != null)
+            {
+                Assert.Empty(userMembershipDetails.Errors);
             }
         }
 
@@ -68,35 +64,31 @@ namespace CloudFlare.Client.Test
         [InlineData(SetMembershipStatus.Rejected)]
         public static void TestUpdateMembershipStatusAsync(SetMembershipStatus status)
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var userMembership = client.GetMembershipsAsync().Result;
+
+            if (userMembership.Result.First().Status == MembershipStatus.Accepted)
             {
-                var userMembership = client.GetMembershipsAsync().Result;
+                var updateUserMembershipStatus = client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status).Result;
 
-                if (userMembership.Result.First().Status == MembershipStatus.Accepted)
-                {
-                    var updateUserMembershipStatus = client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status).Result;
-
-                    Assert.NotNull(updateUserMembershipStatus);
-                    Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x => x.Code));
-                    Assert.False(updateUserMembershipStatus.Success);
-                }
+                Assert.NotNull(updateUserMembershipStatus);
+                Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x => x.Code));
+                Assert.False(updateUserMembershipStatus.Success);
             }
         }
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted membership")]
         public static void TestDeleteMembershipAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var userMembership = client.GetMembershipsAsync().Result;
-                var deletedMembership = client.DeleteMembershipAsync(userMembership.Result.First().Id).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var userMembership = client.GetMembershipsAsync().Result;
+            var deletedMembership = client.DeleteMembershipAsync(userMembership.Result.First().Id).Result;
 
-                Assert.NotNull(deletedMembership);
-                Assert.True(deletedMembership.Success);
-                if (deletedMembership.Errors != null)
-                {
-                    Assert.Empty(deletedMembership.Errors);
-                }
+            Assert.NotNull(deletedMembership);
+            Assert.True(deletedMembership.Success);
+            if (deletedMembership.Errors != null)
+            {
+                Assert.Empty(deletedMembership.Errors);
             }
         }
     }

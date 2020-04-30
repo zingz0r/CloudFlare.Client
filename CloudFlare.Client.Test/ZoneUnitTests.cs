@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
@@ -17,15 +16,13 @@ namespace CloudFlare.Client.Test
         [InlineData(@"test_domain_partial.com", ZoneType.Partial)]
         public void TestCreateZoneAsync(string name, ZoneType type)
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var account = client.GetAccountsAsync().Result.Result.First();
-                var zonesQueryResult = client.CreateZoneAsync(name, type, account).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var account = client.GetAccountsAsync().Result.Result.First();
+            var zonesQueryResult = client.CreateZoneAsync(name, type, account).Result;
 
-                Assert.NotNull(zonesQueryResult);
-                Assert.Empty(zonesQueryResult.Errors);
-                Assert.True(zonesQueryResult.Success);
-            }
+            Assert.NotNull(zonesQueryResult);
+            Assert.Empty(zonesQueryResult.Errors);
+            Assert.True(zonesQueryResult.Success);
         }
 
         [IgnoreOnEmptyCredentialsTheory]
@@ -46,94 +43,84 @@ namespace CloudFlare.Client.Test
         public void TestGetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
             OrderType? order, bool? match)
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var zonesQueryResult = client.GetZonesAsync(name, status, page, perPage, order, match).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync(name, status, page, perPage, order, match).Result;
 
-                Assert.NotNull(zonesQueryResult);
-                Assert.Empty(zonesQueryResult.Errors);
-                Assert.True(zonesQueryResult.Success);
-            }
+            Assert.NotNull(zonesQueryResult);
+            Assert.Empty(zonesQueryResult.Errors);
+            Assert.True(zonesQueryResult.Success);
         }
 
         [IgnoreOnEmptyCredentialsFact]
         public void TestGetZoneDetailsAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-                var zoneDetailsQueryResult = client.GetZoneDetailsAsync(zonesQueryResult.Id).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
+            var zoneDetailsQueryResult = client.GetZoneDetailsAsync(zonesQueryResult.Id).Result;
 
-                Assert.NotNull(zoneDetailsQueryResult);
-                Assert.Empty(zoneDetailsQueryResult.Errors);
-                Assert.True(zoneDetailsQueryResult.Success);
-            }
+            Assert.NotNull(zoneDetailsQueryResult);
+            Assert.Empty(zoneDetailsQueryResult.Errors);
+            Assert.True(zoneDetailsQueryResult.Success);
         }
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause edited zone")]
         public void TestEditZoneAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
+            var editZoneQueryResult = client.EditZoneAsync(zonesQueryResult.Id, new PatchZone
             {
-                var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-                var editZoneQueryResult = client.EditZoneAsync(zonesQueryResult.Id, new PatchZone
+                Paused = false,
+                Plan = new Plan
                 {
-                    Paused = false,
-                    Plan = new Plan
-                    {
-                        Id = "e592fd9519420ba7405e1307bff33214"
-                    },
-                    VanityNameServers = new List<string>
-                    {
-                        "ns1.example.com",
-                        "ns2.example.com"
-                    }
-                }).Result;
+                    Id = "e592fd9519420ba7405e1307bff33214"
+                },
+                VanityNameServers = new List<string>
+                {
+                    "ns1.example.com",
+                    "ns2.example.com"
+                }
+            }).Result;
 
-                Assert.NotNull(editZoneQueryResult);
-                Assert.Empty(editZoneQueryResult.Errors);
-                Assert.True(editZoneQueryResult.Success);
-            }
+            Assert.NotNull(editZoneQueryResult);
+            Assert.Empty(editZoneQueryResult.Errors);
+            Assert.True(editZoneQueryResult.Success);
         }
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted zone")]
 
         public void TestDeleteZoneAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-                var deletedZoneQueryResult = client.DeleteZoneAsync(zonesQueryResult.Id).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
+            var deletedZoneQueryResult = client.DeleteZoneAsync(zonesQueryResult.Id).Result;
 
-                Assert.NotNull(deletedZoneQueryResult);
-                Assert.Empty(deletedZoneQueryResult.Errors);
-                Assert.True(deletedZoneQueryResult.Success);
-            }
+            Assert.NotNull(deletedZoneQueryResult);
+            Assert.Empty(deletedZoneQueryResult.Errors);
+            Assert.True(deletedZoneQueryResult.Success);
         }
 
         [IgnoreOnEmptyCredentialsFact]
 
         public void TestZoneActivationCheckAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
+            var zoneActivationCheckQueryResult = client.ZoneActivationCheckAsync(zonesQueryResult.Id).Result;
+
+            Assert.NotNull(zoneActivationCheckQueryResult);
+
+            var notAvailable = new List<int>
             {
-                var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-                var zoneActivationCheckQueryResult = client.ZoneActivationCheckAsync(zonesQueryResult.Id).Result;
+                1224, // You may only perform this action once per hour.
+            };
 
-                Assert.NotNull(zoneActivationCheckQueryResult);
-
-                var notAvailable = new List<int>
+            if (!zoneActivationCheckQueryResult.Errors.Any(x => notAvailable.Contains(x.Code)))
+            {
+                Assert.True(zoneActivationCheckQueryResult.Success);
+                if (zoneActivationCheckQueryResult.Errors != null)
                 {
-                    1224, // You may only perform this action once per hour.
-                };
-
-                if (!zoneActivationCheckQueryResult.Errors.Any(x => notAvailable.Contains(x.Code)))
-                {
-                    Assert.True(zoneActivationCheckQueryResult.Success);
-                    if (zoneActivationCheckQueryResult.Errors != null)
-                    {
-                        Assert.Empty(zoneActivationCheckQueryResult.Errors);
-                    }
+                    Assert.Empty(zoneActivationCheckQueryResult.Errors);
                 }
             }
         }
@@ -142,15 +129,13 @@ namespace CloudFlare.Client.Test
 
         public void TestPurgeAllFilesAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-                var purgeAllFilesAsyncQueryResult = client.PurgeAllFilesAsync(zonesQueryResult.Id, true).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
+            var purgeAllFilesAsyncQueryResult = client.PurgeAllFilesAsync(zonesQueryResult.Id, true).Result;
 
-                Assert.NotNull(purgeAllFilesAsyncQueryResult);
-                Assert.Empty(purgeAllFilesAsyncQueryResult.Errors);
-                Assert.True(purgeAllFilesAsyncQueryResult.Success);
-            }
+            Assert.NotNull(purgeAllFilesAsyncQueryResult);
+            Assert.Empty(purgeAllFilesAsyncQueryResult.Errors);
+            Assert.True(purgeAllFilesAsyncQueryResult.Success);
         }
     }
 }

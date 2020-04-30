@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -586,8 +585,8 @@ namespace CloudFlare.Client
 
         public Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything)
         {
-            var content = new Dictionary<string, bool> {{ApiParameter.Outgoing.PurgeEverything, purgeEverything}};
-            
+            var content = new Dictionary<string, bool> { { ApiParameter.Outgoing.PurgeEverything, purgeEverything } };
+
             return SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
                 $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content));
         }

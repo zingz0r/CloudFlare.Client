@@ -78,7 +78,7 @@ namespace CloudFlare.Client.Models
         /// Record creation date
         /// </summary>
         [JsonProperty("created_on")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         /// <summary>
         /// Last modification date

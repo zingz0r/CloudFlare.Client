@@ -9,17 +9,15 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsFact]
         public static void TestGetRolesAsync()
         {
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
-            {
-                var accounts = client.GetAccountsAsync().Result;
-                var subscriptions = client.GetAccountSubscriptionsAsync(accounts.Result.First().Id).Result;
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var accounts = client.GetAccountsAsync().Result;
+            var subscriptions = client.GetAccountSubscriptionsAsync(accounts.Result.First().Id).Result;
 
-                Assert.NotNull(subscriptions);
-                Assert.True(subscriptions.Success);
-                if (subscriptions.Errors != null)
-                {
-                    Assert.Empty(subscriptions.Errors);
-                }
+            Assert.NotNull(subscriptions);
+            Assert.True(subscriptions.Success);
+            if (subscriptions.Errors != null)
+            {
+                Assert.Empty(subscriptions.Errors);
             }
         }
     }
