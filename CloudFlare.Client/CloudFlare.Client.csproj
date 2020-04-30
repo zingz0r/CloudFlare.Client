@@ -10,8 +10,7 @@
     <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
-    <PackageReleaseNotes>Custom hostnames - thanks to Jing Wu
-List account subscriptions</PackageReleaseNotes>
+    <PackageReleaseNotes>fixed nullable datetimes and missing ctors and c#8</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
