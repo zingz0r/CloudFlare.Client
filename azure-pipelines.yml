@@ -15,20 +15,27 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Install .Net Core 2.1 framework'
   inputs:
-    version: 2.1.802
+    version: 2.1.*
+    packageType: 'sdk'
 
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Install .Net Core 2.2 framework'
   inputs:
-    version: 2.2.402
+    version: 2.2.*
+    packageType: 'sdk'
 
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Install .Net Core 3.0 framework'
   inputs:
-    version: 3.0.100
+    version: 3.0.*
+
+- task: UseDotNet@2
+  displayName: 'Install .Net Core 3.1 framework'
+  inputs:
+    version: 3.1.*
 
 - script: dotnet restore
   displayName: Restore nuget packages
@@ -81,3 +88,17 @@ steps:
     command: test
     projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
     arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build with .Net Core 3.0 framework'
+  inputs:
+    command: build
+    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test with .Net Core 3.1 framework'
+  inputs:
+    command: test
+    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+    arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
