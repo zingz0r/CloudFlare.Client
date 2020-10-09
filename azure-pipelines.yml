@@ -60,15 +60,6 @@ stages:
       inputs:
         version: 3.1.x
         packageType: 'sdk'
-- stage: restore_nuget
-  displayName: Restore Nuget Packages
-  jobs: 
-  - job: restore_nuget
-    displayName: Restore Nuget Packages
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - script: dotnet restore
 - stage: build
   displayName: Build
   jobs: 
