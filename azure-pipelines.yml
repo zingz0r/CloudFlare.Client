@@ -13,6 +13,31 @@ variables:
   vmImageName: 'windows-latest'
 
 stages:
+- stage: install_env
+  displayName: Install Environment
+  jobs:
+  - job: install_netcore21
+    displayName: Install .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: none
+    - task: UseDotNet@2
+      displayName: 'Install .Net Core 2.1 framework'
+      inputs:
+        version: 2.1.x
+        packageType: 'sdk'
+  - job: install_netcore31
+    displayName: Install .Net Core 3.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: none
+    - task: UseDotNet@2
+      displayName: 'Install .Net Core 3.1 framework'
+      inputs:
+        version: 3.1.x
+        packageType: 'sdk'
 - stage: build
   displayName: Build
   jobs: 
@@ -27,6 +52,17 @@ stages:
         command: build
         projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
         arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
+  - job: build_netcore21
+    displayName: Build with .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Core 2.1 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration)'
   - job: build_netcore31
     displayName: Build with .Net Core 3.1 framework
     pool:
@@ -41,6 +77,20 @@ stages:
 - stage: run_test
   displayName: Run Tests
   jobs: 
+  - job: test_netcore21
+    displayName: Test with .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Test with .Net Core 2.1 framework
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
+      inputs:
+        command: test
+        projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+        arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
   - job: test_netcore31
     displayName: Test with .Net Core 3.1 framework
     pool:
@@ -54,7 +104,8 @@ stages:
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-        arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
+#         arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
 # - stage: deploy_nuget
 #   displayName: Deploy to nuget.org
 #   condition: and(succeeded(), variables['Build.SourceBranch'], 'refs/tags/'))
+#   tag name Build.SourceBranchName
