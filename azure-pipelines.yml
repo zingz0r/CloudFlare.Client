@@ -1,6 +1,7 @@
 resources:
   pipelines:
-  - pipeline: pipeline
+  - pipeline: cfc_pipeline
+    source: cfc
     trigger:
       tags:
         - '*'
