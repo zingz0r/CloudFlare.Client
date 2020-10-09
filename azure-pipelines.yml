@@ -8,10 +8,12 @@ trigger:
     include:
     - '*'
   branches:
-    exclude:
-    - 'fix/*'
-    - 'feature/*'
-    - 'develop/*'
+   include:
+   - 'refs/tags/*'
+   exclude:
+   - 'fix/*'
+   - 'feature/*'
+   - 'develop/*'
 
 variables:
   solution: '**/*.sln'
