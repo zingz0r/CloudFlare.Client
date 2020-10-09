@@ -1,11 +1,3 @@
-trigger:
-  branches:
-    include:
-    - '*'
-  tags:
-    include:
-    - '*'
-
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
