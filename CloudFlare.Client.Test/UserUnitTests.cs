@@ -1,15 +1,16 @@
-﻿using CloudFlare.Client.Test.FactAttributes;
+﻿using System.Threading.Tasks;
+using CloudFlare.Client.Test.FactAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class UserUnitTests
+    public class UserUnitTests
     {
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetUserDetailsAsync()
+        public async Task TestGetUserDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userDetails = client.GetUserDetailsAsync().Result;
+            var userDetails = await client.GetUserDetailsAsync();
 
             Assert.NotNull(userDetails);
             Assert.Empty(userDetails.Errors);
@@ -17,11 +18,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestEditUserAsync()
+        public async Task TestEditUserAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userDetails = client.GetUserDetailsAsync().Result;
-            var editedUser = client.EditUserAsync(userDetails.Result).Result;
+            var userDetails = await client.GetUserDetailsAsync();
+            var editedUser = await client.EditUserAsync(userDetails.Result);
 
             Assert.NotNull(editedUser);
             Assert.Empty(editedUser.Errors);

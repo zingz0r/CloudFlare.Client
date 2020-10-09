@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class UserMembershipUnitTests
+    public class UserMembershipUnitTests
     {
         [IgnoreOnEmptyCredentialsTheory]
         [InlineData(MembershipStatus.Accepted, null, null, null, null, null)]
@@ -20,13 +21,12 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, null, null, null, OrderType.Asc)]
         [InlineData(null, null, null, null, null, OrderType.Desc)]
         [InlineData(null, null, null, null, null, null)]
-        public static void TestGetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        public async Task TestGetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage,
             MembershipOrder? membershipOrder, OrderType? order)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userMembership = client
-                .GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order).Result;
+            var userMembership = await client.GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order);
 
             Assert.NotNull(userMembership);
             Assert.True(userMembership.Success);
@@ -37,10 +37,10 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetMembershipDetailsAsync()
+        public async Task TestGetMembershipDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userMembership = client.GetMembershipsAsync().Result;
+            var userMembership = await client.GetMembershipsAsync();
 
             Assert.NotNull(userMembership);
             Assert.True(userMembership.Success);
@@ -49,7 +49,7 @@ namespace CloudFlare.Client.Test
                 Assert.Empty(userMembership.Errors);
             }
 
-            var userMembershipDetails = client.GetMembershipDetailsAsync(userMembership.Result.First().Id).Result;
+            var userMembershipDetails = await client.GetMembershipDetailsAsync(userMembership.Result.First().Id);
 
             Assert.NotNull(userMembershipDetails);
             Assert.True(userMembershipDetails.Success);
@@ -62,14 +62,14 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsTheory]
         [InlineData(SetMembershipStatus.Accepted)]
         [InlineData(SetMembershipStatus.Rejected)]
-        public static void TestUpdateMembershipStatusAsync(SetMembershipStatus status)
+        public async Task TestUpdateMembershipStatusAsync(SetMembershipStatus status)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userMembership = client.GetMembershipsAsync().Result;
+            var userMembership = await client.GetMembershipsAsync();
 
             if (userMembership.Result.First().Status == MembershipStatus.Accepted)
             {
-                var updateUserMembershipStatus = client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status).Result;
+                var updateUserMembershipStatus = await client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status);
 
                 Assert.NotNull(updateUserMembershipStatus);
                 Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x => x.Code));
@@ -78,11 +78,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted membership")]
-        public static void TestDeleteMembershipAsync()
+        public async Task TestDeleteMembershipAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userMembership = client.GetMembershipsAsync().Result;
-            var deletedMembership = client.DeleteMembershipAsync(userMembership.Result.First().Id).Result;
+            var userMembership = await client.GetMembershipsAsync();
+            var deletedMembership = await client.DeleteMembershipAsync(userMembership.Result.First().Id);
 
             Assert.NotNull(deletedMembership);
             Assert.True(deletedMembership.Success);

@@ -1,17 +1,18 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Test.FactAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class AccountRoleUnitTests
+    public class AccountRoleUnitTests
     {
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetRolesAsync()
+        public async Task TestGetRolesAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var roles = await client.GetRolesAsync(accounts.Result.First().Id);
 
             Assert.NotNull(roles);
             Assert.True(roles.Success);
@@ -22,11 +23,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetRoleDetailsAsync()
+        public async Task TestGetRoleDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var roles = await client.GetRolesAsync(accounts.Result.First().Id);
             var roleDetails = client.GetRoleDetailsAsync(accounts.Result.First().Id, roles.Result.First().Id).Result;
 
             Assert.NotNull(roleDetails);

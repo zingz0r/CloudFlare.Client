@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
@@ -14,11 +15,11 @@ namespace CloudFlare.Client.Test
         [IgnoreOnEmptyCredentialsTheory(Skip = "Would cause new zone")]
         [InlineData(@"test_domain_full.com", ZoneType.Full)]
         [InlineData(@"test_domain_partial.com", ZoneType.Partial)]
-        public void TestCreateZoneAsync(string name, ZoneType type)
+        public async Task TestCreateZoneAsync(string name, ZoneType type)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var account = client.GetAccountsAsync().Result.Result.First();
-            var zonesQueryResult = client.CreateZoneAsync(name, type, account).Result;
+            var account = (await client.GetAccountsAsync()).Result.First();
+            var zonesQueryResult = await client.CreateZoneAsync(name, type, account);
 
             Assert.NotNull(zonesQueryResult);
             Assert.Empty(zonesQueryResult.Errors);
@@ -40,11 +41,11 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, null, null, OrderType.Asc, null)]
         [InlineData(null, null, null, null, null, true)]
         [InlineData(null, null, null, null, null, false)]
-        public void TestGetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
+        public async Task TestGetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
             OrderType? order, bool? match)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync(name, status, page, perPage, order, match).Result;
+            var zonesQueryResult = await client.GetZonesAsync(name, status, page, perPage, order, match);
 
             Assert.NotNull(zonesQueryResult);
             Assert.Empty(zonesQueryResult.Errors);
@@ -52,11 +53,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public void TestGetZoneDetailsAsync()
+        public async Task TestGetZoneDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-            var zoneDetailsQueryResult = client.GetZoneDetailsAsync(zonesQueryResult.Id).Result;
+            var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
+            var zoneDetailsQueryResult = await client.GetZoneDetailsAsync(zonesQueryResult.Id);
 
             Assert.NotNull(zoneDetailsQueryResult);
             Assert.Empty(zoneDetailsQueryResult.Errors);
@@ -64,11 +65,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause edited zone")]
-        public void TestEditZoneAsync()
+        public async Task TestEditZoneAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-            var editZoneQueryResult = client.EditZoneAsync(zonesQueryResult.Id, new PatchZone
+            var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
+            var editZoneQueryResult = await client.EditZoneAsync(zonesQueryResult.Id, new PatchZone
             {
                 Paused = false,
                 Plan = new Plan
@@ -80,7 +81,7 @@ namespace CloudFlare.Client.Test
                     "ns1.example.com",
                     "ns2.example.com"
                 }
-            }).Result;
+            });
 
             Assert.NotNull(editZoneQueryResult);
             Assert.Empty(editZoneQueryResult.Errors);
@@ -89,11 +90,11 @@ namespace CloudFlare.Client.Test
 
         [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted zone")]
 
-        public void TestDeleteZoneAsync()
+        public async Task TestDeleteZoneAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-            var deletedZoneQueryResult = client.DeleteZoneAsync(zonesQueryResult.Id).Result;
+            var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
+            var deletedZoneQueryResult = await client.DeleteZoneAsync(zonesQueryResult.Id);
 
             Assert.NotNull(deletedZoneQueryResult);
             Assert.Empty(deletedZoneQueryResult.Errors);
@@ -102,11 +103,11 @@ namespace CloudFlare.Client.Test
 
         [IgnoreOnEmptyCredentialsFact]
 
-        public void TestZoneActivationCheckAsync()
+        public async Task TestZoneActivationCheckAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-            var zoneActivationCheckQueryResult = client.ZoneActivationCheckAsync(zonesQueryResult.Id).Result;
+            var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
+            var zoneActivationCheckQueryResult = await client.ZoneActivationCheckAsync(zonesQueryResult.Id);
 
             Assert.NotNull(zoneActivationCheckQueryResult);
 
@@ -127,11 +128,11 @@ namespace CloudFlare.Client.Test
 
         [IgnoreOnEmptyCredentialsFact]
 
-        public void TestPurgeAllFilesAsync()
+        public async Task TestPurgeAllFilesAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = client.GetZonesAsync().Result.Result.First();
-            var purgeAllFilesAsyncQueryResult = client.PurgeAllFilesAsync(zonesQueryResult.Id, true).Result;
+            var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
+            var purgeAllFilesAsyncQueryResult = await client.PurgeAllFilesAsync(zonesQueryResult.Id, true);
 
             Assert.NotNull(purgeAllFilesAsyncQueryResult);
             Assert.Empty(purgeAllFilesAsyncQueryResult.Errors);
