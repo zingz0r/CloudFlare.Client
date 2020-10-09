@@ -1,10 +1,10 @@
-resources:
-  pipelines:
-  - pipeline: cfc_pipeline
-    source: cfc
-    trigger:
-      tags:
-        - '*'
+trigger:
+  branches:
+    include:
+    - '*'
+  tags:
+    include:
+    - '*'
 
 variables:
   solution: '**/*.sln'
