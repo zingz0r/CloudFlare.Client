@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
@@ -9,7 +10,7 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class CustomHostnameUnitTests
+    public class CustomHostnameUnitTests
     {
         [MultiTheory(typeof(IgnoreOnEmptyCredentialsTheoryAttribute), typeof(MinimumPlanEnterpriseTheoryAttribute))]
         [InlineData(null, null, null, null, null, null)]
@@ -19,12 +20,12 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, null, null, OrderType.Desc, null)]
         [InlineData(null, null, null, null, null, true)]
         [InlineData(null, null, null, null, null, false)]
-        public static void TestGetCustomHostnamesAsync(string hostname, int? page, int? perPage,
+        public async Task TestGetCustomHostnamesAsync(string hostname, int? page, int? perPage,
             CustomHostnameOrderType? type, OrderType? order, bool? ssl)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = client.GetZonesAsync().Result.Result.First().Id;
-            var customHostnames = client.GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, ssl).Result;
+            var zoneId = (await client.GetZonesAsync()).Result.First().Id;
+            var customHostnames = await client.GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, ssl);
 
             Assert.NotNull(customHostnames);
             Assert.Empty(customHostnames.Errors);
@@ -39,13 +40,13 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, null, null, OrderType.Desc, null)]
         [InlineData(null, null, null, null, null, true)]
         [InlineData(null, null, null, null, null, false)]
-        public static void TestGetCustomHostnamesByIdAsync(string id, int? page, int? perPage,
+        public async Task TestGetCustomHostnamesByIdAsync(string id, int? page, int? perPage,
             CustomHostnameOrderType? type, OrderType? order, bool? ssl)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = client.GetZonesAsync().Result.Result.First().Id;
-            var customHostnameId = client.GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, type, order, ssl).Result.Result.First().Id;
-            var customHostnameDetails = client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId).Result;
+            var zoneId = (await client.GetZonesAsync()).Result.First().Id;
+            var customHostnameId = (await client.GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, type, order, ssl)).Result.First().Id;
+            var customHostnameDetails = await client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId);
 
             Assert.NotNull(customHostnameDetails);
             Assert.Empty(customHostnameDetails.Errors);
@@ -53,12 +54,12 @@ namespace CloudFlare.Client.Test
         }
 
         [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute))]
-        public static void TestGetCustomHostnameDetailsAsync()
+        public async Task TestGetCustomHostnameDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = client.GetZonesAsync().Result.Result.First().Id;
-            var customHostnameId = client.GetCustomHostnamesAsync(zoneId).Result.Result.First().Id;
-            var customHostnameDetails = client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId).Result;
+            var zoneId = (await client.GetZonesAsync()).Result.First().Id;
+            var customHostnameId = (await client.GetCustomHostnamesAsync(zoneId)).Result.First().Id;
+            var customHostnameDetails = await client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId);
 
             Assert.NotNull(customHostnameDetails);
             Assert.Empty(customHostnameDetails.Errors);
@@ -66,11 +67,11 @@ namespace CloudFlare.Client.Test
         }
 
         [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute), Skip = "Would cause edited hostname")]
-        public static void TestEditCustomHostnameAsync()
+        public async Task TestEditCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = client.GetZonesAsync().Result.Result.First().Id;
-            var customHostname = client.GetCustomHostnamesAsync(zoneId).Result.Result.First();
+            var zoneId = (await client.GetZonesAsync()).Result.First().Id;
+            var customHostname = (await client.GetCustomHostnamesAsync(zoneId)).Result.First();
 
             var patchData = new PatchCustomHostname
             {
@@ -91,24 +92,24 @@ namespace CloudFlare.Client.Test
                 }
             };
 
-            var editCustomHostname = client.EditCustomHostnameAsync(zoneId, customHostname.Id, patchData).Result;
-                
+            var editCustomHostname = await client.EditCustomHostnameAsync(zoneId, customHostname.Id, patchData);
+
             Assert.NotNull(editCustomHostname);
             Assert.Empty(editCustomHostname.Errors);
             Assert.True(editCustomHostname.Success);
 
-            var updatedCustomHostname = client.GetCustomHostnamesAsync(zoneId,customHostname.Hostname).Result.Result.First();
+            var updatedCustomHostname = (await client.GetCustomHostnamesAsync(zoneId, customHostname.Hostname)).Result.First();
 
             Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
         }
 
         [Fact(Skip = "Would cause deleted membership")]
-        public static void TestDeleteCustomHostnameAsync()
+        public async Task TestDeleteCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = client.GetZonesAsync().Result.Result.First().Id;
-            var customHostname = client.GetCustomHostnamesAsync(zoneId).Result.Result.First();
-            var deleteCustomHostname = client.DeleteCustomHostnameAsync(zoneId, customHostname.Hostname).Result;
+            var zoneId = (await client.GetZonesAsync()).Result.First().Id;
+            var customHostname = (await client.GetCustomHostnamesAsync(zoneId)).Result.First();
+            var deleteCustomHostname = await client.DeleteCustomHostnameAsync(zoneId, customHostname.Hostname);
 
             Assert.NotNull(deleteCustomHostname);
             Assert.Empty(deleteCustomHostname.Errors);

@@ -6,78 +6,147 @@
 trigger:
 - '*'
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  vmImageName: 'windows-latest'
 
-steps:
-- task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 2.1 framework'
-  inputs:
-    version: 2.1.802
-
-- task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 2.2 framework'
-  inputs:
-    version: 2.2.402
-
-- task: DotNetCoreInstaller@0
-  displayName: 'Install .Net Core 3.0 framework'
-  inputs:
-    version: 3.0.100
-
-- script: dotnet restore
-  displayName: Restore nuget packages
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build with .Net Standard 2.1 framework'
-  inputs:
-    command: build
-    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build with .Net Core 2.1 framework'
-  inputs:
-    command: build
-    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Test with .Net Core 2.1 framework'
-  inputs:
-    command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build with .Net Core 2.2 framework'
-  inputs:
-    command: build
-    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp2.2 --configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Test with .Net Core 2.2 framework'
-  inputs:
-    command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp2.2 --configuration $(buildConfiguration) --collect "Code coverage"'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build with .Net Core 3.0 framework'
-  inputs:
-    command: build
-    projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Test with .Net Core 3.0 framework'
-  inputs:
-    command: test
-    projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
+stages:
+- stage: install_env
+  displayName: Install Environment
+  jobs:
+  - job: install_netcore21
+    displayName: Install .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: none
+    - task: UseDotNet@2
+      displayName: 'Install .Net Core 2.1 framework'
+      inputs:
+        version: 2.1.x
+        packageType: 'sdk'
+  - job: install_netcore31
+    displayName: Install .Net Core 3.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: none
+    - task: UseDotNet@2
+      displayName: 'Install .Net Core 3.1 framework'
+      inputs:
+        version: 3.1.x
+        packageType: 'sdk'
+- stage: build
+  displayName: Build
+  jobs: 
+  - job: build_netstandard20
+    displayName: Build with .Net Standard 2.0 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Standard 2.0 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netstandard2.0 --configuration $(buildConfiguration)'
+  - job: build_netstandard21
+    displayName: Build with .Net Standard 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Standard 2.1 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
+  - job: build_netcore21
+    displayName: Build with .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Core 2.1 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration)'
+  - job: build_netcore31
+    displayName: Build with .Net Core 3.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Core 3.1 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
+- stage: run_test
+  displayName: Run Tests
+  jobs: 
+  - job: test_netcore21
+    displayName: Test with .Net Core 2.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Test with .Net Core 2.1 framework
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
+      inputs:
+        command: test
+        projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+        arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
+  - job: test_netcore31
+    displayName: Test with .Net Core 3.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Test with .Net Core 3.1 framework'
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
+      inputs:
+        command: test
+        projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
+        arguments: '--logger trx --framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
+- stage: pack_nuget
+  displayName: Pack Nuget
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+  jobs: 
+    - job: pack_nuget
+      displayName: Pack Nuget
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'pack'
+          packagesToPack: '**/*.csproj'
+          nobuild: true
+          includesymbols: true
+          includesource: true
+          versioningScheme: 'byEnvVar'
+          versionEnvVar: $(Build.SourceBranchName)
+- stage: deploy_nuget
+  displayName: Deploy to nuget.org
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+  jobs: 
+    - job: deploy_nuget
+      displayName: Deploy to nuget.org
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - checkout: none
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'push'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+          nuGetFeedType: 'external'
+          publishFeedCredentials: 'nuget.org'

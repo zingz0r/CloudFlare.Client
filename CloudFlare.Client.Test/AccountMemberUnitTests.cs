@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class AccountMemberUnitTests
+    public class AccountMemberUnitTests
     {
         [IgnoreOnEmptyCredentialsTheory]
         [InlineData(0, 100, OrderType.Desc)]
@@ -15,12 +16,12 @@ namespace CloudFlare.Client.Test
         [InlineData(0, 100, null)]
         [InlineData(0, null, null)]
         [InlineData(null, null, null)]
-        public static void TestGetAccountMembersAsync(int? page, int? perPage, OrderType? order)
+        public async Task TestGetAccountMembersAsync(int? page, int? perPage, OrderType? order)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            
-            var accounts = client.GetAccountsAsync().Result;
-            var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order).Result;
+
+            var accounts = await client.GetAccountsAsync();
+            var accountMembers = await client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order);
 
             Assert.NotNull(accountMembers);
             Assert.True(accountMembers.Success);
@@ -34,11 +35,11 @@ namespace CloudFlare.Client.Test
 
         [IgnoreOnEmptyCredentialsTheory]
         [InlineData("test@notexistingemail.lan")]
-        public static void TestAddAndDeleteAccountMemberAsync(string emailAddress)
+        public async Task TestAddAndDeleteAccountMemberAsync(string emailAddress)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var roles = client.GetRolesAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var roles = await client.GetRolesAsync(accounts.Result.First().Id);
             var addedAccountMember = client.AddAccountMemberAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
 
             Assert.NotNull(addedAccountMember);
@@ -69,11 +70,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetAccountMemberDetailsAsync()
+        public async Task TestGetAccountMemberDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var accountMembers = await client.GetAccountMembersAsync(accounts.Result.First().Id);
             var accountMemberDetails = client.GetAccountMemberDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
 
             Assert.NotNull(accountMemberDetails);
@@ -85,16 +86,16 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestUpdateAccountMemberAsync()
+        public async Task TestUpdateAccountMemberAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var accountMembers = client.GetAccountMembersAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var accountMembers = await client.GetAccountMembersAsync(accounts.Result.First().Id);
 
             var firstAccountMember = accountMembers.Result.First();
 
-            var updatedMember = client.UpdateAccountMemberAsync(accounts.Result.First().Id, firstAccountMember.Id,
-                firstAccountMember.Roles, firstAccountMember.Code, firstAccountMember.User, MembershipStatus.Accepted).Result;
+            var updatedMember = await client.UpdateAccountMemberAsync(accounts.Result.First().Id, firstAccountMember.Id,
+                firstAccountMember.Roles, firstAccountMember.Code, firstAccountMember.User, MembershipStatus.Accepted);
 
             Assert.NotNull(updatedMember);
 

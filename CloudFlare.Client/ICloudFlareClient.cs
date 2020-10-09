@@ -361,7 +361,7 @@ namespace CloudFlare.Client
         Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
 
         #endregion
-        
+
         #endregion
 
         #region Roles
@@ -909,7 +909,7 @@ namespace CloudFlare.Client
         /// This parameter cannot be used with the 'hostname' parameter</param>
         /// <returns></returns>
         Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId);
-        
+
         /// <summary>
         /// List, search, sort, and filter all of your custom hostnames
         /// </summary>
