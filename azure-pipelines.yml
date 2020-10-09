@@ -13,7 +13,7 @@ variables:
   vmImageName: 'windows-latest'
 
 stages:
-- stage: Install Environment
+- stage: install_env
   displayName: Install Environment
   jobs:
   - job: install_env
@@ -40,7 +40,7 @@ stages:
       inputs:
         version: 3.1.x
         packageType: 'sdk'
-- stage: Restore Nuget Packages
+- stage: restore_nuget
   displayName: Restore Nuget Packages
   jobs: 
   - job: restore_nuget
@@ -48,7 +48,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - script: dotnet restore
-- stage: Build
+- stage: build
   displayName: Build
   jobs: 
   - job: build
@@ -85,7 +85,7 @@ stages:
         command: build
         projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
         arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
-- stage: Run Test
+- stage: run_test
   displayName: Run Tests
   jobs: 
   - job: run_test
