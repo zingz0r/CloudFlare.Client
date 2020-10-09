@@ -1,14 +1,5 @@
 trigger:
-  tags:
-    include:
-    - '*'
-  branches:
-   include:
-   - 'refs/tags/*'
-   exclude:
-   - 'fix/*'
-   - 'feature/*'
-   - 'develop/*'
+- '*'
 
 variables:
   solution: '**/*.sln'
