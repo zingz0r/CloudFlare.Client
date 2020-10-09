@@ -290,7 +290,7 @@ namespace CloudFlare.Client
         public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId)
         {
             return await SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/?{accountId}"));
+                $"{ApiParameter.Endpoints.Account.Base}/?{accountId}")).ConfigureAwait(false);
         }
 
         #endregion
