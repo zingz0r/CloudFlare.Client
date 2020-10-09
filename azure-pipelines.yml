@@ -26,17 +26,17 @@ stages:
         version: 2.1.x
         packageType: 'sdk'
     - task: UseDotNet@2
-      displayName: 'Install .Net Core 2.1 framework'
+      displayName: 'Install .Net Core 2.2 framework'
       inputs:
         version: 2.2.x
         packageType: 'sdk'
     - task: UseDotNet@2
-      displayName: 'Install .Net Core 2.1 framework'
+      displayName: 'Install .Net Core 3.0 framework'
       inputs:
         version: 3.0.x
         packageType: 'sdk'
     - task: UseDotNet@2
-      displayName: 'Install .Net Core 2.1 framework'
+      displayName: 'Install .Net Core 3.1 framework'
       inputs:
         version: 3.1.x
         packageType: 'sdk'
