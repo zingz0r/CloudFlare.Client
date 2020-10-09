@@ -90,11 +90,11 @@ steps:
     arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build with .Net Core 3.0 framework'
+  displayName: 'Build with .Net Core 3.1 framework'
   inputs:
     command: build
     projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-    arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration)'
+    arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test with .Net Core 3.1 framework'
