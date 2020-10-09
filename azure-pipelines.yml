@@ -21,7 +21,6 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - checkout: false
     - task: UseDotNet@2
       displayName: 'Install .Net Core 2.1 framework'
       inputs:
@@ -31,8 +30,8 @@ stages:
     displayName: Install .Net Core 2.2 framework
     pool:
       vmImage: $(vmImageName)
-    steps:
-    - checkout: false
+    steps: 
+    - checkout: none
     - task: UseDotNet@2
       displayName: 'Install .Net Core 2.2 framework'
       inputs:
@@ -43,7 +42,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - checkout: false
+    - checkout: none
     - task: UseDotNet@2
       displayName: 'Install .Net Core 3.0 framework'
       inputs:
@@ -54,7 +53,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - checkout: false
+    - checkout: none
     - task: UseDotNet@2
       displayName: 'Install .Net Core 3.1 framework'
       inputs:
