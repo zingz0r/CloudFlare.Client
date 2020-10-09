@@ -1,5 +1,9 @@
-trigger:
-- '*'
+resources:
+  pipelines:
+  - pipeline: pipeline
+    trigger:
+      tags:
+        - '*'
 
 variables:
   solution: '**/*.sln'
