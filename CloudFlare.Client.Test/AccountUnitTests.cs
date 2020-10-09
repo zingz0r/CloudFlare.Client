@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace CloudFlare.Client.Test
 {
-    public static class AccountUnitTests
+    public class AccountUnitTests
     {
         [IgnoreOnEmptyCredentialsTheory]
         [InlineData(0, null, null)]
@@ -14,10 +15,10 @@ namespace CloudFlare.Client.Test
         [InlineData(null, null, OrderType.Asc)]
         [InlineData(null, null, OrderType.Desc)]
         [InlineData(null, null, null)]
-        public static void TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
+        public async Task TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync(page, perPage, order).Result;
+            var accounts = await client.GetAccountsAsync(page, perPage, order);
 
             Assert.NotNull(accounts);
             Assert.True(accounts.Success);
@@ -28,11 +29,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void TestGetAccountDetailsAsync()
+        public async Task TestGetAccountDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var accountDetails = client.GetAccountDetailsAsync(accounts.Result.First().Id).Result;
+            var accounts = await client.GetAccountsAsync();
+            var accountDetails = await client.GetAccountDetailsAsync(accounts.Result.First().Id);
 
             Assert.NotNull(accountDetails);
             Assert.True(accountDetails.Success);
@@ -43,11 +44,11 @@ namespace CloudFlare.Client.Test
         }
 
         [IgnoreOnEmptyCredentialsFact]
-        public static void UpdateAccountAsync()
+        public async Task UpdateAccountAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = client.GetAccountsAsync().Result;
-            var updatedAccount = client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name).Result;
+            var accounts = await client.GetAccountsAsync();
+            var updatedAccount = await client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name);
 
             Assert.NotNull(updatedAccount);
             Assert.True(updatedAccount.Success);
