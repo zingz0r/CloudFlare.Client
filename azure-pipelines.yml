@@ -94,24 +94,36 @@ stages:
     steps:
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 2.1 framework'
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
         arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 2.2 framework'
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
         arguments: '--framework:netcoreapp2.2 --configuration $(buildConfiguration) --collect "Code coverage"'
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 3.0 framework'
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
         arguments: '--framework:netcoreapp3.0 --configuration $(buildConfiguration) --collect "Code coverage"'
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 3.1 framework'
+      env:
+        ApiKey: $(ApiKey)
+        EmailAddress: $(EmailAddress)
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
