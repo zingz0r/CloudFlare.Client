@@ -122,8 +122,6 @@ stages:
         inputs:
           command: 'pack'
           packagesToPack: '**/*.csproj'
-          includesymbols: true
-          includesource: true
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
 - stage: deploy_nuget
