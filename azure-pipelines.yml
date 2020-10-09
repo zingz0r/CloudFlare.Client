@@ -125,7 +125,7 @@ stages:
           includesymbols: true
           includesource: true
           versioningScheme: 'byEnvVar'
-          versionEnvVar: $(Build.SourceBranchName)
+          versionEnvVar: Build.SourceBranchName
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
