@@ -115,8 +115,40 @@ stages:
       inputs:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-#         arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
-# - stage: deploy_nuget
-#   displayName: Deploy to nuget.org
-#   condition: and(succeeded(), variables['Build.SourceBranch'], 'refs/tags/'))
-#   tag name Build.SourceBranchName
+- stage: pack_nuget
+  displayName: Pack Nuget
+  condition: and(succeeded(), variables['Build.SourceBranch'], 'refs/tags/'))
+  jobs: 
+    - job: pack_nuget
+      displayName: Pack Nuget
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'pack'
+          packagesToPack: '**/*.csproj'
+          nobuild: true
+          includesymbols: true
+          includesource: true
+          versioningScheme: 'byEnvVar'
+          versionEnvVar: $(Build.SourceBranchName)
+- stage: deploy_nuget
+  displayName: Deploy to nuget.org
+  condition: and(succeeded(), variables['Build.SourceBranch'], 'refs/tags/'))
+  jobs: 
+    - job: deploy_nuget
+      displayName: Deploy to nuget.org
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - checkout: none
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'push'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+          nuGetFeedType: 'external'
+          publishFeedCredentials: 'nuget.org'
+
+
+#   tag name 
