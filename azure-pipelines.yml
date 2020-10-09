@@ -1,10 +1,13 @@
 pr:
-- master
-
-trigger:
   branches:
     include:
-    - 'refs/tags/*'
+    - master
+
+trigger:
+  tags:
+    include:
+    - '*'
+  branches:
     exclude:
     - 'fix/*'
     - 'feature/*'
