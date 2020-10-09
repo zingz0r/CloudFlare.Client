@@ -16,6 +16,7 @@ using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Models;
+using CloudFlare.Client.Extensions;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client
