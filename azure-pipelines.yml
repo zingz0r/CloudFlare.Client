@@ -121,9 +121,10 @@ stages:
         displayName: 'Pack Cloudflare.Clients'
         inputs:
           command: 'pack'
-          packagesToPack: '**/*.csproj'
+          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
+          arguments: '--verbosity normal'
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
