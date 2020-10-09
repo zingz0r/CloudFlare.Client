@@ -38,7 +38,6 @@
 
         Console.WriteLine(zone.Name);
     }
-    
 ```
 
 ## Implemented functionality
