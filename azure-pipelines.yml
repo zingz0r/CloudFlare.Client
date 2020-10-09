@@ -41,6 +41,17 @@ stages:
 - stage: build
   displayName: Build
   jobs: 
+  - job: build_netstandard20
+    displayName: Build with .Net Standard 2.0 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Standard 2.0 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netstandard2.0 --configuration $(buildConfiguration)'
   - job: build_netstandard21
     displayName: Build with .Net Standard 2.1 framework
     pool:
