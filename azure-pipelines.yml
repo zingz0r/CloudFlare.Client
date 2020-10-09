@@ -118,7 +118,7 @@ stages:
         arguments: '--logger trx --framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
 - stage: pack_nuget
   displayName: Pack Nuget
-  condition: and(succeeded(), $[eq(variables['Build.SourceBranch'], 'refs/tags/')])
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   jobs: 
     - job: pack_nuget
       displayName: Pack Nuget
@@ -136,7 +136,7 @@ stages:
           versionEnvVar: $(Build.SourceBranchName)
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
-  condition: and(succeeded(), $[eq(variables['Build.SourceBranch'], 'refs/tags/')])
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   jobs: 
     - job: deploy_nuget
       displayName: Deploy to nuget.org
