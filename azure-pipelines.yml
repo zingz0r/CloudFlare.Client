@@ -16,25 +16,45 @@ stages:
 - stage: install_env
   displayName: Install Environment
   jobs:
-  - job: install_env
+  - job: install_netcore21
+    displayName: Install .Net Core 2.1 framework
     pool:
       vmImage: $(vmImageName)
     steps:
+    - checkout: false
     - task: UseDotNet@2
       displayName: 'Install .Net Core 2.1 framework'
       inputs:
         version: 2.1.x
         packageType: 'sdk'
+  - job: install_netcore22
+    displayName: Install .Net Core 2.2 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: false
     - task: UseDotNet@2
       displayName: 'Install .Net Core 2.2 framework'
       inputs:
         version: 2.2.x
         packageType: 'sdk'
+  - job: install_netcore30
+    displayName: Install .Net Core 3.0 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: false
     - task: UseDotNet@2
       displayName: 'Install .Net Core 3.0 framework'
       inputs:
         version: 3.0.x
         packageType: 'sdk'
+  - job: install_netcore31
+    displayName: Install .Net Core 3.1 framework
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: false
     - task: UseDotNet@2
       displayName: 'Install .Net Core 3.1 framework'
       inputs:
