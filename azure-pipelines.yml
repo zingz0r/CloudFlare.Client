@@ -118,10 +118,10 @@ stages:
         vmImage: $(vmImageName)
       steps:
       - task: DotNetCoreCLI@2
+        displayName: 'Pack Cloudflare.Clients'
         inputs:
           command: 'pack'
           packagesToPack: '**/*.csproj'
-          nobuild: true
           includesymbols: true
           includesource: true
           versioningScheme: 'byEnvVar'
@@ -137,6 +137,7 @@ stages:
       steps:
       - checkout: none
       - task: DotNetCoreCLI@2
+        displayName: 'Deploy Cloudflare.Clients to nuget.org'
         inputs:
           command: 'push'
           packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
