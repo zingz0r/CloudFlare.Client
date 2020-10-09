@@ -31,11 +31,13 @@ steps:
   displayName: 'Install .Net Core 3.0 framework'
   inputs:
     version: 3.0.x
+    packageType: 'sdk'
 
 - task: UseDotNet@2
   displayName: 'Install .Net Core 3.1 framework'
   inputs:
     version: 3.1.x
+    packageType: 'sdk'
 
 - script: dotnet restore
   displayName: Restore nuget packages
