@@ -79,6 +79,7 @@ stages:
         arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
 - stage: run_test
   displayName: Run Tests
+  dependsOn: build
   jobs: 
   - job: test_netcore21
     displayName: Test with .Net Core 2.1 framework
@@ -111,6 +112,7 @@ stages:
 - stage: pack_nuget
   displayName: Pack Nuget
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+  dependsOn: build
   jobs: 
     - job: pack_nuget
       displayName: Pack Nuget
@@ -139,6 +141,7 @@ stages:
           verbosityPack: Diagnostic
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
+  dependsOn: pack_nuget
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   jobs: 
     - job: deploy_nuget
