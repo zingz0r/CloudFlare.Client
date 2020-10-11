@@ -117,15 +117,19 @@ stages:
       pool:
         vmImage: $(vmImageName)
       steps:
-      - task: DotNetCoreCLI@2
+      - task: NuGetCommand@2
         displayName: 'Pack Cloudflare.Clients'
         inputs:
           command: 'pack'
           packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
-          outputDir: '$(Build.ArtifactStagingDirectory)'
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
-          arguments: '--verbosity normal'
+          verbosityPack: Normal
+      - task: CopyFiles@2
+        displayName: Copy packaged assets to staging folder
+        inputs:
+          sourceFolder: $(Build.SourcesDirectory)/bin/$(buildConfiguration)
+          targetFolder: $(Build.ArtifactStagingDirectory)
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
@@ -136,10 +140,11 @@ stages:
         vmImage: $(vmImageName)
       steps:
       - checkout: none
-      - task: DotNetCoreCLI@2
+      - task: NuGetCommand@2
         displayName: 'Deploy Cloudflare.Clients to nuget.org'
         inputs:
           command: 'push'
-          packagesToPush: '$(Pipeline.Workspace)/**/drop/*.nupkg'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
           nuGetFeedType: 'external'
           publishFeedCredentials: 'nuget.org'
+          verbosityPush: Detailed
