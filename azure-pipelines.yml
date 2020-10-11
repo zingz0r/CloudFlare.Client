@@ -117,12 +117,23 @@ stages:
       pool:
         vmImage: $(vmImageName)
       steps:
-      - task: NuGetCommand@2
-        displayName: 'Pack Cloudflare.Clients'
+      # - task: NuGetCommand@2
+      #   displayName: 'Pack Cloudflare.Clients'
+      #   inputs:
+      #     command: 'pack'
+      #     packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
+      #     outputDir: '$(Build.ArtifactStagingDirectory)'
+      #     versioningScheme: 'byEnvVar'
+      #     versionEnvVar: Build.SourceBranchName
+      #     verbosityPack: Normal
+      - task: DotNetCoreCLI@2
+        displayName: 'NuGet Pack release'
         inputs:
-          command: 'pack'
-          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
-          outputDir: '$(Build.ArtifactStagingDirectory)'
+          command: pack
+          packagesToPack: '**/AllOverIt.*.csproj;!**/AllOverIt.*[Tt]ests/*.csproj;!Demos/**'
+          packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
+          arguments: '--configuration $(buildConfiguration)'
+          nobuild: true 
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
           verbosityPack: Normal
@@ -141,11 +152,13 @@ stages:
         vmImage: $(vmImageName)
       steps:
       - checkout: none
+      - download: current
+        artifact: 'packages'
       - task: NuGetCommand@2
         displayName: 'Deploy Cloudflare.Clients to nuget.org'
         inputs:
           command: 'push'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/packages/*.nupkg'
           nuGetFeedType: 'external'
           publishFeedCredentials: 'nuget.org'
           verbosityPush: Detailed
