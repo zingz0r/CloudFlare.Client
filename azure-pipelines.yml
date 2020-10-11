@@ -6,7 +6,7 @@ variables:
 
 stages:
 - stage: build
-  displayName: Build
+  displayName: Build & Test
   jobs: 
   - job: build_netstandard20
     displayName: Build with .Net Standard 2.0 framework
@@ -31,7 +31,7 @@ stages:
         projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
         arguments: '--framework:netstandard2.1 --configuration $(buildConfiguration)'
   - job: build_netcore21
-    displayName: Build with .Net Core 2.1 framework
+    displayName: Build and Test with .Net Core 2.1 framework
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -57,7 +57,7 @@ stages:
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
         arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
   - job: build_netcore31
-    displayName: Build with .Net Core 3.1 framework
+    displayName: Build and Test with .Net Core 3.1 framework
     pool:
       vmImage: $(vmImageName)
     steps:
