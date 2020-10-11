@@ -24,7 +24,10 @@ namespace CloudFlare.Client
     {
         #region Fields
 
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
+        };
         private static string AuthenticationErrorMessage => "Authentication error!";
 
         #endregion
@@ -34,10 +37,10 @@ namespace CloudFlare.Client
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
-        public CloudFlareClient(Authentication cloudFlareAuthentication)
+        /// <param name="apiKeyAuthentication">Authentication with api key and email address</param>
+        public CloudFlareClient(ApiKeyAuthentication apiKeyAuthentication)
         {
-            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey, cloudFlareAuthentication.ApiToken);
+            InitializeWithApiKey(apiKeyAuthentication);
         }
 
         /// <summary>
@@ -47,17 +50,46 @@ namespace CloudFlare.Client
         /// <param name="apiKey">CloudFlare API Key</param>
         public CloudFlareClient(string emailAddress, string apiKey)
         {
-            Initialize(emailAddress, apiKey, null);
+            var apiKeyAuthentication = new ApiKeyAuthentication(emailAddress, apiKey);
+            InitializeWithApiKey(apiKeyAuthentication);
+        }
+        
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
+        /// <param name="apiToken">Authentication with api token</param>
+        public CloudFlareClient(string apiToken)
+        {
+            var apiTokenAuthentication = new ApiTokenAuthentication(apiToken);
+            InitializeWithTokenAsync(apiTokenAuthentication);
         }
 
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="apiToken">API token</param>
-        public CloudFlareClient(string apiToken)
+        /// <param name="apiTokenAuthentication">Authentication with api token</param>
+
+        public CloudFlareClient(ApiTokenAuthentication apiTokenAuthentication)
         {
-            Initialize(null, null, apiToken);
+            InitializeWithTokenAsync(apiTokenAuthentication);
         }
+
+        private void InitializeWithApiKey(ApiKeyAuthentication apiKeyAuthentication)
+        {
+            apiKeyAuthentication.EnsureCredentialsHasBeenSet();
+
+            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, apiKeyAuthentication.Email);
+            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKeyAuthentication.ApiKey);
+
+            var testTheUserOnAuth = GetUserDetailsAsync(default).GetAwaiter().GetResult();
+            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
+            {
+                throw new AuthenticationException(AuthenticationErrorMessage);
+            }
+        }
+
+
+
 
         /// <summary>
         /// Initialize CloudFlare Client
@@ -65,40 +97,15 @@ namespace CloudFlare.Client
         /// <param name="emailAddress">Email address</param>
         /// <param name="apiKey">CloudFlare API Key</param>
         /// <param name="apiToken">CloudFlare API token</param>
-        private void Initialize(string emailAddress, string apiKey, string apiToken)
+        private void InitializeWithTokenAsync(ApiTokenAuthentication apiTokenAuthentication)
         {
-            if ((string.IsNullOrEmpty(emailAddress)
-                || string.IsNullOrEmpty(apiKey))
-                && string.IsNullOrEmpty(apiToken))
-            {
-                throw new AuthenticationException("Empty credentials! You must use email address/apikey or only api token combination.");
-            }
 
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
-            };
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiTokenAuthentication.ApiToken);
 
-            if (!string.IsNullOrEmpty(apiToken))
+            var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
+            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
             {
-                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiToken);
-
-                var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
-                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-                {
-                    throw new AuthenticationException(AuthenticationErrorMessage);
-                }
-            }
-            else
-            {
-                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
-                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
-
-                var testTheUserOnAuth = GetUserDetailsAsync().GetAwaiter().GetResult();
-                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-                {
-                    throw new AuthenticationException(AuthenticationErrorMessage);
-                }
+                throw new AuthenticationException(AuthenticationErrorMessage);
             }
         }
 
@@ -1048,7 +1055,7 @@ namespace CloudFlare.Client
         #region CreatePatchContent
 
         /// <summary>
-        /// Creates StringContent which can be send with PatchAsync
+        /// Creates StringContent which can be sent with PatchAsync
         /// </summary>
         /// <typeparam name="T">Type of the incoming value</typeparam>
         /// <param name="value">Content to convert to sendable object</param>

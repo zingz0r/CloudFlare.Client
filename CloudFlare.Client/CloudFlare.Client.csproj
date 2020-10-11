@@ -21,6 +21,7 @@
     <PackageLicenseFile>LICENCE</PackageLicenseFile>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
