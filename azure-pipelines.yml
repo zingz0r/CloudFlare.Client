@@ -5,31 +5,6 @@ variables:
   vmImageName: 'windows-latest'
 
 stages:
-- stage: install_env
-  displayName: Install Environment
-  jobs:
-  - job: install_netcore21
-    displayName: Install .Net Core 2.1 framework
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - checkout: none
-    - task: UseDotNet@2
-      displayName: 'Install .Net Core 2.1 framework'
-      inputs:
-        version: 2.1.x
-        packageType: 'sdk'
-  - job: install_netcore31
-    displayName: Install .Net Core 3.1 framework
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - checkout: none
-    - task: UseDotNet@2
-      displayName: 'Install .Net Core 3.1 framework'
-      inputs:
-        version: 3.1.x
-        packageType: 'sdk'
 - stage: build
   displayName: Build
   jobs: 
@@ -60,33 +35,18 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core 2.1 SDK'
+      inputs:
+        packageType: sdk
+        version: 2.1.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: DotNetCoreCLI@2
       displayName: Build with .Net Core 2.1 framework
       inputs:
         command: build
         projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
         arguments: '--framework:netcoreapp2.1 --configuration $(buildConfiguration)'
-  - job: build_netcore31
-    displayName: Build with .Net Core 3.1 framework
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: Build with .Net Core 3.1 framework
-      inputs:
-        command: build
-        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-        arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
-- stage: run_test
-  displayName: Run Tests
-  dependsOn: build
-  jobs: 
-  - job: test_netcore21
-    displayName: Test with .Net Core 2.1 framework
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - checkout: none
     - task: DotNetCoreCLI@2
       displayName: Test with .Net Core 2.1 framework
       env:
@@ -96,12 +56,23 @@ stages:
         command: test
         projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
         arguments: '--logger trx --framework:netcoreapp2.1 --configuration $(buildConfiguration) --collect "Code coverage"'
-  - job: test_netcore31
-    displayName: Test with .Net Core 3.1 framework
+  - job: build_netcore31
+    displayName: Build with .Net Core 3.1 framework
     pool:
       vmImage: $(vmImageName)
     steps:
-    - checkout: none
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core 3.1 SDK'
+      inputs:
+        packageType: sdk
+        version: 3.1.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    - task: DotNetCoreCLI@2
+      displayName: Build with .Net Core 3.1 framework
+      inputs:
+        command: build
+        projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 3.1 framework'
       env:
@@ -114,23 +85,12 @@ stages:
 - stage: pack_nuget
   displayName: Pack Nuget
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  dependsOn: build
   jobs: 
     - job: pack_nuget
       displayName: Pack Nuget
       pool:
         vmImage: $(vmImageName)
       steps:
-      - checkout: none
-      # - task: NuGetCommand@2
-      #   displayName: 'Pack Cloudflare.Clients'
-      #   inputs:
-      #     command: 'pack'
-      #     packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
-      #     outputDir: '$(Build.ArtifactStagingDirectory)'
-      #     versioningScheme: 'byEnvVar'
-      #     versionEnvVar: Build.SourceBranchName
-      #     verbosityPack: Normal
       - task: DotNetCoreCLI@2
         displayName: 'NuGet Pack Release'
         inputs:
@@ -138,13 +98,11 @@ stages:
           packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
           packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
           arguments: '--configuration $(buildConfiguration)'
-          nobuild: true 
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
           verbosityPack: Diagnostic
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
-  dependsOn: pack_nuget
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   jobs: 
     - job: deploy_nuget
