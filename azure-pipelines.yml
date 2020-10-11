@@ -54,8 +54,6 @@ stages:
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
           verbosityPack: Diagnostic
-      - download: current
-        artifact: 'packages'
       - task: NuGetCommand@2
         displayName: 'Deploy Release to nuget.org'
         inputs:
