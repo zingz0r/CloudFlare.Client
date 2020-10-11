@@ -130,18 +130,13 @@ stages:
         displayName: 'NuGet Pack release'
         inputs:
           command: pack
-          packagesToPack: '**/AllOverIt.*.csproj;!**/AllOverIt.*[Tt]ests/*.csproj;!Demos/**'
+          packagesToPack: '**/CloudFlare.Client.csproj'
           packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
           arguments: '--configuration $(buildConfiguration)'
           nobuild: true 
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
           verbosityPack: Normal
-      - task: CopyFiles@2
-        displayName: Copy packaged assets to staging folder
-        inputs:
-          sourceFolder: $(Build.SourcesDirectory)/bin/$(buildConfiguration)
-          targetFolder: $(Build.ArtifactStagingDirectory)
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
