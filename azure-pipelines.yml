@@ -140,6 +140,6 @@ stages:
         displayName: 'Deploy Cloudflare.Clients to nuget.org'
         inputs:
           command: 'push'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+          packagesToPush: '$(Pipeline.Workspace)/**/drop/*.nupkg'
           nuGetFeedType: 'external'
           publishFeedCredentials: 'nuget.org'
