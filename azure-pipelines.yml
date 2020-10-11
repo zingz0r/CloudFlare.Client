@@ -86,6 +86,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - checkout: none
     - task: DotNetCoreCLI@2
       displayName: Test with .Net Core 2.1 framework
       env:
@@ -100,6 +101,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - checkout: none
     - task: DotNetCoreCLI@2
       displayName: 'Test with .Net Core 3.1 framework'
       env:
@@ -119,6 +121,7 @@ stages:
       pool:
         vmImage: $(vmImageName)
       steps:
+      - checkout: none
       # - task: NuGetCommand@2
       #   displayName: 'Pack Cloudflare.Clients'
       #   inputs:
