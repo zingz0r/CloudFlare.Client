@@ -127,16 +127,16 @@ stages:
       #     versionEnvVar: Build.SourceBranchName
       #     verbosityPack: Normal
       - task: DotNetCoreCLI@2
-        displayName: 'NuGet Pack release'
+        displayName: 'NuGet Pack Release'
         inputs:
           command: pack
-          packagesToPack: '**/CloudFlare.Client.csproj'
+          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
           packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
           arguments: '--configuration $(buildConfiguration)'
           nobuild: true 
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
-          verbosityPack: Normal
+          verbosityPack: Diagnostic
 - stage: deploy_nuget
   displayName: Deploy to nuget.org
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
