@@ -499,6 +499,18 @@ namespace CloudFlare.Client
                 $"{ApiParameter.Endpoints.Zone.Base}/", postZone)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Scan for DNS Records, alternative to jump_start option (jump_start not working anymore)
+        /// </summary>
+        /// <param name="zoneId"></param>
+        /// <returns></returns>
+        public async Task<object> ScanDnsRecordsAsync(string zoneId)
+        {
+            return await SendRequestAsync<object>(_httpClient.PostAsync(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Scan}/", null))
+                .ConfigureAwait(false);
+        }
+
         #endregion
 
         #region DeleteZoneAsync
