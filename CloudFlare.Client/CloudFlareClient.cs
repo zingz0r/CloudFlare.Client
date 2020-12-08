@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +28,6 @@ namespace CloudFlare.Client
         {
             BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
         };
-        private static string AuthenticationErrorMessage => "Authentication error!";
 
         #endregion
 
@@ -39,10 +36,10 @@ namespace CloudFlare.Client
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="apiKeyAuthentication">Authentication with api key and email address</param>
-        public CloudFlareClient(ApiKeyAuthentication apiKeyAuthentication)
+        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
+        public CloudFlareClient(IAuthentication authentication)
         {
-            InitializeWithApiKey(apiKeyAuthentication);
+            authentication.AddToHeaders(_httpClient);
         }
 
         /// <summary>
@@ -53,7 +50,7 @@ namespace CloudFlare.Client
         public CloudFlareClient(string emailAddress, string apiKey)
         {
             var apiKeyAuthentication = new ApiKeyAuthentication(emailAddress, apiKey);
-            InitializeWithApiKey(apiKeyAuthentication);
+            apiKeyAuthentication.AddToHeaders(_httpClient);
         }
         
         /// <summary>
@@ -63,43 +60,7 @@ namespace CloudFlare.Client
         public CloudFlareClient(string apiToken)
         {
             var apiTokenAuthentication = new ApiTokenAuthentication(apiToken);
-            InitializeWithTokenAsync(apiTokenAuthentication);
-        }
-
-        /// <summary>
-        /// Initialize CloudFlare Client
-        /// </summary>
-        /// <param name="apiTokenAuthentication">Authentication with api token</param>
-
-        public CloudFlareClient(ApiTokenAuthentication apiTokenAuthentication)
-        {
-            InitializeWithTokenAsync(apiTokenAuthentication);
-        }
-
-        private void InitializeWithApiKey(ApiKeyAuthentication apiKeyAuthentication)
-        {
-            apiKeyAuthentication.EnsureCredentialsHasBeenSet();
-
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, apiKeyAuthentication.Email);
-            _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKeyAuthentication.ApiKey);
-
-            var testTheUserOnAuth = GetUserDetailsAsync().GetAwaiter().GetResult();
-            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-            {
-                throw new AuthenticationException(AuthenticationErrorMessage);
-            }
-        }
-
-        private void InitializeWithTokenAsync(ApiTokenAuthentication apiTokenAuthentication)
-        {
-
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiTokenAuthentication.ApiToken);
-
-            var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
-            if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-            {
-                throw new AuthenticationException(AuthenticationErrorMessage);
-            }
+            apiTokenAuthentication.AddToHeaders(_httpClient);
         }
 
         #endregion
