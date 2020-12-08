@@ -24,6 +24,8 @@ namespace CloudFlare.Client
     {
         #region Fields
 
+        private bool _disposed;
+
         private readonly HttpClient _httpClient = new HttpClient
         {
             BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
@@ -98,6 +100,15 @@ namespace CloudFlare.Client
             {
                 throw new AuthenticationException(AuthenticationErrorMessage);
             }
+        }
+
+        #endregion
+
+        #region Destructors
+
+        ~CloudFlareClient()
+        {
+            Dispose(false);
         }
 
         #endregion
@@ -1146,15 +1157,24 @@ namespace CloudFlare.Client
 
         protected virtual void Dispose(bool disposing)
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             if (disposing)
             {
+                // Dispose managed state (managed objects).
                 _httpClient?.Dispose();
             }
+
+            _disposed = true;
         }
 
-        public void Dispose()
+        public void Dispose() // Implement IDisposable
         {
-            _httpClient.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion
