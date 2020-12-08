@@ -1,6 +1,10 @@
-﻿namespace CloudFlare.Client.Models
+﻿using System.Net.Http;
+using System.Security.Authentication;
+using CloudFlare.Client.Api;
+
+namespace CloudFlare.Client.Models
 {
-    public class ApiKeyAuthentication
+    public class ApiKeyAuthentication : IAuthentication
     {
         /// <summary>
         /// Email Address
@@ -22,6 +26,18 @@
         {
             Email = emailAddress;
             ApiKey = apiKey;
+
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(ApiKey))
+            {
+                throw new AuthenticationException("Empty credentials! You must set email address and api key.");
+            }
+        }
+
+        /// <inheritdoc />
+        public void AddToHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, Email);
+            client.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, ApiKey);
         }
     }
 }

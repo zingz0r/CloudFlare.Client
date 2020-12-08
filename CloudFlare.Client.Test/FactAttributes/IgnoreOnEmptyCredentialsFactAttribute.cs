@@ -6,9 +6,9 @@ namespace CloudFlare.Client.Test.FactAttributes
     {
         public IgnoreOnEmptyCredentialsFactAttribute()
         {
-            if ((string.IsNullOrEmpty(Credentials.Credentials.Authentication.Email) ||
-                string.IsNullOrEmpty(Credentials.Credentials.Authentication.ApiKey))
-                && string.IsNullOrEmpty(Credentials.Credentials.Authentication.ApiToken))
+            if ((string.IsNullOrEmpty(Credentials.Credentials.EmailAddress) ||
+                string.IsNullOrEmpty(Credentials.Credentials.ApiKey))
+                && string.IsNullOrEmpty(Credentials.Credentials.ApiToken))
             {
                 Skip = "Authentication needed for this test";
             }

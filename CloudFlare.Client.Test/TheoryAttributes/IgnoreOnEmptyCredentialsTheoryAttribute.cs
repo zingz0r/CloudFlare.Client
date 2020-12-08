@@ -7,13 +7,9 @@ namespace CloudFlare.Client.Test.TheoryAttributes
     {
         public IgnoreOnEmptyCredentialsTheoryAttribute()
         {
-            if (string.IsNullOrEmpty(Credentials.Credentials.Authentication.Email) ||
-                string.IsNullOrEmpty(Credentials.Credentials.Authentication.ApiKey))
+            if (!Credentials.Credentials.HasApiKeyAuthentication && !Credentials.Credentials.HasApiTokenAuthentication)
             {
-                if (string.IsNullOrEmpty(Credentials.Credentials.Authentication.ApiToken))
-                {
-                    Skip = "Authentication needed for this test";
-                }
+                Skip = "Authentication needed for this test";
             }
         }
     }

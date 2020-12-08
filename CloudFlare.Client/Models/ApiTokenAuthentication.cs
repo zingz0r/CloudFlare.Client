@@ -1,6 +1,8 @@
-﻿namespace CloudFlare.Client.Models
+﻿using System.Net.Http;
+
+namespace CloudFlare.Client.Models
 {
-    public class ApiTokenAuthentication
+    public class ApiTokenAuthentication : IAuthentication
     {
         /// <summary>
         /// CloudFlare API Token
@@ -15,6 +17,12 @@
         public ApiTokenAuthentication(string apiToken)
         {
             ApiToken = apiToken;
+        }
+
+        /// <inheritdoc />
+        public void AddToHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", ApiToken);
         }
     }
 }
