@@ -668,7 +668,7 @@ namespace CloudFlare.Client
             CancellationToken cancellationToken = default)
         {
             return await _httpClient.PutAsync<Zone, object>(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null, cancellationToken)
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", "", cancellationToken)
                 .ConfigureAwait(false);
         }
 
