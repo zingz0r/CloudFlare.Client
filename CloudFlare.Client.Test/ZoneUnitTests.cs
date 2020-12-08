@@ -4,15 +4,13 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class ZoneUnitTests
     {
-        [IgnoreOnEmptyCredentialsTheory(Skip = "Would cause new zone")]
+        [Theory(Skip = "Would cause new zone")]
         [InlineData(@"test_domain_full.com", ZoneType.Full)]
         [InlineData(@"test_domain_partial.com", ZoneType.Partial)]
         public async Task TestCreateZoneAsync(string name, ZoneType type)
@@ -26,7 +24,7 @@ namespace CloudFlare.Client.Test
             Assert.True(zonesQueryResult.Success);
         }
 
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData("tothnet.hu", null, null, null, null, null)]
         [InlineData(null, ZoneStatus.Active, null, null, null, null)]
@@ -52,7 +50,7 @@ namespace CloudFlare.Client.Test
             Assert.True(zonesQueryResult.Success);
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetZoneDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -64,7 +62,7 @@ namespace CloudFlare.Client.Test
             Assert.True(zoneDetailsQueryResult.Success);
         }
 
-        [IgnoreOnEmptyCredentialsFact(Skip = "Would cause edited zone")]
+        [Fact(Skip = "Would cause edited zone")]
         public async Task TestEditZoneAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -88,7 +86,7 @@ namespace CloudFlare.Client.Test
             Assert.True(editZoneQueryResult.Success);
         }
 
-        [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted zone")]
+        [Fact(Skip = "Would cause deleted zone")]
 
         public async Task TestDeleteZoneAsync()
         {
@@ -101,8 +99,7 @@ namespace CloudFlare.Client.Test
             Assert.True(deletedZoneQueryResult.Success);
         }
 
-        [IgnoreOnEmptyCredentialsFact]
-
+        [Fact]
         public async Task TestZoneActivationCheckAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -126,7 +123,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
 
         public async Task TestPurgeAllFilesAsync()
         {

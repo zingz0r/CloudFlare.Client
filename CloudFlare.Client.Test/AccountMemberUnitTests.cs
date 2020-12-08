@@ -2,15 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class AccountMemberUnitTests
     {
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData(0, 100, OrderType.Desc)]
         [InlineData(0, 100, OrderType.Asc)]
         [InlineData(0, 100, null)]
@@ -33,7 +31,7 @@ namespace CloudFlare.Client.Test
 
         }
 
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData("test@notexistingemail.lan")]
         public async Task TestAddAndDeleteAccountMemberAsync(string emailAddress)
         {
@@ -69,7 +67,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetAccountMemberDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -85,7 +83,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestUpdateAccountMemberAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);

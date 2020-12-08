@@ -1,15 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class UserMembershipUnitTests
     {
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData(MembershipStatus.Accepted, null, null, null, null, null)]
         [InlineData(MembershipStatus.Pending, null, null, null, null, null)]
         [InlineData(MembershipStatus.Rejected, null, null, null, null, null)]
@@ -36,7 +34,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetMembershipDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -59,7 +57,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData(SetMembershipStatus.Accepted)]
         [InlineData(SetMembershipStatus.Rejected)]
         public async Task TestUpdateMembershipStatusAsync(SetMembershipStatus status)
@@ -77,7 +75,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact(Skip = "Would cause deleted membership")]
+        [Fact(Skip = "Would cause deleted membership")]
         public async Task TestDeleteMembershipAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);

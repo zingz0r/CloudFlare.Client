@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Security.Authentication;
 
 namespace CloudFlare.Client.Models
 {
@@ -17,6 +18,11 @@ namespace CloudFlare.Client.Models
         public ApiTokenAuthentication(string apiToken)
         {
             ApiToken = apiToken;
+
+            if (string.IsNullOrEmpty(apiToken))
+            {
+                throw new AuthenticationException("Empty token! You must set the token.");
+            }
         }
 
         /// <inheritdoc />
