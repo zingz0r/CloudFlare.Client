@@ -17,7 +17,7 @@
 ## Usage
 
 ```csharp
-    using var client = new CloudFlareClient("address@example.com", "globalApiKeyFromCF")
+    using var client = new CloudFlareClient("address@example.com", "globalApiKeyFromCF");
     
     var zones = await client.GetZonesAsync();
 
