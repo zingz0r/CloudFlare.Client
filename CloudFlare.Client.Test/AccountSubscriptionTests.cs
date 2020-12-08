@@ -7,7 +7,7 @@ namespace CloudFlare.Client.Test
     public class AccountSubscriptionTests
     {
         [Fact]
-        public async Task TestGetRolesAsync()
+        public async Task TestGetAccountSubscriptionsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.GetAccountsAsync();

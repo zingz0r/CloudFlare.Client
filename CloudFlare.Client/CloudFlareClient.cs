@@ -502,10 +502,10 @@ namespace CloudFlare.Client
         #region GetRoleDetailsAsync
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId,
+        public async Task<CloudFlareResult<AccountRole>> GetRoleDetailsAsync(string accountId,
             string roleId, CancellationToken cancellationToken = default)
         {
-            return await _httpClient.GetAsync<IEnumerable<AccountRole>>(
+            return await _httpClient.GetAsync<AccountRole>(
                 $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}/{roleId}", cancellationToken)
                 .ConfigureAwait(false);
         }

@@ -420,7 +420,7 @@ namespace CloudFlare.Client
         /// <param name="roleId">Role identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<AccountRole>> GetRoleDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default);
 
         #endregion
 
