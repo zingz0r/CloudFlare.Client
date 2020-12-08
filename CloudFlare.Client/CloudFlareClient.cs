@@ -1663,7 +1663,7 @@ namespace CloudFlare.Client
         public async Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId,
             string customHostnameId)
         {
-            return await DeleteCustomHostnameAsync(zoneId, customHostnameId).ConfigureAwait(false);
+            return await DeleteCustomHostnameAsync(zoneId, customHostnameId, default).ConfigureAwait(false);
         }
         
         /// <inheritdoc />
