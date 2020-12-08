@@ -11,21 +11,21 @@ namespace CloudFlare.Client.Extensions
     {
 
         public static async Task<CloudFlareResult<T>> GetAsync<T>(this HttpClient httpClient, string requestUri,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
         }
 
         public static async Task<CloudFlareResult<T>> DeleteAsync<T>(this HttpClient httpClient, string requestUri,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
         }
 
         public static async Task<CloudFlareResult<T>> PatchAsync<T>(this HttpClient httpClient, string requestUri,
-            HttpContent content, CancellationToken cancellationToken = default)
+            HttpContent content, CancellationToken cancellationToken)
         {
             try
             {
@@ -43,14 +43,14 @@ namespace CloudFlare.Client.Extensions
         }
 
         public static async Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(this HttpClient httpClient, string requestUri,
-            TContent content, CancellationToken cancellationToken = default)
+            TContent content, CancellationToken cancellationToken)
         {
             var response = await httpClient.PostAsJsonAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
         public static async Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(this HttpClient httpClient, string requestUri,
-            TContent content, CancellationToken cancellationToken = default)
+            TContent content, CancellationToken cancellationToken)
         {
             var response = await httpClient.PutAsJsonAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
