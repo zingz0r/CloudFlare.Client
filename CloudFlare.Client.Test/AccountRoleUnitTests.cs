@@ -1,13 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Test.FactAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class AccountRoleUnitTests
     {
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetRolesAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -22,7 +21,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetRoleDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);

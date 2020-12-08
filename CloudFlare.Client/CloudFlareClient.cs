@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Security.Authentication;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Account;
@@ -13,10 +11,9 @@ using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Exceptions;
+using CloudFlare.Client.Extensions;
 using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Models;
-using CloudFlare.Client.Extensions;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client
@@ -25,8 +22,12 @@ namespace CloudFlare.Client
     {
         #region Fields
 
-        private HttpClient _httpClient;
-        private static string AuthenticationErrorMessage => "Authentication error!";
+        private bool _disposed;
+
+        private readonly HttpClient _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
+        };
 
         #endregion
 
@@ -35,10 +36,10 @@ namespace CloudFlare.Client
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="cloudFlareAuthentication">CloudFlareAuthentication that contains email address and api key</param>
-        public CloudFlareClient(Authentication cloudFlareAuthentication)
+        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
+        public CloudFlareClient(IAuthentication authentication)
         {
-            Initialize(cloudFlareAuthentication.Email, cloudFlareAuthentication.ApiKey, cloudFlareAuthentication.ApiToken);
+            authentication.AddToHeaders(_httpClient);
         }
 
         /// <summary>
@@ -48,59 +49,27 @@ namespace CloudFlare.Client
         /// <param name="apiKey">CloudFlare API Key</param>
         public CloudFlareClient(string emailAddress, string apiKey)
         {
-            Initialize(emailAddress, apiKey, null);
+            var apiKeyAuthentication = new ApiKeyAuthentication(emailAddress, apiKey);
+            apiKeyAuthentication.AddToHeaders(_httpClient);
         }
 
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="apiToken">API token</param>
+        /// <param name="apiToken">Authentication with api token</param>
         public CloudFlareClient(string apiToken)
         {
-            Initialize(null, null, apiToken);
+            var apiTokenAuthentication = new ApiTokenAuthentication(apiToken);
+            apiTokenAuthentication.AddToHeaders(_httpClient);
         }
 
-        /// <summary>
-        /// Initialize CloudFlare Client
-        /// </summary>
-        /// <param name="emailAddress">Email address</param>
-        /// <param name="apiKey">CloudFlare API Key</param>
-        /// <param name="apiToken">CloudFlare API token</param>
-        private void Initialize(string emailAddress, string apiKey, string apiToken)
+        #endregion
+
+        #region Destructors
+
+        ~CloudFlareClient()
         {
-            if ((string.IsNullOrEmpty(emailAddress)
-                || string.IsNullOrEmpty(apiKey))
-                && string.IsNullOrEmpty(apiToken))
-            {
-                throw new AuthenticationException("Empty credentials! You must use email address/apikey or only api token combination.");
-            }
-
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(ApiParameter.Config.BaseUrl)
-            };
-
-            if (!string.IsNullOrEmpty(apiToken))
-            {
-                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiToken);
-
-                var testTheUserOnAuth = VerifyTokenAsync().GetAwaiter().GetResult();
-                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-                {
-                    throw new AuthenticationException(AuthenticationErrorMessage);
-                }
-            }
-            else
-            {
-                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthEmailHeader, emailAddress);
-                _httpClient.DefaultRequestHeaders.Add(ApiParameter.Config.AuthKeyHeader, apiKey);
-
-                var testTheUserOnAuth = GetUserDetailsAsync().GetAwaiter().GetResult();
-                if (!testTheUserOnAuth.Success || testTheUserOnAuth.Errors.Any())
-                {
-                    throw new AuthenticationException(AuthenticationErrorMessage);
-                }
-            }
+            Dispose(false);
         }
 
         #endregion
@@ -109,7 +78,14 @@ namespace CloudFlare.Client
 
         #region EditUserAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<User>> EditUserAsync(User editedUser)
+        {
+            return await EditUserAsync(editedUser, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<User>> EditUserAsync(User editedUser, CancellationToken cancellationToken)
         {
             var correctUserProps = new User
             {
@@ -120,8 +96,9 @@ namespace CloudFlare.Client
                 Zipcode = editedUser.Zipcode
             };
 
-            return await SendRequestAsync<User>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.User.Base}/", CreatePatchContent(correctUserProps))).ConfigureAwait(false);
+            return await _httpClient.PatchAsync<User>(
+                $"{ApiParameter.Endpoints.User.Base}/", CreatePatchContent(correctUserProps), cancellationToken)
+                .ConfigureAwait(false);
         }
 
 
@@ -129,24 +106,34 @@ namespace CloudFlare.Client
 
         #region GetUserDetailsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<User>> GetUserDetailsAsync()
         {
-            return await SendRequestAsync<User>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.User.Base}/")).ConfigureAwait(false);
+            return await GetUserDetailsAsync(default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<User>> GetUserDetailsAsync(CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<User>($"{ApiParameter.Endpoints.User.Base}/", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region VerifyTokenAsync
 
-        /// <summary>
-        /// Verify API token
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync()
         {
-            return await SendRequestAsync<VerifyToken>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}")).ConfigureAwait(false);
+            return await VerifyTokenAsync(default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<VerifyToken>> VerifyTokenAsync(CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<VerifyToken>($"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -156,50 +143,116 @@ namespace CloudFlare.Client
         #region User's Account Memberships
 
         #region DeleteMembershipAsync
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId)
         {
-            return await SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}")).ConfigureAwait(false);
+            return await DeleteMembershipAsync(default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.DeleteAsync<IEnumerable<UserMembership>>(
+                $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetMembershipsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync()
         {
-            return await GetMembershipsAsync(null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetMembershipsAsync(null, null, null, null, null, null, default).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(CancellationToken cancellationToken)
+        {
+            return await GetMembershipsAsync(null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status)
         {
-            return await GetMembershipsAsync(status, null, null, null, null, null).ConfigureAwait(false);
-
+            return await GetMembershipsAsync(status, null, null, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            CancellationToken cancellationToken)
         {
-            return await GetMembershipsAsync(status, accountName, null, null, null, null).ConfigureAwait(false);
+            return await GetMembershipsAsync(status, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName)
         {
-            return await GetMembershipsAsync(status, accountName, page, null, null, null).ConfigureAwait(false);
+            return await GetMembershipsAsync(status, accountName, null, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, CancellationToken cancellationToken)
         {
-            return await GetMembershipsAsync(status, accountName, page, perPage, null, null).ConfigureAwait(false);
+            return await GetMembershipsAsync(status, accountName, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage,
-            MembershipOrder? membershipOrder)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page)
         {
-            return await GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, null).ConfigureAwait(false);
+            return await GetMembershipsAsync(status, accountName, page, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage,
-            MembershipOrder? membershipOrder, OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, CancellationToken cancellationToken)
+        {
+            return await GetMembershipsAsync(status, accountName, page, null, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage)
+        {
+            return await GetMembershipsAsync(status, accountName, page, perPage, null, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetMembershipsAsync(status, accountName, page, perPage, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage, MembershipOrder? membershipOrder)
+        {
+            return await GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, CancellationToken cancellationToken)
+        {
+            return await GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, OrderType? order)
+        {
+            return await GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status,
+            string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, OrderType? order, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -214,33 +267,52 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
 
-            return await SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Membership.Base}/?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<UserMembership>>(
+                $"{ApiParameter.Endpoints.Membership.Base}/?{parameterString}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetMembershipDetailsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId)
         {
-            return await SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Membership.Base}/?{membershipId}")).ConfigureAwait(false);
+            return await GetMembershipDetailsAsync(membershipId, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipDetailsAsync(string membershipId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<IEnumerable<UserMembership>>(
+                $"{ApiParameter.Endpoints.Membership.Base}/?{membershipId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region UpdateMembershipAsync
 
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId,
+            SetMembershipStatus status)
+        {
+            return await UpdateMembershipStatusAsync(membershipId, status, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId,
+            SetMembershipStatus status, CancellationToken cancellationToken)
         {
             var data = new Dictionary<string, SetMembershipStatus>
             {
                 {ApiParameter.Filtering.Status, status}
             };
 
-            return await SendRequestAsync<IEnumerable<UserMembership>>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", data)).ConfigureAwait(false);
+            return await _httpClient.PutAsync<IEnumerable<UserMembership>, Dictionary<string, SetMembershipStatus>>($"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", data, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -251,24 +323,56 @@ namespace CloudFlare.Client
 
         #region GetAccountsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync()
         {
-            return await GetAccountsAsync(null, null, null).ConfigureAwait(false);
+            return await GetAccountsAsync(null, null, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(CancellationToken cancellationToken)
+        {
+            return await GetAccountsAsync(null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page)
         {
-            return await GetAccountsAsync(page, null, null).ConfigureAwait(false);
+            return await GetAccountsAsync(page, null, null, default).ConfigureAwait(false);
         }
-
-
-        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page,
+            CancellationToken cancellationToken)
         {
-            return await GetAccountsAsync(page, perPage, null).ConfigureAwait(false);
+            return await GetAccountsAsync(page, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page,
+            int? perPage)
+        {
+            return await GetAccountsAsync(page, perPage, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page,
+            int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetAccountsAsync(page, perPage, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page,
+            int? perPage, OrderType? order)
+        {
+            return await GetAccountsAsync(page, perPage, order, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page,
+            int? perPage, OrderType? order, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -280,31 +384,59 @@ namespace CloudFlare.Client
             var parameterString = parameterBuilder.ParameterCollection;
 
 
-            return await SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<Account>>(
+                $"{ApiParameter.Endpoints.Account.Base}/?{parameterString}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetAccountDetailsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId)
         {
-            return await SendRequestAsync<IEnumerable<Account>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/?{accountId}")).ConfigureAwait(false);
+            return await GetAccountDetailsAsync(accountId, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Account>>> GetAccountDetailsAsync(string accountId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<IEnumerable<Account>>(
+                $"{ApiParameter.Endpoints.Account.Base}/?{accountId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region UpdateAccount
 
-        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId,
+            string name)
         {
-            return await UpdateAccountAsync(accountId, name, null).ConfigureAwait(false);
+            return await UpdateAccountAsync(accountId, name, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId, string name,
-            AccountSettings settings)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId,
+            string name, CancellationToken cancellationToken)
+        {
+            return await UpdateAccountAsync(accountId, name, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId,
+            string name, AccountSettings settings)
+        {
+            return await UpdateAccountAsync(accountId, name, settings, default).ConfigureAwait(false);
+
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Account>> UpdateAccountAsync(string accountId,
+            string name, AccountSettings settings, CancellationToken cancellationToken)
         {
             var updatedAccount = new Account
             {
@@ -313,8 +445,9 @@ namespace CloudFlare.Client
                 Settings = settings
             };
 
-            return await SendRequestAsync<Account>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}", updatedAccount)).ConfigureAwait(false);
+            return await _httpClient.PutAsync<Account, Account>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}", updatedAccount, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -325,7 +458,16 @@ namespace CloudFlare.Client
 
         #region AddAccountMemberAsync
 
-        public async Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId, string emailAddress, IEnumerable<AccountRole> roles)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId,
+            string emailAddress, IEnumerable<AccountRole> roles)
+        {
+            return await AddAccountMemberAsync(accountId, emailAddress, roles, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId,
+            string emailAddress, IEnumerable<AccountRole> roles, CancellationToken cancellationToken)
         {
             var addAccountMember = new PostAccount
             {
@@ -334,42 +476,88 @@ namespace CloudFlare.Client
                 Status = AddMembershipStatus.Pending
             };
 
-            return await SendRequestAsync<AccountMember>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}", addAccountMember)).ConfigureAwait(false);
+            return await _httpClient.PostAsync<AccountMember, PostAccount>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}", addAccountMember, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region DeleteAccountMemberAsync
 
-        public async Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId, string memberId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId,
+            string memberId)
         {
-            return await SendRequestAsync<AccountMember>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}")).ConfigureAwait(false);
+            return await DeleteAccountMemberAsync(accountId, memberId, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> DeleteAccountMemberAsync(string accountId,
+            string memberId, CancellationToken cancellationToken)
+        {
+            return await _httpClient.DeleteAsync<AccountMember>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetAccountMembersAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId)
         {
-            return await GetAccountMembersAsync(accountId, null, null, null).ConfigureAwait(false);
+            return await GetAccountMembersAsync(accountId, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            CancellationToken cancellationToken)
         {
-            return await GetAccountMembersAsync(accountId, page, null, null).ConfigureAwait(false);
-
+            return await GetAccountMembersAsync(accountId, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page)
         {
-            return await GetAccountMembersAsync(accountId, page, perPage, null).ConfigureAwait(false);
+            return await GetAccountMembersAsync(accountId, page, null, null, default).ConfigureAwait(false);
+
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page, CancellationToken cancellationToken)
+        {
+            return await GetAccountMembersAsync(accountId, page, null, null, cancellationToken).ConfigureAwait(false);
+
         }
 
-        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId, int? page, int? perPage,
-            OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page, int? perPage)
+        {
+            return await GetAccountMembersAsync(accountId, page, perPage, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetAccountMembersAsync(accountId, page, perPage, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page, int? perPage, OrderType? order)
+        {
+            return await GetAccountMembersAsync(accountId, page, perPage, order, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountMember>>> GetAccountMembersAsync(string accountId,
+            int? page, int? perPage, OrderType? order, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -380,42 +568,87 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return await SendRequestAsync<IEnumerable<AccountMember>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<AccountMember>>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/?{parameterString}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetAccountMemberDetailsAsync
 
-        public async Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId, string memberId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId,
+            string memberId)
         {
-            return await SendRequestAsync<AccountMember>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}")).ConfigureAwait(false);
+            return await GetAccountMemberDetailsAsync(accountId, memberId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId,
+            string memberId, CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<AccountMember>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region UpdateAccountMemberAsync
 
-        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles)
         {
-            return await UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null).ConfigureAwait(false);
-
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, CancellationToken cancellationToken)
+        {
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code)
         {
-            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null).ConfigureAwait(false);
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code, CancellationToken cancellationToken)
+        {
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code, User user)
         {
-            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null).ConfigureAwait(false);
-
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code, User user, CancellationToken cancellationToken)
+        {
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId, string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status)
+        {
+            return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, status, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
+            string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status, CancellationToken cancellationToken)
         {
             var updatedAccountMember = new AccountMember
             {
@@ -429,8 +662,8 @@ namespace CloudFlare.Client
                 updatedAccountMember.Status = status.Value;
             }
 
-            return await SendRequestAsync<AccountMember>(
-                _httpClient.PutAsJsonAsync($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", updatedAccountMember))
+            return await _httpClient.PutAsync<AccountMember, AccountMember>($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}",
+                    updatedAccountMember, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -442,10 +675,19 @@ namespace CloudFlare.Client
 
         #region GetAccountSubscriptionsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId)
         {
-            return await SendRequestAsync<IEnumerable<AccountSubscription>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Subscriptions}")).ConfigureAwait(false);
+            return await GetAccountSubscriptionsAsync(accountId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<IEnumerable<AccountSubscription>>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Subscriptions}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -456,20 +698,39 @@ namespace CloudFlare.Client
 
         #region GetRolesAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId)
         {
-            return await SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}")).ConfigureAwait(false);
+            return await GetRolesAsync(accountId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<IEnumerable<AccountRole>>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetRoleDetailsAsync
 
-        public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRoleDetailsAsync(string accountId, string roleId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountRole>> GetRoleDetailsAsync(string accountId,
+            string roleId)
         {
-            return await SendRequestAsync<IEnumerable<AccountRole>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}")).ConfigureAwait(false);
+            return await GetRoleDetailsAsync(accountId, roleId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<AccountRole>> GetRoleDetailsAsync(string accountId,
+            string roleId, CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<AccountRole>(
+                $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}/{roleId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -480,12 +741,30 @@ namespace CloudFlare.Client
 
         #region CreateZoneAsync
 
-        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name,
+            ZoneType type, Account account)
         {
-            return await CreateZoneAsync(name, type, account, null).ConfigureAwait(false);
+            return await CreateZoneAsync(name, type, account, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name,
+            ZoneType type, Account account, CancellationToken cancellationToken)
+        {
+            return await CreateZoneAsync(name, type, account, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name, ZoneType type, Account account, bool? jumpStart)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name,
+            ZoneType type, Account account, bool? jumpStart)
+        {
+            return await CreateZoneAsync(name, type, account, jumpStart, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> CreateZoneAsync(string name,
+            ZoneType type, Account account, bool? jumpStart, CancellationToken cancellationToken)
         {
             var postZone = new PostZone
             {
@@ -495,66 +774,144 @@ namespace CloudFlare.Client
                 JumpStart = jumpStart ?? false
             };
 
-            return await SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/", postZone)).ConfigureAwait(false);
+            return await _httpClient.PostAsync<Zone, PostZone>(
+                $"{ApiParameter.Endpoints.Zone.Base}/", postZone, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region DeleteZoneAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId)
         {
-            return await SendRequestAsync<Zone>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}")).ConfigureAwait(false);
+            return await DeleteZoneAsync(zoneId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> DeleteZoneAsync(string zoneId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.DeleteAsync<Zone>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region EditZoneAsync
 
-        public async Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId, PatchZone patchZone)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId,
+            PatchZone patchZone)
         {
-            return await SendRequestAsync<Zone>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchZone))).ConfigureAwait(false);
+            return await EditZoneAsync(zoneId, patchZone, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> EditZoneAsync(string zoneId,
+            PatchZone patchZone, CancellationToken cancellationToken)
+        {
+            return await _httpClient.PatchAsync<Zone>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchZone), cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetZonesAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync()
         {
-            return await GetZonesAsync(null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetZonesAsync(null, null, null, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(CancellationToken cancellationToken)
+        {
+            return await GetZonesAsync(null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name)
         {
-            return await GetZonesAsync(name, null, null, null, null, null).ConfigureAwait(false);
+            return await GetZonesAsync(name, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status)
+                
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            CancellationToken cancellationToken)
         {
-            return await GetZonesAsync(name, status, null, null, null, null).ConfigureAwait(false);
+            return await GetZonesAsync(name, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status)
         {
-            return await GetZonesAsync(name, status, page, null, null, null).ConfigureAwait(false);
+            return await GetZonesAsync(name, status, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, CancellationToken cancellationToken)
         {
-            return await GetZonesAsync(name, status, page, perPage, null, null).ConfigureAwait(false);
+            return await GetZonesAsync(name, status, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage, OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page)
         {
-            return await GetZonesAsync(name, status, page, perPage, order, null).ConfigureAwait(false);
+            return await GetZonesAsync(name, status, page, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, CancellationToken cancellationToken)
+        {
+            return await GetZonesAsync(name, status, page, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
-            OrderType? order, bool? match)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage)
+        {
+            return await GetZonesAsync(name, status, page, perPage, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetZonesAsync(name, status, page, perPage, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage, OrderType? order)
+        {
+            return await GetZonesAsync(name, status, page, perPage, order, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage, OrderType? order, CancellationToken cancellationToken)
+        {
+            return await GetZonesAsync(name, status, page, perPage, order, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage, OrderType? order, bool? match)
+        {
+            return await GetZonesAsync(name, status, page, perPage, order, match, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<Zone>>> GetZonesAsync(string name,
+            ZoneStatus? status, int? page, int? perPage, OrderType? order, bool? match, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -568,40 +925,67 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return await SendRequestAsync<IEnumerable<Zone>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<Zone>>(
+                $"{ApiParameter.Endpoints.Zone.Base}/?{parameterString}", cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetZoneDetailsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId)
         {
-            return await SendRequestAsync<Zone>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}")).ConfigureAwait(false);
+            return await GetZoneDetailsAsync(zoneId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> GetZoneDetailsAsync(string zoneId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<Zone>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region PurgeAllFilesAsync
 
-        public async Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId,
+            bool purgeEverything)
+        {
+            return await PurgeAllFilesAsync(zoneId, purgeEverything, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId,
+            bool purgeEverything, CancellationToken cancellationToken)
         {
             var content = new Dictionary<string, bool> { { ApiParameter.Outgoing.PurgeEverything, purgeEverything } };
 
-            return await SendRequestAsync<Zone>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content)).ConfigureAwait(false);
+            return await _httpClient.PostAsync<Zone, Dictionary<string, bool>>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.PurgeCache}", content, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region ZoneActivationCheckAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId)
         {
-            return await SendRequestAsync<Zone>(_httpClient.PutAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", null)).ConfigureAwait(false);
+            return await ZoneActivationCheckAsync(zoneId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> ZoneActivationCheckAsync(string zoneId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.PutAsync<Zone, object>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.Zone.ActivationCheck}", "", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -612,25 +996,58 @@ namespace CloudFlare.Client
 
         #region CreateDnsRecordAsync
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content)
         {
-            return await CreateDnsRecordAsync(zoneId, type, name, content, null, null, null).ConfigureAwait(false);
-
+            return await CreateDnsRecordAsync(zoneId, type, name, content, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, CancellationToken cancellationToken)
+        {
+            return await CreateDnsRecordAsync(zoneId, type, name, content, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl)
         {
-            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, null, null).ConfigureAwait(false);
-
+            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl, CancellationToken cancellationToken)
+        {
+            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl, int? priority)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl, int? priority)
         {
-            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, priority, null).ConfigureAwait(false);
+            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, priority, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl, int? priority, CancellationToken cancellationToken)
+        {
+            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, priority, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId, DnsRecordType type, string name, string content, int? ttl,
-            int? priority, bool? proxied)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl, int? priority, bool? proxied)
+        {
+            return await CreateDnsRecordAsync(zoneId, type, name, content, ttl, priority, proxied, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> CreateDnsRecordAsync(string zoneId,
+            DnsRecordType type, string name, string content, int? ttl, int? priority, bool? proxied, CancellationToken cancellationToken)
         {
             var newDnsRecord = new DnsRecord
             {
@@ -642,27 +1059,47 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return await SendRequestAsync<DnsRecord>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/", newDnsRecord)).ConfigureAwait(false);
+            return await _httpClient.PostAsync<DnsRecord, DnsRecord>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/", newDnsRecord, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region DeleteDnsRecordAsync
 
-        public async Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId, string identifier)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId,
+            string identifier)
         {
-            return await SendRequestAsync<DnsRecord>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/")).ConfigureAwait(false);
+            return await DeleteDnsRecordAsync(zoneId, identifier, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> DeleteDnsRecordAsync(string zoneId,
+            string identifier, CancellationToken cancellationToken)
+        {
+            return await _httpClient.DeleteAsync<DnsRecord>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region ExportDnsRecordsAsync
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<string>> ExportDnsRecordsAsync(string zoneId)
         {
-            return await SendRequestAsync<string>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Export}/"))
+            return await ExportDnsRecordsAsync(zoneId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<string>> ExportDnsRecordsAsync(string zoneId,
+            CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<string>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Export}/", cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -670,44 +1107,113 @@ namespace CloudFlare.Client
 
         #region GetDnsRecordsAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId)
         {
-            return await GetDnsRecordsAsync(zoneId, null, null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, null, null, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            CancellationToken cancellationToken)
         {
-            return await GetDnsRecordsAsync(zoneId, type, null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, null, null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type)
         {
-            return await GetDnsRecordsAsync(zoneId, type, name, null, null, null, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, type, null, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, CancellationToken cancellationToken)
         {
-            return await GetDnsRecordsAsync(zoneId, type, name, content, null, null, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, type, null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name)
         {
-            return await GetDnsRecordsAsync(zoneId, type, name, content, page, null, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, type, name, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page, int? perPage)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, CancellationToken cancellationToken)
         {
-            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, null, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, type, name, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content, int? page, int? perPage,
-            OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content)
         {
-            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, order, null).ConfigureAwait(false);
+            return await GetDnsRecordsAsync(zoneId, type, name, content, null, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, CancellationToken cancellationToken)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId, DnsRecordType? type, string name, string content,
-            int? page, int? perPage, OrderType? order, bool? match)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, CancellationToken cancellationToken)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, null, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage, OrderType? order)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, order, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage, OrderType? order, CancellationToken cancellationToken)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, order, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage, OrderType? order, bool? match)
+        {
+            return await GetDnsRecordsAsync(zoneId, type, name, content, page, perPage, order, match, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<DnsRecord>>> GetDnsRecordsAsync(string zoneId,
+            DnsRecordType? type, string name, string content, int? page, int? perPage, OrderType? order, bool? match, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -722,30 +1228,58 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return await SendRequestAsync<IEnumerable<DnsRecord>>(
-                _httpClient.GetAsync($"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<DnsRecord>>($"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/?{parameterString}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetDnsRecordDetailsAsync
 
-        public async Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId, string identifier)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId,
+            string identifier)
         {
-            return await SendRequestAsync<DnsRecord>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}")).ConfigureAwait(false);
+            return await GetDnsRecordDetailsAsync(zoneId, identifier, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> GetDnsRecordDetailsAsync(string zoneId,
+            string identifier, CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<DnsRecord>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region ImportDnsRecordsAsync
 
-        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId,
+            FileInfo fileInfo)
         {
-            return await ImportDnsRecordsAsync(zoneId, fileInfo, null).ConfigureAwait(false);
+            return await ImportDnsRecordsAsync(zoneId, fileInfo, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId,
+            FileInfo fileInfo, CancellationToken cancellationToken)
+        {
+            return await ImportDnsRecordsAsync(zoneId, fileInfo, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId, FileInfo fileInfo, bool? proxied)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId,
+            FileInfo fileInfo, bool? proxied)
+        {
+            return await ImportDnsRecordsAsync(zoneId, fileInfo, proxied, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsImportResult>> ImportDnsRecordsAsync(string zoneId,
+            FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken)
         {
             var form = new MultipartFormDataContent
             {
@@ -757,8 +1291,8 @@ namespace CloudFlare.Client
                 }
             };
 
-            return await SendRequestAsync<DnsImportResult>(_httpClient.PostAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Import}/", form))
+            return await _httpClient.PostAsync<DnsImportResult, MultipartFormDataContent>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{ApiParameter.Endpoints.DnsRecord.Import}/", form, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -766,18 +1300,44 @@ namespace CloudFlare.Client
 
         #region UpdateDnsRecordAsync
 
-        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content)
         {
-            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, null, null).ConfigureAwait(false);
+            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, int? ttl)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content, CancellationToken cancellationToken)
         {
-            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, ttl, null).ConfigureAwait(false);
+            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId, string identifier, DnsRecordType type,
-            string name, string content, int? ttl, bool? proxied)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content, int? ttl)
+        {
+            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, ttl, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content, int? ttl, CancellationToken cancellationToken)
+        {
+            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, ttl, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content, int? ttl, bool? proxied)
+        {
+            return await UpdateDnsRecordAsync(zoneId, identifier, type, name, content, ttl, proxied, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<DnsRecord>> UpdateDnsRecordAsync(string zoneId,
+            string identifier, DnsRecordType type, string name, string content, int? ttl, bool? proxied, CancellationToken cancellationToken)
         {
             var updatedDnsRecord = new DnsRecord
             {
@@ -788,8 +1348,9 @@ namespace CloudFlare.Client
                 Proxied = proxied
             };
 
-            return await SendRequestAsync<DnsRecord>(_httpClient.PutAsJsonAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/", updatedDnsRecord)).ConfigureAwait(false);
+            return await _httpClient.PutAsync<DnsRecord, DnsRecord>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/{identifier}/", updatedDnsRecord, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
@@ -800,7 +1361,16 @@ namespace CloudFlare.Client
 
         #region CreateCustomHostnameAsync
 
-        public async Task<CloudFlareResult<CustomHostname>> CreateCustomHostnameAsync(string zoneId, string hostname, CustomHostnameSsl ssl)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> CreateCustomHostnameAsync(string zoneId,
+            string hostname, CustomHostnameSsl ssl)
+        {
+            return await CreateCustomHostnameAsync(zoneId, hostname, ssl, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> CreateCustomHostnameAsync(string zoneId,
+            string hostname, CustomHostnameSsl ssl, CancellationToken cancellationToken)
         {
             var postCustomHostname = new PostCustomHostname
             {
@@ -808,48 +1378,109 @@ namespace CloudFlare.Client
                 Ssl = ssl
             };
 
-            return await SendRequestAsync<CustomHostname>(_httpClient.PostAsJsonAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}", postCustomHostname)).ConfigureAwait(false);
+            return await _httpClient.PostAsync<CustomHostname, PostCustomHostname>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}",
+                postCustomHostname, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetCustomHostnamesAsync
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId)
         {
-            return await GetCustomHostnamesAsync(zoneId, null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, null, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesAsync(zoneId, hostname, null, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname)
         {
-            return await GetCustomHostnamesAsync(zoneId, hostname, page, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, hostname, null, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, hostname, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
-            CustomHostnameOrderType? type)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page)
         {
-            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, null, null, null, null, default).ConfigureAwait(false);
         }
-
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
-            CustomHostnameOrderType? type, OrderType? order)
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, null).ConfigureAwait(false);
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId, string hostname, int? page, int? perPage,
-            CustomHostnameOrderType? type, OrderType? order, bool? ssl)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, null, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, null, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, null, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, null, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl)
+        {
+            return await GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, ssl, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesAsync(string zoneId,
+            string hostname, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -863,43 +1494,108 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return await SendRequestAsync<IEnumerable<CustomHostname>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}")).ConfigureAwait(false);
+            return await _httpClient.GetAsync<IEnumerable<CustomHostname>>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
+        #endregion
+
+        #region GetCustomHostnamesByIdAsync
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, null, null, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, null, null, null, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, null, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, null, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, null, null, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page, int? perPage)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, null, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, null, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, null, null, null, null, default).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type,
-            OrderType? order)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, CancellationToken cancellationToken)
         {
-            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, order, null).ConfigureAwait(false);
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, null, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId, string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type,
-            OrderType? order, bool? ssl)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, null, null, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, null, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, null, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, null, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, order, null, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, CancellationToken cancellationToken)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, order, null, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl)
+        {
+            return await GetCustomHostnamesByIdAsync(zoneId, customHostnameId, page, perPage, type, order, ssl, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IEnumerable<CustomHostname>>> GetCustomHostnamesByIdAsync(string zoneId,
+            string customHostnameId, int? page, int? perPage, CustomHostnameOrderType? type, OrderType? order, bool? ssl, CancellationToken cancellationToken)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -913,8 +1609,8 @@ namespace CloudFlare.Client
 
             var parameterString = parameterBuilder.ParameterCollection;
 
-            return await SendRequestAsync<IEnumerable<CustomHostname>>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}"))
+            return await _httpClient.GetAsync<IEnumerable<CustomHostname>>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}?{parameterString}", cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -922,75 +1618,71 @@ namespace CloudFlare.Client
 
         #region GetCustomHostnameDetailsAsync
 
-        public async Task<CloudFlareResult<CustomHostname>> GetCustomHostnameDetailsAsync(string zoneId, string customHostnameId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> GetCustomHostnameDetailsAsync(string zoneId,
+            string customHostnameId)
         {
-            return await SendRequestAsync<CustomHostname>(_httpClient.GetAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}")).ConfigureAwait(false);
+            return await GetCustomHostnameDetailsAsync(zoneId, customHostnameId, default).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> GetCustomHostnameDetailsAsync(string zoneId,
+            string customHostnameId, CancellationToken cancellationToken)
+        {
+            return await _httpClient.GetAsync<CustomHostname>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region EditCustomHostnameAsync
 
-        public async Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId, string customHostnameId, PatchCustomHostname patchCustomHostname)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId,
+            string customHostnameId, PatchCustomHostname patchCustomHostname)
         {
-            return await SendRequestAsync<CustomHostname>(_httpClient.PatchAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}", CreatePatchContent(patchCustomHostname))).ConfigureAwait(false);
+            return await EditCustomHostnameAsync(zoneId, customHostnameId, patchCustomHostname, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> EditCustomHostnameAsync(string zoneId,
+            string customHostnameId, PatchCustomHostname patchCustomHostname, CancellationToken cancellationToken)
+        {
+            return await _httpClient.PatchAsync<CustomHostname>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}",
+                CreatePatchContent(patchCustomHostname), cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
 
         #region DeleteCustomHostnameAsync
 
-        public async Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId, string customHostnameId)
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId,
+            string customHostnameId)
         {
-            return await SendRequestAsync<CustomHostname>(_httpClient.DeleteAsync(
-                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}")).ConfigureAwait(false);
+            return await DeleteCustomHostnameAsync(zoneId, customHostnameId, default).ConfigureAwait(false);
+        }
+        
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<CustomHostname>> DeleteCustomHostnameAsync(string zoneId,
+            string customHostnameId, CancellationToken cancellationToken)
+        {
+            return await _httpClient.DeleteAsync<CustomHostname>(
+                $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.CustomHostname.Base}/{customHostnameId}", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         #endregion
-
-        #endregion
-
-        #region SendRequestAsync
-
-        /// <summary>
-        /// Sends the request async with HttpClient and parses response in the given type
-        /// </summary>
-        /// <typeparam name="T">Will parse response in to this type</typeparam>
-        /// <param name="request">The request task. Don't await before this func.</param>
-        /// <returns></returns>
-        private static async Task<CloudFlareResult<T>> SendRequestAsync<T>(Task<HttpResponseMessage> request)
-        {
-            try
-            {
-                var response = await request.ConfigureAwait(false);
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.Forbidden:
-                    case HttpStatusCode.Unauthorized:
-                        var errorResult = JsonConvert.DeserializeObject<CloudFlareResult<object>>(content);
-                        throw new AuthenticationException(string.Join(Environment.NewLine, errorResult.Errors.Select(x => x.Message)));
-                    default:
-                        return JsonConvert.DeserializeObject<CloudFlareResult<T>>(content);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new PersistenceUnavailableException(ex);
-
-            }
-        }
 
         #endregion
 
         #region CreatePatchContent
 
         /// <summary>
-        /// Creates StringContent which can be send with PatchAsync
+        /// Creates StringContent which can be sent with PatchAsync
         /// </summary>
         /// <typeparam name="T">Type of the incoming value</typeparam>
         /// <param name="value">Content to convert to sendable object</param>
@@ -1006,13 +1698,21 @@ namespace CloudFlare.Client
 
         protected virtual void Dispose(bool disposing)
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             if (disposing)
             {
+                // Dispose managed state (managed objects).
                 _httpClient?.Dispose();
             }
+
+            _disposed = true;
         }
 
-        public void Dispose()
+        public void Dispose() // Implement IDisposable
         {
             Dispose(true);
             GC.SuppressFinalize(this);

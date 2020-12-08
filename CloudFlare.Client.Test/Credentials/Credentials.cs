@@ -1,16 +1,41 @@
 ﻿using System;
+using System.Security.Authentication;
 using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Test.Credentials
 {
     public static class Credentials
     {
-        private static string ApiKey => Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
+        public static string ApiKey { get; }
+        public static string ApiToken { get; }
+        public static string EmailAddress { get; }
 
-        private static string ApiToken => Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
+        public static bool HasApiKeyAuthentication => !string.IsNullOrEmpty(EmailAddress) && !string.IsNullOrEmpty(ApiKey);
+        public static bool HasApiTokenAuthentication => !string.IsNullOrEmpty(ApiToken);
 
-        private static string EmailAddress => Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
+        public static IAuthentication Authentication
+        {
+            get
+            {
+                if (HasApiTokenAuthentication)
+                {
+                    return new ApiTokenAuthentication(ApiToken);
+                }
 
-        public static Authentication Authentication => new Authentication(EmailAddress, ApiKey, ApiToken);
+                if (HasApiKeyAuthentication)
+                {
+                    return new ApiKeyAuthentication(EmailAddress, ApiKey);
+                }
+
+                throw new AuthenticationException("No authentication provided");
+            }
+        }
+        
+        static Credentials()
+        {
+            EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
+            ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
+            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
+        }
     }
 }

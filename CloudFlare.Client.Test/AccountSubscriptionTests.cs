@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Test.FactAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class AccountSubscriptionTests
     {
-        [IgnoreOnEmptyCredentialsFact]
-        public async Task TestGetRolesAsync()
+        [Fact]
+        public async Task TestGetAccountSubscriptionsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.GetAccountsAsync();

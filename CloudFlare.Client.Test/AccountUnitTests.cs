@@ -1,15 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
 namespace CloudFlare.Client.Test
 {
     public class AccountUnitTests
     {
-        [IgnoreOnEmptyCredentialsTheory]
+        [Theory]
         [InlineData(0, null, null)]
         [InlineData(null, 100, null)]
         [InlineData(null, null, OrderType.Asc)]
@@ -28,7 +26,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task TestGetAccountDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -43,7 +41,7 @@ namespace CloudFlare.Client.Test
             }
         }
 
-        [IgnoreOnEmptyCredentialsFact]
+        [Fact]
         public async Task UpdateAccountAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);

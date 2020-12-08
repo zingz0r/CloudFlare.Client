@@ -12,7 +12,7 @@ namespace CloudFlare.Client.Test
 {
     public class CustomHostnameUnitTests
     {
-        [MultiTheory(typeof(IgnoreOnEmptyCredentialsTheoryAttribute), typeof(MinimumPlanEnterpriseTheoryAttribute))]
+        [MinimumPlanEnterpriseTheory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -32,7 +32,7 @@ namespace CloudFlare.Client.Test
             Assert.True(customHostnames.Success);
         }
 
-        [MultiTheory(typeof(IgnoreOnEmptyCredentialsTheoryAttribute), typeof(MinimumPlanEnterpriseTheoryAttribute))]
+        [MinimumPlanEnterpriseTheory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -53,7 +53,7 @@ namespace CloudFlare.Client.Test
             Assert.True(customHostnameDetails.Success);
         }
 
-        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute))]
+        [MinimumPlanEnterpriseFact]
         public async Task TestGetCustomHostnameDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -66,7 +66,7 @@ namespace CloudFlare.Client.Test
             Assert.True(customHostnameDetails.Success);
         }
 
-        [MultiFact(typeof(IgnoreOnEmptyCredentialsFactAttribute), typeof(MinimumPlanEnterpriseFactAttribute), Skip = "Would cause edited hostname")]
+        [MinimumPlanEnterpriseFact(Skip = "Would cause edited hostname")]
         public async Task TestEditCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
