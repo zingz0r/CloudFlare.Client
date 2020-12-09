@@ -36,6 +36,7 @@
                 public static string Base => "dns_records";
                 public static string Export => "export";
                 public static string Import => "import";
+                public static string Scan => "scan";
             }
 
             public static class Membership
