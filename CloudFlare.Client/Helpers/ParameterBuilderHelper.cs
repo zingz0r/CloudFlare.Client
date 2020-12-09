@@ -29,7 +29,7 @@ namespace CloudFlare.Client.Helpers
         /// <returns></returns>
         public ParameterBuilderHelper InsertValue<T>(string key, T value)
         {
-            if (!EqualityComparer<T>.Default.Equals(value, default(T)))
+            if (!EqualityComparer<T>.Default.Equals(value, default))
             {
                 ParameterCollection[key] = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
             }
