@@ -44,6 +44,9 @@ namespace CloudFlare.Client
             apiTokenAuthentication.AddToHeaders(_httpClient);
         }
 
+        /// <summary>
+        /// Destruct CloudFlare Client
+        /// </summary>
         ~CloudFlareClient()
         {
             Dispose(false);
@@ -58,14 +61,16 @@ namespace CloudFlare.Client
 
             if (disposing)
             {
-                // Dispose managed state (managed objects).
                 _httpClient?.Dispose();
             }
 
             _disposed = true;
         }
 
-        public void Dispose() // Implement IDisposable
+        /// <summary>
+        /// Dispose CloudFlare Client
+        /// </summary>
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
