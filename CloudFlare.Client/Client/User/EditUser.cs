@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Extensions;
+using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client
@@ -28,7 +29,7 @@ namespace CloudFlare.Client
             };
 
             return await _httpClient.PatchAsync<User>(
-                    $"{ApiParameter.Endpoints.User.Base}/", CreatePatchContent(correctUserProps), cancellationToken)
+                    $"{ApiParameter.Endpoints.User.Base}/", PatchContentHelper.Create(correctUserProps), cancellationToken)
                 .ConfigureAwait(false);
         }
     }

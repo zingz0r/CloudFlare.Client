@@ -1,5 +1,4 @@
-﻿using System;
-using CloudFlare.Client.Enumerators;
+﻿using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models

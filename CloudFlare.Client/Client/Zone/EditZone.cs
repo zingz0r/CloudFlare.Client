@@ -4,6 +4,7 @@ using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Extensions;
+using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client
@@ -22,7 +23,7 @@ namespace CloudFlare.Client
             PatchZone patchZone, CancellationToken cancellationToken)
         {
             return await _httpClient.PatchAsync<Zone>(
-                    $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", CreatePatchContent(patchZone), cancellationToken)
+                    $"{ApiParameter.Endpoints.Zone.Base}/{zoneId}", PatchContentHelper.Create(patchZone), cancellationToken)
                 .ConfigureAwait(false);
         }
     }

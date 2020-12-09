@@ -20,7 +20,7 @@ namespace CloudFlare.Client.Extensions
         public static async Task<CloudFlareResult<T>> DeleteAsync<T>(this HttpClient httpClient, string requestUri,
             CancellationToken cancellationToken)
         {
-            var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
+            var response = await httpClient.DeleteAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
         }
 
