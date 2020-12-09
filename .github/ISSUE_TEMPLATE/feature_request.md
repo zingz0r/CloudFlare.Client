@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[Feature]"
+title: "[Feature] The requested endpoint (ex: PUT memberships/:identifier)"
 labels: enhancement
-assignees: ''
+assignees: zingz0r
 
 ---
 
