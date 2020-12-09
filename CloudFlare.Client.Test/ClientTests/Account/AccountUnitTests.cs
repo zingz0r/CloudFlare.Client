@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests.Account
 {
     public class AccountUnitTests
     {

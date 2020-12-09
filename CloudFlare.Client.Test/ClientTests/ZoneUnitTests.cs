@@ -6,7 +6,7 @@ using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class ZoneUnitTests
     {

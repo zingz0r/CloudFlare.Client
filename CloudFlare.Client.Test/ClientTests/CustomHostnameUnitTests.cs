@@ -8,7 +8,7 @@ using CloudFlare.Client.Test.FactAttributes;
 using CloudFlare.Client.Test.TheoryAttributes;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class CustomHostnameUnitTests
     {

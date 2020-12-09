@@ -1,7 +1,7 @@
 ﻿using System.Security.Authentication;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class AuthenticationTests
     {
