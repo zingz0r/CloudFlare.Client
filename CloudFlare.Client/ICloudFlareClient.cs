@@ -29,6 +29,7 @@
         ICreateDnsRecord,
         IGetDnsRecords,
         IGetDnsRecordDetails,
+        IScanDnsRecords,
         IUpdateDnsRecord,
         IDeleteDnsRecord,
         IExportDnsRecord,
