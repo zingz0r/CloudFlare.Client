@@ -11,7 +11,7 @@ namespace CloudFlare.Client
     {
         public async Task<CloudFlareResult<DnsRecordScan>> ScanDnsRecordsAsync(string zoneId)
         {
-            return await ScanDnsRecordsAsync(zoneId, default);
+            return await ScanDnsRecordsAsync(zoneId, default).ConfigureAwait(false);
         }
 
         public async Task<CloudFlareResult<DnsRecordScan>> ScanDnsRecordsAsync(string zoneId, CancellationToken cancellationToken)
