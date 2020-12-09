@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
 namespace CloudFlare.Client.Test.ClientTests.Account
@@ -13,12 +14,9 @@ namespace CloudFlare.Client.Test.ClientTests.Account
             var accounts = await client.GetAccountsAsync();
             var subscriptions = await client.GetAccountSubscriptionsAsync(accounts.Result.First().Id);
 
-            Assert.NotNull(subscriptions);
-            Assert.True(subscriptions.Success);
-            if (subscriptions.Errors != null)
-            {
-                Assert.Empty(subscriptions.Errors);
-            }
+            subscriptions.Should().NotBeNull();
+            subscriptions.Success.Should().BeTrue();
+            subscriptions.Errors?.Should().BeEmpty();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Security.Authentication;
+﻿using System;
+using System.Security.Authentication;
+using FluentAssertions;
 using Xunit;
 
 namespace CloudFlare.Client.Test.ClientTests
@@ -14,7 +16,8 @@ namespace CloudFlare.Client.Test.ClientTests
         [InlineData("", "WrongKey")]
         public void TestClientAuthenticationWithApiKey(string emailAddress, string apiKey)
         {
-            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(emailAddress, apiKey));
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(emailAddress, apiKey);
+            ctor.Should().ThrowExactly<AuthenticationException>();
         }
 
         [Theory]
@@ -22,13 +25,16 @@ namespace CloudFlare.Client.Test.ClientTests
         [InlineData("")]
         public void TestClientAuthenticationWithApiToken(string token)
         {
-            Assert.Throws<AuthenticationException>(() => new CloudFlareClient(token));
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(token);
+            ctor.Should().ThrowExactly<AuthenticationException>();
         }
 
         [Fact]
         public void TestClientAuthenticationWithAuthObject()
         {
-            Assert.NotNull(new CloudFlareClient(Credentials.Credentials.Authentication));
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(Credentials.Credentials.Authentication);
+            ctor.Should().NotThrow();
+            ctor.Invoke().Should().NotBeNull();
         }
     }
 }

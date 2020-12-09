@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
+using FluentAssertions;
 using Xunit;
 
 namespace CloudFlare.Client.Test.ClientTests.Account
@@ -21,13 +22,9 @@ namespace CloudFlare.Client.Test.ClientTests.Account
             var accounts = await client.GetAccountsAsync();
             var accountMembers = await client.GetAccountMembersAsync(accounts.Result.First().Id, page, perPage, order);
 
-            Assert.NotNull(accountMembers);
-            Assert.True(accountMembers.Success);
-
-            if (accountMembers.Errors != null)
-            {
-                Assert.Empty(accountMembers.Errors);
-            }
+            accountMembers.Should().NotBeNull();
+            accountMembers.Success.Should().BeTrue();
+            accountMembers.Errors?.Should().BeEmpty();
 
         }
 
@@ -40,7 +37,7 @@ namespace CloudFlare.Client.Test.ClientTests.Account
             var roles = await client.GetRolesAsync(accounts.Result.First().Id);
             var addedAccountMember = client.AddAccountMemberAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
 
-            Assert.NotNull(addedAccountMember);
+            addedAccountMember.Should().NotBeNull();
 
             var notAvailable = new List<int>
             {
@@ -50,20 +47,14 @@ namespace CloudFlare.Client.Test.ClientTests.Account
 
             if (!addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code)))
             {
-                Assert.True(addedAccountMember.Success);
-                if (addedAccountMember.Errors != null)
-                {
-                    Assert.Empty(addedAccountMember.Errors);
-                }
+                addedAccountMember.Success.Should().BeTrue();
+                addedAccountMember.Errors?.Should().BeEmpty();
 
                 var deletedAccountMember = client.DeleteAccountMemberAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
 
-                Assert.NotNull(deletedAccountMember);
-                Assert.True(deletedAccountMember.Success);
-                if (addedAccountMember.Errors != null)
-                {
-                    Assert.Empty(addedAccountMember.Errors);
-                }
+                deletedAccountMember.Should().NotBeNull();
+                deletedAccountMember.Success.Should().BeTrue();
+                addedAccountMember.Errors?.Should().BeEmpty();
             }
         }
 
@@ -75,12 +66,9 @@ namespace CloudFlare.Client.Test.ClientTests.Account
             var accountMembers = await client.GetAccountMembersAsync(accounts.Result.First().Id);
             var accountMemberDetails = client.GetAccountMemberDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
 
-            Assert.NotNull(accountMemberDetails);
-            Assert.True(accountMemberDetails.Success);
-            if (accountMemberDetails.Errors != null)
-            {
-                Assert.Empty(accountMemberDetails.Errors);
-            }
+            accountMemberDetails.Should().NotBeNull();
+            accountMemberDetails.Success.Should().BeTrue();
+            accountMemberDetails.Errors?.Should().BeEmpty();
         }
 
         [Fact]
@@ -95,7 +83,7 @@ namespace CloudFlare.Client.Test.ClientTests.Account
             var updatedMember = await client.UpdateAccountMemberAsync(accounts.Result.First().Id, firstAccountMember.Id,
                 firstAccountMember.Roles, firstAccountMember.Code, firstAccountMember.User, MembershipStatus.Accepted);
 
-            Assert.NotNull(updatedMember);
+            updatedMember.Should().NotBeNull();
 
             var notAvailable = new List<int>
             {
@@ -104,11 +92,8 @@ namespace CloudFlare.Client.Test.ClientTests.Account
 
             if (!updatedMember.Errors.Any(x => notAvailable.Contains(x.Code)))
             {
-                Assert.True(updatedMember.Success);
-                if (updatedMember.Errors != null)
-                {
-                    Assert.Empty(updatedMember.Errors);
-                }
+                updatedMember.Success.Should().BeTrue();
+                updatedMember.Errors?.Should().BeEmpty();
             }
         }
     }
