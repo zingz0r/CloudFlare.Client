@@ -2,11 +2,11 @@
 using CloudFlare.Client.Enumerators;
 using Xunit;
 
-namespace CloudFlare.Client.Test.TheoryAttributes
+namespace CloudFlare.Client.Test.Attributes
 {
-    public sealed class MinimumPlanEnterpriseTheoryAttribute : TheoryAttribute
+    public sealed class MinimumPlanEnterpriseFactAttribute : FactAttribute
     {
-        public MinimumPlanEnterpriseTheoryAttribute()
+        public MinimumPlanEnterpriseFactAttribute()
         {
             var hasEnterpriseLevelAccount = false;
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))

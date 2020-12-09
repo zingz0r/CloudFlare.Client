@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
+using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
 
