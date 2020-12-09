@@ -31,7 +31,7 @@ namespace CloudFlare.Client.Models
         /// Original name servers before moving to CloudFlare
         /// </summary>
         [JsonProperty("original_name_servers")]
-        public IEnumerable<string> OriginalNameServers { get; set; }
+        public IReadOnlyList<string> OriginalNameServers { get; set; }
 
         /// <summary>
         /// Registrar for the domain at the time of switching to CloudFlare
@@ -79,7 +79,7 @@ namespace CloudFlare.Client.Models
         /// Available permissions on the zone for the current user requesting the item
         /// </summary>
         [JsonProperty("permissions")]
-        public IEnumerable<string> Permissions { get; set; }
+        public IReadOnlyList<string> Permissions { get; set; }
 
         /// <summary>
         /// A zone plan
@@ -115,6 +115,6 @@ namespace CloudFlare.Client.Models
         /// CloudFlare-assigned name servers. This is only populated for zones that use CloudFlare DNS
         /// </summary>
         [JsonProperty("name_servers")]
-        public IEnumerable<string> NameServers { get; set; }
+        public IReadOnlyList<string> NameServers { get; set; }
     }
 }

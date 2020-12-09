@@ -19,6 +19,6 @@ namespace CloudFlare.Client.Api.Result
         /// Error chain
         /// </summary>
         [JsonProperty("error_chain")]
-        public IEnumerable<ErrorDetails> ErrorChain { get; set; }
+        public IReadOnlyList<ErrorDetails> ErrorChain { get; set; }
     }
 }

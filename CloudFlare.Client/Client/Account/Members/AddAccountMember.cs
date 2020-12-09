@@ -14,14 +14,14 @@ namespace CloudFlare.Client
     {
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId,
-            string emailAddress, IEnumerable<AccountRole> roles)
+            string emailAddress, IReadOnlyList<AccountRole> roles)
         {
             return await AddAccountMemberAsync(accountId, emailAddress, roles, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> AddAccountMemberAsync(string accountId,
-            string emailAddress, IEnumerable<AccountRole> roles, CancellationToken cancellationToken)
+            string emailAddress, IReadOnlyList<AccountRole> roles, CancellationToken cancellationToken)
         {
             var addAccountMember = new PostAccount
             {

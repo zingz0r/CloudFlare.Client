@@ -13,56 +13,56 @@ namespace CloudFlare.Client
     {
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles)
+            string memberId, IReadOnlyList<AccountRole> roles)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, CancellationToken cancellationToken)
+            string memberId, IReadOnlyList<AccountRole> roles, CancellationToken cancellationToken)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, null, null, null, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code)
+            string memberId, IReadOnlyList<AccountRole> roles, string code)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code, CancellationToken cancellationToken)
+            string memberId, IReadOnlyList<AccountRole> roles, string code, CancellationToken cancellationToken)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, code, null, null, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code, User user)
+            string memberId, IReadOnlyList<AccountRole> roles, string code, User user)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code, User user, CancellationToken cancellationToken)
+            string memberId, IReadOnlyList<AccountRole> roles, string code, User user, CancellationToken cancellationToken)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, null, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status)
+            string memberId, IReadOnlyList<AccountRole> roles, string code, User user, MembershipStatus? status)
         {
             return await UpdateAccountMemberAsync(accountId, memberId, roles, code, user, status, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> UpdateAccountMemberAsync(string accountId,
-            string memberId, IEnumerable<AccountRole> roles, string code, User user, MembershipStatus? status, CancellationToken cancellationToken)
+            string memberId, IReadOnlyList<AccountRole> roles, string code, User user, MembershipStatus? status, CancellationToken cancellationToken)
         {
             var updatedAccountMember = new AccountMember
             {

@@ -11,16 +11,16 @@ namespace CloudFlare.Client
     public partial class CloudFlareClient
     {
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId)
+        public async Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetRolesAsync(string accountId)
         {
             return await GetRolesAsync(accountId, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<AccountRole>>> GetRolesAsync(string accountId,
+        public async Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetRolesAsync(string accountId,
             CancellationToken cancellationToken)
         {
-            return await _httpClient.GetAsync<IEnumerable<AccountRole>>(
+            return await _httpClient.GetAsync<IReadOnlyList<AccountRole>>(
                     $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}", cancellationToken)
                 .ConfigureAwait(false);
         }
