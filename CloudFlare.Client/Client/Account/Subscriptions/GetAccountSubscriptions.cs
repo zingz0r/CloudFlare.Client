@@ -11,16 +11,16 @@ namespace CloudFlare.Client
     public partial class CloudFlareClient
     {
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId)
+        public async Task<CloudFlareResult<IReadOnlyList<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId)
         {
             return await GetAccountSubscriptionsAsync(accountId, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId,
+        public async Task<CloudFlareResult<IReadOnlyList<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId,
             CancellationToken cancellationToken)
         {
-            return await _httpClient.GetAsync<IEnumerable<AccountSubscription>>(
+            return await _httpClient.GetAsync<IReadOnlyList<AccountSubscription>>(
                     $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Subscriptions}", cancellationToken)
                 .ConfigureAwait(false);
         }

@@ -28,6 +28,6 @@ namespace CloudFlare.Client.Models
         /// A whitelist of ciphers for TLS termination. These ciphers must be in the BoringSSL format
         /// </summary>
         [JsonProperty("ciphers")]
-        public IEnumerable<string> Ciphers { get; set; }
+        public IReadOnlyList<string> Ciphers { get; set; }
     }
 }

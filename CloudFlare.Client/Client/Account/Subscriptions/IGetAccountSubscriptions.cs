@@ -13,7 +13,7 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
+        Task<CloudFlareResult<IReadOnlyList<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId);
 
         /// <summary>
         /// Lists all an account's subscriptions
@@ -21,6 +21,6 @@ namespace CloudFlare.Client
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<AccountSubscription>>> GetAccountSubscriptionsAsync(string accountId, CancellationToken cancellationToken);
     }
 }

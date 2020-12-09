@@ -18,7 +18,7 @@ namespace CloudFlare.Client.Api.Zone
         /// </summary>
         [JsonProperty("vanity_name_servers", NullValueHandling = NullValueHandling.Ignore)]
         [DataMember(EmitDefaultValue = false)]
-        public IEnumerable<string> VanityNameServers { get; set; }
+        public IReadOnlyList<string> VanityNameServers { get; set; }
 
         /// <summary>
         /// <see cref="Models.Zone.Plan"/>

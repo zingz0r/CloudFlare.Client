@@ -11,16 +11,16 @@ namespace CloudFlare.Client
     public partial class CloudFlareClient
     {
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId)
+        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteMembershipAsync(string membershipId)
         {
             return await DeleteMembershipAsync(membershipId, default).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId,
+        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteMembershipAsync(string membershipId,
             CancellationToken cancellationToken)
         {
-            return await _httpClient.DeleteAsync<IEnumerable<UserMembership>>(
+            return await _httpClient.DeleteAsync<IReadOnlyList<UserMembership>>(
                 $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", cancellationToken).ConfigureAwait(false);
         }
     }

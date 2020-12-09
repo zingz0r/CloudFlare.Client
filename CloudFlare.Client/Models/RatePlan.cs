@@ -34,7 +34,7 @@ namespace CloudFlare.Client.Models
         /// The sets of the rate plan
         /// </summary>
         [JsonProperty("sets")]
-        public IEnumerable<string> Sets { get; set; }
+        public IReadOnlyList<string> Sets { get; set; }
 
         /// <summary>
         /// Whether the rate plan is contract

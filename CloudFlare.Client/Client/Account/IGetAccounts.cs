@@ -14,21 +14,21 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync();
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync();
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
         /// </summary>
         /// <param name="page">Page number of paginated results</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page);
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
@@ -36,7 +36,7 @@ namespace CloudFlare.Client
         /// <param name="page">Page number of paginated results</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page, CancellationToken cancellationToken);
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
@@ -44,7 +44,7 @@ namespace CloudFlare.Client
         /// <param name="page">Page number of paginated results</param>
         /// <param name="perPage">Number of DNS records per page</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page, int? perPage);
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
@@ -53,16 +53,7 @@ namespace CloudFlare.Client
         /// <param name="perPage">Number of DNS records per page</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// List all accounts you have ownership or verified access to
-        /// </summary>
-        /// <param name="page">Page number of paginated results</param>
-        /// <param name="perPage">Number of DNS records per page</param>
-        /// <param name="order">Field to order records by</param>
-        /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page, int? perPage, CancellationToken cancellationToken);
 
         /// <summary>
         /// List all accounts you have ownership or verified access to
@@ -70,8 +61,17 @@ namespace CloudFlare.Client
         /// <param name="page">Page number of paginated results</param>
         /// <param name="perPage">Number of DNS records per page</param>
         /// <param name="order">Field to order records by</param>
+        /// <returns></returns>
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order);
+
+        /// <summary>
+        /// List all accounts you have ownership or verified access to
+        /// </summary>
+        /// <param name="page">Page number of paginated results</param>
+        /// <param name="perPage">Number of DNS records per page</param>
+        /// <param name="order">Field to order records by</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync(int? page, int? perPage, OrderType? order, CancellationToken cancellationToken);
     }
 }

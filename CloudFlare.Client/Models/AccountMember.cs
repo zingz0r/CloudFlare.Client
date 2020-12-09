@@ -34,6 +34,6 @@ namespace CloudFlare.Client.Models
         /// Roles assigned to a member
         /// </summary>
         [JsonProperty("roles")]
-        public IEnumerable<AccountRole> Roles { get; set; }
+        public IReadOnlyList<AccountRole> Roles { get; set; }
     }
 }

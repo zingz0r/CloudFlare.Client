@@ -13,14 +13,14 @@ namespace CloudFlare.Client
         /// List memberships of accounts the user can access
         /// </summary>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync();
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync();
 
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(CancellationToken cancellationToken);
 
         
         /// <summary>
@@ -29,7 +29,7 @@ namespace CloudFlare.Client
         /// <param name="status">Status of this membership</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status);
 
         /// <summary>
         /// List memberships of accounts the user can access
@@ -37,7 +37,7 @@ namespace CloudFlare.Client
         /// <param name="status">Status of this membership</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, CancellationToken cancellationToken);
 
         /// <summary>
         /// List memberships of accounts the user can access
@@ -45,7 +45,7 @@ namespace CloudFlare.Client
         /// <param name="status">Status of this membership</param>
         /// <param name="accountName">Account name</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName);
         
         /// <summary>
         /// List memberships of accounts the user can access
@@ -54,7 +54,7 @@ namespace CloudFlare.Client
         /// <param name="accountName">Account name</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, CancellationToken cancellationToken);
 
         /// <summary>
         /// List memberships of accounts the user can access
@@ -63,7 +63,7 @@ namespace CloudFlare.Client
         /// <param name="accountName">Account name</param>
         /// <param name="page">Page number of paginated results</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page);
         
         /// <summary>
         /// List memberships of accounts the user can access
@@ -73,7 +73,7 @@ namespace CloudFlare.Client
         /// <param name="page">Page number of paginated results</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page, CancellationToken cancellationToken);
 
         /// <summary>
         /// List memberships of accounts the user can access
@@ -83,7 +83,7 @@ namespace CloudFlare.Client
         /// <param name="page">Page number of paginated results</param>
         /// <param name="perPage">Number of memberships per page</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage);
         
         /// <summary>
@@ -95,7 +95,7 @@ namespace CloudFlare.Client
         /// <param name="perPage">Number of memberships per page</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, CancellationToken cancellationToken);
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace CloudFlare.Client
         /// <param name="perPage">Number of memberships per page</param>
         /// <param name="membershipOrder">Field to order memberships by</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder);
         
         /// <summary>
@@ -120,7 +120,7 @@ namespace CloudFlare.Client
         /// <param name="membershipOrder">Field to order memberships by</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder, CancellationToken cancellationToken);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace CloudFlare.Client
         /// <param name="membershipOrder">Field to order memberships by</param>
         /// <param name="order">Direction to order memberships</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder, OrderType? order);
         
         /// <summary>
@@ -147,7 +147,7 @@ namespace CloudFlare.Client
         /// <param name="order">Direction to order memberships</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
             int? perPage, MembershipOrder? membershipOrder, OrderType? order, CancellationToken cancellationToken);
 
     }

@@ -15,7 +15,7 @@ namespace CloudFlare.Client
         /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status);
 
         /// <summary>
         /// Accept or reject this account invitation
@@ -24,6 +24,6 @@ namespace CloudFlare.Client
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> UpdateMembershipStatusAsync(string membershipId, SetMembershipStatus status, CancellationToken cancellationToken);
     }
 }

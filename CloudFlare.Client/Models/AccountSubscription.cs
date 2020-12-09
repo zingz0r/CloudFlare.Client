@@ -41,7 +41,7 @@ namespace CloudFlare.Client.Models
         /// The list of add-ons subscribed to
         /// </summary>
         [JsonProperty("component_values")]
-        public IEnumerable<ComponentValue> ComponentValues { get; set; }
+        public IReadOnlyList<ComponentValue> ComponentValues { get; set; }
 
         /// <summary>
         /// A simple zone object. May have null properties if not a zone subscription.

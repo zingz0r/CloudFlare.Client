@@ -23,6 +23,6 @@ namespace CloudFlare.Client.Api.Account
         /// Array of roles associated with this member
         /// </summary>
         [JsonProperty("roles")]
-        public IEnumerable<AccountRole> Roles { get; set; }
+        public IReadOnlyList<AccountRole> Roles { get; set; }
     }
 }

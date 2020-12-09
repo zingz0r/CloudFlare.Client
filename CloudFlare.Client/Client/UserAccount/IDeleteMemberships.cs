@@ -13,7 +13,7 @@ namespace CloudFlare.Client
         /// </summary>
         /// <param name="membershipId">Membership identifier tag</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteMembershipAsync(string membershipId);
 
         /// <summary>
         /// Remove the associated member from an account
@@ -21,6 +21,6 @@ namespace CloudFlare.Client
         /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IEnumerable<UserMembership>>> DeleteMembershipAsync(string membershipId, CancellationToken cancellationToken);
+        Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteMembershipAsync(string membershipId, CancellationToken cancellationToken);
     }
 }

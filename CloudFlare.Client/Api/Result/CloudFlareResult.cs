@@ -22,12 +22,12 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Additional messages
         /// </summary>
-        public IEnumerable<ErrorDetails> Messages { get; set; }
+        public IReadOnlyList<ErrorDetails> Messages { get; set; }
 
         /// <summary>
         /// Array of potential errors
         /// </summary>
-        public IEnumerable<ApiError> Errors { get; set; }
+        public IReadOnlyList<ApiError> Errors { get; set; }
 
         /// <summary>
         /// Time info of procession
