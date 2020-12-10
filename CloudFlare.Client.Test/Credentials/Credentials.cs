@@ -33,9 +33,9 @@ namespace CloudFlare.Client.Test.Credentials
 
         static Credentials()
         {
-            EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.User);
-            ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.User);
-            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.User);
+            EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
+            ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
+            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
         }
     }
 }

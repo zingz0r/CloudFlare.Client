@@ -15,7 +15,7 @@ namespace CloudFlare.Client.Test.ClientTests
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zone = (await client.GetZonesAsync()).Result.First();
 
-            var create = await client.CreateDnsRecordAsync(zone.Id, DnsRecordType.A, $"{Guid.NewGuid()}.{zone.Name}", "1.1.1.1");
+            var create = await client.CreateDnsRecordAsync(zone.Id, DnsRecordType.A, $"{Guid.NewGuid()}.{zone.Name}", "127.0.0.1");
             var delete = await client.DeleteDnsRecordAsync(zone.Id, create.Result.Id);
 
             create.Success.Should().BeTrue();
