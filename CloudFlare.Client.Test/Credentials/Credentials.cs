@@ -1,6 +1,6 @@
-﻿using System;
-using System.Security.Authentication;
+﻿using System.Security.Authentication;
 using CloudFlare.Client.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace CloudFlare.Client.Test.Credentials
 {
@@ -33,9 +33,13 @@ namespace CloudFlare.Client.Test.Credentials
 
         static Credentials()
         {
-            EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.User);
-            ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.User);
-            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.User);
+            var config = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
+                    .Build();
+
+            EmailAddress = config.GetValue<string>("CloudFlare.EmailAddress");
+            ApiKey = config.GetValue<string>("CloudFlare.ApiKey");
+            ApiToken = config.GetValue<string>("CloudFlare.ApiToken");
         }
     }
 }
