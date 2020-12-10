@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class UserUnitTests
     {
@@ -11,9 +12,9 @@ namespace CloudFlare.Client.Test
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var userDetails = await client.GetUserDetailsAsync();
 
-            Assert.NotNull(userDetails);
-            Assert.Empty(userDetails.Errors);
-            Assert.True(userDetails.Success);
+            userDetails.Should().NotBeNull();
+            userDetails.Errors?.Should().BeEmpty();
+            userDetails.Success.Should().BeTrue();
         }
 
         [Fact]
@@ -23,9 +24,9 @@ namespace CloudFlare.Client.Test
             var userDetails = await client.GetUserDetailsAsync();
             var editedUser = await client.EditUserAsync(userDetails.Result);
 
-            Assert.NotNull(editedUser);
-            Assert.Empty(editedUser.Errors);
-            Assert.True(editedUser.Success);
+            editedUser.Should().NotBeNull();
+            editedUser.Errors?.Should().BeEmpty();
+            editedUser.Success.Should().BeTrue();
         }
     }
 }

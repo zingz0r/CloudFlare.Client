@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
+using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests.Account
 {
     public class AccountUnitTests
     {
@@ -18,12 +19,9 @@ namespace CloudFlare.Client.Test
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.GetAccountsAsync(page, perPage, order);
 
-            Assert.NotNull(accounts);
-            Assert.True(accounts.Success);
-            if (accounts.Errors != null)
-            {
-                Assert.Empty(accounts.Errors);
-            }
+            accounts.Should().NotBeNull();
+            accounts.Success.Should().BeTrue();
+            accounts.Errors?.Should().BeEmpty();
         }
 
         [Fact]
@@ -33,12 +31,9 @@ namespace CloudFlare.Client.Test
             var accounts = await client.GetAccountsAsync();
             var accountDetails = await client.GetAccountDetailsAsync(accounts.Result.First().Id);
 
-            Assert.NotNull(accountDetails);
-            Assert.True(accountDetails.Success);
-            if (accountDetails.Errors != null)
-            {
-                Assert.Empty(accountDetails.Errors);
-            }
+            accountDetails.Should().NotBeNull();
+            accountDetails.Success.Should().BeTrue();
+            accountDetails.Errors?.Should().BeEmpty();
         }
 
         [Fact]
@@ -48,12 +43,9 @@ namespace CloudFlare.Client.Test
             var accounts = await client.GetAccountsAsync();
             var updatedAccount = await client.UpdateAccountAsync(accounts.Result.First().Id, accounts.Result.First().Name);
 
-            Assert.NotNull(updatedAccount);
-            Assert.True(updatedAccount.Success);
-            if (updatedAccount.Errors != null)
-            {
-                Assert.Empty(updatedAccount.Errors);
-            }
+            updatedAccount.Should().NotBeNull();
+            updatedAccount.Success.Should().BeTrue();
+            updatedAccount.Errors?.Should().BeEmpty();
         }
     }
 }

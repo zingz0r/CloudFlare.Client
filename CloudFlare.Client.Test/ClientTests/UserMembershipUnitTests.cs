@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Enumerators;
+using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class UserMembershipUnitTests
     {
@@ -26,12 +27,9 @@ namespace CloudFlare.Client.Test
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var userMembership = await client.GetMembershipsAsync(status, accountName, page, perPage, membershipOrder, order);
 
-            Assert.NotNull(userMembership);
-            Assert.True(userMembership.Success);
-            if (userMembership.Errors != null)
-            {
-                Assert.Empty(userMembership.Errors);
-            }
+            userMembership.Should().NotBeNull();
+            userMembership.Success.Should().BeTrue();
+            userMembership.Errors?.Should().BeEmpty();
         }
 
         [Fact]
@@ -40,21 +38,15 @@ namespace CloudFlare.Client.Test
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var userMembership = await client.GetMembershipsAsync();
 
-            Assert.NotNull(userMembership);
-            Assert.True(userMembership.Success);
-            if (userMembership.Errors != null)
-            {
-                Assert.Empty(userMembership.Errors);
-            }
+            userMembership.Should().NotBeNull();
+            userMembership.Success.Should().BeTrue();
+            userMembership.Errors?.Should().BeEmpty();
 
             var userMembershipDetails = await client.GetMembershipDetailsAsync(userMembership.Result.First().Id);
 
-            Assert.NotNull(userMembershipDetails);
-            Assert.True(userMembershipDetails.Success);
-            if (userMembershipDetails.Errors != null)
-            {
-                Assert.Empty(userMembershipDetails.Errors);
-            }
+            userMembershipDetails.Should().NotBeNull();
+            userMembershipDetails.Success.Should().BeTrue();
+            userMembershipDetails.Errors?.Should().BeEmpty();
         }
 
         [Theory]
@@ -69,9 +61,9 @@ namespace CloudFlare.Client.Test
             {
                 var updateUserMembershipStatus = await client.UpdateMembershipStatusAsync(userMembership.Result.First().Id, status);
 
-                Assert.NotNull(updateUserMembershipStatus);
+                updateUserMembershipStatus.Should().NotBeNull();
                 Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x => x.Code));
-                Assert.False(updateUserMembershipStatus.Success);
+                updateUserMembershipStatus.Success.Should().BeFalse();
             }
         }
 
@@ -82,12 +74,9 @@ namespace CloudFlare.Client.Test
             var userMembership = await client.GetMembershipsAsync();
             var deletedMembership = await client.DeleteMembershipAsync(userMembership.Result.First().Id);
 
-            Assert.NotNull(deletedMembership);
-            Assert.True(deletedMembership.Success);
-            if (deletedMembership.Errors != null)
-            {
-                Assert.Empty(deletedMembership.Errors);
-            }
+            deletedMembership.Should().NotBeNull();
+            deletedMembership.Success.Should().BeTrue();
+            deletedMembership.Errors?.Should().BeEmpty();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace CloudFlare.Client.Test.Credentials
                 throw new AuthenticationException("No authentication provided");
             }
         }
-        
+
         static Credentials()
         {
             EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);

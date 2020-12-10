@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.CustomHostname;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
-using CloudFlare.Client.Test.FactAttributes;
-using CloudFlare.Client.Test.TheoryAttributes;
+using CloudFlare.Client.Test.Attributes;
+using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class CustomHostnameUnitTests
     {
@@ -27,9 +27,9 @@ namespace CloudFlare.Client.Test
             var zoneId = (await client.GetZonesAsync()).Result.First().Id;
             var customHostnames = await client.GetCustomHostnamesAsync(zoneId, hostname, page, perPage, type, order, ssl);
 
-            Assert.NotNull(customHostnames);
-            Assert.Empty(customHostnames.Errors);
-            Assert.True(customHostnames.Success);
+            customHostnames.Should().NotBeNull();
+            customHostnames.Errors?.Should().BeEmpty();
+            customHostnames.Success.Should().BeTrue();
         }
 
         [MinimumPlanEnterpriseTheory]
@@ -48,9 +48,9 @@ namespace CloudFlare.Client.Test
             var customHostnameId = (await client.GetCustomHostnamesByIdAsync(zoneId, id, page, perPage, type, order, ssl)).Result.First().Id;
             var customHostnameDetails = await client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId);
 
-            Assert.NotNull(customHostnameDetails);
-            Assert.Empty(customHostnameDetails.Errors);
-            Assert.True(customHostnameDetails.Success);
+            customHostnameDetails.Should().NotBeNull();
+            customHostnameDetails.Errors?.Should().BeEmpty();
+            customHostnameDetails.Success.Should().BeTrue();
         }
 
         [MinimumPlanEnterpriseFact]
@@ -61,9 +61,9 @@ namespace CloudFlare.Client.Test
             var customHostnameId = (await client.GetCustomHostnamesAsync(zoneId)).Result.First().Id;
             var customHostnameDetails = await client.GetCustomHostnameDetailsAsync(zoneId, customHostnameId);
 
-            Assert.NotNull(customHostnameDetails);
-            Assert.Empty(customHostnameDetails.Errors);
-            Assert.True(customHostnameDetails.Success);
+            customHostnameDetails.Should().NotBeNull();
+            customHostnameDetails.Errors?.Should().BeEmpty();
+            customHostnameDetails.Success.Should().BeTrue();
         }
 
         [MinimumPlanEnterpriseFact(Skip = "Would cause edited hostname")]
@@ -94,9 +94,9 @@ namespace CloudFlare.Client.Test
 
             var editCustomHostname = await client.EditCustomHostnameAsync(zoneId, customHostname.Id, patchData);
 
-            Assert.NotNull(editCustomHostname);
-            Assert.Empty(editCustomHostname.Errors);
-            Assert.True(editCustomHostname.Success);
+            editCustomHostname.Should().NotBeNull();
+            editCustomHostname.Errors?.Should().BeEmpty();
+            editCustomHostname.Success.Should().BeTrue();
 
             var updatedCustomHostname = (await client.GetCustomHostnamesAsync(zoneId, customHostname.Hostname)).Result.First();
 
@@ -111,9 +111,9 @@ namespace CloudFlare.Client.Test
             var customHostname = (await client.GetCustomHostnamesAsync(zoneId)).Result.First();
             var deleteCustomHostname = await client.DeleteCustomHostnameAsync(zoneId, customHostname.Hostname);
 
-            Assert.NotNull(deleteCustomHostname);
-            Assert.Empty(deleteCustomHostname.Errors);
-            Assert.True(deleteCustomHostname.Success);
+            deleteCustomHostname.Should().NotBeNull();
+            deleteCustomHostname.Errors?.Should().BeEmpty();
+            deleteCustomHostname.Success.Should().BeTrue();
         }
     }
 }

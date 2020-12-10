@@ -12,7 +12,6 @@ namespace CloudFlare.Client
         /// <summary>
         /// List all accounts you have ownership or verified access to
         /// </summary>
-        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Account>>> GetAccountsAsync();
 

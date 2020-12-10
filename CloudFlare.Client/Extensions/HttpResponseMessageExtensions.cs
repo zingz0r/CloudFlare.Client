@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Exceptions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client.Extensions
 {
@@ -25,13 +27,40 @@ namespace CloudFlare.Client.Extensions
                         var errorResult = JsonConvert.DeserializeObject<CloudFlareResult<object>>(content);
                         throw new AuthenticationException(string.Join(Environment.NewLine, errorResult.Errors.Select(x => x.Message)));
                     default:
-                        return JsonConvert.DeserializeObject<CloudFlareResult<T>>(content);
+                        if (content.IsValidJson())
+                        {
+                            return JsonConvert.DeserializeObject<CloudFlareResult<T>>(content);
+                        }
+                        else
+                        {
+                            if (typeof(T) != typeof(string))
+                            {
+                                throw new PersistenceUnavailableException("Unexpected result from CloudFlare");
+                            }
+
+                            dynamic cast = content.Replace("\\n", Environment.NewLine);
+                            return new CloudFlareResult<T>((T)cast, new ResultInfo(), true, new List<ErrorDetails>(), new List<ApiError>(), new TimingInfo());
+                        }
                 }
             }
             catch (Exception ex)
             {
                 throw new PersistenceUnavailableException(ex);
             }
+        }
+
+        private static bool IsValidJson(this string content)
+        {
+            try
+            {
+                JToken.Parse(content);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

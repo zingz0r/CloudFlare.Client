@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
-using CloudFlare.Client.Enumerators;
+﻿using System.Runtime.Serialization;
 using CloudFlare.Client.Models;
 using Newtonsoft.Json;
 

@@ -9,7 +9,7 @@ namespace CloudFlare.Client
 {
     public partial class CloudFlareClient
     {
-        
+
         /// <inheritdoc />
         public async Task<CloudFlareResult<AccountMember>> GetAccountMemberDetailsAsync(string accountId,
             string memberId)

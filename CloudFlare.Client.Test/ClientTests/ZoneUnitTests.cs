@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
+using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test.ClientTests
 {
     public class ZoneUnitTests
     {
@@ -19,9 +20,9 @@ namespace CloudFlare.Client.Test
             var account = (await client.GetAccountsAsync()).Result.First();
             var zonesQueryResult = await client.CreateZoneAsync(name, type, account);
 
-            Assert.NotNull(zonesQueryResult);
-            Assert.Empty(zonesQueryResult.Errors);
-            Assert.True(zonesQueryResult.Success);
+            zonesQueryResult.Should().NotBeNull();
+            zonesQueryResult.Errors?.Should().BeEmpty();
+            zonesQueryResult.Success.Should().BeTrue();
         }
 
         [Theory]
@@ -45,9 +46,9 @@ namespace CloudFlare.Client.Test
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zonesQueryResult = await client.GetZonesAsync(name, status, page, perPage, order, match);
 
-            Assert.NotNull(zonesQueryResult);
-            Assert.Empty(zonesQueryResult.Errors);
-            Assert.True(zonesQueryResult.Success);
+            zonesQueryResult.Should().NotBeNull();
+            zonesQueryResult.Errors?.Should().BeEmpty();
+            zonesQueryResult.Success.Should().BeTrue();
         }
 
         [Fact]
@@ -57,9 +58,9 @@ namespace CloudFlare.Client.Test
             var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
             var zoneDetailsQueryResult = await client.GetZoneDetailsAsync(zonesQueryResult.Id);
 
-            Assert.NotNull(zoneDetailsQueryResult);
-            Assert.Empty(zoneDetailsQueryResult.Errors);
-            Assert.True(zoneDetailsQueryResult.Success);
+            zoneDetailsQueryResult.Should().NotBeNull();
+            zoneDetailsQueryResult.Errors?.Should().BeEmpty();
+            zoneDetailsQueryResult.Success.Should().BeTrue();
         }
 
         [Fact(Skip = "Would cause edited zone")]
@@ -81,9 +82,9 @@ namespace CloudFlare.Client.Test
                 }
             });
 
-            Assert.NotNull(editZoneQueryResult);
-            Assert.Empty(editZoneQueryResult.Errors);
-            Assert.True(editZoneQueryResult.Success);
+            editZoneQueryResult.Should().NotBeNull();
+            editZoneQueryResult.Errors?.Should().BeEmpty();
+            editZoneQueryResult.Success.Should().BeTrue();
         }
 
         [Fact(Skip = "Would cause deleted zone")]
@@ -94,9 +95,9 @@ namespace CloudFlare.Client.Test
             var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
             var deletedZoneQueryResult = await client.DeleteZoneAsync(zonesQueryResult.Id);
 
-            Assert.NotNull(deletedZoneQueryResult);
-            Assert.Empty(deletedZoneQueryResult.Errors);
-            Assert.True(deletedZoneQueryResult.Success);
+            deletedZoneQueryResult.Should().NotBeNull();
+            deletedZoneQueryResult.Errors?.Should().BeEmpty();
+            deletedZoneQueryResult.Success.Should().BeTrue();
         }
 
         [Fact]
@@ -106,7 +107,7 @@ namespace CloudFlare.Client.Test
             var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
             var zoneActivationCheckQueryResult = await client.ZoneActivationCheckAsync(zonesQueryResult.Id);
 
-            Assert.NotNull(zoneActivationCheckQueryResult);
+            zoneActivationCheckQueryResult.Should().NotBeNull();
 
             var notAvailable = new List<int>
             {
@@ -115,11 +116,8 @@ namespace CloudFlare.Client.Test
 
             if (!zoneActivationCheckQueryResult.Errors.Any(x => notAvailable.Contains(x.Code)))
             {
-                Assert.True(zoneActivationCheckQueryResult.Success);
-                if (zoneActivationCheckQueryResult.Errors != null)
-                {
-                    Assert.Empty(zoneActivationCheckQueryResult.Errors);
-                }
+                zoneActivationCheckQueryResult.Success.Should().BeTrue();
+                zoneActivationCheckQueryResult.Errors?.Should().BeEmpty();
             }
         }
 
@@ -131,9 +129,9 @@ namespace CloudFlare.Client.Test
             var zonesQueryResult = (await client.GetZonesAsync()).Result.First();
             var purgeAllFilesAsyncQueryResult = await client.PurgeAllFilesAsync(zonesQueryResult.Id, true);
 
-            Assert.NotNull(purgeAllFilesAsyncQueryResult);
-            Assert.Empty(purgeAllFilesAsyncQueryResult.Errors);
-            Assert.True(purgeAllFilesAsyncQueryResult.Success);
+            purgeAllFilesAsyncQueryResult.Should().NotBeNull();
+            purgeAllFilesAsyncQueryResult.Errors?.Should().BeEmpty();
+            purgeAllFilesAsyncQueryResult.Success.Should().BeTrue();
         }
     }
 }

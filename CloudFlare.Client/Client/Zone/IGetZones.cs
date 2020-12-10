@@ -129,7 +129,6 @@ namespace CloudFlare.Client
         /// <param name="perPage">Number of DNS records per page</param>
         /// <param name="order">Field to order records by</param>
         /// <param name="match">Whether to match all search requirements or at least one</param>
-        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Zone>>> GetZonesAsync(string name, ZoneStatus? status, int? page,
             int? perPage, OrderType? order, bool? match);
