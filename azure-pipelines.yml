@@ -6,7 +6,7 @@ variables:
 
 stages:
 - stage: buildandtest
-  displayName: Build and Test
+  displayName: CloudFlare.Client
   jobs: 
     - job: buildandtest
       displayName: Build and Test
@@ -14,6 +14,7 @@ stages:
         vmImage: $(vmImageName)
       steps:
       - task: DotNetCoreCLI@2
+        displayName: Restore
         inputs:
           command: 'restore'
           projects: '**/*.csproj'
@@ -37,7 +38,7 @@ stages:
       - task: CopyFiles@2
         displayName: Copy Files
         inputs:
-          SourceFolder: '${System.Default.WorkingDirectory}/CloudFlare.Client/bin'
+          SourceFolder: '$(System.Default.WorkingDirectory)/CloudFlare.Client/bin'
           Contents: '**'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
