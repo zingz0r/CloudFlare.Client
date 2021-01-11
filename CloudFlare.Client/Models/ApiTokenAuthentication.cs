@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Security.Authentication;
+using CloudFlare.Client.Interfaces;
 
 namespace CloudFlare.Client.Models
 {
@@ -10,7 +11,7 @@ namespace CloudFlare.Client.Models
         /// </summary>
         public string ApiToken { get; }
 
-        
+
         /// <summary>
         /// Authenticate with API Token
         /// </summary>

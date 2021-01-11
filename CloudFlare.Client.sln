@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFlare.Client", "CloudFlare.Client\CloudFlare.Client.csproj", "{7A9D2E3E-8E75-4EA9-B6C3-3FE619244AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFlare.Client.Test", "CloudFlare.Client.Test\CloudFlare.Client.Test.csproj", "{790DCA6A-1F49-4065-8BFB-6971D83AEFD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFlare.Client.Test", "CloudFlare.Client.Test\CloudFlare.Client.Test.csproj", "{790DCA6A-1F49-4065-8BFB-6971D83AEFD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

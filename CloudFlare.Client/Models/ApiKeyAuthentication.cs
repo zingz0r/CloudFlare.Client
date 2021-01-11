@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Security.Authentication;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Interfaces;
 
 namespace CloudFlare.Client.Models
 {

@@ -11,10 +11,10 @@ namespace CloudFlare.Client.Test.Attributes
             var hasEnterpriseLevelAccount = false;
             using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
             {
-                var accounts = client.GetAccountsAsync().Result.Result;
+                var accounts = client.Accounts.GetAsync().Result.Result;
                 foreach (var account in accounts)
                 {
-                    var subscriptions = client.GetAccountSubscriptionsAsync(account.Id).Result.Result;
+                    var subscriptions = client.Accounts.Subscriptions.GetAsync(account.Id).Result.Result;
                     if (subscriptions.Any(subscription => subscription.RatePlan.Id == LegacyType.Enterprise))
                     {
                         hasEnterpriseLevelAccount = true;
