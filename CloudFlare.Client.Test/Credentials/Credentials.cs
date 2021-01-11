@@ -36,7 +36,7 @@ namespace CloudFlare.Client.Test.Credentials
         {
             EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
             ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
-            ApiToken = "VghBEW8xThh58O7URhyYlDadhh6CivCfggnxE482"; //Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
+            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
         }
     }
 }
