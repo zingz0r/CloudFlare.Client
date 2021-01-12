@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
 
@@ -29,7 +30,7 @@ namespace CloudFlare.Client.Test.ClientTests.Users
             updatedUser.Errors?.Should().BeEmpty();
         }
 
-        [Fact]
+        [OnlyWithApiTokenAuthenticationFact]
         public async Task TestVerifyUserAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
