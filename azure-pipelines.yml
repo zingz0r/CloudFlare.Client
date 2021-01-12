@@ -5,11 +5,11 @@ variables:
   vmImageName: 'windows-latest'
 
 stages:
-- stage: buildandtest
+- stage: pipeline
   displayName: CloudFlare.Client
   jobs: 
-    - job: buildandtest
-      displayName: Build and Test
+    - job: pipeline
+      displayName: CI/CD Pipeline
       pool:
         vmImage: $(vmImageName)
       
