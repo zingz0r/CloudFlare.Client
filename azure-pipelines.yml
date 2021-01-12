@@ -62,6 +62,7 @@ stages:
       
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
         inputs:
           command: pack
           packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
