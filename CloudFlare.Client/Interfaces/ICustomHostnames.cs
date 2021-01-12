@@ -38,6 +38,7 @@ namespace CloudFlare.Client.Interfaces
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="filter">Custom Hostname filtering options</param>
+        /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<CustomHostname>>> GetAsync(string zoneId, CustomHostnameFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
