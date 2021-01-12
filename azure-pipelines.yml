@@ -21,7 +21,7 @@ stages:
           SonarCloud: 'SonarCloud'
           organization: 'zingz0r-github'
           scannerMode: 'MSBuild'
-          projectKey: 'zingz0r_CloudFlare.Client'
+          projectKey: 'CloudFlare.Client'
           projectName: 'CloudFlare.Client'
           projectVersion: '$(Build.BuildNumber)'
           extraProperties: |
