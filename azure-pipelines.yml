@@ -60,6 +60,17 @@ stages:
       - task: SonarCloudPublish@1
         displayName: "Publish Code Analysis Results"
       
+      - task: DotNetCoreCLI@2
+        displayName: 'Pack Release'
+        inputs:
+          command: pack
+          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
+          packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
+          arguments: '--no-build  --configuration $(buildConfiguration)'
+          versioningScheme: 'byEnvVar'
+          versionEnvVar: Build.SourceBranchName
+          verbosityPack: Diagnostic
+
       - task: CopyFiles@2
         displayName: Copy Files
         inputs:
@@ -74,26 +85,8 @@ stages:
           ArtifactName: 'drop'
           publishLocation: 'Container'
 
-- stage: deploy
-  displayName: Deploy Nuget
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  jobs: 
-    - job: deploy
-      displayName: Deploy Nuget
-      pool:
-        vmImage: $(vmImageName)
-      steps:
-      - task: DotNetCoreCLI@2
-        displayName: 'Pack Release'
-        inputs:
-          command: pack
-          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
-          packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
-          arguments: '--no-build  --configuration $(buildConfiguration)'
-          versioningScheme: 'byEnvVar'
-          versionEnvVar: Build.SourceBranchName
-          verbosityPack: Diagnostic
       - task: NuGetCommand@2
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
         displayName: 'Deploy Release to nuget.org'
         inputs:
           command: 'push'
@@ -101,3 +94,4 @@ stages:
           nuGetFeedType: 'external'
           publishFeedCredentials: 'nuget.org'
           verbosityPush: Detailed
+
