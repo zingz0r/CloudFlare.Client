@@ -24,6 +24,10 @@ stages:
           projectKey: 'CloudFlare.Client'
           projectName: 'CloudFlare.Client'
           projectVersion: '$(Build.BuildNumber)'
+          extraProperties: |
+            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       
       - task: DotNetCoreCLI@2
         displayName: Restore
@@ -48,7 +52,7 @@ stages:
         inputs:
           command: test
           projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage"'
+          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
 
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
