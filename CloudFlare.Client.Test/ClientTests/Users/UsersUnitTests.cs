@@ -33,7 +33,6 @@ namespace CloudFlare.Client.Test.ClientTests.Users
         public async Task TestVerifyUserAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var user = await client.Users.GetDetailsAsync();
             var verification = await client.Users.VerifyAsync();
 
             verification.Should().NotBeNull();
