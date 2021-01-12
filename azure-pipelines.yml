@@ -6,25 +6,44 @@ variables:
 
 stages:
 - stage: buildandtest
-  displayName: Build and Test
+  displayName: CloudFlare.Client
   jobs: 
     - job: buildandtest
       displayName: Build and Test
       pool:
         vmImage: $(vmImageName)
+      
       steps:
-      - task: UseDotNet@2
-        displayName: 'Install .NET Core 3.1 SDK'
+    
+      - task: SonarCloudPrepare@1
+        displayName: Prepare Sonar Cloud
         inputs:
-          packageType: sdk
-          version: 3.1.x
-          installationPath: $(Agent.ToolsDirectory)/dotnet
+          SonarCloud: 'SonarCloud'
+          organization: 'zingz0r-github'
+          scannerMode: 'MSBuild'
+          projectKey: 'CloudFlare.Client'
+          projectName: 'CloudFlare.Client'
+          projectVersion: '$(Build.BuildNumber)'
+          extraProperties: |
+            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: 'restore'
+          projects: '**/*.csproj'
+          feedsToUse: 'select'
+          vstsFeed: 'd5f72524-9a3d-4cca-ac65-8688b67830d4/f7ea4fd7-43dc-4f24-a491-8f013b20ab55'
+      
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
           command: build
-          projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
-          arguments: '--framework:netcoreapp3.1 --configuration $(buildConfiguration)'
+          projects: '**/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+      
       - task: DotNetCoreCLI@2
         displayName: 'Test'
         env:
@@ -33,28 +52,42 @@ stages:
         inputs:
           command: test
           projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-          arguments: '--logger trx --framework:netcoreapp3.1 --configuration $(buildConfiguration) --collect "Code coverage"'
+          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
 
-- stage: deploy
-  displayName: Deploy Nuget
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  jobs: 
-    - job: deploy
-      displayName: Deploy Nuget
-      pool:
-        vmImage: $(vmImageName)
-      steps:
+      - task: SonarCloudAnalyze@1
+        displayName: "Analyze Code with SonarCloud"
+
+      - task: SonarCloudPublish@1
+        displayName: "Publish Code Analysis Results"
+      
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
         inputs:
           command: pack
           packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
           packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
-          arguments: '--configuration $(buildConfiguration)'
+          arguments: '--no-build  --configuration $(buildConfiguration)'
           versioningScheme: 'byEnvVar'
           versionEnvVar: Build.SourceBranchName
           verbosityPack: Diagnostic
+
+      - task: CopyFiles@2
+        displayName: Copy Files
+        inputs:
+          SourceFolder: 'CloudFlare.Client/bin'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+      - task: PublishBuildArtifacts@1
+        displayName: Publish To Artifactory
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+
       - task: NuGetCommand@2
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
         displayName: 'Deploy Release to nuget.org'
         inputs:
           command: 'push'
