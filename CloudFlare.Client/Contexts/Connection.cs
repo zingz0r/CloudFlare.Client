@@ -3,25 +3,21 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Extensions;
 using CloudFlare.Client.Helpers;
-using CloudFlare.Client.Interfaces;
 
 namespace CloudFlare.Client.Contexts
 {
     public abstract class Connection : IConnection
     {
-        public Uri BaseAddress => new Uri(ApiParameter.Config.BaseUrl);
-
         protected HttpClient HttpClient { get; }
         protected bool IsDisposed { get; private set; }
 
-        protected Connection(IAuthentication authentication)
+        protected Connection(ConnectionInfo connectionInfo)
         {
-            HttpClient = CreateHttpClient(authentication);
+            HttpClient = CreateHttpClient(connectionInfo);
 
             IsDisposed = false;
         }
@@ -71,31 +67,28 @@ namespace CloudFlare.Client.Contexts
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
-        protected virtual HttpClient CreateHttpClient(IAuthentication authentication)
+        private static HttpClient CreateHttpClient(ConnectionInfo connectionInfo)
         {
             var handler = new HttpClientHandler
             {
-                //AllowAutoRedirect = connectionInfo.AllowAutoRedirect,
-                //UseProxy = connectionInfo.UseProxy
+                AllowAutoRedirect = connectionInfo.AllowAutoRedirect,
+                UseProxy = connectionInfo.UseProxy,
+                Proxy = connectionInfo.Proxy
             };
-            //handler.Proxy = connectionInfo.Proxy;
 
             var client = new HttpClient(handler, true)
             {
-                BaseAddress = BaseAddress
+                BaseAddress = connectionInfo.Address
             };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(HttpContentTypesHelper.Json));
-            //client.DefaultRequestHeaders.ExpectContinue = connectionInfo.ExpectContinue;
+            client.DefaultRequestHeaders.ExpectContinue = connectionInfo.ExpectContinue;
 
-            //if (connectionInfo.Timeout.HasValue)
-            //    client.Timeout = connectionInfo.Timeout.Value;
+            if (connectionInfo.Timeout.HasValue)
+            {
+                client.Timeout = connectionInfo.Timeout.Value;
+            }
 
-            //if (connectionInfo.BasicAuth != null)
-            //{
-            //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", connectionInfo.BasicAuth.Value);
-            //}
-
-            authentication.AddToHeaders(client);
+            connectionInfo.Authentication.AddToHeaders(client);
 
             return client;
         }

@@ -17,18 +17,26 @@ namespace CloudFlare.Client
         private readonly IConnection _connection;
 
         /// <summary>
-        /// Initialize CloudFlare Client
+        /// Initialize CloudFlare Client with connection info
         /// </summary>
-        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
-        public CloudFlareClient(IAuthentication authentication)
+        /// <param name="connectionInfo">Connection info</param>
+        public CloudFlareClient(ConnectionInfo connectionInfo)
         {
             IsDisposed = false;
 
-            _connection = new ApiConnection(authentication);
+            _connection = new ApiConnection(connectionInfo);
 
             Accounts = new Accounts(_connection);
             Users = new Users(_connection);
             Zones = new Zones(_connection);
+        }
+
+        /// <summary>
+        /// Initialize CloudFlare Client
+        /// </summary>
+        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
+        public CloudFlareClient(IAuthentication authentication) : this(new ConnectionInfo(authentication))
+        {
         }
 
         /// <summary>

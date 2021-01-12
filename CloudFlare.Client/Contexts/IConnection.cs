@@ -8,8 +8,6 @@ namespace CloudFlare.Client.Contexts
 {
     public interface IConnection : IDisposable
     {
-        Uri BaseAddress { get; }
-
         Task<CloudFlareResult<T>> GetAsync<T>(string requestUri, CancellationToken cancellationToken);
         Task<CloudFlareResult<T>> DeleteAsync<T>(string requestUri, CancellationToken cancellationToken);
         Task<CloudFlareResult<T>> PatchAsync<T>(string requestUri, HttpContent content, CancellationToken cancellationToken);
