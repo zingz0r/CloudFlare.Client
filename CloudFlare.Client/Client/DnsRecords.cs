@@ -29,9 +29,9 @@ namespace CloudFlare.Client.Client
                 Content = content,
                 Type = type,
                 Name = name,
-                Ttl = properties.Ttl ?? 1,
-                Priority = properties.Priority ?? 0,
-                Proxied = properties.Proxied
+                Ttl = properties?.Ttl ?? 1,
+                Priority = properties?.Priority ?? 0,
+                Proxied = properties?.Proxied
             };
 
             return await Connection.PostAsync<DnsRecord, DnsRecord>($"{ApiParameter.Endpoints.Zone.Base}/{zoneId}/{ApiParameter.Endpoints.DnsRecord.Base}/", newDnsRecord, cancellationToken).ConfigureAwait(false);
