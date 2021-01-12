@@ -7,9 +7,9 @@ namespace CloudFlare.Client.Test.Attributes
     {
         public OnlyWithApiTokenAuthenticationFactAttribute()
         {
-            if (Credentials.Credentials.Authentication.GetType() != typeof(ApiTokenAuthentication))
+            if (Credentials.Credentials.Authentication.GetType() == typeof(ApiTokenAuthentication))
             {
-                Skip = "Minimum enterprise level account needed!";
+                Skip = "Only available with api token authentication!";
             }
         }
     }
