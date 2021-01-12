@@ -29,13 +29,13 @@ namespace CloudFlare.Client.Contexts
         public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
             var response = await HttpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
-            return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
+            return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
         public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
             var response = await HttpClient.DeleteAsync(requestUri, cancellationToken).ConfigureAwait(false);
-            return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
+            return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
         public async Task<CloudFlareResult<TResult>> PatchAsync<TResult>(string requestUri, HttpContent content, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ namespace CloudFlare.Client.Contexts
                 var request = new HttpRequestMessage(method, requestUri) { Content = content };
 
                 var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-                return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
+                return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
 
             }
             catch (Exception ex)
