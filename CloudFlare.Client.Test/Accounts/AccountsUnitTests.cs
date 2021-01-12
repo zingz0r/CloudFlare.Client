@@ -5,7 +5,7 @@ using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests.Accounts
+namespace CloudFlare.Client.Test.Accounts
 {
     public class AccountsUnitTests
     {

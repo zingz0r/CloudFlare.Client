@@ -3,7 +3,7 @@ using System.Security.Authentication;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests
+namespace CloudFlare.Client.Test
 {
     public class AuthenticationTests
     {

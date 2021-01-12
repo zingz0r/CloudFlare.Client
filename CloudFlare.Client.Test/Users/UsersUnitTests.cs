@@ -3,7 +3,7 @@ using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests.Users
+namespace CloudFlare.Client.Test.Users
 {
     public class UsersUnitTests
     {

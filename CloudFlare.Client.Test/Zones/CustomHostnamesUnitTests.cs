@@ -9,10 +9,37 @@ using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests.Zones
+namespace CloudFlare.Client.Test.Zones
 {
     public class CustomHostnamesUnitTests
     {
+        [MinimumPlanEnterpriseFact(Skip = "Would cause created hostname")]
+        public async Task TestAddCustomHostnameAsync()
+        {
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
+            var addCustomHostname = await client.Zones.CustomHostnames.AddAsync(zoneId, "test",
+                new CustomHostnameSsl
+                {
+                    Method = MethodType.Cname,
+                    Settings = new CustomHostnameSslSettings
+                    {
+                        Ciphers = new List<string>
+                        {
+                            "CDHE-ECDSA-CHACHA20-POLY1305"
+                        },
+                        Http2 = FeatureStatus.On,
+                        MinTlsVersion = TlsVersion.Tls13,
+                        Tls13 = FeatureStatus.On
+                    },
+                    Type = DomainValidationType.Dv
+                });
+
+            addCustomHostname.Should().NotBeNull();
+            addCustomHostname.Errors?.Should().BeEmpty();
+            addCustomHostname.Success.Should().BeTrue();
+        }
+
         [MinimumPlanEnterpriseTheory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
@@ -95,7 +122,7 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
                         Http2 = FeatureStatus.On,
                         MinTlsVersion = TlsVersion.Tls12,
                         Tls13 = FeatureStatus.On
-                    },
+                    }
                 }
             };
 
@@ -111,7 +138,7 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
             Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
         }
 
-        [Fact(Skip = "Would cause deleted membership")]
+        [MinimumPlanEnterpriseFact(Skip = "Would cause deleted membership")]
         public async Task TestDeleteCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
@@ -122,6 +149,36 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
             deleteCustomHostname.Should().NotBeNull();
             deleteCustomHostname.Errors?.Should().BeEmpty();
             deleteCustomHostname.Success.Should().BeTrue();
+        }
+
+        [MinimumPlanEnterpriseFact(Skip = "Would cause modified hostname")]
+        public async Task TestUpdateCustomHostnameAsync()
+        {
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
+            var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
+            var updatedCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zoneId, customHostname.Id, new PatchCustomHostname
+            {
+                Ssl = new CustomHostnameSsl
+                {
+                    Method = MethodType.Http,
+                    Settings = new CustomHostnameSslSettings
+                    {
+                        Ciphers = new List<string>
+                        {
+                            "ECDHE-RSA-AES128-GCM-SHA256",
+                            "AES128-SHA"
+                        },
+                        Http2 = FeatureStatus.On,
+                        MinTlsVersion = TlsVersion.Tls12,
+                        Tls13 = FeatureStatus.On
+                    }
+                }
+            });
+
+            updatedCustomHostname.Should().NotBeNull();
+            updatedCustomHostname.Errors?.Should().BeEmpty();
+            updatedCustomHostname.Success.Should().BeTrue();
         }
     }
 }

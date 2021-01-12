@@ -6,7 +6,7 @@ using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests.Users
+namespace CloudFlare.Client.Test.Users
 {
     public class UserMembershipUnitTests
     {

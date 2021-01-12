@@ -8,7 +8,7 @@ using CloudFlare.Client.Models;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.ClientTests.Zones
+namespace CloudFlare.Client.Test.Zones
 {
     public class ZonesUnitTests
     {
