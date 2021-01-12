@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
@@ -20,12 +22,18 @@ namespace CloudFlare.Client.Test.ClientTests.Users
         [InlineData(null, null, null, null, null, OrderType.Asc)]
         [InlineData(null, null, null, null, null, OrderType.Desc)]
         [InlineData(null, null, null, null, null, null)]
-        public async Task TestGetMembershipsAsync(MembershipStatus? status, string accountName, int? page,
-            int? perPage,
-            MembershipOrder? membershipOrder, OrderType? order)
+        public async Task TestGetMembershipsAsync(MembershipStatus? status, string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, OrderType? order)
         {
+            var filter = new MembershipFilter
+            {
+                AccountName = accountName,
+                MembershipOrder = membershipOrder,
+                Status = status
+            };
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var userMembership = await client.Users.Memberships.GetAsync(status, accountName, page, perPage, membershipOrder, order);
+            var userMembership = await client.Users.Memberships.GetAsync(filter, displayOptions);
 
             userMembership.Should().NotBeNull();
             userMembership.Success.Should().BeTrue();
@@ -54,7 +62,15 @@ namespace CloudFlare.Client.Test.ClientTests.Users
             if (userMembership.Status == MembershipStatus.Accepted)
             {
                 updateUserMembershipStatus.Should().NotBeNull();
-                Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x => x.Code));
+                Assert.Contains(1001, updateUserMembershipStatus.Errors.Select(x =>
+                {
+                    if (x == null)
+                    {
+                        throw new ArgumentNullException(nameof(x));
+                    }
+
+                    return x.Code;
+                }));
                 updateUserMembershipStatus.Success.Should().BeFalse();
             }
         }

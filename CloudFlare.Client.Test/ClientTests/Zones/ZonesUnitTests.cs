@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Zone;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
@@ -40,11 +41,18 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
         [InlineData(null, null, null, null, OrderType.Asc, null)]
         [InlineData(null, null, null, null, null, true)]
         [InlineData(null, null, null, null, null, false)]
-        public async Task TestGetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage,
-            OrderType? order, bool? match)
+        public async Task TestGetZonesAsync(string name, ZoneStatus? status, int? page, int? perPage, OrderType? order, bool? match)
         {
+            var filter = new ZoneFilter
+            {
+                Name = name,
+                Match = match,
+                Status = status
+            };
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = await client.Zones.GetAsync(name, status, page, perPage, order, match);
+            var zonesQueryResult = await client.Zones.GetAsync(filter, displayOptions);
 
             zonesQueryResult.Should().NotBeNull();
             zonesQueryResult.Errors?.Should().BeEmpty();

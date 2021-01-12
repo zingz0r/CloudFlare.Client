@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
@@ -18,109 +19,25 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteAsync(string membershipId)
-        {
-            return await DeleteAsync(membershipId, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
         public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> DeleteAsync(string membershipId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             return await Connection.DeleteAsync<IReadOnlyList<UserMembership>>(
                 $"{ApiParameter.Endpoints.Membership.Base}/{membershipId}", cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync()
-        {
-            return await GetAsync(null, null, null, null, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(CancellationToken cancellationToken)
-        {
-            return await GetAsync(null, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status)
-        {
-            return await GetAsync(status, null, null, null, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, CancellationToken cancellationToken)
-        {
-            return await GetAsync(status, null, null, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName)
-        {
-            return await GetAsync(status, accountName, null, null, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, CancellationToken cancellationToken)
-        {
-            return await GetAsync(status, accountName, null, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page)
-        {
-            return await GetAsync(status, accountName, page, null, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, CancellationToken cancellationToken)
-        {
-            return await GetAsync(status, accountName, page, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage)
-        {
-            return await GetAsync(status, accountName, page, perPage, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage, CancellationToken cancellationToken)
-        {
-            return await GetAsync(status, accountName, page, perPage, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage, MembershipOrder? membershipOrder)
-        {
-            return await GetAsync(status, accountName, page, perPage, membershipOrder, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, CancellationToken cancellationToken)
-        {
-            return await GetAsync(status, accountName, page, perPage, membershipOrder, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, OrderType? order)
-        {
-            return await GetAsync(status, accountName, page, perPage, membershipOrder, order, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipStatus? status, string accountName, int? page, int? perPage, MembershipOrder? membershipOrder, OrderType? order, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetAsync(MembershipFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
             parameterBuilder
-                .InsertValue(ApiParameter.Filtering.Status, status)
-                .InsertValue(ApiParameter.Filtering.AccountName, accountName)
-                .InsertValue(ApiParameter.Filtering.Page, page)
-                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
-                .InsertValue(ApiParameter.Filtering.Order, membershipOrder)
-                .InsertValue(ApiParameter.Filtering.Direction, order);
+                .InsertValue(ApiParameter.Filtering.Status, filter?.Status)
+                .InsertValue(ApiParameter.Filtering.AccountName, filter?.AccountName)
+                .InsertValue(ApiParameter.Filtering.Order, filter?.MembershipOrder)
+                .InsertValue(ApiParameter.Filtering.Page, displayOptions?.Page)
+                .InsertValue(ApiParameter.Filtering.PerPage, displayOptions?.PerPage)
+                .InsertValue(ApiParameter.Filtering.Direction, displayOptions?.Order);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
@@ -130,25 +47,13 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetDetailsAsync(string membershipId)
-        {
-            return await GetDetailsAsync(membershipId, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<IReadOnlyList<UserMembership>>($"{ApiParameter.Endpoints.Membership.Base}/?{membershipId}", cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> UpdateAsync(string membershipId, MembershipStatus status)
-        {
-            return await UpdateAsync(membershipId, status, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<IReadOnlyList<UserMembership>>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken = default)
         {
             var data = new Dictionary<string, MembershipStatus>
             {

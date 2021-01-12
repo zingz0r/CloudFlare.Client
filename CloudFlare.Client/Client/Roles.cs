@@ -16,25 +16,13 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId)
-        {
-            return await GetAsync(accountId, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId, CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<IReadOnlyList<AccountRole>>($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}", cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId)
-        {
-            return await GetDetailsAsync(accountId, roleId, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<AccountRole>($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Roles}/{roleId}", cancellationToken).ConfigureAwait(false);
         }

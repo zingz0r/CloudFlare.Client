@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
@@ -16,8 +17,10 @@ namespace CloudFlare.Client.Test.ClientTests.Accounts
         [InlineData(null, null, null)]
         public async Task TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
         {
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync(page, perPage, order);
+            var accounts = await client.Accounts.GetAsync(displayOptions);
 
             accounts.Should().NotBeNull();
             accounts.Success.Should().BeTrue();

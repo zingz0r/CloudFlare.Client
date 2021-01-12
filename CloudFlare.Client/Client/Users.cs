@@ -19,37 +19,19 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<User>> GetDetailsAsync()
-        {
-            return await GetDetailsAsync(default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<User>> GetDetailsAsync(CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<User>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<User>($"{ApiParameter.Endpoints.User.Base}/", cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser)
-        {
-            return await UpdateAsync(editedUser, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser, CancellationToken cancellationToken = default)
         {
             return await Connection.PatchAsync<User>($"{ApiParameter.Endpoints.User.Base}/", PatchContentHelper.Create(editedUser), cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<VerifyToken>> VerifyAsync()
-        {
-            return await VerifyAsync(default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<VerifyToken>> VerifyAsync(CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<VerifyToken>> VerifyAsync(CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<VerifyToken>($"{ApiParameter.Endpoints.Tokens.Base}/{ApiParameter.Endpoints.Tokens.Verify}", cancellationToken).ConfigureAwait(false);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
@@ -17,10 +18,12 @@ namespace CloudFlare.Client.Test.ClientTests.Accounts
         [InlineData(null, null, null)]
         public async Task TestGetAccountMembersAsync(int? page, int? perPage, OrderType? order)
         {
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
 
             var accounts = await client.Accounts.GetAsync();
-            var accountMembers = await client.Accounts.Members.GetAsync(accounts.Result.First().Id, page, perPage, order);
+            var accountMembers = await client.Accounts.Members.GetAsync(accounts.Result.First().Id, displayOptions);
 
             accountMembers.Should().NotBeNull();
             accountMembers.Success.Should().BeTrue();
@@ -81,7 +84,12 @@ namespace CloudFlare.Client.Test.ClientTests.Accounts
             var firstAccountMember = accountMembers.Result.First();
 
             var updatedMember = await client.Accounts.Members.UpdateAsync(accounts.Result.First().Id, firstAccountMember.Id,
-                firstAccountMember.Roles, firstAccountMember.Code, firstAccountMember.User, MembershipStatus.Accepted);
+                firstAccountMember.Roles, new MemberUpdateSettings
+                {
+                    Code = firstAccountMember.Code,
+                    User = firstAccountMember.User,
+                    Status = MembershipStatus.Accepted
+                });
 
             updatedMember.Should().NotBeNull();
 

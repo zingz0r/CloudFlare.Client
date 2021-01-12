@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Helpers
         /// <returns></returns>
         public static StringContent Create<T>(T value)
         {
-            return new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
+            return new(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
         }
     }
 }

@@ -12,24 +12,9 @@ namespace CloudFlare.Client.Interfaces
         /// Get all available roles for an account
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
-        /// <returns></returns>
-        Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId);
-
-        /// <summary>
-        /// Get all available roles for an account
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Get information about a specific role for an account
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
-        /// <param name="roleId">Role identifier tag</param>
-        /// <returns></returns>
-        Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId);
+        Task<CloudFlareResult<IReadOnlyList<AccountRole>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get information about a specific role for an account
@@ -38,6 +23,6 @@ namespace CloudFlare.Client.Interfaces
         /// <param name="roleId">Role identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken);
+        Task<CloudFlareResult<AccountRole>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default);
     }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api;
 using CloudFlare.Client.Api.Account;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
@@ -19,13 +20,7 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> AddAsync(string accountId, string emailAddress, IReadOnlyList<AccountRole> roles)
-        {
-            return await AddAsync(accountId, emailAddress, roles, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> AddAsync(string accountId, string emailAddress, IReadOnlyList<AccountRole> roles, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<AccountMember>> AddAsync(string accountId, string emailAddress, IReadOnlyList<AccountRole> roles, CancellationToken cancellationToken = default)
         {
             var addAccountMember = new PostAccount
             {
@@ -39,73 +34,25 @@ namespace CloudFlare.Client.Client
                 .ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> DeleteAsync(string accountId, string memberId)
-        {
-            return await DeleteAsync(accountId, memberId, default).ConfigureAwait(false);
-        }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<AccountMember>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default)
         {
             return await Connection.DeleteAsync<AccountMember>(
                     $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId)
-        {
-            return await GetAsync(accountId, null, null, null, default).ConfigureAwait(false);
-        }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, CancellationToken cancellationToken)
-        {
-            return await GetAsync(accountId, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page)
-        {
-            return await GetAsync(accountId, page, null, null, default).ConfigureAwait(false);
-
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page, CancellationToken cancellationToken)
-        {
-            return await GetAsync(accountId, page, null, null, cancellationToken).ConfigureAwait(false);
-
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page, int? perPage)
-        {
-            return await GetAsync(accountId, page, perPage, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page, int? perPage, CancellationToken cancellationToken)
-        {
-            return await GetAsync(accountId, page, perPage, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page, int? perPage, OrderType? order)
-        {
-            return await GetAsync(accountId, page, perPage, order, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, int? page, int? perPage, OrderType? order, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<IReadOnlyList<AccountMember>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
             parameterBuilder
-                .InsertValue(ApiParameter.Filtering.Page, page)
-                .InsertValue(ApiParameter.Filtering.PerPage, perPage)
-                .InsertValue(ApiParameter.Filtering.Direction, order);
+                .InsertValue(ApiParameter.Filtering.Page, displayOptions?.Page)
+                .InsertValue(ApiParameter.Filtering.PerPage, displayOptions?.PerPage)
+                .InsertValue(ApiParameter.Filtering.Direction, displayOptions?.Order);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
@@ -115,13 +62,7 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> GetDetailsAsync(string accountId, string memberId)
-        {
-            return await GetDetailsAsync(accountId, memberId, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<AccountMember>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default)
         {
             return await Connection.GetAsync<AccountMember>(
                     $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}", cancellationToken)
@@ -129,60 +70,19 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles)
-        {
-            return await UpdateAsync(accountId, memberId, roles, null, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, CancellationToken cancellationToken)
-        {
-            return await UpdateAsync(accountId, memberId, roles, null, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code)
-        {
-            return await UpdateAsync(accountId, memberId, roles, code, null, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code, CancellationToken cancellationToken)
-        {
-            return await UpdateAsync(accountId, memberId, roles, code, null, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code, User user)
-        {
-            return await UpdateAsync(accountId, memberId, roles, code, user, null, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code, User user, CancellationToken cancellationToken)
-        {
-            return await UpdateAsync(accountId, memberId, roles, code, user, null, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code, User user, MembershipStatus? status)
-        {
-            return await UpdateAsync(accountId, memberId, roles, code, user, status, default).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, string code, User user, MembershipStatus? status, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<AccountMember>> UpdateAsync(string accountId, string memberId, IReadOnlyList<AccountRole> roles, MemberUpdateSettings settings = null,
+            CancellationToken cancellationToken = default)
         {
             var updatedAccountMember = new AccountMember
             {
-                Code = code,
-                User = user,
+                Code = settings?.Code,
+                User = settings?.User,
                 Roles = roles,
             };
 
-            if (status.HasValue)
+            if (settings?.Status != null)
             {
-                updatedAccountMember.Status = status.Value;
+                updatedAccountMember.Status = settings.Status.Value;
             }
 
             return await Connection.PutAsync<AccountMember, AccountMember>($"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Members}/{memberId}",

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.CustomHostname;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Models;
 using CloudFlare.Client.Test.Attributes;
@@ -23,9 +24,12 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
         public async Task TestGetCustomHostnamesAsync(string hostname, int? page, int? perPage,
             CustomHostnameOrderType? type, OrderType? order, bool? ssl)
         {
+            var filter = new CustomHostnameFilter { Hostname = hostname, OrderType = type, Ssl = ssl };
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zoneId, hostname, page, perPage, type, order, ssl);
+            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zoneId, filter, displayOptions);
 
             customHostnames.Should().NotBeNull();
             customHostnames.Errors?.Should().BeEmpty();
@@ -43,9 +47,12 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
         public async Task TestGetCustomHostnamesByIdAsync(string id, int? page, int? perPage,
             CustomHostnameOrderType? type, OrderType? order, bool? ssl)
         {
+            var filter = new CustomHostnameFilter { CustomHostnameId = id, OrderType = type, Ssl = ssl };
+            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostnameId = (await client.Zones.CustomHostnames.GetByIdAsync(zoneId, id, page, perPage, type, order, ssl)).Result.First().Id;
+            var customHostnameId = (await client.Zones.CustomHostnames.GetAsync(zoneId, filter, displayOptions)).Result.First().Id;
             var customHostnameDetails = await client.Zones.CustomHostnames.GetDetailsAsync(zoneId, customHostnameId);
 
             customHostnameDetails.Should().NotBeNull();
@@ -98,7 +105,8 @@ namespace CloudFlare.Client.Test.ClientTests.Zones
             editCustomHostname.Errors?.Should().BeEmpty();
             editCustomHostname.Success.Should().BeTrue();
 
-            var updatedCustomHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId, customHostname.Hostname)).Result.First();
+            var filter = new CustomHostnameFilter { Hostname = customHostname.Hostname };
+            var updatedCustomHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId, filter)).Result.First();
 
             Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
         }
