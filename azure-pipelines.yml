@@ -37,7 +37,7 @@ stages:
         displayName: Build
         inputs:
           command: build
-          projects: 'CloudFlare.Client/CloudFlare.Client.csproj'
+          projects: '**/*.csproj'
           arguments: '--configuration $(buildConfiguration)'
       
       - task: DotNetCoreCLI@2
@@ -48,7 +48,7 @@ stages:
         inputs:
           command: test
           projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-          arguments: '--no-build --logger trx --configuration $(buildConfiguration) --collect "Code coverage"'
+          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage"'
 
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
