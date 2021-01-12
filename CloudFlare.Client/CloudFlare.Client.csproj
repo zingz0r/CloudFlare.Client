@@ -14,11 +14,11 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <Version>2.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
-    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
     <LangVersion>9</LangVersion>
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENCE">
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
