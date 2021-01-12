@@ -14,7 +14,7 @@ namespace CloudFlare.Client
         public IUsers Users { get; }
         public IZones Zones { get; }
 
-        private IConnection _connection;
+        private readonly IConnection _connection;
 
         /// <summary>
         /// Initialize CloudFlare Client
@@ -60,16 +60,16 @@ namespace CloudFlare.Client
 
         protected virtual void Dispose(bool disposing)
         {
-            if (IsDisposed || !disposing)
-                return;
 
-            if (_connection == null)
+            if (IsDisposed)
             {
                 return;
             }
 
-            _connection.Dispose();
-            _connection = null;
+            if (disposing)
+            {
+                _connection?.Dispose();
+            }
 
             IsDisposed = true;
         }

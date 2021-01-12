@@ -16,7 +16,7 @@ namespace CloudFlare.Client.Contexts
     {
         public Uri BaseAddress => new Uri(ApiParameter.Config.BaseUrl);
 
-        protected HttpClient HttpClient { get; private set; }
+        protected HttpClient HttpClient { get; }
         protected bool IsDisposed { get; private set; }
 
         protected Connection(IAuthentication authentication)
@@ -25,6 +25,8 @@ namespace CloudFlare.Client.Contexts
 
             IsDisposed = false;
         }
+
+        ~Connection() => Dispose(false);
 
         public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
@@ -106,16 +108,15 @@ namespace CloudFlare.Client.Contexts
 
         protected virtual void Dispose(bool disposing)
         {
-            if (IsDisposed || !disposing)
+            if (IsDisposed)
             {
                 return;
             }
 
-            if (HttpClient != null)
+            if (disposing)
             {
-                HttpClient.CancelPendingRequests();
-                HttpClient.Dispose();
-                HttpClient = null;
+                HttpClient?.CancelPendingRequests();
+                HttpClient?.Dispose();
             }
 
             IsDisposed = true;
