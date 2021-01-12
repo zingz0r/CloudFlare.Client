@@ -52,17 +52,17 @@ stages:
         inputs:
           command: test
           projects: '**/*Test.csproj'
-          arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+          arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
           publishTestResults: true
 
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
 
       - task: SonarCloudPublish@1
-        displayName: "Publish Code Analysis Results"
+        displayName: "Publish Code Analysis Results to SonarCloud"
       
       - task: PublishCodeCoverageResults@1
-        displayName: 'Publish code coverage report'
+        displayName: 'Publish Code Coverage Report'
         inputs:
           codeCoverageTool: 'cobertura'
           summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
