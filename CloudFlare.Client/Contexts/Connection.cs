@@ -102,7 +102,6 @@ namespace CloudFlare.Client.Contexts
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            IsDisposed = true;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -118,6 +117,8 @@ namespace CloudFlare.Client.Contexts
                 HttpClient.Dispose();
                 HttpClient = null;
             }
+
+            IsDisposed = true;
         }
     }
 }

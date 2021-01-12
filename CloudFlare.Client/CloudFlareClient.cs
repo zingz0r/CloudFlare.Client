@@ -56,7 +56,6 @@ namespace CloudFlare.Client
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            IsDisposed = true;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -71,6 +70,8 @@ namespace CloudFlare.Client
 
             _connection.Dispose();
             _connection = null;
+
+            IsDisposed = true;
         }
     }
 }
