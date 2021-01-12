@@ -26,19 +26,19 @@ namespace CloudFlare.Client.Contexts
             IsDisposed = false;
         }
 
-        public async Task<CloudFlareResult<T>> GetAsync<T>(string requestUri, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
             var response = await HttpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<T>> DeleteAsync<T>(string requestUri, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
             var response = await HttpClient.DeleteAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<T>().ConfigureAwait(false);
         }
 
-        public async Task<CloudFlareResult<T>> PatchAsync<T>(string requestUri, HttpContent content, CancellationToken cancellationToken)
+        public async Task<CloudFlareResult<TResult>> PatchAsync<TResult>(string requestUri, HttpContent content, CancellationToken cancellationToken)
         {
             try
             {
@@ -108,7 +108,9 @@ namespace CloudFlare.Client.Contexts
         protected virtual void Dispose(bool disposing)
         {
             if (IsDisposed || !disposing)
+            {
                 return;
+            }
 
             if (HttpClient != null)
             {

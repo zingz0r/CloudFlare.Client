@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Helpers
             using var sourceStream = File.Open(path, FileMode.Open);
 
             var result = new byte[sourceStream.Length];
-            await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length, cancellationToken);
+            await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length, cancellationToken).ConfigureAwait(false);
 
             return result;
         }

@@ -1,6 +1,6 @@
 ﻿namespace CloudFlare.Client.Helpers
 {
-    class HttpContentTypesHelper
+    static class HttpContentTypesHelper
     {
         public const string Text = "text/plain";
         public const string Xml = "application/xml";
