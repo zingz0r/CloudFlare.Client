@@ -42,7 +42,7 @@ namespace CloudFlare.Client.Client
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<CustomHostname>>> GetAsync(string zoneId, CustomHostnameFilter filter = null, DisplayOptions options = null, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<IReadOnlyList<CustomHostname>>> GetAsync(string zoneId, CustomHostnameFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
         {
             var parameterBuilder = new ParameterBuilderHelper();
 
@@ -51,9 +51,9 @@ namespace CloudFlare.Client.Client
                 .InsertValue(ApiParameter.Filtering.Hostname, filter?.Hostname)
                 .InsertValue(ApiParameter.Filtering.Order, filter?.OrderType)
                 .InsertValue(ApiParameter.Filtering.Ssl, filter?.Ssl ?? false ? 1 : 0)
-                .InsertValue(ApiParameter.Filtering.Page, options?.Page)
-                .InsertValue(ApiParameter.Filtering.PerPage, options?.PerPage)
-                .InsertValue(ApiParameter.Filtering.Direction, options?.Order);
+                .InsertValue(ApiParameter.Filtering.Page, displayOptions?.Page)
+                .InsertValue(ApiParameter.Filtering.PerPage, displayOptions?.PerPage)
+                .InsertValue(ApiParameter.Filtering.Direction, displayOptions?.Order);
 
             var parameterString = parameterBuilder.ParameterCollection;
 
