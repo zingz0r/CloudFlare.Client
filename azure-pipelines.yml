@@ -51,8 +51,9 @@ stages:
           EmailAddress: $(EmailAddress)
         inputs:
           command: test
-          projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
+          projects: '**/*Test.csproj'
+          arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+          publishTestResults: true
 
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
@@ -60,6 +61,12 @@ stages:
       - task: SonarCloudPublish@1
         displayName: "Publish Code Analysis Results"
       
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage report'
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
