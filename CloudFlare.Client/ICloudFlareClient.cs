@@ -1,44 +1,12 @@
-﻿namespace CloudFlare.Client
+﻿using System;
+using CloudFlare.Client.Interfaces;
+
+namespace CloudFlare.Client
 {
-    public interface ICloudFlareClient : 
-        IDeleteMemberships,
-        IGetMemberships,
-        IGetMembershipDetails,
-        IUpdateMembershipStatus,
-        IEditUser,
-        IGetUserDetails,
-        IVerifyToken,
-        IGetAccounts,
-        IGetAccountDetails,
-        IUpdateAccount,
-        IAddAccountMember,
-        IDeleteAccountMember,
-        IGetAccountMembers,
-        IGetAccountMemberDetails,
-        IUpdateAccountMember,
-        IGetAccountSubscriptions,
-        IGetRoles,
-        IGetRoleDetails,
-        IGetZones,
-        ICreateZone,
-        IEditZone,
-        IDeleteZone,
-        IGetZoneDetails,
-        IPurgeAllFiles,
-        IZoneActivation,
-        ICreateDnsRecord,
-        IGetDnsRecords,
-        IGetDnsRecordDetails,
-        IScanDnsRecords,
-        IUpdateDnsRecord,
-        IDeleteDnsRecord,
-        IExportDnsRecord,
-        IImportDnsRecords,
-        ICreateCustomHostname,
-        IGetCustomHostnames,
-        IGetCustomHostnamesById,
-        IGetCustomHostnameDetails,
-        IEditCustomHostname,
-        IDeleteCustomHostname
-    { }
+    public interface ICloudFlareClient : IDisposable
+    {
+        IAccounts Accounts { get; }
+        IUsers Users { get; }
+        IZones Zones { get; }
+    }
 }

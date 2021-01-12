@@ -18,12 +18,12 @@
 
 ```csharp
     using var client = new CloudFlareClient("address@example.com", "globalApiKeyFromCF");
-    
-    var zones = await client.GetZonesAsync();
+
+    var zones = await client.Zones.GetAsync(cancellationToken: ct);
 
     foreach (var zone in zones.Result)
     {
-        var dnsRecords = await client.GetDnsRecordsAsync(zone.Id);
+        var dnsRecords = await client.Zones.DnsRecords.GetAsync(zone.Id, cancellationToken: ct);
         foreach (var dnsRecord in dnsRecords.Result)
         {
             Console.WriteLine(dnsRecord.Name);

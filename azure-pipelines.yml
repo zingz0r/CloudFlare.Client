@@ -26,7 +26,7 @@ stages:
           projectVersion: '$(Build.BuildNumber)'
           extraProperties: |
             sonar.exclusions=**/obj/**,**/*.dll
-            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       
       - task: DotNetCoreCLI@2
@@ -51,15 +51,23 @@ stages:
           EmailAddress: $(EmailAddress)
         inputs:
           command: test
-          projects: 'CloudFlare.Client.Test/CloudFlare.Client.Test.csproj'
-          arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
+          projects: '**/*Test.csproj'
+          arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
+          publishTestResults: true
 
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
 
       - task: SonarCloudPublish@1
-        displayName: "Publish Code Analysis Results"
+        displayName: "Publish Code Analysis Results to SonarCloud"
       
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish Code Coverage Report'
+        inputs:
+          codeCoverageTool: 'cobertura'
+          failIfCoverageEmpty: true
+          summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.**.cobertura.xml'
+
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
