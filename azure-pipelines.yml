@@ -25,7 +25,7 @@ stages:
           projectName: 'CloudFlare.Client'
           projectVersion: '$(Build.BuildNumber)'
           extraProperties: |
-            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.exclusions=**/obj/**,**/*.dll,**/*Test.csproj,**/*Tests.cs
             sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       
