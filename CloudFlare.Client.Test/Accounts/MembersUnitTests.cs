@@ -47,7 +47,7 @@ namespace CloudFlare.Client.Test.Accounts
             var notAvailable = new List<int>
             {
                 429, // add limit reached
-                1004, // AccountEndpoints member already exists for email address
+                1004, // Account member already exists for email address
             };
 
             if (!addedAccountMember.Errors.Any(x => notAvailable.Contains(x.Code)))
