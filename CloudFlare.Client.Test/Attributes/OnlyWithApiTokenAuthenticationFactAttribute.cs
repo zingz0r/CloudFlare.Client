@@ -7,7 +7,7 @@ namespace CloudFlare.Client.Test.Attributes
     {
         public OnlyWithApiTokenAuthenticationFactAttribute()
         {
-            if (Credentials.Credentials.Authentication.GetType() != typeof(ApiTokenAuthentication))
+            if (Credentials.Authentication.GetType() != typeof(ApiTokenAuthentication))
             {
                 Skip = "Only available with api token authentication!";
             }

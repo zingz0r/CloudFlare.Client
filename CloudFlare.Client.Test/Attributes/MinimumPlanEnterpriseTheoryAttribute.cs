@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Test.Attributes
         public MinimumPlanEnterpriseTheoryAttribute()
         {
             var hasEnterpriseLevelAccount = false;
-            using (var client = new CloudFlareClient(Credentials.Credentials.Authentication))
+            using (var client = new CloudFlareClient(Credentials.Authentication))
             {
                 var accounts = client.Accounts.GetAsync().Result.Result;
                 foreach (var account in accounts)

@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Test.Accounts
         {
             var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
 
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
 
             var accounts = await client.Accounts.GetAsync();
             var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id, displayOptions);
@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Test.Accounts
         [InlineData("test@notexistingemail.lan")]
         public async Task TestAddAndDeleteAccountMemberAsync(string emailAddress)
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
             var addedAccountMember = client.Accounts.Memberships.AddAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
@@ -66,7 +66,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestGetAccountMemberDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id);
             var accountMemberDetails = client.Accounts.Memberships.GetDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
@@ -79,7 +79,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestUpdateAccountMemberAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id);
 

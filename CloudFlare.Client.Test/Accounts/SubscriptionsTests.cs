@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact(Skip = "Would cause new subscription")]
         public async Task TestAddAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var addSubscription = await client.Accounts.Subscriptions.AddAsync(accounts.Result.First().Id,
                 new Subscription
@@ -59,7 +59,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestGetAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var subscriptions = await client.Accounts.Subscriptions.GetAsync(accounts.Result.First().Id);
 
@@ -71,7 +71,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact(Skip = "Would cause modified subscription")]
         public async Task TestModifyAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var account = (await client.Accounts.GetAsync()).Result.First();
             var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
             var modifiedSubscription = await client.Accounts.Subscriptions.UpdateAsync(account.Id, subscription);
@@ -84,7 +84,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact(Skip = "Would cause deleted subscription")]
         public async Task TestDeleteAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var account = (await client.Accounts.GetAsync()).Result.First();
             var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
             var deletedSubscription = await client.Accounts.Subscriptions.DeleteAsync(account.Id, subscription.Id);

@@ -2,7 +2,7 @@
 using System.Security.Authentication;
 using CloudFlare.Client.Api.Authentication;
 
-namespace CloudFlare.Client.Test.Credentials
+namespace CloudFlare.Client.Test
 {
     public static class Credentials
     {
@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Test.Credentials
         {
             EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
             ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
-            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
+            ApiToken = "asd";// Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace CloudFlare.Client.Test
         [Fact]
         public void TestClientAuthenticationWithAuthObject()
         {
-            Func<CloudFlareClient> ctor = () => new CloudFlareClient(Credentials.Credentials.Authentication);
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(Credentials.Authentication);
             ctor.Should().NotThrow();
             ctor.Invoke().Should().NotBeNull();
         }

@@ -18,6 +18,12 @@ namespace CloudFlare.Client.Api.Result
         public int PerPage { get; set; }
 
         /// <summary>
+        /// Total count of the pages
+        /// </summary>
+        [JsonProperty("total_page")]
+        public int TotalPage { get; set; }
+
+        /// <summary>
         /// When count is provided, the response will contain up to count results.
         /// Since results are not sorted, you are likely to get different data for repeated requests.
         /// Count must be an integer > 0.

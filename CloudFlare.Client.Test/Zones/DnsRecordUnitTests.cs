@@ -12,7 +12,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestCreateDnsRecordAsyncDeleteDnsRecordAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
 
             var create = await client.Zones.DnsRecords.AddAsync(zone.Id, DnsRecordType.A, $"{Guid.NewGuid()}.{zone.Name}", "127.0.0.1");
@@ -27,7 +27,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestExportDnsRecordsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
 
             var export = await client.Zones.DnsRecords.ExportAsync(zone.Id);
@@ -39,7 +39,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestGetDnsRecordsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
             var records = (await client.Zones.DnsRecords.GetAsync(zone.Id));
 
@@ -50,7 +50,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestGetDnsRecordDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
             var record = (await client.Zones.DnsRecords.GetAsync(zone.Id)).Result.First();
 
@@ -63,7 +63,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestScanDnsRecordsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
             var scanZone = await client.Zones.DnsRecords.ScanAsync(zone.Id);
 
@@ -74,7 +74,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestUpdateDnsRecordAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
             var record = (await client.Zones.DnsRecords.GetAsync(zone.Id)).Result.First();
 

@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Test.Users
         [Fact]
         public async Task TestGetUserDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var user = await client.Users.GetDetailsAsync();
 
             user.Should().NotBeNull();
@@ -21,7 +21,7 @@ namespace CloudFlare.Client.Test.Users
         [Fact]
         public async Task TestUpdateUserDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var user = await client.Users.GetDetailsAsync();
             var updatedUser = await client.Users.UpdateAsync(user.Result);
 
@@ -33,7 +33,7 @@ namespace CloudFlare.Client.Test.Users
         [OnlyWithApiTokenAuthenticationFact]
         public async Task TestVerifyUserAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var verification = await client.Users.VerifyAsync();
 
             verification.Should().NotBeNull();

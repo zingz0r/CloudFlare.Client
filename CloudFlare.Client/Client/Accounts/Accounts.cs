@@ -32,15 +32,20 @@ namespace CloudFlare.Client.Client.Accounts
                 .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
                 .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-            var requestUri = $"{AccountEndpoints.Base}/?{builder.ParameterCollection}";
+            var requestUri = $"{AccountEndpoints.Base}";
+            if (builder.ParameterCollection.HasKeys())
+            {
+                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+            }
+
             return await Connection.GetAsync<IReadOnlyList<Account>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<Account>>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Account>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default)
         {
-            var requestUri = $"{AccountEndpoints.Base}/?{accountId}";
-            return await Connection.GetAsync<IReadOnlyList<Account>>(requestUri, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{AccountEndpoints.Base}/{accountId}";
+            return await Connection.GetAsync<Account>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

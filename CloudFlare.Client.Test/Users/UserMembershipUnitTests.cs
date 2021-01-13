@@ -33,7 +33,7 @@ namespace CloudFlare.Client.Test.Users
             };
             var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
 
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var userMembership = await client.Users.Memberships.GetAsync(filter, displayOptions);
 
             userMembership.Should().NotBeNull();
@@ -44,7 +44,7 @@ namespace CloudFlare.Client.Test.Users
         [Fact]
         public async Task TestGetMembershipDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var userMembership = await client.Users.Memberships.GetAsync();
             var userMembershipDetails = await client.Users.Memberships.GetDetailsAsync(userMembership.Result.First().Id);
 
@@ -56,7 +56,7 @@ namespace CloudFlare.Client.Test.Users
         [Fact]
         public async Task TestUpdateMembershipStatusAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var userMembership = (await client.Users.Memberships.GetAsync()).Result.First();
             var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(userMembership.Id, userMembership.Status);
 
@@ -79,7 +79,7 @@ namespace CloudFlare.Client.Test.Users
         [Fact(Skip = "Would cause deleted membership")]
         public async Task TestDeleteMembershipAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var userMembership = await client.Users.Memberships.GetAsync();
             var deletedMembership = await client.Users.Memberships.DeleteAsync(userMembership.Result.First().Id);
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts
 {
@@ -9,5 +10,11 @@ namespace CloudFlare.Client.Api.Accounts
         /// </summary>
         [JsonProperty("enforce_twofactor")]
         public bool EnforceTwoFactorAuthentication { get; set; }
+
+        /// <summary>
+        /// Access approval expiry date 
+        /// </summary>
+        [JsonProperty("access_approval_expiry")]
+        public DateTime? AccessApprovalExpiry { get; set; }
     }
 }

@@ -5,12 +5,12 @@ using Newtonsoft.Json.Converters;
 namespace CloudFlare.Client.Enumerators
 {
     /// <summary>
-    /// Represents the component value types
+    /// Represents the account types
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum ComponentValueType
+    public enum AccountType
     {
-        [EnumMember(Value = "page_rules")]
-        PageRules
+        [EnumMember(Value = "standard")]
+        Standard
     }
 }

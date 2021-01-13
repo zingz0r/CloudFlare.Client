@@ -16,7 +16,7 @@ namespace CloudFlare.Client.Test.Zones
         [InlineData(@"test_domain_partial.com", ZoneType.Partial)]
         public async Task TestCreateZoneAsync(string name, ZoneType type)
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var account = (await client.Accounts.GetAsync()).Result.First();
             var zonesQueryResult = await client.Zones.AddAsync(name, type, account);
 
@@ -50,7 +50,7 @@ namespace CloudFlare.Client.Test.Zones
             };
             var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
 
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zonesQueryResult = await client.Zones.GetAsync(filter, displayOptions);
 
             zonesQueryResult.Should().NotBeNull();
@@ -61,7 +61,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestGetZoneDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zonesQueryResult = (await client.Zones.GetAsync()).Result.First();
             var zoneDetailsQueryResult = await client.Zones.GetDetailsAsync(zonesQueryResult.Id);
 
@@ -73,7 +73,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestEditZoneAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
             var editZone = await client.Zones.UpdateAsync(zone.Id, new ModifiedZone
             {
@@ -93,7 +93,7 @@ namespace CloudFlare.Client.Test.Zones
 
         public async Task TestDeleteZoneAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zonesQueryResult = (await client.Zones.GetAsync()).Result.First();
             var deletedZoneQueryResult = await client.Zones.DeleteAsync(zonesQueryResult.Id);
 
@@ -105,7 +105,7 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestZoneActivationCheckAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zonesQueryResult = (await client.Zones.GetAsync()).Result.First();
             var zoneActivationCheckQueryResult = await client.Zones.CheckActivationAsync(zonesQueryResult.Id);
 
@@ -127,7 +127,7 @@ namespace CloudFlare.Client.Test.Zones
 
         public async Task TestPurgeAllFilesAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var zonesQueryResult = (await client.Zones.GetAsync()).Result.First();
             var purgeAllFilesAsyncQueryResult = await client.Zones.PurgeAllFilesAsync(zonesQueryResult.Id, true);
 

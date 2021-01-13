@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestGetRolesAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
 
@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestGetRoleDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            using var client = new CloudFlareClient(Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
             var roleDetails = client.Accounts.Roles.GetDetailsAsync(accounts.Result.First().Id, roles.Result.First().Id).Result;
