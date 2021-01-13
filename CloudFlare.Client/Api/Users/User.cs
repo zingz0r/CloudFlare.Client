@@ -6,25 +6,25 @@ namespace CloudFlare.Client.Api.Users
     public class User
     {
         /// <summary>
-        /// UserEndpoints identifier tag
+        /// User identifier tag
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// UserEndpoints's contact email address
+        /// User's contact email address
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
 
         /// <summary>
-        /// UserEndpoints's first name
+        /// User's first name
         /// </summary>
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
 
         /// <summary>
-        /// UserEndpoints's last name
+        /// User's last name
         /// </summary>
         [JsonProperty("last_name")]
         public string LastName { get; set; }
@@ -36,7 +36,7 @@ namespace CloudFlare.Client.Api.Users
         public string Username { get; set; }
 
         /// <summary>
-        /// UserEndpoints's telephone number
+        /// User's telephone number
         /// </summary>
         [JsonProperty("telephone")]
         public string Telephone { get; set; }
