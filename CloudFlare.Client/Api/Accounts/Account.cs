@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Api.Accounts
         public string Name { get; set; }
 
         /// <summary>
-        /// Additional Account Properties
+        /// Additional account settings
         /// </summary>
         [JsonProperty("settings")]
         public AdditionalAccountSettings Settings { get; set; }
