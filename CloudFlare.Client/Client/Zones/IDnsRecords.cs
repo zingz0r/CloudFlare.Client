@@ -71,7 +71,7 @@ namespace CloudFlare.Client.Client.Zones
         Task<CloudFlareResult<DnsRecordImportResult>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Scan for DNS DnsRecordEndpoints, alternative to jump_start option
+        /// Scan for DNS record, alternative to jump_start option
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
