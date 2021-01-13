@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones;
@@ -22,7 +23,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> AddAsync(string name, ZoneType type, Api.Accounts.Account account, bool? jumpStart = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Zone>> AddAsync(string name, ZoneType type, Account account, bool? jumpStart = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Initiate another zone activation check
