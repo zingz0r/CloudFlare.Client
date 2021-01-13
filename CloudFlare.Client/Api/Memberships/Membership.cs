@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Api.Memberships
         public IReadOnlyList<TRole> Roles { get; set; }
 
         /// <summary>
-        /// All access permissions for the UserEndpoints at the AccountEndpoints
+        /// All access permissions for the User at the Account
         /// </summary>
         [JsonProperty("permissions")]
         public IDictionary<string, Permission> Permissions { get; set; }

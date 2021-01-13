@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Get all available roles for an account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
@@ -19,7 +19,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Get information about a specific role for an account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="roleId">Role identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>

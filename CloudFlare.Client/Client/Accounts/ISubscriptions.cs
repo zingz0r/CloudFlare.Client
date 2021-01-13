@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Creates an account subscription
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="subscription">New subscription details</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -20,7 +20,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Removes an account subscription
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="subscriptionId">Subscription identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -29,7 +29,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Lists all an account's subscriptions
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Subscription>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Updates an account subscription
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="subscription">Modified subscription details</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>

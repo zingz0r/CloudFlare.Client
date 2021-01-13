@@ -6,7 +6,7 @@
     public static class Filtering
     {
         /// <summary>
-        /// AccountEndpoints name representation on CloudFlare
+        /// Account name representation on CloudFlare
         /// </summary>
         public static string AccountName => "account.name";
 

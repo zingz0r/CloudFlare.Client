@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Add a user to the list of members for this account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="emailAddress">Your contact email address</param>
         /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -24,7 +24,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Remove a member from an account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">MembershipEndpoints identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// List all members of an account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="displayOptions">Display Options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Get information about a specific member of an account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">MembershipEndpoints identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -51,10 +51,10 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Modify an account member
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
-        /// <param name="memberId">MembershipEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
         /// <param name="roles">Roles assigned to this member</param>
-        /// <param name="properties">Additional additionalAccountProperties of the member</param>
+        /// <param name="properties">Additional account properties</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipProperties<User> properties = null, CancellationToken cancellationToken = default);

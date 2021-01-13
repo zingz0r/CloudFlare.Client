@@ -24,17 +24,17 @@ namespace CloudFlare.Client.Client.Accounts
         /// <summary>
         /// Get information about a specific account that you are a member of
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
+        /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Account>>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Update an existing AccountEndpoints
+        /// Update an existing account
         /// </summary>
-        /// <param name="accountId">AccountEndpoints identifier tag</param>
-        /// <param name="name">AccountEndpoints name</param>
-        /// <param name="additionalAccountProperties">AccountEndpoints additionalAccountProperties</param>
+        /// <param name="accountId">Account identifier tag</param>
+        /// <param name="name">Account name</param>
+        /// <param name="additionalAccountProperties">Additional account properties</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Account>> UpdateAsync(string accountId, string name, AdditionalAccountProperties additionalAccountProperties = null, CancellationToken cancellationToken = default);

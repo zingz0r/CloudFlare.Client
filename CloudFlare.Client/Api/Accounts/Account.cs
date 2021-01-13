@@ -5,21 +5,21 @@ namespace CloudFlare.Client.Api.Accounts
     public class Account
     {
         /// <summary>
-        /// AccountEndpoints id
+        /// Account id
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// AccountEndpoints name
+        /// Account name
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// AccountEndpoints additionalAccountProperties
+        /// Additional Account Properties
         /// </summary>
-        [JsonProperty("additionalAccountProperties")]
+        [JsonProperty("settings")]
         public AdditionalAccountProperties AdditionalAccountProperties { get; set; }
     }
 }
