@@ -21,13 +21,13 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Membership<User, Role>>> AddAsync(string accountId, string emailAddress, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Membership<User, Role>>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
         {
             var membership = new NewMembership
             {
                 EmailAddress = emailAddress,
                 Roles = roles,
-                Status = MembershipStatus.Pending
+                Status = status
             };
 
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
@@ -51,7 +51,12 @@ namespace CloudFlare.Client.Client.Accounts
                 .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
                 .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/?{builder.ParameterCollection}";
+            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
+            if (builder.ParameterCollection.HasKeys())
+            {
+                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+            }
+
             return await Connection.GetAsync<IReadOnlyList<Membership<User, Role>>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 

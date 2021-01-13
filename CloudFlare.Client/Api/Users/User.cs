@@ -57,13 +57,13 @@ namespace CloudFlare.Client.Api.Users
         /// When the user signed up.
         /// </summary>
         [JsonProperty("created_on")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         /// <summary>
         /// Last time the user was modified
         /// </summary>
         [JsonProperty("modified_on")]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedOn { get; set; }
 
         /// <summary>
         /// Whether two-factor authentication is enabled for the user account. This does not apply to API authentication

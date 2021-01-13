@@ -6,6 +6,7 @@ using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Memberships;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users;
+using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Accounts
 {
@@ -16,10 +17,11 @@ namespace CloudFlare.Client.Client.Accounts
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="emailAddress">Your contact email address</param>
+        /// <param name="status">Status of the membership</param>
         /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> AddAsync(string accountId, string emailAddress, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Membership<User, Role>>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Remove a member from an account

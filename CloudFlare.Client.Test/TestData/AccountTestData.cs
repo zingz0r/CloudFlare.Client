@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using CloudFlare.Client.Api.Accounts;
-using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Test.TestData
 {
     public class AccountTestData
     {
-        public static ResultInfo ResultInfo { get; } = new();
-        public static TimingInfo TimingInfo { get; } = new();
-        public static IReadOnlyList<ErrorDetails> ErrorDetails { get; } = new List<ErrorDetails>();
-        public static IReadOnlyList<ApiError> ApiErrors { get; } = new List<ApiError>();
-
         public static List<Account> AccountsData { get; set; } = new()
         {
             new Account
