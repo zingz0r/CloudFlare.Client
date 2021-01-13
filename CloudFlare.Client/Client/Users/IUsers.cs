@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Client.Users
         public IMemberships Memberships { get; }
 
         /// <summary>
-        /// The currently logged in/authenticated UserEndpoints
+        /// The currently logged in/authenticated user
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
