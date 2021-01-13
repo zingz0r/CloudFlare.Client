@@ -2,6 +2,6 @@
 {
     public static class MembershipEndpoints
     {
-        public static string Base => "memberships";
+        public const string Base = "memberships";
     }
 }

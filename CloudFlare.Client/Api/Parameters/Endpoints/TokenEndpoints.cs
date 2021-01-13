@@ -2,7 +2,7 @@
 {
     public static class TokenEndpoints
     {
-        public static string Base => "tokens";
-        public static string Verify => "verify";
+        public const string Base = "tokens";
+        public const string Verify = "verify";
     }
 }

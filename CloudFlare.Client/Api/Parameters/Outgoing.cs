@@ -5,6 +5,6 @@
     /// </summary>
     public static class Outgoing
     {
-        public static string PurgeEverything => "purge_everything";
+        public const string PurgeEverything = "purge_everything";
     }
 }

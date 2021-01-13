@@ -8,9 +8,9 @@
         /// <summary>
         /// Base CloudFlare api url
         /// </summary>
-        public static string BaseUrl => "https://api.cloudflare.com/client/v4/";
+        public const string BaseUrl = "https://api.cloudflare.com/client/v4/";
 
-        public static string AuthEmailHeader => "X-Auth-Email";
-        public static string AuthKeyHeader => "X-Auth-Key";
+        public const string AuthEmailHeader = "X-Auth-Email";
+        public const string AuthKeyHeader = "X-Auth-Key";
     }
 }

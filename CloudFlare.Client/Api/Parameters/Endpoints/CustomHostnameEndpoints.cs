@@ -2,6 +2,6 @@
 {
     public static class CustomHostnameEndpoints
     {
-        public static string Base => "custom_hostnames";
+        public const string Base = "custom_hostnames";
     }
 }

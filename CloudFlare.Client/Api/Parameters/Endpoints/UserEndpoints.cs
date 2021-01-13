@@ -2,6 +2,6 @@
 {
     public static class UserEndpoints
     {
-        public static string Base => "user";
+        public const string Base = "user";
     }
 }

@@ -8,71 +8,71 @@
         /// <summary>
         /// Account name representation on CloudFlare
         /// </summary>
-        public static string AccountName => "account.name";
+        public const string AccountName = "account.name";
 
         /// <summary>
         /// Content representation on CloudFlare
         /// </summary>
-        public static string Content => "content";
+        public const string Content = "content";
 
         /// <summary>
         /// Direction representation on CloudFlare
         /// </summary>
-        public static string Direction => "direction";
+        public const string Direction = "direction";
 
         /// <summary>
         /// DnsRecordType representation on CloudFlare
         /// </summary>
-        public static string DnsRecordType => "type";
+        public const string DnsRecordType = "type";
 
         /// <summary>
         /// Hostname representation on CloudFlare
         /// </summary>
-        public static string Hostname => "hostname";
+        public const string Hostname = "hostname";
 
         /// <summary>
         /// Identifier representation on CloudFlare
         /// </summary>
-        public static string Id => "id";
+        public const string Id = "id";
 
         /// <summary>
         /// Match representation on CloudFlare
         /// </summary>
-        public static string Match => "match";
+        public const string Match = "match";
 
         /// <summary>
         /// Name representation on CloudFlare
         /// </summary>
-        public static string Name => "name";
+        public const string Name = "name";
 
         /// <summary>
         /// Order representation on CloudFlare
         /// </summary>
-        public static string Order => "order";
+        public const string Order = "order";
 
         /// <summary>
         /// Page representation on CloudFlare
         /// </summary>
-        public static string Page => "page";
+        public const string Page = "page";
 
         /// <summary>
         /// PerPage representation on CloudFlare
         /// </summary>
-        public static string PerPage => "per_page";
+        public const string PerPage = "per_page";
 
         /// <summary>
         /// Proxied representation on CloudFlare
         /// </summary>
-        public static string Proxied => "proxied";
+        public const string Proxied = "proxied";
 
         /// <summary>
         /// Ssl representation on CloudFlare
         /// </summary>
-        public static string Ssl => "ssl";
+        public const string Ssl = "ssl";
 
         /// <summary>
         /// Status representation on CloudFlare
         /// </summary>
-        public static string Status => "status";
+        public const string Status = "status";
     }
 }

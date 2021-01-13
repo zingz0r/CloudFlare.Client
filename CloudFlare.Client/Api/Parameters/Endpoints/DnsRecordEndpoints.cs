@@ -2,9 +2,9 @@
 {
     public static class DnsRecordEndpoints
     {
-        public static string Base => "dns_records";
-        public static string Export => "export";
-        public static string Import => "import";
-        public static string Scan => "scan";
+        public const string Base = "dns_records";
+        public const string Export = "export";
+        public const string Import = "import";
+        public const string Scan = "scan";
     }
 }
