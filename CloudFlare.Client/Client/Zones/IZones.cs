@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Client.Zones
         /// Create a new zone
         /// </summary>
         /// <param name="name">The domain name</param>
-        /// <param name="type">ZoneEndpoints type</param>
+        /// <param name="type">Zone type</param>
         /// <param name="account">Information about the account the zone belongs to</param>
         /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -27,7 +27,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Initiate another zone activation check
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> CheckActivationAsync(string zoneId, CancellationToken cancellationToken = default);
@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Delete DNS zone
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> DeleteAsync(string zoneId, CancellationToken cancellationToken = default);
@@ -52,7 +52,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Get all details of the specified zone
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Zone>> GetDetailsAsync(string zoneId, CancellationToken cancellationToken = default);
@@ -60,7 +60,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Remove ALL files from CloudFlare's cache
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="purgeEverything">A flag that indicates all resources in CloudFlare's cache should be removed. Note: This may have dramatic affects on your origin server load after performing this action.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -69,7 +69,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Change key zone property with new value 
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="modifiedZone">The modified zone values</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>

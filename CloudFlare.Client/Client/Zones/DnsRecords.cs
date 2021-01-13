@@ -22,16 +22,16 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, DnsRecordType type, string name, string content, AdditionalDnsRecordProperties properties = null, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, DnsRecordType type, string name, string content, AdditionalDnsRecordSettings settings = null, CancellationToken cancellationToken = default)
         {
             var dnsRecord = new DnsRecord
             {
                 Content = content,
                 Type = type,
                 Name = name,
-                Ttl = properties?.Ttl ?? 1,
-                Priority = properties?.Priority ?? 0,
-                Proxied = properties?.Proxied
+                Ttl = settings?.Ttl ?? 1,
+                Priority = settings?.Priority ?? 0,
+                Proxied = settings?.Proxied
             };
 
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}";
