@@ -54,9 +54,9 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="roles">Roles assigned to this member</param>
-        /// <param name="properties">Additional account properties</param>
+        /// <param name="settings">Additional account settings</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipProperties<User> properties = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipSettings<User> settings = null, CancellationToken cancellationToken = default);
     }
 }

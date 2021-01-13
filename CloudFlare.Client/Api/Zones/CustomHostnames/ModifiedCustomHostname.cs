@@ -6,7 +6,7 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
     public class ModifiedCustomHostname
     {
         /// <summary>
-        /// SSL properties used when creating the custom hostname
+        /// SSL settings used when creating the custom hostname
         /// </summary>
         [JsonProperty("ssl", NullValueHandling = NullValueHandling.Ignore)]
         [DataMember(EmitDefaultValue = false)]

@@ -63,19 +63,19 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipProperties<User> properties = null,
+        public async Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipSettings<User> settings = null,
             CancellationToken cancellationToken = default)
         {
             var modified = new Membership<User, Role>
             {
-                Code = properties?.Code,
-                Entity = properties?.Entity,
+                Code = settings?.Code,
+                Entity = settings?.Entity,
                 Roles = roles
             };
 
-            if (properties?.Status != null)
+            if (settings?.Status != null)
             {
-                modified.Status = properties.Status.Value;
+                modified.Status = settings.Status.Value;
             }
 
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";

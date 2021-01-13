@@ -34,7 +34,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="name">Account name</param>
-        /// <param name="additionalAccountSettings">Additional account properties</param>
+        /// <param name="additionalAccountSettings">Additional account settings</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Account>> UpdateAsync(string accountId, string name, AdditionalAccountSettings additionalAccountSettings = null, CancellationToken cancellationToken = default);

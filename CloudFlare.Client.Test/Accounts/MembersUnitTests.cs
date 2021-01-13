@@ -86,7 +86,7 @@ namespace CloudFlare.Client.Test.Accounts
             var firstAccountMember = accountMembers.Result.First();
 
             var updatedMember = await client.Accounts.Memberships.UpdateAsync(accounts.Result.First().Id, firstAccountMember.Id,
-                firstAccountMember.Roles, new AdditionalMembershipProperties<User>
+                firstAccountMember.Roles, new AdditionalMembershipSettings<User>
                 {
                     Code = firstAccountMember.Code,
                     Entity = firstAccountMember.Entity,

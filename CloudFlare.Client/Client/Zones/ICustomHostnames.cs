@@ -18,7 +18,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">ZoneEndpoints identifier</param>
         /// <param name="hostname">The custom hostname that will point to your hostname via CNAME</param>
-        /// <param name="ssl">SSL properties used when creating the custom hostname</param>
+        /// <param name="ssl">SSL settings used when creating the custom hostname</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, string hostname, CustomHostnameSsl ssl, CancellationToken cancellationToken = default);
@@ -58,7 +58,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">ZoneEndpoints identifier</param>
         /// <param name="customHostnameId">Custom hostname identifier</param>
-        /// <param name="modifiedCustomHostname">SSL properties used when creating the custom hostname</param>
+        /// <param name="modifiedCustomHostname">SSL settings used when creating the custom hostname</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<CustomHostname>> UpdateAsync(string zoneId, string customHostnameId, ModifiedCustomHostname modifiedCustomHostname, CancellationToken cancellationToken = default);
