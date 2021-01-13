@@ -88,7 +88,7 @@ namespace CloudFlare.Client.Contexts
 
             var client = new HttpClient(handler, true)
             {
-                BaseAddress = connectionInfo.Address
+                BaseAddress = ConnectionInfo.Address
             };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(HttpContentTypesHelper.Json));
             client.DefaultRequestHeaders.ExpectContinue = connectionInfo.ExpectContinue;
