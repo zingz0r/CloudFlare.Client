@@ -45,6 +45,11 @@ namespace CloudFlare.Client.Extensions
             }
             catch (Exception ex)
             {
+                if (ex is AuthenticationException)
+                {
+                    throw;
+                }
+
                 throw new PersistenceUnavailableException(ex);
             }
         }

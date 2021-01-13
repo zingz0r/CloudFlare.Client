@@ -1,0 +1,93 @@
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Zones;
+using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Helpers;
+
+namespace CloudFlare.Client.Client.Zones
+{
+    public class Zones : ApiContextBase<IConnection>, IZones
+    {
+        public ICustomHostnames CustomHostnames { get; }
+        public IDnsRecords DnsRecords { get; }
+
+        public Zones(IConnection connection) : base(connection)
+        {
+            CustomHostnames = new CustomHostnames(connection);
+            DnsRecords = new DnsRecords(connection);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> AddAsync(string name, ZoneType type, Api.Accounts.Account account, bool? jumpStart = null, CancellationToken cancellationToken = default)
+        {
+            var zone = new NewZone
+            {
+                Name = name,
+                Account = account,
+                Type = type,
+                JumpStart = jumpStart ?? false
+            };
+
+            var requestUri = $"{ZoneEndpoints.Base}";
+            return await Connection.PostAsync<Zone, NewZone>(requestUri, zone, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> CheckActivationAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.ActivationCheck}";
+            return await Connection.PutAsync<Zone, object>(requestUri, string.Empty, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> DeleteAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+            return await Connection.DeleteAsync<Zone>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
+        {
+            var builder = new ParameterBuilderHelper()
+                .InsertValue(Filtering.Name, filter?.Name)
+                .InsertValue(Filtering.Status, filter?.Status)
+                .InsertValue(Filtering.Match, filter?.Match)
+                .InsertValue(Filtering.Page, displayOptions?.Page)
+                .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
+                .InsertValue(Filtering.Order, displayOptions?.Order);
+
+            var requestUri = $"{ZoneEndpoints.Base}/?{builder.ParameterCollection}";
+            return await Connection.GetAsync<IReadOnlyList<Zone>>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> GetDetailsAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+            return await Connection.GetAsync<Zone>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything, CancellationToken cancellationToken = default)
+        {
+            var content = new Dictionary<string, bool> { { Outgoing.PurgeEverything, purgeEverything } };
+
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}";
+            return await Connection.PostAsync<Zone, Dictionary<string, bool>>(requestUri, content, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+            return await Connection.PatchAsync<Zone>(requestUri, PatchContentHelper.Create(modifiedZone), cancellationToken).ConfigureAwait(false);
+        }
+    }
+}

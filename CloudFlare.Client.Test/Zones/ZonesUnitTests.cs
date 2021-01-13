@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Parameters;
-using CloudFlare.Client.Api.Zone;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Models;
 using FluentAssertions;
 using Xunit;
 
@@ -71,28 +70,23 @@ namespace CloudFlare.Client.Test.Zones
             zoneDetailsQueryResult.Success.Should().BeTrue();
         }
 
-        [Fact(Skip = "Would cause edited zone")]
+        [Fact]
         public async Task TestEditZoneAsync()
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zonesQueryResult = (await client.Zones.GetAsync()).Result.First();
-            var editZoneQueryResult = await client.Zones.UpdateAsync(zonesQueryResult.Id, new PatchZone
+            var zone = (await client.Zones.GetAsync()).Result.First();
+            var editZone = await client.Zones.UpdateAsync(zone.Id, new ModifiedZone
             {
-                Paused = false,
                 Plan = new Plan
                 {
-                    Id = "e592fd9519420ba7405e1307bff33214"
-                },
-                VanityNameServers = new List<string>
-                {
-                    "ns1.example.com",
-                    "ns2.example.com"
+                    Id = zone.Plan.Id,
+                    Currency = "USD"
                 }
             });
 
-            editZoneQueryResult.Should().NotBeNull();
-            editZoneQueryResult.Errors?.Should().BeEmpty();
-            editZoneQueryResult.Success.Should().BeTrue();
+            editZone.Should().NotBeNull();
+            editZone.Errors?.Should().BeEmpty();
+            editZone.Success.Should().BeTrue();
         }
 
         [Fact(Skip = "Would cause deleted zone")]

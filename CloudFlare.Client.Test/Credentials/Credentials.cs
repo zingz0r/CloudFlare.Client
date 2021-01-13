@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Security.Authentication;
-using CloudFlare.Client.Interfaces;
-using CloudFlare.Client.Models;
+using CloudFlare.Client.Api.Authentication;
 
 namespace CloudFlare.Client.Test.Credentials
 {

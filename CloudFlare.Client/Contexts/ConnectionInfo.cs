@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Net;
-using CloudFlare.Client.Api;
-using CloudFlare.Client.Interfaces;
+using CloudFlare.Client.Api.Authentication;
 
 namespace CloudFlare.Client.Contexts
 {
     public class ConnectionInfo
     {
-        public Uri Address { get; } = new(ApiParameter.Config.BaseUrl);
+        public static Uri Address { get; } = new("https://api.cloudflare.com/client/v4/", UriKind.Absolute);
         public IAuthentication Authentication { get; set; }
         public TimeSpan? Timeout { get; set; }
         public bool AllowAutoRedirect { get; set; } = false;

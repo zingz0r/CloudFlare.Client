@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Memberships;
+using CloudFlare.Client.Api.Users;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
@@ -23,7 +25,7 @@ namespace CloudFlare.Client.Test.Accounts
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
 
             var accounts = await client.Accounts.GetAsync();
-            var accountMembers = await client.Accounts.Members.GetAsync(accounts.Result.First().Id, displayOptions);
+            var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id, displayOptions);
 
             accountMembers.Should().NotBeNull();
             accountMembers.Success.Should().BeTrue();
@@ -38,7 +40,7 @@ namespace CloudFlare.Client.Test.Accounts
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
-            var addedAccountMember = client.Accounts.Members.AddAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
+            var addedAccountMember = client.Accounts.Memberships.AddAsync(accounts.Result.First().Id, emailAddress, roles.Result).Result;
 
             addedAccountMember.Should().NotBeNull();
 
@@ -53,7 +55,7 @@ namespace CloudFlare.Client.Test.Accounts
                 addedAccountMember.Success.Should().BeTrue();
                 addedAccountMember.Errors?.Should().BeEmpty();
 
-                var deletedAccountMember = client.Accounts.Members.DeleteAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
+                var deletedAccountMember = client.Accounts.Memberships.DeleteAsync(accounts.Result.First().Id, addedAccountMember.Result.Id).Result;
 
                 deletedAccountMember.Should().NotBeNull();
                 deletedAccountMember.Success.Should().BeTrue();
@@ -66,8 +68,8 @@ namespace CloudFlare.Client.Test.Accounts
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
-            var accountMembers = await client.Accounts.Members.GetAsync(accounts.Result.First().Id);
-            var accountMemberDetails = client.Accounts.Members.GetDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
+            var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id);
+            var accountMemberDetails = client.Accounts.Memberships.GetDetailsAsync(accounts.Result.First().Id, accountMembers.Result.First().Id).Result;
 
             accountMemberDetails.Should().NotBeNull();
             accountMemberDetails.Success.Should().BeTrue();
@@ -79,15 +81,15 @@ namespace CloudFlare.Client.Test.Accounts
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
-            var accountMembers = await client.Accounts.Members.GetAsync(accounts.Result.First().Id);
+            var accountMembers = await client.Accounts.Memberships.GetAsync(accounts.Result.First().Id);
 
             var firstAccountMember = accountMembers.Result.First();
 
-            var updatedMember = await client.Accounts.Members.UpdateAsync(accounts.Result.First().Id, firstAccountMember.Id,
-                firstAccountMember.Roles, new MemberUpdateSettings
+            var updatedMember = await client.Accounts.Memberships.UpdateAsync(accounts.Result.First().Id, firstAccountMember.Id,
+                firstAccountMember.Roles, new AdditionalMembershipSettings<User>
                 {
                     Code = firstAccountMember.Code,
-                    User = firstAccountMember.User,
+                    Entity = firstAccountMember.Entity,
                     Status = MembershipStatus.Accepted
                 });
 

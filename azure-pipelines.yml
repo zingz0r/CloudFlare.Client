@@ -16,7 +16,7 @@ stages:
       steps:
     
       - task: SonarCloudPrepare@1
-        displayName: Prepare Sonar Cloud
+        displayName: Prepare SonarCloud
         inputs:
           SonarCloud: 'SonarCloud'
           organization: 'zingz0r-github'
@@ -59,7 +59,7 @@ stages:
         displayName: "Analyze Code with SonarCloud"
 
       - task: SonarCloudPublish@1
-        displayName: "Publish Code Analysis Results to SonarCloud"
+        displayName: "Publish Code Analysis Results"
       
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish Code Coverage Report'
