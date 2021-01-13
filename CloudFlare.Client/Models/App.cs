@@ -8,6 +8,6 @@ namespace CloudFlare.Client.Models
         /// The app installation identifier
         /// </summary>
         [JsonProperty("install_id")]
-        public object InstallId { get; set; }
+        public string InstallId { get; set; }
     }
 }

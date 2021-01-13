@@ -65,7 +65,7 @@ namespace CloudFlare.Client.Models
         /// The end of the current period, and also when the next billing is due
         /// </summary>
         [JsonProperty("current_period_end")]
-        public DateTime CurrentPeriodEnd { get; set; }
+        public DateTime? CurrentPeriodEnd { get; set; }
 
         /// <summary>
         /// When the current billing period started, may be the same as InitialPeriodStart if this is the first period

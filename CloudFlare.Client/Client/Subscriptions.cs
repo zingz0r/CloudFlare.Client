@@ -15,6 +15,13 @@ namespace CloudFlare.Client.Client
         {
         }
 
+        public async Task<CloudFlareResult<AccountSubscription>> AddAsync(string accountId, AccountSubscription subscription, CancellationToken cancellationToken = default)
+        {
+            return await Connection.PostAsync<AccountSubscription, AccountSubscription>(
+                    $"{ApiParameter.Endpoints.Account.Base}/{accountId}/{ApiParameter.Endpoints.Account.Subscriptions}", subscription, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         /// <inheritdoc />
         public async Task<CloudFlareResult<IReadOnlyList<AccountSubscription>>> GetAsync(string accountId, CancellationToken cancellationToken = default)
         {

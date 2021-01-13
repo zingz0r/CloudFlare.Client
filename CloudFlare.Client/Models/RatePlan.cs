@@ -28,7 +28,7 @@ namespace CloudFlare.Client.Models
         /// The scope of the rate plan
         /// </summary>
         [JsonProperty("scope")]
-        public string Scope { get; set; }
+        public RatePlanScope Scope { get; set; }
 
         /// <summary>
         /// The sets of the rate plan

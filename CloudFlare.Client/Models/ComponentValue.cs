@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CloudFlare.Client.Enumerators;
+using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models
 {
@@ -8,7 +9,7 @@ namespace CloudFlare.Client.Models
         /// The name of the component
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public ComponentValueType Name { get; set; }
 
         /// <summary>
         /// The value of the component
