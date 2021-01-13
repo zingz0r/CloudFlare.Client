@@ -1,4 +1,4 @@
-﻿using CloudFlare.Client.Models;
+﻿using CloudFlare.Client.Api.Authentication;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Attributes

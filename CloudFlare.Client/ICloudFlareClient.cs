@@ -1,5 +1,7 @@
 ﻿using System;
-using CloudFlare.Client.Interfaces;
+using CloudFlare.Client.Client.Accounts;
+using CloudFlare.Client.Client.Users;
+using CloudFlare.Client.Client.Zones;
 
 namespace CloudFlare.Client
 {

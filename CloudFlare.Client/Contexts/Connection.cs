@@ -53,11 +53,21 @@ namespace CloudFlare.Client.Contexts
             }
         }
 
+        public async Task<CloudFlareResult<TResult>> PostAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
+        {
+            return await PostAsync<TResult, TResult>(requestUri, content, cancellationToken);
+        }
+
         public async Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(string requestUri,
             TContent content, CancellationToken cancellationToken)
         {
             var response = await HttpClient.PostAsJsonAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
+        }
+
+        public async Task<CloudFlareResult<TResult>> PutAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
+        {
+            return await PutAsync<TResult, TResult>(requestUri, content, cancellationToken);
         }
 
         public async Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(string requestUri,

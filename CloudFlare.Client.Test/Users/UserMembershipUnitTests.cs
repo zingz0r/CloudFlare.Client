@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Memberships;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Security.Authentication;
-using CloudFlare.Client.Interfaces;
-using CloudFlare.Client.Models;
+using CloudFlare.Client.Api.Authentication;
 
 namespace CloudFlare.Client.Test.Credentials
 {
@@ -36,7 +35,7 @@ namespace CloudFlare.Client.Test.Credentials
         {
             EmailAddress = Environment.GetEnvironmentVariable("EmailAddress", EnvironmentVariableTarget.Process);
             ApiKey = Environment.GetEnvironmentVariable("ApiKey", EnvironmentVariableTarget.Process);
-            ApiToken = Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
+            ApiToken = "AZmrtGtmpGcELATOJ22C-irdHx_3RZPmgz_BeHca"; //Environment.GetEnvironmentVariable("ApiToken", EnvironmentVariableTarget.Process);
         }
     }
 }

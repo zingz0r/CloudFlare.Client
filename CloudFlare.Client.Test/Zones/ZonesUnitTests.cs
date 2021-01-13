@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Parameters;
-using CloudFlare.Client.Api.Zone;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Enumerators;
 using FluentAssertions;
 using Xunit;
@@ -75,11 +75,13 @@ namespace CloudFlare.Client.Test.Zones
         {
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zone = (await client.Zones.GetAsync()).Result.First();
-            var editZone = await client.Zones.UpdateAsync(zone.Id, new PatchZone
+            var editZone = await client.Zones.UpdateAsync(zone.Id, new ModifiedZone
             {
-                Paused = zone.Paused,
-                Plan = zone.Plan,
-                VanityNameServers = zone.NameServers
+                Plan = new Plan
+                {
+                    Id = zone.Plan.Id,
+                    Currency = "USD"
+                }
             });
 
             editZone.Should().NotBeNull();

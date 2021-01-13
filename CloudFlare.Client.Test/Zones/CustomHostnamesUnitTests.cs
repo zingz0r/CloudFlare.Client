@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.CustomHostname;
-using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.CustomHostnames;
+using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Models;
 using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
@@ -107,7 +106,7 @@ namespace CloudFlare.Client.Test.Zones
             var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
             var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
 
-            var patchData = new PatchCustomHostname
+            var patchData = new ModifiedCustomHostname
             {
                 Ssl = new CustomHostnameSsl
                 {
@@ -157,7 +156,7 @@ namespace CloudFlare.Client.Test.Zones
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
             var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
-            var updatedCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zoneId, customHostname.Id, new PatchCustomHostname
+            var updatedCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zoneId, customHostname.Id, new ModifiedCustomHostname
             {
                 Ssl = new CustomHostnameSsl
                 {

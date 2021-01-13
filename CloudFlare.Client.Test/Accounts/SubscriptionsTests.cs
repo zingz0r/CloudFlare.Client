@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Accounts.Subscriptions;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Models;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Test.Accounts
             using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
             var accounts = await client.Accounts.GetAsync();
             var addSubscription = await client.Accounts.Subscriptions.AddAsync(accounts.Result.First().Id,
-                new AccountSubscription
+                new Subscription
                 {
                     App = new App
                     {
@@ -66,6 +66,32 @@ namespace CloudFlare.Client.Test.Accounts
             subscriptions.Should().NotBeNull();
             subscriptions.Success.Should().BeTrue();
             subscriptions.Errors?.Should().BeEmpty();
+        }
+
+        [Fact(Skip = "Would cause modified subscription")]
+        public async Task TestModifyAccountSubscriptionsAsync()
+        {
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var account = (await client.Accounts.GetAsync()).Result.First();
+            var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
+            var modifiedSubscription = await client.Accounts.Subscriptions.UpdateAsync(account.Id, subscription);
+
+            modifiedSubscription.Should().NotBeNull();
+            modifiedSubscription.Success.Should().BeTrue();
+            modifiedSubscription.Errors?.Should().BeEmpty();
+        }
+
+        [Fact(Skip = "Would cause deleted subscription")]
+        public async Task TestDeleteAccountSubscriptionsAsync()
+        {
+            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
+            var account = (await client.Accounts.GetAsync()).Result.First();
+            var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
+            var deletedSubscription = await client.Accounts.Subscriptions.DeleteAsync(account.Id, subscription.Id);
+
+            deletedSubscription.Should().NotBeNull();
+            deletedSubscription.Success.Should().BeTrue();
+            deletedSubscription.Errors?.Should().BeEmpty();
         }
     }
 }
