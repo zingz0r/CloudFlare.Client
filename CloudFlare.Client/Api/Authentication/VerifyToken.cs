@@ -6,7 +6,7 @@ namespace CloudFlare.Client.Api.Authentication
     public class VerifyToken
     {
         /// <summary>
-        /// MembershipEndpoints identifier tag
+        /// Membership identifier tag
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }

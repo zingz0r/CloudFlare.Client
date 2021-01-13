@@ -25,7 +25,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// Remove a member from an account
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
-        /// <param name="memberId">MembershipEndpoints identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Membership<User, Role>>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
@@ -43,7 +43,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// Get information about a specific member of an account
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
-        /// <param name="memberId">MembershipEndpoints identifier tag</param>
+        /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<Membership<User, Role>>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default);

@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Client.Users
         /// <summary>
         /// Remove the associated member from an account
         /// </summary>
-        /// <param name="membershipId">MembershipEndpoints identifier tag</param>
+        /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> DeleteAsync(string membershipId, CancellationToken cancellationToken = default);
@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Client.Users
         /// <summary>
         /// List memberships of accounts the user can access
         /// </summary>
-        /// <param name="filter">UserEndpoints Memberships filtering options</param>
+        /// <param name="filter">Membership's filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -31,7 +31,7 @@ namespace CloudFlare.Client.Client.Users
         /// <summary>
         /// Get a specific membership
         /// </summary>
-        /// <param name="membershipId">MembershipEndpoints identifier tag</param>
+        /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken = default);
@@ -39,7 +39,7 @@ namespace CloudFlare.Client.Client.Users
         /// <summary>
         /// Accept or reject this account invitation
         /// </summary>
-        /// <param name="membershipId">MembershipEndpoints identifier tag</param>
+        /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
