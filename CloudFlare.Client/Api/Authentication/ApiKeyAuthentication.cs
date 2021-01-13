@@ -36,8 +36,8 @@ namespace CloudFlare.Client.Api.Authentication
         /// <inheritdoc />
         public void AddToHeaders(HttpClient client)
         {
-            client.DefaultRequestHeaders.Add(Configuration.AuthEmailHeader, Email);
-            client.DefaultRequestHeaders.Add(Configuration.AuthKeyHeader, ApiKey);
+            client.DefaultRequestHeaders.Add(AuthenticationHeader.EmailHeader, Email);
+            client.DefaultRequestHeaders.Add(AuthenticationHeader.KeyHeader, ApiKey);
         }
     }
 }
