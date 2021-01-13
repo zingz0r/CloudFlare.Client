@@ -45,7 +45,7 @@ namespace CloudFlare.Client.Api.Accounts.Subscriptions
         public IReadOnlyList<ComponentValue> ComponentValues { get; set; }
 
         /// <summary>
-        /// A simple zone object. May have null settings if not a zone subscription.
+        /// A simple zone object. May have null properties if not a zone subscription.
         /// </summary>
         [JsonProperty("zone")]
         public Zone Zone { get; set; }
