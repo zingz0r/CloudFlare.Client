@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Create a new DNS record for a zone. See the record object definitions for required attributes for each record type
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="type">DNS record type</param>
         /// <param name="name">DNS record name</param>
         /// <param name="content">DNS record content</param>
@@ -26,7 +26,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Delete DNS record
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Export your BIND config through this endpoint.
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<string>> ExportAsync(string zoneId, CancellationToken cancellationToken = default);
@@ -43,7 +43,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// List, search, sort, and filter a zone's DNS records.
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="filter">DNS Records filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -53,7 +53,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Get all details of the specified dns record
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -63,7 +63,7 @@ namespace CloudFlare.Client.Client.Zones
         /// Import your BIND config through this endpoint.
         /// Notice: SOA DNS record type is not supported by CloudFlare
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="fileInfo">FileInfo of the file</param>
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -73,7 +73,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Scan for DNS DnsRecordEndpoints, alternative to jump_start option
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<DnsRecordScan>> ScanAsync(string zoneId, CancellationToken cancellationToken = default);
@@ -81,7 +81,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Update DNS record
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="type">The new DNS record type</param>
         /// <param name="name">The new DNS record name</param>

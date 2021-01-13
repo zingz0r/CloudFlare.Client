@@ -16,7 +16,7 @@ namespace CloudFlare.Client.Client.Zones
         /// Specifying 'cname' will return a CNAME that needs to be placed. If http is used and the domain is not already pointing to the Managed CNAME host,
         /// the PATCH method must be used once it is (to complete validation).
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="hostname">The custom hostname that will point to your hostname via CNAME</param>
         /// <param name="ssl">SSL settings used when creating the custom hostname</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -26,7 +26,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Delete Custom Hostname (and any issued SSL certificates)
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// List, search, sort, and filter all of your custom hostnames
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="filter">Custom Hostname filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
@@ -45,7 +45,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Get all details of the specified custom hostname
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="customHostnameId"></param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace CloudFlare.Client.Client.Zones
         /// used to indicate that hostname should pass domain control validation (DCV). Can also be used to change validation type,
         /// e.g., from 'http' to 'email'.
         /// </summary>
-        /// <param name="zoneId">ZoneEndpoints identifier</param>
+        /// <param name="zoneId">Zone identifier</param>
         /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="modifiedCustomHostname">SSL settings used when creating the custom hostname</param>
         /// <param name="cancellationToken">Cancellation token</param>
