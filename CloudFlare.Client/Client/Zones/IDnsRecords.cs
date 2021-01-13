@@ -18,10 +18,10 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="type">DNS record type</param>
         /// <param name="name">DNS record name</param>
         /// <param name="content">DNS record content</param>
-        /// <param name="properties">Properties of the DNS Record</param>
+        /// <param name="settings">Additional settings of the DNS Record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, DnsRecordType type, string name, string content, AdditionalDnsRecordProperties properties = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, DnsRecordType type, string name, string content, AdditionalDnsRecordSettings settings = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete DNS record
@@ -89,7 +89,6 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="modifiedDnsRecord">Modified DNS Record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, DnsRecordType type, string name,
-            string content, ModifiedDnsRecord modifiedDnsRecord = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, ModifiedDnsRecord modifiedDnsRecord = null, CancellationToken cancellationToken = default);
     }
 }

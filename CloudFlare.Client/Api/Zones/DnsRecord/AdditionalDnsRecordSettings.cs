@@ -1,6 +1,6 @@
 ﻿namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
-    public class AdditionalDnsRecordProperties
+    public class AdditionalDnsRecordSettings
     {
         /// <summary>
         /// Time to live for DNS record. Value of 1 is 'automatic'
