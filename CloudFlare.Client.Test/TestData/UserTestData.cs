@@ -6,7 +6,7 @@ namespace CloudFlare.Client.Test.TestData
 {
     public class UserTestData
     {
-        public static List<User> UsersData { get; set; } = new()
+        public static List<User> Users { get; set; } = new()
         {
             new User
             {

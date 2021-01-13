@@ -1,35 +1,61 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Test.Helpers;
+using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Accounts
 {
     public class RolesUnitTests
     {
+        private readonly WireMockServer _wireMockServer;
+        private readonly ConnectionInfo _connectionInfo;
+
+        public RolesUnitTests()
+        {
+            _wireMockServer = WireMockServer.Start();
+            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+        }
+
         [Fact]
         public async Task TestGetRolesAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
+            var accountId = AccountTestData.Accounts.First().Id;
 
-            roles.Should().NotBeNull();
-            roles.Success.Should().BeTrue();
-            roles.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(RoleTestData.Roles)));
+
+            using var client = new CloudFlareClient(_connectionInfo);
+
+            var roles = await client.Accounts.Roles.GetAsync(accountId);
+
+            roles.Result.Should().BeEquivalentTo(RoleTestData.Roles);
         }
 
         [Fact]
         public async Task TestGetRoleDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var roles = await client.Accounts.Roles.GetAsync(accounts.Result.First().Id);
-            var roleDetails = client.Accounts.Roles.GetDetailsAsync(accounts.Result.First().Id, roles.Result.First().Id).Result;
+            var accountId = AccountTestData.Accounts.First().Id;
+            var role = RoleTestData.Roles.First();
 
-            roleDetails.Should().NotBeNull();
-            roleDetails.Success.Should().BeTrue();
-            roleDetails.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}/{role.Id}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(role)));
+
+            using var client = new CloudFlareClient(_connectionInfo);
+
+            var roleDetails = await client.Accounts.Roles.GetDetailsAsync(accountId, role.Id);
+
+            roleDetails.Result.Should().BeEquivalentTo(role);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
@@ -17,10 +18,12 @@ namespace CloudFlare.Client.Test.Accounts
     public class AccountsUnitTests
     {
         private readonly WireMockServer _wireMockServer;
+        private readonly ConnectionInfo _connectionInfo;
 
         public AccountsUnitTests()
         {
             _wireMockServer = WireMockServer.Start();
+            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
         }
 
         [Fact]
@@ -29,26 +32,26 @@ namespace CloudFlare.Client.Test.Accounts
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(AccountTestData.AccountsData)));
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(AccountTestData.Accounts)));
 
-            using var client = new CloudFlareClient(new WireMockConnection(_wireMockServer.Urls.FirstOrDefault()).ConnectionInfo);
+            using var client = new CloudFlareClient(_connectionInfo);
 
             var accounts = await client.Accounts.GetAsync();
 
-            accounts.Result.Should().BeEquivalentTo(AccountTestData.AccountsData);
+            accounts.Result.Should().BeEquivalentTo(AccountTestData.Accounts);
         }
 
         [Fact]
         public async Task TestGetAccountDetailsAsync()
         {
-            var account = AccountTestData.AccountsData.First();
+            var account = AccountTestData.Accounts.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(account)));
 
-            using var client = new CloudFlareClient(new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo);
+            using var client = new CloudFlareClient(_connectionInfo);
 
             var accountDetails = await client.Accounts.GetDetailsAsync(account.Id);
 
@@ -58,14 +61,14 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task UpdateAccountAsync()
         {
-            var account = AccountTestData.AccountsData.First();
+            var account = AccountTestData.Accounts.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
                 {
                     var body = JsonConvert.DeserializeObject<Account>(x.Body);
-                    var acc = AccountTestData.AccountsData.First(y => y.Id == body.Id).DeepClone();
+                    var acc = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
 
                     acc.Id = body.Id;
                     acc.Name = body.Name;
@@ -74,7 +77,7 @@ namespace CloudFlare.Client.Test.Accounts
                     return WireMockResponseHelper.CreateTestResponse(acc);
                 }));
 
-            using var client = new CloudFlareClient(new WireMockConnection(_wireMockServer.Urls.FirstOrDefault()).ConnectionInfo);
+            using var client = new CloudFlareClient(_connectionInfo);
 
             var updatedAccount = await client.Accounts.UpdateAsync(account.Id, "New Name", new AdditionalAccountSettings
             {
