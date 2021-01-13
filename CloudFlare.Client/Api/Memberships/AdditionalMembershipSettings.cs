@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Api.Memberships
         /// </summary>
         public string Code { get; set; }
         /// <summary>
-        /// Entity object (Account/User)
+        /// Membership entity object (Account/User)
         /// </summary>
         public T Entity { get; set; }
         /// <summary>

@@ -7,7 +7,7 @@ namespace CloudFlare.Client.Api.Memberships
     public class Membership<T, TRole>
     {
         /// <summary>
-        /// MembershipEndpoints identifier tag
+        /// Membership identifier tag
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -25,7 +25,7 @@ namespace CloudFlare.Client.Api.Memberships
         public MembershipStatus Status { get; set; }
 
         /// <summary>
-        /// MembershipEndpoints information
+        /// Membership entity object (Account/User)
         /// </summary>
         [JsonProperty((nameof(T)))]
         public T Entity { get; set; }
