@@ -101,15 +101,15 @@ namespace CloudFlare.Client.Client.Zones
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, DnsRecordType type, string name, string content,
-            ModifiedDnsRecord settings = null, CancellationToken cancellationToken = default)
+            ModifiedDnsRecord modifiedDnsRecord = null, CancellationToken cancellationToken = default)
         {
             var modified = new DnsRecord
             {
                 Content = content,
                 Type = type,
                 Name = name,
-                Ttl = settings?.Ttl ?? 1,
-                Proxied = settings?.Proxied
+                Ttl = modifiedDnsRecord?.Ttl ?? 1,
+                Proxied = modifiedDnsRecord?.Proxied
             };
 
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}";

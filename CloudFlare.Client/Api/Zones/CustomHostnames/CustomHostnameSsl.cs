@@ -1,7 +1,7 @@
 ﻿using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.CustomHostnames
+namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
     public class CustomHostnameSsl
     {
@@ -18,9 +18,9 @@ namespace CloudFlare.Client.Api.CustomHostnames
         public DomainValidationType Type { get; set; }
 
         /// <summary>
-        /// SSL specific additionalAccountProperties
+        /// Additional SSL specific settings
         /// </summary>
-        [JsonProperty("additionalAccountProperties")]
-        public CustomHostnameSslSettings Settings { get; set; }
+        [JsonProperty("settings")]
+        public AdditionalCustomHostnameSslSettings Settings { get; set; }
     }
 }

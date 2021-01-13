@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.CustomHostnames;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Zones.CustomHostnames;
 
 namespace CloudFlare.Client.Client.Zones
 {

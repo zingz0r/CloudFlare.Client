@@ -2,9 +2,9 @@
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.CustomHostnames
+namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
-    public class CustomHostnameSslSettings
+    public class AdditionalCustomHostnameSslSettings
     {
         /// <summary>
         /// Whether or not HTTP2 is enabled

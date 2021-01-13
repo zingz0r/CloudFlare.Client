@@ -44,13 +44,13 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Account>> UpdateAsync(string accountId, string name, AdditionalAccountProperties additionalAccountProperties = null, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Account>> UpdateAsync(string accountId, string name, AdditionalAccountSettings additionalAccountSettings = null, CancellationToken cancellationToken = default)
         {
             var account = new Account
             {
                 Id = accountId,
                 Name = name,
-                AdditionalAccountProperties = additionalAccountProperties
+                Settings = additionalAccountSettings
             };
 
             var requestUri = $"{AccountEndpoints.Base}/{accountId}";

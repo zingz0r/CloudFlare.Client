@@ -1,6 +1,6 @@
 ﻿using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Api.CustomHostnames
+namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
     public class CustomHostnameFilter
     {

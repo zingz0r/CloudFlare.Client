@@ -2,7 +2,7 @@
 
 namespace CloudFlare.Client.Api.Accounts
 {
-    public class AdditionalAccountProperties
+    public class AdditionalAccountSettings
     {
         /// <summary>
         /// Indicates whether or not membership in this account requires that Two-Factor Authentication is enabled

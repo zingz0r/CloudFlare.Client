@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.CustomHostnames;
 using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Zones.CustomHostnames;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
@@ -21,7 +21,7 @@ namespace CloudFlare.Client.Test.Zones
                 new CustomHostnameSsl
                 {
                     Method = MethodType.Cname,
-                    Settings = new CustomHostnameSslSettings
+                    Settings = new AdditionalCustomHostnameSslSettings
                     {
                         Ciphers = new List<string>
                         {
@@ -111,7 +111,7 @@ namespace CloudFlare.Client.Test.Zones
                 Ssl = new CustomHostnameSsl
                 {
                     Method = MethodType.Http,
-                    Settings = new CustomHostnameSslSettings
+                    Settings = new AdditionalCustomHostnameSslSettings
                     {
                         Ciphers = new List<string>
                         {
@@ -161,7 +161,7 @@ namespace CloudFlare.Client.Test.Zones
                 Ssl = new CustomHostnameSsl
                 {
                     Method = MethodType.Http,
-                    Settings = new CustomHostnameSslSettings
+                    Settings = new AdditionalCustomHostnameSslSettings
                     {
                         Ciphers = new List<string>
                         {

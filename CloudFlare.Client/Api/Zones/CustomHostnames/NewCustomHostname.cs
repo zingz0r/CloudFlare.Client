@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.CustomHostnames
+namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
     public class NewCustomHostname
     {

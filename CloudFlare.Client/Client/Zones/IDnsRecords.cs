@@ -86,10 +86,10 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="type">The new DNS record type</param>
         /// <param name="name">The new DNS record name</param>
         /// <param name="content">The new DNS record content</param>
-        /// <param name="settings">Additional additionalAccountProperties of the DNS Record</param>
+        /// <param name="modifiedDnsRecord">Modified DNS Record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, DnsRecordType type, string name,
-            string content, ModifiedDnsRecord settings = null, CancellationToken cancellationToken = default);
+            string content, ModifiedDnsRecord modifiedDnsRecord = null, CancellationToken cancellationToken = default);
     }
 }
