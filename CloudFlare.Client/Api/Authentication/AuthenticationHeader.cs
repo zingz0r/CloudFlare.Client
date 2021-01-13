@@ -1,4 +1,4 @@
-﻿namespace CloudFlare.Client.Api.Parameters
+﻿namespace CloudFlare.Client.Api.Authentication
 {
     /// <summary>
     /// CloudFlare specific configuration strings
