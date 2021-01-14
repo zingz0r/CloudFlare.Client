@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Helpers
 #if NETSTANDARD2_0
             await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length, cancellationToken);
 #else
-            using var memoryStream = new MemoryStream(result);
+            using var memoryStream = new MemoryStream(result, 0, result.Length, true, true);
             await sourceStream.ReadAsync(memoryStream.GetBuffer(), cancellationToken);
 #endif
 

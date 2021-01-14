@@ -36,6 +36,15 @@ namespace CloudFlare.Client.Test.TestData
             }
         };
 
+        public static List<DnsRecordImport> DnsRecordImports { get; set; } = new()
+        {
+            new DnsRecordImport
+            {
+                RecordsAdded = 10,
+                TotalRecordsParsed = 10
+            }
+        };
+
         public static string Export { get; set; } = @"
         ;;
         ;; Domain:     tothnet.hu.

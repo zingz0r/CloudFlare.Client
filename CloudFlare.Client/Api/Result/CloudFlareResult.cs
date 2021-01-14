@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Result
 {
@@ -7,31 +8,37 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Generic result property
         /// </summary>
+        [JsonProperty("result")]
         public T Result { get; }
 
         /// <summary>
         /// Additional pagination info
         /// </summary>
+        [JsonProperty("resultinfo")]
         public ResultInfo ResultInfo { get; }
 
         /// <summary>
         /// Success flag
         /// </summary>
+        [JsonProperty("success")]
         public bool Success { get; }
 
         /// <summary>
         /// Additional messages
         /// </summary>
+        [JsonProperty("messages")]
         public IReadOnlyList<ErrorDetails> Messages { get; }
 
         /// <summary>
         /// Array of potential errors
         /// </summary>
+        [JsonProperty("errors")]
         public IReadOnlyList<ApiError> Errors { get; }
 
         /// <summary>
         /// Time info of procession
         /// </summary>
+        [JsonProperty("timing")]
         public TimingInfo Timing { get; }
 
         /// <summary>

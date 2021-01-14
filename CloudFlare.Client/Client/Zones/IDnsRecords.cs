@@ -64,7 +64,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecordImportResult>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecordImport>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Scan for DNS record, alternative to jump_start option

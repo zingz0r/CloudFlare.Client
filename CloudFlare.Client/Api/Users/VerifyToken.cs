@@ -2,7 +2,7 @@
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Authentication
+namespace CloudFlare.Client.Api.Users
 {
     public class VerifyToken
     {
@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Api.Authentication
         /// Status of this membership
         /// </summary>
         [JsonProperty("status")]
-        public VerifyTokenStatus Status { get; set; }
+        public TokenStatus Status { get; set; }
 
         /// <summary>
         /// The expiration time on or after which the JWT MUST NOT be accepted for processing
