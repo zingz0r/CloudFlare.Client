@@ -55,9 +55,9 @@ namespace CloudFlare.Client.Client.Users
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, Status status, CancellationToken cancellationToken = default)
         {
-            var data = new Dictionary<string, MembershipStatus>
+            var data = new Dictionary<string, Status>
             {
                 {
                     Filtering.Status, status
@@ -65,7 +65,7 @@ namespace CloudFlare.Client.Client.Users
             };
 
             var requestUri = $"{MembershipEndpoints.Base}/{membershipId}";
-            return await Connection.PutAsync<Membership, Dictionary<string, MembershipStatus>>(requestUri, data, cancellationToken).ConfigureAwait(false);
+            return await Connection.PutAsync<Membership, Dictionary<string, Status>>(requestUri, data, cancellationToken).ConfigureAwait(false);
         }
     }
 }

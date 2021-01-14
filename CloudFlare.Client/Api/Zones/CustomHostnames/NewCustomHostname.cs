@@ -14,6 +14,6 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// SSL settings used when creating the custom hostname
         /// </summary>
         [JsonProperty("ssl")]
-        public CustomHostnameSsl Ssl { get; set; }
+        public Ssl Ssl { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, Status status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Remove a member from an account

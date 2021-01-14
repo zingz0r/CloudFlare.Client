@@ -20,7 +20,7 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, Status status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
         {
             var membership = new NewMember
             {

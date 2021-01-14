@@ -35,20 +35,20 @@ namespace CloudFlare.Client.Test.Accounts
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(AccountsMembershipTestData.Members)));
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(AccountMembershipTestData.Members)));
 
             using var client = new CloudFlareClient(_connectionInfo);
 
             var accountMembers = await client.Accounts.Members.GetAsync(accountId);
 
-            accountMembers.Result.Should().BeEquivalentTo(AccountsMembershipTestData.Members);
+            accountMembers.Result.Should().BeEquivalentTo(AccountMembershipTestData.Members);
         }
 
         [Fact]
         public async Task TestGetAccountMemberDetailsAsync()
         {
             var accountId = AccountTestData.Accounts.First().Id;
-            var membership = AccountsMembershipTestData.Members.First();
+            var membership = AccountMembershipTestData.Members.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{membership.Id}").UsingGet())
@@ -66,7 +66,7 @@ namespace CloudFlare.Client.Test.Accounts
         public async Task TestAddAccountMemberAsync()
         {
             var accountId = AccountTestData.Accounts.First().Id;
-            var membership = AccountsMembershipTestData.Members.First();
+            var membership = AccountMembershipTestData.Members.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}").UsingPost())
@@ -84,7 +84,7 @@ namespace CloudFlare.Client.Test.Accounts
         public async Task TestDeleteAccountMemberAsync()
         {
             var accountId = AccountTestData.Accounts.First().Id;
-            var membership = AccountsMembershipTestData.Members.First();
+            var membership = AccountMembershipTestData.Members.First();
             var expected = new Member { Id = membership.Id };
 
             _wireMockServer
@@ -104,11 +104,11 @@ namespace CloudFlare.Client.Test.Accounts
         public async Task TestUpdateAccountMemberAsync()
         {
             var accountId = AccountTestData.Accounts.First().Id;
-            var membership = AccountsMembershipTestData.Members.First();
+            var membership = AccountMembershipTestData.Members.First();
             var expected = new AdditionalMemberSettings
             {
                 Code = "testCode",
-                Status = MembershipStatus.Rejected
+                Status = Status.Rejected
             };
 
             _wireMockServer
@@ -117,7 +117,7 @@ namespace CloudFlare.Client.Test.Accounts
                     .WithBody(x =>
                     {
                         var body = JsonConvert.DeserializeObject<Member>(x.Body);
-                        var response = AccountsMembershipTestData.Members.First(y => y.Id == x.PathSegments[3]).DeepClone();
+                        var response = AccountMembershipTestData.Members.First(y => y.Id == x.PathSegments[3]).DeepClone();
 
                         response.Code = body.Code;
                         response.Status = body.Status;

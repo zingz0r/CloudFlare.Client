@@ -77,10 +77,9 @@ namespace CloudFlare.Client.Test.Users
 
             using var client = new CloudFlareClient(_connectionInfo);
 
-
-            var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(membership.Id, MembershipStatus.Pending);
+            var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(membership.Id, Status.Pending);
             updateUserMembershipStatus.Result.Should().BeEquivalentTo(membership, opt => opt.Excluding(x => x.Status));
-            updateUserMembershipStatus.Result.Status.Should().Be(MembershipStatus.Pending);
+            updateUserMembershipStatus.Result.Status.Should().Be(Status.Pending);
         }
 
         [Fact]

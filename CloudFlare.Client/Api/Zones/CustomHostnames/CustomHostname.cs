@@ -1,4 +1,6 @@
-﻿using CloudFlare.Client.Enumerators;
+﻿using System;
+using System.Collections.Generic;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
@@ -22,38 +24,47 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// </summary>
         [JsonProperty("ssl")]
         public Ssl Ssl { get; set; }
-    }
 
-    public class Ssl
-    {
         /// <summary>
-        /// Status of the hostname's SSL certificates
+        /// Custom metadata
+        /// </summary>
+        [JsonProperty("custom_metadata")]
+        public IReadOnlyDictionary<string, string> CustomMetadata { get; set; }
+
+        /// <summary>
+        /// Custom origin server
+        /// </summary>
+        [JsonProperty("custom_origin_server")]
+        public string CustomOriginServer { get; set; }
+
+        /// <summary>
+        /// 
         /// </summary>
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         /// <summary>
-        /// Domain control validation (DCV) method used for this hostname
+        /// Verification errors
         /// </summary>
-        [JsonProperty("method")]
-        public MethodType Method { get; set; }
+        [JsonProperty("verification_errors")]
+        public IReadOnlyList<string> VerificationErrors { get; }
 
         /// <summary>
-        /// Level of validation to be used for this hostname. Domain validation (dv) must be used
+        /// Ownership verification
         /// </summary>
-        [JsonProperty("type")]
-        public DomainValidationType Type { get; set; }
+        [JsonProperty("ownership_verification")]
+        public OwnershipVerification OwnershipVerification { get; set; }
 
         /// <summary>
-        /// The value that must be returned when the CNAME (cname) is queried during domain validation
+        /// Ownership http verification
         /// </summary>
-        [JsonProperty("cname_target")]
-        public string CnameTarget { get; set; }
+        [JsonProperty("ownership_verification_http")]
+        public OwnershipVerificationHttp OwnershipVerificationHttp { get; set; }
 
         /// <summary>
-        /// The CNAME that the certificate authority (CA) will resolve during the domain validation
+        /// Creation date
         /// </summary>
-        [JsonProperty("cname")]
-        public string Cname { get; set; }
+        [JsonProperty("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }

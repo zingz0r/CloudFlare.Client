@@ -19,14 +19,8 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, string hostname, CustomHostnameSsl ssl, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, NewCustomHostname customHostname, CancellationToken cancellationToken = default)
         {
-            var customHostname = new NewCustomHostname
-            {
-                Hostname = hostname,
-                Ssl = ssl
-            };
-
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}";
             return await Connection.PostAsync<CustomHostname, NewCustomHostname>(requestUri, customHostname, cancellationToken).ConfigureAwait(false);
         }
@@ -52,7 +46,12 @@ namespace CloudFlare.Client.Client.Zones
                 .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
                 .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}?{builder.ParameterCollection}";
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}";
+            if (builder.ParameterCollection.HasKeys())
+            {
+                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+            }
+
             return await Connection.GetAsync<IReadOnlyList<CustomHostname>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 

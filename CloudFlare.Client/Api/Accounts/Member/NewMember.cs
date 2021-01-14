@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Api.Accounts.Member
         /// A member's status in the account
         /// </summary>
         [JsonProperty("status")]
-        public MembershipStatus Status { get; set; }
+        public Status Status { get; set; }
 
         /// <summary>
         /// Array of roles associated with this member

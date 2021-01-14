@@ -7,7 +7,7 @@ namespace CloudFlare.Client.Api.Users.Memberships
         /// <summary>
         /// Status of this membership
         /// </summary>
-        public MembershipStatus? Status { get; set; }
+        public Status? Status { get; set; }
 
         /// <summary>
         /// Account name
