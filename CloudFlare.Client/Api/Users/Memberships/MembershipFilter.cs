@@ -1,13 +1,13 @@
 ﻿using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Api.Memberships
+namespace CloudFlare.Client.Api.Users.Memberships
 {
     public class MembershipFilter
     {
         /// <summary>
         /// Status of this membership
         /// </summary>
-        public MembershipStatus? Status { get; set; }
+        public Status? Status { get; set; }
 
         /// <summary>
         /// Account name

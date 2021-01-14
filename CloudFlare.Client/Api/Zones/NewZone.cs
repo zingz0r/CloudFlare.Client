@@ -7,12 +7,6 @@ namespace CloudFlare.Client.Api.Zones
     public class NewZone
     {
         /// <summary>
-        /// Zone identifier tag
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        /// <summary>
         /// The domain name
         /// </summary>
         [JsonProperty("name")]

@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones;
-using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Zones
 {
@@ -17,13 +15,10 @@ namespace CloudFlare.Client.Client.Zones
         /// <summary>
         /// Create a new zone
         /// </summary>
-        /// <param name="name">The domain name</param>
-        /// <param name="type">Zone type</param>
-        /// <param name="account">Information about the account the zone belongs to</param>
-        /// <param name="jumpStart">Automatically attempt to fetch existing DNS records</param>
+        /// <param name="newZone">The new zone to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Zone>> AddAsync(string name, ZoneType type, Account account, bool? jumpStart = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Initiate another zone activation check

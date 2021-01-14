@@ -7,22 +7,22 @@ namespace CloudFlare.Client.Api.Zones
     public class ModifiedZone
     {
         /// <summary>
-        /// <see cref="Models.Zone.Paused"/>
+        /// Whether the zone is paused
         /// </summary>
-        [JsonProperty("paused", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("paused")]
         public bool? Paused { get; set; }
 
         /// <summary>
         /// An array of domains used for custom name servers. This is only available for Business and Enterprise plans.
         /// </summary>
-        [JsonProperty("vanity_name_servers", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("vanity_name_servers")]
         [DataMember(EmitDefaultValue = false)]
         public IReadOnlyList<string> VanityNameServers { get; set; }
 
         /// <summary>
-        /// <see cref="Models.Zone.Plan"/>
+        /// Plan of the zone
         /// </summary>
-        [JsonProperty("plan", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("plan")]
         [DataMember(EmitDefaultValue = false)]
         public Plan Plan { get; set; }
     }

@@ -7,7 +7,6 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Contexts;
-using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones
@@ -24,18 +23,10 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Zone>> AddAsync(string name, ZoneType type, Api.Accounts.Account account, bool? jumpStart = null, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default)
         {
-            var zone = new NewZone
-            {
-                Name = name,
-                Account = account,
-                Type = type,
-                JumpStart = jumpStart ?? false
-            };
-
             var requestUri = $"{ZoneEndpoints.Base}";
-            return await Connection.PostAsync<Zone, NewZone>(requestUri, zone, cancellationToken).ConfigureAwait(false);
+            return await Connection.PostAsync<Zone, NewZone>(requestUri, newZone, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -63,7 +54,12 @@ namespace CloudFlare.Client.Client.Zones
                 .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
                 .InsertValue(Filtering.Order, displayOptions?.Order);
 
-            var requestUri = $"{ZoneEndpoints.Base}/?{builder.ParameterCollection}";
+            var requestUri = $"{ZoneEndpoints.Base}";
+            if (builder.ParameterCollection.HasKeys())
+            {
+                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+            }
+
             return await Connection.GetAsync<IReadOnlyList<Zone>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
@@ -87,7 +83,7 @@ namespace CloudFlare.Client.Client.Zones
         public async Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
-            return await Connection.PatchAsync<Zone>(requestUri, PatchContentHelper.Create(modifiedZone), cancellationToken).ConfigureAwait(false);
+            return await Connection.PatchAsync<Zone, ModifiedZone>(requestUri, modifiedZone, cancellationToken).ConfigureAwait(false);
         }
     }
 }

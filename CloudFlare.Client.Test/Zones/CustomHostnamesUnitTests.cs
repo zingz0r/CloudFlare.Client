@@ -1,183 +1,134 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.CustomHostnames;
+using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Test.Attributes;
+using CloudFlare.Client.Test.Helpers;
+using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
+using Force.DeepCloner;
+using Newtonsoft.Json;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Zones
 {
     public class CustomHostnamesUnitTests
     {
-        [MinimumPlanEnterpriseFact(Skip = "Would cause created hostname")]
+        private readonly WireMockServer _wireMockServer;
+        private readonly ConnectionInfo _connectionInfo;
+
+        public CustomHostnamesUnitTests()
+        {
+            _wireMockServer = WireMockServer.Start();
+            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+        }
+
+        [Fact]
         public async Task TestAddCustomHostnameAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var addCustomHostname = await client.Zones.CustomHostnames.AddAsync(zoneId, "test",
-                new CustomHostnameSsl
-                {
-                    Method = MethodType.Cname,
-                    Settings = new AdditionalCustomHostnameSslSettings
-                    {
-                        Ciphers = new List<string>
-                        {
-                            "CDHE-ECDSA-CHACHA20-POLY1305"
-                        },
-                        Http2 = FeatureStatus.On,
-                        MinTlsVersion = TlsVersion.Tls13,
-                        Tls13 = FeatureStatus.On
-                    },
-                    Type = DomainValidationType.Dv
-                });
+            var zone = ZoneTestData.Zones.First();
+            var customHostname = CustomHostnameTestData.CustomHostnames.First();
+            var newCustomHostname = new NewCustomHostname { Hostname = customHostname.Hostname, Ssl = SslTestData.Ssls.First() };
 
-            addCustomHostname.Should().NotBeNull();
-            addCustomHostname.Errors?.Should().BeEmpty();
-            addCustomHostname.Success.Should().BeTrue();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(customHostname)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var addCustomHostname = await client.Zones.CustomHostnames.AddAsync(zone.Id, newCustomHostname);
+
+            addCustomHostname.Result.Should().BeEquivalentTo(customHostname);
         }
 
-        [MinimumPlanEnterpriseTheory]
-        [InlineData(null, null, null, null, null, null)]
-        [InlineData(null, null, 0, null, null, null)]
-        [InlineData(null, null, null, 100, null, null)]
-        [InlineData(null, null, null, null, OrderType.Asc, null)]
-        [InlineData(null, null, null, null, OrderType.Desc, null)]
-        [InlineData(null, null, null, null, null, true)]
-        [InlineData(null, null, null, null, null, false)]
-        public async Task TestGetCustomHostnamesAsync(string hostname, int? page, int? perPage,
-            CustomHostnameOrderType? type, OrderType? order, bool? ssl)
+        [Fact]
+        public async Task TestGetCustomHostnamesAsync()
         {
-            var filter = new CustomHostnameFilter { Hostname = hostname, OrderType = type, Ssl = ssl };
-            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+            var zone = ZoneTestData.Zones.First();
 
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zoneId, filter, displayOptions);
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(CustomHostnameTestData.CustomHostnames)));
 
-            customHostnames.Should().NotBeNull();
-            customHostnames.Errors?.Should().BeEmpty();
-            customHostnames.Success.Should().BeTrue();
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zone.Id);
+
+            customHostnames.Result.Should().BeEquivalentTo(CustomHostnameTestData.CustomHostnames);
         }
 
-        [MinimumPlanEnterpriseTheory]
-        [InlineData(null, null, null, null, null, null)]
-        [InlineData(null, null, 0, null, null, null)]
-        [InlineData(null, null, null, 100, null, null)]
-        [InlineData(null, null, null, null, OrderType.Asc, null)]
-        [InlineData(null, null, null, null, OrderType.Desc, null)]
-        [InlineData(null, null, null, null, null, true)]
-        [InlineData(null, null, null, null, null, false)]
-        public async Task TestGetCustomHostnamesByIdAsync(string id, int? page, int? perPage,
-            CustomHostnameOrderType? type, OrderType? order, bool? ssl)
-        {
-            var filter = new CustomHostnameFilter { CustomHostnameId = id, OrderType = type, Ssl = ssl };
-            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
-
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostnameId = (await client.Zones.CustomHostnames.GetAsync(zoneId, filter, displayOptions)).Result.First().Id;
-            var customHostnameDetails = await client.Zones.CustomHostnames.GetDetailsAsync(zoneId, customHostnameId);
-
-            customHostnameDetails.Should().NotBeNull();
-            customHostnameDetails.Errors?.Should().BeEmpty();
-            customHostnameDetails.Success.Should().BeTrue();
-        }
-
-        [MinimumPlanEnterpriseFact]
+        [Fact]
         public async Task TestGetCustomHostnameDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostnameId = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First().Id;
-            var customHostnameDetails = await client.Zones.CustomHostnames.GetDetailsAsync(zoneId, customHostnameId);
+            var zone = ZoneTestData.Zones.First();
+            var customHostname = CustomHostnameTestData.CustomHostnames.First();
 
-            customHostnameDetails.Should().NotBeNull();
-            customHostnameDetails.Errors?.Should().BeEmpty();
-            customHostnameDetails.Success.Should().BeTrue();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/{customHostname.Id}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(customHostname)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var customHostnameDetails = await client.Zones.CustomHostnames.GetDetailsAsync(zone.Id, customHostname.Id);
+
+            customHostnameDetails.Result.Should().BeEquivalentTo(customHostname);
         }
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause edited hostname")]
+        [Fact]
         public async Task TestEditCustomHostnameAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
-
-            var patchData = new ModifiedCustomHostname
+            var zone = ZoneTestData.Zones.First();
+            var customHostname = CustomHostnameTestData.CustomHostnames.First();
+            var modified = new ModifiedCustomHostname
             {
-                Ssl = new CustomHostnameSsl
-                {
-                    Method = MethodType.Http,
-                    Settings = new AdditionalCustomHostnameSslSettings
-                    {
-                        Ciphers = new List<string>
-                        {
-                            "ECDHE-RSA-AES128-GCM-SHA256",
-                            "AES128-SHA"
-                        },
-                        Http2 = FeatureStatus.On,
-                        MinTlsVersion = TlsVersion.Tls12,
-                        Tls13 = FeatureStatus.On
-                    }
-                }
+                Ssl = SslTestData.Ssls.First().DeepClone()
             };
+            modified.Ssl.Settings.Tls13 = FeatureStatus.Off;
 
-            var editCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zoneId, customHostname.Id, patchData);
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/{customHostname.Id}").UsingPatch())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x =>
+                    {
+                        var body = JsonConvert.DeserializeObject<NewCustomHostname>(x.Body);
+                        var response = CustomHostnameTestData.CustomHostnames.First(y => y.Id == x.PathSegments[3]).DeepClone();
+                        response.Ssl = body.Ssl;
 
-            editCustomHostname.Should().NotBeNull();
-            editCustomHostname.Errors?.Should().BeEmpty();
-            editCustomHostname.Success.Should().BeTrue();
+                        return WireMockResponseHelper.CreateTestResponse(response);
+                    }));
 
-            var filter = new CustomHostnameFilter { Hostname = customHostname.Hostname };
-            var updatedCustomHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId, filter)).Result.First();
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
+            var editCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zone.Id, customHostname.Id, modified);
+
+            editCustomHostname.Result.Should().BeEquivalentTo(customHostname, opt => opt.Excluding(y => y.Ssl.Settings.Tls13));
+            editCustomHostname.Result.Ssl.Settings.Tls13.Should().BeEquivalentTo(FeatureStatus.Off);
         }
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause deleted membership")]
+        [Fact]
         public async Task TestDeleteCustomHostnameAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
-            var deleteCustomHostname = await client.Zones.CustomHostnames.DeleteAsync(zoneId, customHostname.Hostname);
+            var zone = ZoneTestData.Zones.First();
+            var customHostname = CustomHostnameTestData.CustomHostnames.First();
+            var expected = new CustomHostname { Id = customHostname.Id };
 
-            deleteCustomHostname.Should().NotBeNull();
-            deleteCustomHostname.Errors?.Should().BeEmpty();
-            deleteCustomHostname.Success.Should().BeTrue();
-        }
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/{customHostname.Id}").UsingDelete())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause modified hostname")]
-        public async Task TestUpdateCustomHostnameAsync()
-        {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var zoneId = (await client.Zones.GetAsync()).Result.First().Id;
-            var customHostname = (await client.Zones.CustomHostnames.GetAsync(zoneId)).Result.First();
-            var updatedCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zoneId, customHostname.Id, new ModifiedCustomHostname
-            {
-                Ssl = new CustomHostnameSsl
-                {
-                    Method = MethodType.Http,
-                    Settings = new AdditionalCustomHostnameSslSettings
-                    {
-                        Ciphers = new List<string>
-                        {
-                            "ECDHE-RSA-AES128-GCM-SHA256",
-                            "AES128-SHA"
-                        },
-                        Http2 = FeatureStatus.On,
-                        MinTlsVersion = TlsVersion.Tls12,
-                        Tls13 = FeatureStatus.On
-                    }
-                }
-            });
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            updatedCustomHostname.Should().NotBeNull();
-            updatedCustomHostname.Errors?.Should().BeEmpty();
-            updatedCustomHostname.Success.Should().BeTrue();
+            var deleteCustomHostname = await client.Zones.CustomHostnames.DeleteAsync(zone.Id, customHostname.Id);
+
+            deleteCustomHostname.Result.Should().BeEquivalentTo(expected);
         }
     }
 }

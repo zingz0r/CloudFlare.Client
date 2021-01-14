@@ -18,14 +18,15 @@ namespace CloudFlare.Client
         private readonly IConnection _connection;
 
         /// <summary>
-        /// Initialize CloudFlare Client with connection info
+        /// Initialize CloudFlare Client
         /// </summary>
+        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
         /// <param name="connectionInfo">Connection info</param>
-        public CloudFlareClient(ConnectionInfo connectionInfo)
+        public CloudFlareClient(IAuthentication authentication, ConnectionInfo connectionInfo = null)
         {
             IsDisposed = false;
 
-            _connection = new ApiConnection(connectionInfo);
+            _connection = new ApiConnection(authentication, connectionInfo ?? new ConnectionInfo());
 
             Accounts = new Accounts(_connection);
             Users = new Users(_connection);
@@ -35,23 +36,17 @@ namespace CloudFlare.Client
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
-        /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
-        public CloudFlareClient(IAuthentication authentication) : this(new ConnectionInfo(authentication))
-        {
-        }
-
-        /// <summary>
-        /// Initialize CloudFlare Client
-        /// </summary>
         /// <param name="emailAddress">Email address</param>
         /// <param name="apiKey">CloudFlare API Key</param>
-        public CloudFlareClient(string emailAddress, string apiKey) : this(new ApiKeyAuthentication(emailAddress, apiKey)) { }
+        /// <param name="connectionInfo">Connection info</param>
+        public CloudFlareClient(string emailAddress, string apiKey, ConnectionInfo connectionInfo = null) : this(new ApiKeyAuthentication(emailAddress, apiKey), connectionInfo) { }
 
         /// <summary>
         /// Initialize CloudFlare Client
         /// </summary>
         /// <param name="apiToken">Authentication with api token</param>
-        public CloudFlareClient(string apiToken) : this(new ApiTokenAuthentication(apiToken)) { }
+        /// <param name="connectionInfo">Connection info</param>
+        public CloudFlareClient(string apiToken, ConnectionInfo connectionInfo = null) : this(new ApiTokenAuthentication(apiToken), connectionInfo) { }
 
         /// <summary>
         /// Destruct CloudFlare Client

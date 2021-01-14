@@ -1,97 +1,110 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Subscriptions;
-using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Test.Helpers;
+using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
+using Force.DeepCloner;
+using Newtonsoft.Json;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Accounts
 {
     public class SubscriptionsTests
     {
-        [Fact(Skip = "Would cause new subscription")]
+        private readonly WireMockServer _wireMockServer;
+        private readonly ConnectionInfo _connectionInfo;
+
+        public SubscriptionsTests()
+        {
+            _wireMockServer = WireMockServer.Start();
+            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+        }
+
+        [Fact]
         public async Task TestAddAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var addSubscription = await client.Accounts.Subscriptions.AddAsync(accounts.Result.First().Id,
-                new Subscription
-                {
-                    App = new App
-                    {
-                        InstallId = null,
-                    },
-                    ComponentValues = new List<ComponentValue>
-                    {
-                        new()
-                        {
-                            Name = ComponentValueType.PageRules,
-                            Default = 3,
-                            Price = 0,
-                            Value = 0
-                        }
-                    },
-                    Currency = "USD",
-                    CurrentPeriodStart = DateTime.UtcNow,
-                    Frequency = Frequency.Monthly,
-                    Id = Guid.NewGuid().ToString(),
-                    Price = 0,
-                    RatePlan = new RatePlan
-                    {
-                        Id = LegacyType.Free,
-                        Currency = "USD",
-                        ExternallyManaged = false,
-                        IsContract = false,
-                        PublicName = "Test RatePlan",
-                        Scope = RatePlanScope.Zone,
-                        Sets = new List<string>()
-                    },
-                    State = SubscriptionState.Paid
-                });
+            var accountId = AccountTestData.Accounts.First().Id;
+            var subscription = SubscriptionTestData.Subscriptions.First();
 
-            addSubscription.Should().NotBeNull();
-            addSubscription.Success.Should().BeTrue();
-            addSubscription.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Subscriptions}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(subscription)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var addSubscription = await client.Accounts.Subscriptions.AddAsync(accountId, subscription);
+
+            addSubscription.Result.Should().BeEquivalentTo(subscription);
         }
 
         [Fact]
         public async Task TestGetAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var subscriptions = await client.Accounts.Subscriptions.GetAsync(accounts.Result.First().Id);
+            var accountId = AccountTestData.Accounts.First().Id;
 
-            subscriptions.Should().NotBeNull();
-            subscriptions.Success.Should().BeTrue();
-            subscriptions.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Subscriptions}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(SubscriptionTestData.Subscriptions)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var subscriptions = await client.Accounts.Subscriptions.GetAsync(accountId);
+
+            subscriptions.Result.Should().BeEquivalentTo(SubscriptionTestData.Subscriptions);
         }
 
-        [Fact(Skip = "Would cause modified subscription")]
+        [Fact]
         public async Task TestModifyAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var account = (await client.Accounts.GetAsync()).Result.First();
-            var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
-            var modifiedSubscription = await client.Accounts.Subscriptions.UpdateAsync(account.Id, subscription);
+            var accountId = AccountTestData.Accounts.First().Id;
+            var subscription = SubscriptionTestData.Subscriptions.First().DeepClone();
+            subscription.Price = long.MaxValue;
 
-            modifiedSubscription.Should().NotBeNull();
-            modifiedSubscription.Success.Should().BeTrue();
-            modifiedSubscription.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Subscriptions}/{subscription.Id}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x =>
+                    {
+                        var body = JsonConvert.DeserializeObject<Subscription>(x.Body);
+                        var response = SubscriptionTestData.Subscriptions.First().DeepClone();
+                        response.Price = body.Price;
+
+                        return WireMockResponseHelper.CreateTestResponse(response);
+                    }));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var modifiedSubscription = await client.Accounts.Subscriptions.UpdateAsync(accountId, subscription);
+
+            modifiedSubscription.Result.Should().BeEquivalentTo(SubscriptionTestData.Subscriptions.First(), opt => opt.Excluding(x => x.Price));
+            modifiedSubscription.Result.Price.Should().Be(long.MaxValue);
         }
 
-        [Fact(Skip = "Would cause deleted subscription")]
+        [Fact]
         public async Task TestDeleteAccountSubscriptionsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var account = (await client.Accounts.GetAsync()).Result.First();
-            var subscription = (await client.Accounts.Subscriptions.GetAsync(account.Id)).Result.First();
-            var deletedSubscription = await client.Accounts.Subscriptions.DeleteAsync(account.Id, subscription.Id);
+            var accountId = AccountTestData.Accounts.First().Id;
+            var subscription = SubscriptionTestData.Subscriptions.First();
+            var expected = new DeletedSubscription { SubscriptionId = subscription.Id };
 
-            deletedSubscription.Should().NotBeNull();
-            deletedSubscription.Success.Should().BeTrue();
-            deletedSubscription.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Subscriptions}/{subscription.Id}").UsingDelete())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var deletedSubscription = await client.Accounts.Subscriptions.DeleteAsync(accountId, subscription.Id);
+
+            deletedSubscription.Result.Should().BeEquivalentTo(expected);
         }
     }
 }

@@ -17,11 +17,10 @@ namespace CloudFlare.Client.Client.Zones
         /// the PATCH method must be used once it is (to complete validation).
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
-        /// <param name="hostname">The custom hostname that will point to your hostname via CNAME</param>
-        /// <param name="ssl">SSL settings used when creating the custom hostname</param>
+        /// <param name="customHostname">Custom hostname to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, string hostname, CustomHostnameSsl ssl, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, NewCustomHostname customHostname, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete Custom Hostname (and any issued SSL certificates)

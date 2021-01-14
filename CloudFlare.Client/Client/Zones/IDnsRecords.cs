@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones.DnsRecord;
-using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Zones
 {
@@ -15,13 +14,10 @@ namespace CloudFlare.Client.Client.Zones
         /// Create a new DNS record for a zone. See the record object definitions for required attributes for each record type
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
-        /// <param name="type">DNS record type</param>
-        /// <param name="name">DNS record name</param>
-        /// <param name="content">DNS record content</param>
-        /// <param name="settings">Additional settings of the DNS Record</param>
+        /// <param name="newDnsRecord">New DNS record to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, DnsRecordType type, string name, string content, AdditionalDnsRecordSettings settings = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecord newDnsRecord, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete DNS record
@@ -83,12 +79,9 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
-        /// <param name="type">The new DNS record type</param>
-        /// <param name="name">The new DNS record name</param>
-        /// <param name="content">The new DNS record content</param>
         /// <param name="modifiedDnsRecord">Modified DNS Record</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, DnsRecordType type, string name, string content, ModifiedDnsRecord modifiedDnsRecord = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, ModifiedDnsRecord modifiedDnsRecord, CancellationToken cancellationToken = default);
     }
 }

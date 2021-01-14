@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Client.Accounts
 {
     public interface IAccounts
     {
-        public IMemberships Memberships { get; }
+        public IMembers Members { get; }
         public ISubscriptions Subscriptions { get; }
         public IRoles Roles { get; }
 
@@ -27,7 +27,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IReadOnlyList<Account>>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Account>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update an existing account

@@ -1,54 +1,92 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Display;
-using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Api.Accounts;
+using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Test.Helpers;
+using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
+using Force.DeepCloner;
+using Newtonsoft.Json;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Accounts
 {
     public class AccountsUnitTests
     {
-        [Theory]
-        [InlineData(0, null, null)]
-        [InlineData(null, 100, null)]
-        [InlineData(null, null, OrderType.Asc)]
-        [InlineData(null, null, OrderType.Desc)]
-        [InlineData(null, null, null)]
-        public async Task TestGetAccountsAsync(int? page, int? perPage, OrderType? order)
+        private readonly WireMockServer _wireMockServer;
+        private readonly ConnectionInfo _connectionInfo;
+
+        public AccountsUnitTests()
         {
-            var displayOptions = new DisplayOptions { Page = page, PerPage = perPage, Order = order };
+            _wireMockServer = WireMockServer.Start();
+            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+        }
 
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync(displayOptions);
+        [Fact]
+        public async Task TestGetAccountsAsync()
+        {
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(AccountTestData.Accounts)));
 
-            accounts.Should().NotBeNull();
-            accounts.Success.Should().BeTrue();
-            accounts.Errors?.Should().BeEmpty();
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var accounts = await client.Accounts.GetAsync();
+
+            accounts.Result.Should().BeEquivalentTo(AccountTestData.Accounts);
         }
 
         [Fact]
         public async Task TestGetAccountDetailsAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var accountDetails = await client.Accounts.GetDetailsAsync(accounts.Result.First().Id);
+            var account = AccountTestData.Accounts.First();
 
-            accountDetails.Should().NotBeNull();
-            accountDetails.Success.Should().BeTrue();
-            accountDetails.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(account)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var accountDetails = await client.Accounts.GetDetailsAsync(account.Id);
+
+            accountDetails.Result.Should().BeEquivalentTo(account);
         }
 
         [Fact]
         public async Task UpdateAccountAsync()
         {
-            using var client = new CloudFlareClient(Credentials.Credentials.Authentication);
-            var accounts = await client.Accounts.GetAsync();
-            var updatedAccount = await client.Accounts.UpdateAsync(accounts.Result.First().Id, accounts.Result.First().Name);
+            var account = AccountTestData.Accounts.First();
 
-            updatedAccount.Should().NotBeNull();
-            updatedAccount.Success.Should().BeTrue();
-            updatedAccount.Errors?.Should().BeEmpty();
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingPut())
+                .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
+                {
+                    var body = JsonConvert.DeserializeObject<Account>(x.Body);
+                    var acc = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
+
+                    acc.Id = body.Id;
+                    acc.Name = body.Name;
+                    acc.Settings = body.Settings;
+
+                    return WireMockResponseHelper.CreateTestResponse(acc);
+                }));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var updatedAccount = await client.Accounts.UpdateAsync(account.Id, "New Name", new AdditionalAccountSettings
+            {
+                EnforceTwoFactorAuthentication = true
+            });
+
+            updatedAccount.Result.Name.Should().Be("New Name");
+            updatedAccount.Result.Settings.EnforceTwoFactorAuthentication.Should().BeTrue();
+            updatedAccount.Result.Should().BeEquivalentTo(account, opt => opt.Excluding(x => x.Name).Excluding(x => x.Settings.EnforceTwoFactorAuthentication));
         }
     }
 }
