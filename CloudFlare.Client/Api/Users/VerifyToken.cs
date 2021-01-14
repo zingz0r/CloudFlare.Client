@@ -2,7 +2,7 @@
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Authentication
+namespace CloudFlare.Client.Api.Users
 {
     public class VerifyToken
     {

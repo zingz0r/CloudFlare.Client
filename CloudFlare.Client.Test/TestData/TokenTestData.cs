@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CloudFlare.Client.Api.Authentication;
+using CloudFlare.Client.Api.Users;
 using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Test.TestData

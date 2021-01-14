@@ -6,7 +6,6 @@ namespace CloudFlare.Client.Api.Result
     {
         /// <summary>
         /// Page number of paginated results
-
         /// </summary>
         [JsonProperty("page")]
         public int Page { get; set; }
