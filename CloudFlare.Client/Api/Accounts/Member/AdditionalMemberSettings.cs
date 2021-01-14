@@ -1,17 +1,18 @@
-﻿using CloudFlare.Client.Enumerators;
+﻿using CloudFlare.Client.Api.Users;
+using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Api.Memberships
+namespace CloudFlare.Client.Api.Accounts.Member
 {
-    public class AdditionalMembershipSettings<T>
+    public class AdditionalMemberSettings
     {
         /// <summary>
-        /// The unique activation code for the account membership
+        /// The unique activation code for the account member
         /// </summary>
         public string Code { get; set; }
         /// <summary>
-        /// Membership entity object (Account/User)
+        /// Member user
         /// </summary>
-        public T Entity { get; set; }
+        public User User { get; set; }
         /// <summary>
         /// A member's status in the account
         /// </summary>

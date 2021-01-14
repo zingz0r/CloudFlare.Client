@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Client.Accounts
 {
     public interface IAccounts
     {
-        public IMemberships Memberships { get; }
+        public IMembers Members { get; }
         public ISubscriptions Subscriptions { get; }
         public IRoles Roles { get; }
 

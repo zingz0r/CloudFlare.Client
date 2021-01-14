@@ -13,13 +13,13 @@ namespace CloudFlare.Client.Client.Accounts
 {
     public class Accounts : ApiContextBase<IConnection>, IAccounts
     {
-        public IMemberships Memberships { get; }
+        public IMembers Members { get; }
         public IRoles Roles { get; }
         public ISubscriptions Subscriptions { get; }
 
         public Accounts(IConnection connection) : base(connection)
         {
-            Memberships = new Memberships(connection);
+            Members = new Members(connection);
             Roles = new Roles(connection);
             Subscriptions = new Subscriptions(connection);
         }

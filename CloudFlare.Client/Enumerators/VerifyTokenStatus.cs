@@ -11,6 +11,10 @@ namespace CloudFlare.Client.Enumerators
     public enum VerifyTokenStatus
     {
         [EnumMember(Value = "active")]
-        Active
+        Active,
+        [EnumMember(Value = "disabled")]
+        Disabled,
+        [EnumMember(Value = "expired")]
+        Expired
     }
 }

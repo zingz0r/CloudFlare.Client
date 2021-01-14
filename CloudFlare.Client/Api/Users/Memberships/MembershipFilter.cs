@@ -1,6 +1,6 @@
 ﻿using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Api.Memberships
+namespace CloudFlare.Client.Api.Users.Memberships
 {
     public class MembershipFilter
     {

@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Accounts.Member;
 using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Api.Display;
-using CloudFlare.Client.Api.Memberships;
 using CloudFlare.Client.Api.Result;
-using CloudFlare.Client.Api.Users;
 using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Accounts
 {
-    public interface IMemberships
+    public interface IMembers
     {
         /// <summary>
         /// Add a user to the list of members for this account
@@ -21,7 +20,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="roles">Array of roles associated with this member</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, MembershipStatus status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Remove a member from an account
@@ -30,7 +29,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// List all members of an account
@@ -39,7 +38,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="displayOptions">Display Options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<IReadOnlyList<Membership<User, Role>>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get information about a specific member of an account
@@ -48,7 +47,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Modify an account member
@@ -56,9 +55,9 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="roles">Roles assigned to this member</param>
-        /// <param name="settings">Additional account settings</param>
+        /// <param name="settings">Additional member settings</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Membership<User, Role>>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMembershipSettings<User> settings = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMemberSettings settings = null, CancellationToken cancellationToken = default);
     }
 }

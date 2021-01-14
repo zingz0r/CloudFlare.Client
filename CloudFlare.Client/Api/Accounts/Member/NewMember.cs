@@ -3,9 +3,9 @@ using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Memberships
+namespace CloudFlare.Client.Api.Accounts.Member
 {
-    public class NewMembership
+    public class NewMember
     {
         /// <summary>
         /// Your contact email address

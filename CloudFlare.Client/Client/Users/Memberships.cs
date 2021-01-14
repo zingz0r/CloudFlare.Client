@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Display;
-using CloudFlare.Client.Api.Memberships;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Users.Memberships;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Helpers;
@@ -20,14 +19,14 @@ namespace CloudFlare.Client.Client.Users
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> DeleteAsync(string membershipId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Membership>> DeleteAsync(string membershipId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{MembershipEndpoints.Base}/{membershipId}";
-            return await Connection.DeleteAsync<IReadOnlyList<Membership<Account, string>>>(requestUri, cancellationToken).ConfigureAwait(false);
+            return await Connection.DeleteAsync<Membership>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> GetAsync(MembershipFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<IReadOnlyList<Membership>>> GetAsync(MembershipFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
         {
             var builder = new ParameterBuilderHelper();
 
@@ -39,19 +38,24 @@ namespace CloudFlare.Client.Client.Users
                 .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
                 .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-            var requestUri = $"{MembershipEndpoints.Base}/?{builder.ParameterCollection}";
-            return await Connection.GetAsync<IReadOnlyList<Membership<Account, string>>>(requestUri, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{MembershipEndpoints.Base}";
+            if (builder.ParameterCollection.HasKeys())
+            {
+                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+            }
+
+            return await Connection.GetAsync<IReadOnlyList<Membership>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Membership>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken = default)
         {
-            var requestUri = $"{MembershipEndpoints.Base}/?{membershipId}";
-            return await Connection.GetAsync<IReadOnlyList<Membership<Account, string>>>(requestUri, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{MembershipEndpoints.Base}/{membershipId}";
+            return await Connection.GetAsync<Membership>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IReadOnlyList<Membership<Account, string>>>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken = default)
         {
             var data = new Dictionary<string, MembershipStatus>
             {
@@ -61,7 +65,7 @@ namespace CloudFlare.Client.Client.Users
             };
 
             var requestUri = $"{MembershipEndpoints.Base}/{membershipId}";
-            return await Connection.PutAsync<IReadOnlyList<Membership<Account, string>>, Dictionary<string, MembershipStatus>>(requestUri, data, cancellationToken).ConfigureAwait(false);
+            return await Connection.PutAsync<Membership, Dictionary<string, MembershipStatus>>(requestUri, data, cancellationToken).ConfigureAwait(false);
         }
     }
 }

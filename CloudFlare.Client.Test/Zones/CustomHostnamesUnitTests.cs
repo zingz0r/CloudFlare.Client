@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Zones.CustomHostnames;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Test.Attributes;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +11,7 @@ namespace CloudFlare.Client.Test.Zones
 {
     public class CustomHostnamesUnitTests
     {
-        [MinimumPlanEnterpriseFact(Skip = "Would cause created hostname")]
+        [Fact]
         public async Task TestAddCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Authentication);
@@ -39,7 +38,7 @@ namespace CloudFlare.Client.Test.Zones
             addCustomHostname.Success.Should().BeTrue();
         }
 
-        [MinimumPlanEnterpriseTheory]
+        [Theory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -62,7 +61,7 @@ namespace CloudFlare.Client.Test.Zones
             customHostnames.Success.Should().BeTrue();
         }
 
-        [MinimumPlanEnterpriseTheory]
+        [Theory]
         [InlineData(null, null, null, null, null, null)]
         [InlineData(null, null, 0, null, null, null)]
         [InlineData(null, null, null, 100, null, null)]
@@ -86,7 +85,7 @@ namespace CloudFlare.Client.Test.Zones
             customHostnameDetails.Success.Should().BeTrue();
         }
 
-        [MinimumPlanEnterpriseFact]
+        [Fact]
         public async Task TestGetCustomHostnameDetailsAsync()
         {
             using var client = new CloudFlareClient(Credentials.Authentication);
@@ -99,7 +98,7 @@ namespace CloudFlare.Client.Test.Zones
             customHostnameDetails.Success.Should().BeTrue();
         }
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause edited hostname")]
+        [Fact]
         public async Task TestEditCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Authentication);
@@ -137,7 +136,7 @@ namespace CloudFlare.Client.Test.Zones
             Assert.Equal(MethodType.Http, updatedCustomHostname.Ssl.Method);
         }
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause deleted membership")]
+        [Fact]
         public async Task TestDeleteCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Authentication);
@@ -150,7 +149,7 @@ namespace CloudFlare.Client.Test.Zones
             deleteCustomHostname.Success.Should().BeTrue();
         }
 
-        [MinimumPlanEnterpriseFact(Skip = "Would cause modified hostname")]
+        [Fact]
         public async Task TestUpdateCustomHostnameAsync()
         {
             using var client = new CloudFlareClient(Credentials.Authentication);
