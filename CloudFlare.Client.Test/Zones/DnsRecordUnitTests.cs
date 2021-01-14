@@ -151,5 +151,44 @@ namespace CloudFlare.Client.Test.Zones
             update.Result.Should().BeEquivalentTo(record, opt => opt.Excluding(x => x.Name));
             update.Result.Name.Should().BeEquivalentTo("new.tothnet.hu");
         }
+
+        [Fact]
+        public async Task TestDeleteDnsRecordAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var record = DnsRecordTestData.DnsRecords.First();
+            var expected = new DnsRecord() { Id = record.Id };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}/{record.Id}").UsingDelete())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var deleteCustomHostname = await client.Zones.DnsRecords.DeleteAsync(zone.Id, record.Id);
+
+            deleteCustomHostname.Result.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task TestImportDnsRecordAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var record = DnsRecordTestData.DnsRecords.First();
+            var file = FileHelper.CreateTempFile("test.txt");
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(DnsRecordTestData.DnsRecordImports.First())));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var deleteCustomHostname = await client.Zones.DnsRecords.ImportAsync(zone.Id, file, false);
+            file.Delete();
+
+            deleteCustomHostname.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecordImports.First());
+        }
     }
 }
