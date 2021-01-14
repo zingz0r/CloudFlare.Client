@@ -15,7 +15,6 @@ namespace CloudFlare.Client.Client.Zones
     {
         public CustomHostnames(IConnection connection) : base(connection)
         {
-
         }
 
         /// <inheritdoc />
@@ -66,7 +65,7 @@ namespace CloudFlare.Client.Client.Zones
         public async Task<CloudFlareResult<CustomHostname>> UpdateAsync(string zoneId, string customHostnameId, ModifiedCustomHostname modifiedCustomHostname, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}";
-            return await Connection.PatchAsync<CustomHostname>(requestUri, PatchContentHelper.Create(modifiedCustomHostname), cancellationToken).ConfigureAwait(false);
+            return await Connection.PatchAsync<CustomHostname, ModifiedCustomHostname>(requestUri, modifiedCustomHostname, cancellationToken).ConfigureAwait(false);
         }
     }
 }

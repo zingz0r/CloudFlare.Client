@@ -5,7 +5,6 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users;
 using CloudFlare.Client.Contexts;
-using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Users
 {
@@ -29,7 +28,7 @@ namespace CloudFlare.Client.Client.Users
         public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{UserEndpoints.Base}";
-            return await Connection.PatchAsync<User>(requestUri, PatchContentHelper.Create(editedUser), cancellationToken).ConfigureAwait(false);
+            return await Connection.PatchAsync(requestUri, editedUser, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

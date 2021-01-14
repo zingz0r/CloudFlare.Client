@@ -83,7 +83,7 @@ namespace CloudFlare.Client.Client.Zones
         public async Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
-            return await Connection.PatchAsync<Zone>(requestUri, PatchContentHelper.Create(modifiedZone), cancellationToken).ConfigureAwait(false);
+            return await Connection.PatchAsync<Zone, ModifiedZone>(requestUri, modifiedZone, cancellationToken).ConfigureAwait(false);
         }
     }
 }
