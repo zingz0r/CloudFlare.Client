@@ -86,7 +86,6 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         [JsonProperty("modified_on")]
         public DateTime? ModifiedDate { get; set; }
 
-
         /// <summary>
         /// Additional data
         /// </summary>

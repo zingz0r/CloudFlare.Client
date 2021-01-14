@@ -6,14 +6,14 @@ using Xunit;
 
 namespace CloudFlare.Client.Test.Serialization
 {
-    public class AdditionalCustomHostnameSslSettingsTest
+    public class NewCustomHostnameTest
     {
         [Fact]
         public void TestSerialization()
         {
-            var sut = new AdditionalCustomHostnameSslSettings();
+            var sut = new NewCustomHostname();
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "http2", "min_tls_version", "tls_1_3", "ciphers" });
+            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "ssl", "hostname" });
         }
     }
 }

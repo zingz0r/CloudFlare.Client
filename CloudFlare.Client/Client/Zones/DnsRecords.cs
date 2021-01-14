@@ -70,7 +70,7 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<DnsRecordImportResult>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<DnsRecordImport>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default)
         {
             var form = new MultipartFormDataContent
             {
@@ -83,7 +83,7 @@ namespace CloudFlare.Client.Client.Zones
             };
 
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}";
-            return await Connection.PostAsync<DnsRecordImportResult, MultipartFormDataContent>(requestUri, form, cancellationToken).ConfigureAwait(false);
+            return await Connection.PostAsync<DnsRecordImport, MultipartFormDataContent>(requestUri, form, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<CloudFlareResult<DnsRecordScan>> ScanAsync(string zoneId, CancellationToken cancellationToken = default)

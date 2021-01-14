@@ -19,13 +19,13 @@ namespace CloudFlare.Client.Test.Serialization
 
             var json = JObject.Parse(serialized);
 
-            var keys = json.Properties().Select(p => p.Name).ToList().OrderBy(x => x);
+            var keys = json.Properties().Select(p => p.Name).ToList();
 
-            keys.Should().BeEquivalentTo(new List<string>
+            keys.Should().BeEquivalentTo(new SortedSet<string>
             {
                 "app", "id", "state", "price", "currency", "component_values",
                 "zone", "frequency", "rate_plan", "current_period_end", "current_period_start"
-            }.OrderBy(x => x));
+            });
         }
     }
 }

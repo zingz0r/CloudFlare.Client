@@ -2,7 +2,7 @@
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
-    public class DnsRecordImportResult
+    public class DnsRecordImport
     {
         /// <summary>
         /// Number of the imported records

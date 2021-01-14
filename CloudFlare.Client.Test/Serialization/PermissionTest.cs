@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
-using CloudFlare.Client.Api.Accounts.Subscriptions;
+using CloudFlare.Client.Api;
 using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Serialization
 {
-    public class RatePlanTest
+    public class PermissionTest
     {
         [Fact]
         public void TestSerialization()
         {
-            var sut = new RatePlan();
+            var sut = new Permission();
 
             JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string>
             {
-                "id", "public_name", "currency", "scope", "sets", "is_contract", "externally_managed"
+                "read", "write"
             });
         }
     }
