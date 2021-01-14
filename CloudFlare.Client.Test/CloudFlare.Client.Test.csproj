@@ -30,8 +30,4 @@
     <ProjectReference Include="..\CloudFlare.Client\CloudFlare.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Serialization\Enumerators\" />
-  </ItemGroup>
-
 </Project>

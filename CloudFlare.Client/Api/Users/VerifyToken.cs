@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Api.Users
         /// Status of this membership
         /// </summary>
         [JsonProperty("status")]
-        public VerifyTokenStatus Status { get; set; }
+        public TokenStatus Status { get; set; }
 
         /// <summary>
         /// The expiration time on or after which the JWT MUST NOT be accepted for processing

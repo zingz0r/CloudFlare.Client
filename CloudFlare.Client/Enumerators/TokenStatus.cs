@@ -8,7 +8,7 @@ namespace CloudFlare.Client.Enumerators
     /// Represents the zone statuses
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum VerifyTokenStatus
+    public enum TokenStatus
     {
         [EnumMember(Value = "active")]
         Active,
