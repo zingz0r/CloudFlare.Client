@@ -34,7 +34,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(UserMembershipTestsData.Memberships)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var userMembership = await client.Users.Memberships.GetAsync();
 
@@ -51,7 +51,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(UserMembershipTestsData.Memberships.First())));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var userMembershipDetails = await client.Users.Memberships.GetDetailsAsync(membership.Id);
 
@@ -75,7 +75,7 @@ namespace CloudFlare.Client.Test.Users
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(membership.Id, Status.Pending);
             updateUserMembershipStatus.Result.Should().BeEquivalentTo(membership, opt => opt.Excluding(x => x.Status));
@@ -93,7 +93,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var deletedMembership = await client.Users.Memberships.DeleteAsync(membership.Id);
 

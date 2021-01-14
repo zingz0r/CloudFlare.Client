@@ -42,7 +42,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var addZone = await client.Zones.AddAsync(newZone);
 
@@ -57,7 +57,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(ZoneTestData.Zones)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var zones = await client.Zones.GetAsync();
 
@@ -74,7 +74,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var zoneDetails = await client.Zones.GetDetailsAsync(zone.Id);
 
@@ -103,7 +103,7 @@ namespace CloudFlare.Client.Test.Zones
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var editZone = await client.Zones.UpdateAsync(zone.Id, modified);
 
@@ -123,7 +123,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var deletedZone = await client.Zones.DeleteAsync(zone.Id);
 
@@ -141,7 +141,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var checkActivation = await client.Zones.CheckActivationAsync(zone.Id);
 
@@ -160,7 +160,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var purge = await client.Zones.PurgeAllFilesAsync(zone.Id, true);
 

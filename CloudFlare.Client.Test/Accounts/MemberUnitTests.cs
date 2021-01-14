@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(AccountMembershipTestData.Members)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var accountMembers = await client.Accounts.Members.GetAsync(accountId);
 
@@ -55,7 +55,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(membership)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var accountMemberDetails = await client.Accounts.Members.GetDetailsAsync(accountId, membership.Id);
 
@@ -73,7 +73,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(membership)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var addedAccountMember = await client.Accounts.Members.AddAsync(accountId, membership.User.Email, membership.Status, membership.Roles);
 
@@ -92,7 +92,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var deletedAccountMember = await client.Accounts.Members.DeleteAsync(accountId, membership.Id);
 
@@ -124,7 +124,7 @@ namespace CloudFlare.Client.Test.Accounts
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var updatedMember = await client.Accounts.Members.UpdateAsync(accountId, membership.Id, membership.Roles, expected);
 

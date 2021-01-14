@@ -46,7 +46,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(dnsRecord)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newZone);
 
@@ -63,7 +63,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(DnsRecordTestData.Export)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var export = await client.Zones.DnsRecords.ExportAsync(zone.Id);
 
@@ -80,7 +80,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(DnsRecordTestData.DnsRecords)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var records = await client.Zones.DnsRecords.GetAsync(zone.Id);
 
@@ -98,7 +98,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(record)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var recordDetails = await client.Zones.DnsRecords.GetDetailsAsync(zone.Id, record.Id);
 
@@ -115,7 +115,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(DnsRecordTestData.DnsRecordScans.First())));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var scanZone = await client.Zones.DnsRecords.ScanAsync(zone.Id);
 
@@ -144,7 +144,7 @@ namespace CloudFlare.Client.Test.Zones
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var update = await client.Zones.DnsRecords.UpdateAsync(zone.Id, record.Id, modified);
 

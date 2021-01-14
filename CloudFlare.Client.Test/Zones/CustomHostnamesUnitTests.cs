@@ -39,7 +39,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(customHostname)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var addCustomHostname = await client.Zones.CustomHostnames.AddAsync(zone.Id, newCustomHostname);
 
@@ -56,7 +56,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(CustomHostnameTestData.CustomHostnames)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var customHostnames = await client.Zones.CustomHostnames.GetAsync(zone.Id);
 
@@ -74,7 +74,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(customHostname)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var customHostnameDetails = await client.Zones.CustomHostnames.GetDetailsAsync(zone.Id, customHostname.Id);
 
@@ -104,7 +104,7 @@ namespace CloudFlare.Client.Test.Zones
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var editCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zone.Id, customHostname.Id, modified);
 
@@ -124,7 +124,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var deleteCustomHostname = await client.Zones.CustomHostnames.DeleteAsync(zone.Id, customHostname.Id);
 

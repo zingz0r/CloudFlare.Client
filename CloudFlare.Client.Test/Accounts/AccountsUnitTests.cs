@@ -34,7 +34,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(AccountTestData.Accounts)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var accounts = await client.Accounts.GetAsync();
 
@@ -51,7 +51,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(account)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var accountDetails = await client.Accounts.GetDetailsAsync(account.Id);
 
@@ -77,7 +77,7 @@ namespace CloudFlare.Client.Test.Accounts
                     return WireMockResponseHelper.CreateTestResponse(acc);
                 }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var updatedAccount = await client.Accounts.UpdateAsync(account.Id, "New Name", new AdditionalAccountSettings
             {

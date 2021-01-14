@@ -33,7 +33,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(RoleTestData.Roles)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var roles = await client.Accounts.Roles.GetAsync(accountId);
 
@@ -51,7 +51,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(role)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var roleDetails = await client.Accounts.Roles.GetDetailsAsync(accountId, role.Id);
 

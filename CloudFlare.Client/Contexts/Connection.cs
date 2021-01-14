@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Extensions;
@@ -21,12 +22,12 @@ namespace CloudFlare.Client.Contexts
         private readonly JsonMediaTypeFormatter _formatter;
         private readonly JsonSerializerSettings _serializerSettings;
 
-        protected Connection(ConnectionInfo connectionInfo)
+        protected Connection(IAuthentication authentication, ConnectionInfo connectionInfo)
         {
             _serializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             _formatter = new JsonMediaTypeFormatter { SerializerSettings = _serializerSettings };
 
-            HttpClient = CreateHttpClient(connectionInfo);
+            HttpClient = CreateHttpClient(authentication, connectionInfo);
 
             IsDisposed = false;
         }
@@ -92,7 +93,7 @@ namespace CloudFlare.Client.Contexts
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
-        private static HttpClient CreateHttpClient(ConnectionInfo connectionInfo)
+        private static HttpClient CreateHttpClient(IAuthentication authentication, ConnectionInfo connectionInfo)
         {
             var handler = new HttpClientHandler
             {
@@ -113,7 +114,7 @@ namespace CloudFlare.Client.Contexts
                 client.Timeout = connectionInfo.Timeout.Value;
             }
 
-            connectionInfo.Authentication.AddToHeaders(client);
+            authentication.AddToHeaders(client);
 
             return client;
         }

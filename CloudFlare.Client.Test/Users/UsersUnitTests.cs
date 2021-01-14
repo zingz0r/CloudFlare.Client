@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(user)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var userDetails = await client.Users.GetDetailsAsync();
 
@@ -57,7 +57,7 @@ namespace CloudFlare.Client.Test.Users
                         return WireMockResponseHelper.CreateTestResponse(body);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var updatedUser = await client.Users.UpdateAsync(expected);
 
@@ -74,7 +74,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(token)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
             var verification = await client.Users.VerifyAsync();
 
             verification.Result.Should().BeEquivalentTo(token);

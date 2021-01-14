@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(subscription)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var addSubscription = await client.Accounts.Subscriptions.AddAsync(accountId, subscription);
 
@@ -54,7 +54,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(SubscriptionTestData.Subscriptions)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var subscriptions = await client.Accounts.Subscriptions.GetAsync(accountId);
 
@@ -80,7 +80,7 @@ namespace CloudFlare.Client.Test.Accounts
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var modifiedSubscription = await client.Accounts.Subscriptions.UpdateAsync(accountId, subscription);
 
@@ -100,7 +100,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
-            using var client = new CloudFlareClient(_connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var deletedSubscription = await client.Accounts.Subscriptions.DeleteAsync(accountId, subscription.Id);
 
