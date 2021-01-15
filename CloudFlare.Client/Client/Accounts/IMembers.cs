@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Member;
-using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 
@@ -50,11 +49,9 @@ namespace CloudFlare.Client.Client.Accounts
         /// Modify an account member
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
-        /// <param name="memberId">Membership identifier tag</param>
-        /// <param name="roles">Roles assigned to this member</param>
-        /// <param name="settings">Additional member settings</param>
+        /// <param name="member">Modified member</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<Member>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMemberSettings settings = null, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Member>> UpdateAsync(string accountId, Member member, CancellationToken cancellationToken = default);
     }
 }

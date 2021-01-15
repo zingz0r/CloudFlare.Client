@@ -76,6 +76,12 @@ namespace CloudFlare.Client.Test.Accounts
         {
             var accountId = AccountTestData.Accounts.First().Id;
             var membership = AccountMembershipTestData.Members.First();
+            var newMember = new NewMember
+            {
+                EmailAddress = membership.User.Email,
+                Roles = membership.Roles,
+                Status = membership.Status
+            };
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}").UsingPost())
@@ -84,7 +90,7 @@ namespace CloudFlare.Client.Test.Accounts
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var addedAccountMember = await client.Accounts.Members.AddAsync(accountId, membership.User.Email, membership.Status, membership.Roles);
+            var addedAccountMember = await client.Accounts.Members.AddAsync(accountId, newMember);
 
             addedAccountMember.Result.Should().BeEquivalentTo(membership);
         }
@@ -114,11 +120,6 @@ namespace CloudFlare.Client.Test.Accounts
         {
             var accountId = AccountTestData.Accounts.First().Id;
             var membership = AccountMembershipTestData.Members.First();
-            var expected = new AdditionalMemberSettings
-            {
-                Code = "testCode",
-                Status = Status.Rejected
-            };
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{membership.Id}").UsingPut())
@@ -135,10 +136,10 @@ namespace CloudFlare.Client.Test.Accounts
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var updatedMember = await client.Accounts.Members.UpdateAsync(accountId, membership.Id, membership.Roles, expected);
+            var updatedMember = await client.Accounts.Members.UpdateAsync(accountId, membership);
 
-            updatedMember.Result.Code.Should().Be(expected.Code);
-            updatedMember.Result.Status.Should().Be(expected.Status);
+            updatedMember.Result.Code.Should().Be(membership.Code);
+            updatedMember.Result.Status.Should().Be(membership.Status);
             updatedMember.Result.Should().BeEquivalentTo(membership, opt => opt.Excluding(x => x.Code).Excluding(x => x.Status));
         }
     }

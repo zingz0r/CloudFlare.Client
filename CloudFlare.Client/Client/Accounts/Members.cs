@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Member;
-using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
@@ -59,23 +58,10 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Member>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMemberSettings settings = null,
-            CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Member>> UpdateAsync(string accountId, Member member, CancellationToken cancellationToken = default)
         {
-            var modified = new Member
-            {
-                Code = settings?.Code,
-                User = settings?.User,
-                Roles = roles
-            };
-
-            if (settings?.Status != null)
-            {
-                modified.Status = settings.Status.Value;
-            }
-
-            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";
-            return await Connection.PutAsync(requestUri, modified, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{member.Id}";
+            return await Connection.PutAsync(requestUri, member, cancellationToken).ConfigureAwait(false);
         }
     }
 }
