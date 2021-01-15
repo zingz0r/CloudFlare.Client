@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Member;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
@@ -30,16 +32,23 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task TestGetAccountMembersAsync()
         {
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+
             var accountId = AccountTestData.Accounts.First().Id;
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}").UsingGet())
+                .Given(Request.Create()
+                    .WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/")
+                    .WithParam(Filtering.Page)
+                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.PerPage)
+                    .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(AccountMembershipTestData.Members)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var accountMembers = await client.Accounts.Members.GetAsync(accountId);
+            var accountMembers = await client.Accounts.Members.GetAsync(accountId, displayOptions);
 
             accountMembers.Result.Should().BeEquivalentTo(AccountMembershipTestData.Members);
         }

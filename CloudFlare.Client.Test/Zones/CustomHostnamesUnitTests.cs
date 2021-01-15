@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.CustomHostnames;
 using CloudFlare.Client.Contexts;
@@ -49,16 +51,23 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestGetCustomHostnamesAsync()
         {
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+
             var zone = ZoneTestData.Zones.First();
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}").UsingGet())
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/")
+                    .WithParam(Filtering.Page)
+                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.PerPage)
+                    .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(CustomHostnameTestData.CustomHostnames)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zone.Id);
+            var customHostnames = await client.Zones.CustomHostnames.GetAsync(zone.Id, displayOptions: displayOptions);
 
             customHostnames.Result.Should().BeEquivalentTo(CustomHostnameTestData.CustomHostnames);
         }
