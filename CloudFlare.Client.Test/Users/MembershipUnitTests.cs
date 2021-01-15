@@ -35,7 +35,7 @@ namespace CloudFlare.Client.Test.Users
 
             _wireMockServer
                 .Given(Request.Create()
-                    .WithPath($"/{MembershipEndpoints.Base}")
+                    .WithPath($"/{MembershipEndpoints.Base}/")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
                     .WithParam(Filtering.PerPage)
