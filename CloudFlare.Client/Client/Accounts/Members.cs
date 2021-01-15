@@ -8,7 +8,6 @@ using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
-using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Accounts
@@ -20,17 +19,10 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, Status status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, NewMember newMember, CancellationToken cancellationToken = default)
         {
-            var membership = new NewMember
-            {
-                EmailAddress = emailAddress,
-                Roles = roles,
-                Status = status
-            };
-
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
-            return await Connection.PostAsync<Member, NewMember>(requestUri, membership, cancellationToken).ConfigureAwait(false);
+            return await Connection.PostAsync<Member, NewMember>(requestUri, newMember, cancellationToken).ConfigureAwait(false);
         }
 
 
