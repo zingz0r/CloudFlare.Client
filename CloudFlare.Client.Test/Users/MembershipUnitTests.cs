@@ -32,20 +32,24 @@ namespace CloudFlare.Client.Test.Users
         public async Task TestGetUserMembershipsAsync()
         {
             var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+            var membershipFilter = new MembershipFilter { AccountName = "tothnet", MembershipOrder = MembershipOrder.Status, Status = Status.Accepted };
 
             _wireMockServer
                 .Given(Request.Create()
                     .WithPath($"/{MembershipEndpoints.Base}/")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
-                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.Order)
+                    .WithParam(Filtering.Status)
+                    .WithParam(Filtering.AccountName)
+                    .WithParam(Filtering.Direction)
                     .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(UserMembershipTestsData.Memberships)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var userMembership = await client.Users.Memberships.GetAsync(displayOptions: displayOptions);
+            var userMembership = await client.Users.Memberships.GetAsync(membershipFilter, displayOptions);
 
             userMembership.Result.Should().BeEquivalentTo(UserMembershipTestsData.Memberships);
         }

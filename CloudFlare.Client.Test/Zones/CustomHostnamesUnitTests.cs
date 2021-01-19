@@ -61,7 +61,7 @@ namespace CloudFlare.Client.Test.Zones
                     .WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
-                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.Order)
                     .WithParam(Filtering.Id)
                     .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
