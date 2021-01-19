@@ -2,13 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Member;
-using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
-using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Accounts
@@ -20,17 +18,10 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, string emailAddress, Status status, IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Member>> AddAsync(string accountId, NewMember newMember, CancellationToken cancellationToken = default)
         {
-            var membership = new NewMember
-            {
-                EmailAddress = emailAddress,
-                Roles = roles,
-                Status = status
-            };
-
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
-            return await Connection.PostAsync<Member, NewMember>(requestUri, membership, cancellationToken).ConfigureAwait(false);
+            return await Connection.PostAsync<Member, NewMember>(requestUri, newMember, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -67,23 +58,10 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Member>> UpdateAsync(string accountId, string memberId, IReadOnlyList<Role> roles, AdditionalMemberSettings settings = null,
-            CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<Member>> UpdateAsync(string accountId, Member member, CancellationToken cancellationToken = default)
         {
-            var modified = new Member
-            {
-                Code = settings?.Code,
-                User = settings?.User,
-                Roles = roles
-            };
-
-            if (settings?.Status != null)
-            {
-                modified.Status = settings.Status.Value;
-            }
-
-            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";
-            return await Connection.PutAsync(requestUri, modified, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{member.Id}";
+            return await Connection.PutAsync(requestUri, member, cancellationToken).ConfigureAwait(false);
         }
     }
 }

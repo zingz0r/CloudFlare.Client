@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Users.Memberships;
 using CloudFlare.Client.Contexts;
@@ -29,14 +31,21 @@ namespace CloudFlare.Client.Test.Users
         [Fact]
         public async Task TestGetUserMembershipsAsync()
         {
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{MembershipEndpoints.Base}").UsingGet())
+                .Given(Request.Create()
+                    .WithPath($"/{MembershipEndpoints.Base}/")
+                    .WithParam(Filtering.Page)
+                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.PerPage)
+                    .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(UserMembershipTestsData.Memberships)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var userMembership = await client.Users.Memberships.GetAsync();
+            var userMembership = await client.Users.Memberships.GetAsync(displayOptions: displayOptions);
 
             userMembership.Result.Should().BeEquivalentTo(UserMembershipTestsData.Memberships);
         }

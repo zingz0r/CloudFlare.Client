@@ -26,7 +26,7 @@ namespace CloudFlare.Client.Test
         }
 
         [Fact]
-        public async Task TestClientAuthenticationWithApiKey()
+        public async Task TestClientAuthenticationWithApiKeyAuthentication()
         {
             var user = UserTestData.Users.First();
 
@@ -49,7 +49,57 @@ namespace CloudFlare.Client.Test
             headers.First(x => x.Key == "X-Auth-Email").Value.Should().BeEquivalentTo(WireMockConnection.EmailAddress);
 
             headers.Should().ContainKey("X-Auth-Key");
-            headers.First(x => x.Key == "X-Auth-Key").Value.Should().BeEquivalentTo(WireMockConnection.Password);
+            headers.First(x => x.Key == "X-Auth-Key").Value.Should().BeEquivalentTo(WireMockConnection.Key);
+        }
+
+        [Fact]
+        public async Task TestClientAuthenticationWithApiKey()
+        {
+            var user = UserTestData.Users.First();
+
+            using var client = new CloudFlareClient(WireMockConnection.EmailAddress, WireMockConnection.Key, _connectionInfo);
+
+            IDictionary<string, WireMockList<string>> headers = null;
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{UserEndpoints.Base}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x =>
+                    {
+                        headers = x.Headers;
+                        return WireMockResponseHelper.CreateTestResponse(user);
+                    }));
+
+            await client.Users.GetDetailsAsync();
+
+            headers.Should().ContainKey("X-Auth-Email");
+            headers.First(x => x.Key == "X-Auth-Email").Value.Should().BeEquivalentTo(WireMockConnection.EmailAddress);
+
+            headers.Should().ContainKey("X-Auth-Key");
+            headers.First(x => x.Key == "X-Auth-Key").Value.Should().BeEquivalentTo(WireMockConnection.Key);
+        }
+
+        [Fact]
+        public async Task TestClientAuthenticationWithTokenAuthentication()
+        {
+            var user = UserTestData.Users.First();
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiTokenAuthentication, _connectionInfo);
+
+            IDictionary<string, WireMockList<string>> headers = null;
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{UserEndpoints.Base}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x =>
+                    {
+                        headers = x.Headers;
+                        return WireMockResponseHelper.CreateTestResponse(user);
+                    }));
+
+            await client.Users.GetDetailsAsync();
+            headers.Should().ContainKey("Authorization");
+            headers.First(x => x.Key == "Authorization").Value.Should().BeEquivalentTo($"Bearer {WireMockConnection.Token}");
         }
 
         [Fact]
@@ -57,7 +107,7 @@ namespace CloudFlare.Client.Test
         {
             var user = UserTestData.Users.First();
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiTokenAuthentication, _connectionInfo);
+            using var client = new CloudFlareClient(WireMockConnection.Token, _connectionInfo);
 
             IDictionary<string, WireMockList<string>> headers = null;
 
