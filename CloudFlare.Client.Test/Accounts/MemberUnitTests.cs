@@ -41,7 +41,7 @@ namespace CloudFlare.Client.Test.Accounts
                     .WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
-                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.Direction)
                     .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(AccountMembershipTestData.Members)));

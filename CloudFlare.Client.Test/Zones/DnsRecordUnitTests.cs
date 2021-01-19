@@ -77,6 +77,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestGetDnsRecordsAsync()
         {
             var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+            var dnsRecordFilter = new DnsRecordFilter { Content = "127.0.0.1", Match = false, Name = "tothnet.hu", Type = DnsRecordType.A };
 
             var zone = ZoneTestData.Zones.First();
 
@@ -85,14 +86,17 @@ namespace CloudFlare.Client.Test.Zones
                     .WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}/")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
-                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.Order)
+                    .WithParam(Filtering.Name)
+                    .WithParam(Filtering.Content)
+                    .WithParam(Filtering.DnsRecordType)
                     .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(DnsRecordTestData.DnsRecords)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var records = await client.Zones.DnsRecords.GetAsync(zone.Id, displayOptions: displayOptions);
+            var records = await client.Zones.DnsRecords.GetAsync(zone.Id, dnsRecordFilter, displayOptions);
 
             records.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecords);
         }

@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
@@ -52,14 +55,25 @@ namespace CloudFlare.Client.Test.Zones
         [Fact]
         public async Task TestGetZonesAsync()
         {
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active, Name = "tothnet.hu" };
+
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}").UsingGet())
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/")
+                    .WithParam(Filtering.Page)
+                    .WithParam(Filtering.PerPage)
+                    .WithParam(Filtering.Order)
+                    .WithParam(Filtering.Name)
+                    .WithParam(Filtering.Status)
+                    .WithParam(Filtering.Match)
+                    .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(ZoneTestData.Zones)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var zones = await client.Zones.GetAsync();
+            var zones = await client.Zones.GetAsync(zoneFilter, displayOptions);
 
             zones.Result.Should().BeEquivalentTo(ZoneTestData.Zones);
         }
