@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Contexts;
@@ -123,6 +125,28 @@ namespace CloudFlare.Client.Test
             await client.Users.GetDetailsAsync();
             headers.Should().ContainKey("Authorization");
             headers.First(x => x.Key == "Authorization").Value.Should().BeEquivalentTo($"Bearer {WireMockConnection.Token}");
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void TestClientAuthenticationWithApiToken(string token)
+        {
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(token);
+            ctor.Should().ThrowExactly<AuthenticationException>();
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", "")]
+        [InlineData("email", "")]
+        [InlineData("email", null)]
+        [InlineData("", "password")]
+        [InlineData(null, "password")]
+        public void TestClientAuthenticationWithAuthObject(string email, string key)
+        {
+            Func<CloudFlareClient> ctor = () => new CloudFlareClient(email, key);
+            ctor.Should().ThrowExactly<AuthenticationException>();
         }
     }
 }
