@@ -17,7 +17,6 @@ namespace CloudFlare.Client.Test
         [InlineData("key", true)]
         [InlineData("key", 'c')]
         [InlineData("key", ZoneStatus.Deactivated)]
-        [InlineData("key", null)]
         public void TestParameterBuilder(string key, object value)
         {
             var expected = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
@@ -30,6 +29,22 @@ namespace CloudFlare.Client.Test
             builder.ParameterCollection.AllKeys.First().Should().Be(key);
 
             builder.ParameterCollection.GetValues(0).Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [InlineData("", 1)]
+        [InlineData(null, 1)]
+        [InlineData("", 3.0)]
+        [InlineData(null, 3.0)]
+        [InlineData("key", null)]
+        [InlineData("key", "")]
+        public void TestParameterBuilderWithDefaults(string key, object value)
+        {
+            var builder = new ParameterBuilderHelper();
+
+            builder.InsertValue(key, value);
+
+            builder.ParameterCollection.AllKeys.Should().BeEmpty();
         }
     }
 }
