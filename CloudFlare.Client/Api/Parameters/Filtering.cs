@@ -11,6 +11,11 @@
         public const string AccountName = "account.name";
 
         /// <summary>
+        /// Account identifier tag on CloudFlare
+        /// </summary>
+        public const string AccountId = "account.id";
+
+        /// <summary>
         /// Content representation on CloudFlare
         /// </summary>
         public const string Content = "content";
