@@ -47,6 +47,8 @@ namespace CloudFlare.Client.Client.Zones
         public async Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
         {
             var builder = new ParameterBuilderHelper()
+                .InsertValue(Filtering.AccountId, filter?.AccountId)
+                .InsertValue(Filtering.AccountName, filter?.AccountName)
                 .InsertValue(Filtering.Name, filter?.Name)
                 .InsertValue(Filtering.Status, filter?.Status)
                 .InsertValue(Filtering.Match, filter?.Match)
