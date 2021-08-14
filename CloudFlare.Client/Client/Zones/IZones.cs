@@ -11,6 +11,7 @@ namespace CloudFlare.Client.Client.Zones
     {
         public ICustomHostnames CustomHostnames { get; }
         public IDnsRecords DnsRecords { get; }
+        public IFilters Filters { get; }
 
         /// <summary>
         /// Create a new zone

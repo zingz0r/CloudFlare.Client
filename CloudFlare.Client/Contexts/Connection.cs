@@ -45,6 +45,25 @@ namespace CloudFlare.Client.Contexts
             var response = await HttpClient.DeleteAsync(requestUri, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
+        
+        public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Delete, requestUri)
+                              {
+                                  Content = new StringContent(JsonConvert.SerializeObject(content, _serializerSettings), Encoding.UTF8, HttpContentTypesHelper.Json)
+                              };
+
+                var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
+
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+            }
+        }
 
         public async Task<CloudFlareResult<TResult>> PatchAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
         {

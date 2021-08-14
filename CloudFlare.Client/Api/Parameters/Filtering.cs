@@ -21,6 +21,11 @@
         public const string Content = "content";
 
         /// <summary>
+        /// Description representation on CloudFlare
+        /// </summary>
+        public const string Description = "description";
+        
+        /// <summary>
         /// Direction representation on CloudFlare
         /// </summary>
         public const string Direction = "direction";
@@ -29,6 +34,11 @@
         /// DnsRecordType representation on CloudFlare
         /// </summary>
         public const string DnsRecordType = "type";
+        
+        /// <summary>
+        /// Expression representation on CloudFlare
+        /// </summary>
+        public const string Expression = "expression";
 
         /// <summary>
         /// Hostname representation on CloudFlare
@@ -59,6 +69,11 @@
         /// Page representation on CloudFlare
         /// </summary>
         public const string Page = "page";
+        
+        /// <summary>
+        /// Paused representation on CloudFlare
+        /// </summary>
+        public const string Paused = "paused";
 
         /// <summary>
         /// PerPage representation on CloudFlare
@@ -70,6 +85,11 @@
         /// </summary>
         public const string Proxied = "proxied";
 
+        /// <summary>
+        /// Ref representation on CloudFlare
+        /// </summary>
+        public const string Ref = "ref";
+        
         /// <summary>
         /// Ssl representation on CloudFlare
         /// </summary>

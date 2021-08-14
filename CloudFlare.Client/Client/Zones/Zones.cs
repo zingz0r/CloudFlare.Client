@@ -15,11 +15,13 @@ namespace CloudFlare.Client.Client.Zones
     {
         public ICustomHostnames CustomHostnames { get; }
         public IDnsRecords DnsRecords { get; }
+        public IFilters Filters { get; }
 
         public Zones(IConnection connection) : base(connection)
         {
             CustomHostnames = new CustomHostnames(connection);
             DnsRecords = new DnsRecords(connection);
+            Filters = new Filters(connection);
         }
 
         /// <inheritdoc />
