@@ -6,17 +6,16 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
     public abstract class NewDnsRecordBase
     {
         /// <summary>
+        /// DNS record type
+        /// </summary>
+        [JsonProperty("type")]
+        public DnsRecordType Type { get; set; }
+        
+        /// <summary>
         /// Whether the record is receiving the performance and security benefits of CloudFlare
         /// </summary>
         [JsonProperty("proxied")]
         public bool? Proxied { get; set; }
-
-        /// <summary>
-        /// Used with some records like MX and SRV to determine priority.
-        /// If you do not supply a priority for an MX record, a default value of 0 will be set
-        /// </summary>
-        [JsonProperty("priority")]
-        public int? Priority { get; set; }
 
         /// <summary>
         /// Time to live (TTL) of the DNS entry for the IP address returned by this load balancer.

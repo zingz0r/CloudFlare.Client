@@ -59,6 +59,41 @@ namespace CloudFlare.Client.Test.Zones
         }
 
         [Fact]
+        public async Task TestCreateDataDnsRecordAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var dnsRecord = DnsRecordTestData.DnsRecords.First();
+            var newRecord = new NewDnsRecord<Srv>
+            {
+                Type = DnsRecordType.Srv,
+                Data = new()
+                {
+                    Name = "@",
+                    Port = 1234,
+                    Priority = 5,
+                    Protocol = Protocol.Tcp,
+                    Service = "_servicename",
+                    Target = "servicename.tothnet.hu",
+                    Weight = 5
+                },
+                Proxied = true,
+                Ttl = 12,
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(dnsRecord)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
+
+            created.Result.Should().BeEquivalentTo(dnsRecord);
+        }
+
+        
+        [Fact]
         public async Task TestExportDnsRecordsAsync()
         {
             var zone = ZoneTestData.Zones.First();

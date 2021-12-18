@@ -1,6 +1,8 @@
 ﻿using System;
 using CloudFlare.Client.Api.Parameters.Data;
+using CloudFlare.Client.Attributes;
 using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Extensions;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
@@ -18,32 +20,56 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("content")]
         public string Content { get; set; }
+
+        /// <summary>
+        /// Used with some records like MX and SRV to determine priority.
+        /// If you do not supply a priority for an MX record, a default value of 0 will be set
+        /// </summary>
+        [JsonProperty("priority")]
+        public int? Priority { get; set; }
         
         /// <summary>
         /// DNS record type
         /// </summary>
         [JsonProperty("type")]
-        public DnsRecordType Type { get; set; }
+        public new DnsRecordType Type
+        {
+            get
+            {
+                return base.Type;
+            }
+            set
+            {
+                value.EnsureIsNotDataType();
+                base.Type = value;
+            }
+        }
     }
 
     public class NewDnsRecord<T> : NewDnsRecordBase
         where T : class, IData
     {
-        public NewDnsRecord()
-        {
-            Type = typeof(T) == typeof(Srv) ? DnsRecordType.Srv : throw new NotSupportedException($"{typeof(T)} is not supported Data type");
-        }
-        
-        /// <summary>
-        /// DNS record type
-        /// </summary>
-        [JsonProperty("type")]
-        public DnsRecordType Type { get; }
-        
         /// <summary>
         /// Data of the record
         /// </summary>
         [JsonProperty("data")]
         public T Data { get; set; }
+
+        /// <summary>
+        /// DNS record type
+        /// </summary>
+        [JsonProperty("type")]
+        public new DnsRecordType Type
+        {
+            get
+            {
+                return base.Type;
+            }
+            set
+            {
+                value.EnsureIsDataType();
+                base.Type = value;
+            }
+        }
     }
 }

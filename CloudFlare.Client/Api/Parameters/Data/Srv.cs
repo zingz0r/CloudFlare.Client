@@ -5,6 +5,11 @@ namespace CloudFlare.Client.Api.Parameters.Data
 {
     public class Srv : IData
     {
+        public Srv()
+        {
+
+        }
+
         /// <summary>
         /// Service name of the SRV record
         /// </summary>
@@ -18,17 +23,18 @@ namespace CloudFlare.Client.Api.Parameters.Data
         public Protocol Protocol { get; set; }
 
         /// <summary>
-        /// Name of the SRV record
-        /// Use @ for root
+        /// <para>Name of the SRV record</para>
+        /// <para>Use @ for root</para>
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Priority of the SRV record
+        /// Used with some records like MX and SRV to determine priority.
+        /// If you do not supply a priority for an MX record, a default value of 0 will be set
         /// </summary>
         [JsonProperty("priority")]
-        public long Priority { get; set; }
+        public int Priority { get; set; }
 
         /// <summary>
         /// Weight of the SRV record
