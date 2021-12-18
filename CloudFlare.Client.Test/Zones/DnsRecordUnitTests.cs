@@ -62,7 +62,6 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestCreateDataDnsRecordAsync()
         {
             var zone = ZoneTestData.Zones.First();
-            var dnsRecord = DnsRecordTestData.DnsRecords.First();
             var newRecord = new NewDnsRecord<Srv>
             {
                 Type = DnsRecordType.Srv,
@@ -79,6 +78,10 @@ namespace CloudFlare.Client.Test.Zones
                 Proxied = true,
                 Ttl = 12,
             };
+            var dnsRecord = DnsRecordTestData.DnsRecords.First();
+            dnsRecord.Type = newRecord.Type;
+            dnsRecord.Priority = newRecord.Data.Priority;
+            dnsRecord.Data = newRecord.Data as object;
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
@@ -89,7 +92,8 @@ namespace CloudFlare.Client.Test.Zones
 
             var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
 
-            created.Result.Should().BeEquivalentTo(dnsRecord);
+            created.Result.Should().BeEquivalentTo(dnsRecord, c => c.Excluding(p => p.Data));
+            JsonConvert.DeserializeObject<Srv>(created.Result.Data.ToString()).Should().BeEquivalentTo(dnsRecord.Data);
         }
 
         

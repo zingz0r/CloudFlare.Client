@@ -5,11 +5,6 @@ namespace CloudFlare.Client.Api.Parameters.Data
 {
     public class Srv : IData
     {
-        public Srv()
-        {
-
-        }
-
         /// <summary>
         /// Service name of the SRV record
         /// </summary>
