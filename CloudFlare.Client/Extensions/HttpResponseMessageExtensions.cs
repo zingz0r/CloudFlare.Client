@@ -12,9 +12,9 @@ using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client.Extensions
 {
-    public static class HttpResponseMessageExtensions
+    internal static class HttpResponseMessageExtensions
     {
-        public static async Task<CloudFlareResult<T>> GetCloudFlareResultAsync<T>(this HttpResponseMessage response)
+        internal static async Task<CloudFlareResult<T>> GetCloudFlareResultAsync<T>(this HttpResponseMessage response)
         {
             try
             {

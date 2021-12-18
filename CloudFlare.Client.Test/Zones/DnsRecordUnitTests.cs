@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.DnsRecord;
 using CloudFlare.Client.Contexts;
@@ -34,7 +36,7 @@ namespace CloudFlare.Client.Test.Zones
         {
             var zone = ZoneTestData.Zones.First();
             var dnsRecord = DnsRecordTestData.DnsRecords.First();
-            var newZone = new NewDnsRecord
+            var newRecord = new NewDnsRecord
             {
                 Name = dnsRecord.Name,
                 Content = dnsRecord.Content,
@@ -51,7 +53,7 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newZone);
+            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
 
             created.Result.Should().BeEquivalentTo(dnsRecord);
         }

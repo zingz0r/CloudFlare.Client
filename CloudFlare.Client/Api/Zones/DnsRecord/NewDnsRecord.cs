@@ -1,16 +1,12 @@
-﻿using CloudFlare.Client.Enumerators;
+﻿using System;
+using CloudFlare.Client.Api.Parameters.Data;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
-    public class NewDnsRecord
+    public class NewDnsRecord : NewDnsRecordBase
     {
-        /// <summary>
-        /// DNS record type
-        /// </summary>
-        [JsonProperty("type")]
-        public DnsRecordType Type { get; set; }
-
         /// <summary>
         /// Name of the record
         /// </summary>
@@ -22,25 +18,32 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("content")]
         public string Content { get; set; }
-
+        
         /// <summary>
-        /// Whether the record is receiving the performance and security benefits of CloudFlare
+        /// DNS record type
         /// </summary>
-        [JsonProperty("proxied")]
-        public bool? Proxied { get; set; }
+        [JsonProperty("type")]
+        public DnsRecordType Type { get; set; }
+    }
 
+    public class NewDnsRecord<T> : NewDnsRecordBase
+        where T : class, IData
+    {
+        public NewDnsRecord()
+        {
+            Type = typeof(T) == typeof(Srv) ? DnsRecordType.Srv : throw new NotSupportedException($"{typeof(T)} is not supported Data type");
+        }
+        
         /// <summary>
-        /// Used with some records like MX and SRV to determine priority.
-        /// If you do not supply a priority for an MX record, a default value of 0 will be set
+        /// DNS record type
         /// </summary>
-        [JsonProperty("priority")]
-        public int? Priority { get; set; }
-
+        [JsonProperty("type")]
+        public DnsRecordType Type { get; }
+        
         /// <summary>
-        /// Time to live (TTL) of the DNS entry for the IP address returned by this load balancer.
-        /// This only applies to gray-clouded (unproxied) load balancers.
+        /// Data of the record
         /// </summary>
-        [JsonProperty("ttl")]
-        public int? Ttl { get; set; }
+        [JsonProperty("data")]
+        public T Data { get; set; }
     }
 }

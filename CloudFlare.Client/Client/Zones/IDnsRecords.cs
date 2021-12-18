@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="newDnsRecord">New DNS record to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecord newDnsRecord, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecordBase newDnsRecord, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete DNS record
