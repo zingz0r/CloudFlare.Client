@@ -8,19 +8,22 @@ internal static class DnsRecordTypeExtensions
 {
     internal static void EnsureIsDataType(this DnsRecordType dnsRecordType)
     {
-        var fieldInfo = typeof(DnsRecordType).GetField(dnsRecordType.ToString());
-        if (!fieldInfo.IsDefined(typeof(DataTypeDnsRecordAttribute), false))
-        {
+        if(!dnsRecordType.IsDataType())
+        { 
             throw new NotSupportedException($"{dnsRecordType} is not data type");
         }
     }
     
     internal static void EnsureIsNotDataType(this DnsRecordType dnsRecordType)
     {
-        var fieldInfo = typeof(DnsRecordType).GetField(dnsRecordType.ToString());
-        if (fieldInfo.IsDefined(typeof(DataTypeDnsRecordAttribute), false))
+        if (dnsRecordType.IsDataType())
         {
             throw new NotSupportedException($"{dnsRecordType} is data type");
         }
+    }
+
+    internal static bool IsDataType(this DnsRecordType dnsRecordType)
+    {
+        return typeof(DnsRecordType).GetField(dnsRecordType.ToString()).IsDefined(typeof(DataTypeDnsRecordAttribute), false);
     }
 }
