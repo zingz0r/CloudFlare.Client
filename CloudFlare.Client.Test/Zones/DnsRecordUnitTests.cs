@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
+using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.DnsRecord;
 using CloudFlare.Client.Contexts;
@@ -34,7 +35,7 @@ namespace CloudFlare.Client.Test.Zones
         {
             var zone = ZoneTestData.Zones.First();
             var dnsRecord = DnsRecordTestData.DnsRecords.First();
-            var newZone = new NewDnsRecord
+            var newRecord = new NewDnsRecord
             {
                 Name = dnsRecord.Name,
                 Content = dnsRecord.Content,
@@ -51,11 +52,58 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newZone);
+            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
 
             created.Result.Should().BeEquivalentTo(dnsRecord);
         }
 
+        [Fact]
+        public async Task TestCreateDataDnsRecordAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var newRecord = new NewDnsRecord<Srv>
+            {
+                Type = DnsRecordType.Srv,
+                Data = new()
+                {
+                    Name = "@",
+                    Port = 1234,
+                    Priority = 5,
+                    Protocol = Protocol.Tcp,
+                    Service = "_servicename",
+                    Target = "servicename.tothnet.hu",
+                    Weight = 5
+                },
+                Proxied = true,
+                Ttl = 12,
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x => 
+                    {
+                        var dnsRecord = DnsRecordTestData.DnsRecords.First().DeepClone();
+                        dnsRecord.Type = newRecord.Type;
+                        dnsRecord.Priority = newRecord.Data.Priority;
+                        dnsRecord.Data = newRecord.Data;
+                        return WireMockResponseHelper.CreateTestResponse(dnsRecord);
+                    }));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
+
+            created.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecords.First(),
+                c => c.Excluding(p => p.Data)
+                .Excluding(p => p.Type)
+                .Excluding(p => p.Priority));
+            JsonConvert.DeserializeObject<Srv>(created.Result.Data.ToString()).Should().BeEquivalentTo(newRecord.Data);
+            created.Result.Type.Should().Be(newRecord.Type);
+            created.Result.Priority.Should().Be(newRecord.Data.Priority);
+        }
+
+        
         [Fact]
         public async Task TestExportDnsRecordsAsync()
         {

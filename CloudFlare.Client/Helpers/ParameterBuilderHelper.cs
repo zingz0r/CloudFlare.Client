@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Helpers
 {
-    public class ParameterBuilderHelper
+    internal class ParameterBuilderHelper
     {
         /// <summary>
         /// Property that holds the parameters
