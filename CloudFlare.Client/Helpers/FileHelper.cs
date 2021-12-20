@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace CloudFlare.Client.Helpers
 {
-    public static class FileHelper
+    internal static class FileHelper
     {
-        public static async Task<byte[]> ReadAsync(string path, CancellationToken cancellationToken)
+        internal static async Task<byte[]> ReadAsync(string path, CancellationToken cancellationToken)
         {
             using var sourceStream = File.Open(path, FileMode.Open);
             var result = new byte[sourceStream.Length];

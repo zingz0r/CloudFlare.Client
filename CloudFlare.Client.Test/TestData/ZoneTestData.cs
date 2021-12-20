@@ -6,7 +6,7 @@ using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Test.TestData
 {
-    public class ZoneTestData
+    public static class ZoneTestData
     {
         public static List<Zone> Zones { get; set; } = new()
         {

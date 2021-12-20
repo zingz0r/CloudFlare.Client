@@ -21,10 +21,10 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecord newDnsRecord, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecordBase newDnsRecord, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}";
-            return await Connection.PostAsync<DnsRecord, NewDnsRecord>(requestUri, newDnsRecord, cancellationToken).ConfigureAwait(false);
+            return await Connection.PostAsync<DnsRecord, NewDnsRecordBase>(requestUri, newDnsRecord, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
