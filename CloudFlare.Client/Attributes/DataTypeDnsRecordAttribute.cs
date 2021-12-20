@@ -1,8 +1,12 @@
-﻿namespace CloudFlare.Client.Attributes;
+using System;
 
-public class DataTypeDnsRecordAttribute : System.Attribute
+namespace CloudFlare.Client.Attributes
 {
-    public DataTypeDnsRecordAttribute()
+    [AttributeUsage(AttributeTargets.Enum)]
+    public class DataTypeDnsRecordAttribute : Attribute
     {
-    }   
+        public DataTypeDnsRecordAttribute()
+        {
+        }   
+    }
 }
