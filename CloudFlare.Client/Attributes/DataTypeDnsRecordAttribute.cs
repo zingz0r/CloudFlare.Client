@@ -2,7 +2,7 @@ using System;
 
 namespace CloudFlare.Client.Attributes
 {
-    [AttributeUsage(AttributeTargets.Enum)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class DataTypeDnsRecordAttribute : Attribute
     {
         public DataTypeDnsRecordAttribute()
