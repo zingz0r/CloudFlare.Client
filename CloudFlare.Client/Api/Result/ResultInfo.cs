@@ -19,7 +19,7 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Total count of the pages
         /// </summary>
-        [JsonProperty("total_page")]
+        [JsonProperty("total_pages")]
         public int TotalPage { get; set; }
 
         /// <summary>
