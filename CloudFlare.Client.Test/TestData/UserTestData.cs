@@ -4,7 +4,7 @@ using CloudFlare.Client.Api.Users;
 
 namespace CloudFlare.Client.Test.TestData
 {
-    public class UserTestData
+    public static class UserTestData
     {
         public static List<User> Users { get; set; } = new()
         {

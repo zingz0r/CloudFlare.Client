@@ -3,7 +3,7 @@ using CloudFlare.Client.Api.Accounts.Roles;
 
 namespace CloudFlare.Client.Test.TestData
 {
-    public class RoleTestData
+    public static class RoleTestData
     {
         public static List<Role> Roles { get; set; } = new()
         {

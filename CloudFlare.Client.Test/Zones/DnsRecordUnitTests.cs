@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Data;
@@ -78,22 +77,30 @@ namespace CloudFlare.Client.Test.Zones
                 Proxied = true,
                 Ttl = 12,
             };
-            var dnsRecord = DnsRecordTestData.DnsRecords.First();
-            dnsRecord.Type = newRecord.Type;
-            dnsRecord.Priority = newRecord.Data.Priority;
-            dnsRecord.Data = newRecord.Data as object;
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(dnsRecord)));
+                    .WithBody(x => 
+                    {
+                        var dnsRecord = DnsRecordTestData.DnsRecords.First().DeepClone();
+                        dnsRecord.Type = newRecord.Type;
+                        dnsRecord.Priority = newRecord.Data.Priority;
+                        dnsRecord.Data = newRecord.Data;
+                        return WireMockResponseHelper.CreateTestResponse(dnsRecord);
+                    }));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
 
-            created.Result.Should().BeEquivalentTo(dnsRecord, c => c.Excluding(p => p.Data));
-            JsonConvert.DeserializeObject<Srv>(created.Result.Data.ToString()).Should().BeEquivalentTo(dnsRecord.Data);
+            created.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecords.First(),
+                c => c.Excluding(p => p.Data)
+                .Excluding(p => p.Type)
+                .Excluding(p => p.Priority));
+            JsonConvert.DeserializeObject<Srv>(created.Result.Data.ToString()).Should().BeEquivalentTo(newRecord.Data);
+            created.Result.Type.Should().Be(newRecord.Type);
+            created.Result.Priority.Should().Be(newRecord.Data.Priority);
         }
 
         
