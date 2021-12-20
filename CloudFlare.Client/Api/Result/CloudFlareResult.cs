@@ -14,7 +14,7 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Additional pagination info
         /// </summary>
-        [JsonProperty("resultinfo")]
+        [JsonProperty("result_info")]
         public ResultInfo ResultInfo { get; }
 
         /// <summary>
