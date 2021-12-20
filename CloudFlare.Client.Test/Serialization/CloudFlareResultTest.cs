@@ -13,7 +13,7 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new CloudFlareResult<string>(default, default, default, default, default, default);
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "result", "resultinfo", "timing", "messages", "errors", "success" });
+            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "result", "result_info", "timing", "messages", "errors", "success" });
         }
     }
 }
