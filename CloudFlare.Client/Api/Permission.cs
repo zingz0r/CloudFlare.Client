@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api
 {
+    /// <summary>
+    /// Permission
+    /// </summary>
     public class Permission
     {
         /// <summary>

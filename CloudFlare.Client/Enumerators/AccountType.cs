@@ -10,6 +10,9 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AccountType
     {
+        /// <summary>
+        /// Standard
+        /// </summary>
         [EnumMember(Value = "standard")]
         Standard
     }

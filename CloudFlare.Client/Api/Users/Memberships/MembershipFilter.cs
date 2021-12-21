@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Users.Memberships
 {
+    /// <summary>
+    /// Membership filter
+    /// </summary>
     public class MembershipFilter
     {
         /// <summary>

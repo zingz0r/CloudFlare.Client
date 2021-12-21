@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones
 {
+    /// <summary>
+    /// Zone
+    /// </summary>
     public class Zone
     {
         /// <summary>

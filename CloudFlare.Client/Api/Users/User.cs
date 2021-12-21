@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Users
 {
+    /// <summary>
+    /// User
+    /// </summary>
     public class User
     {
         /// <summary>

@@ -7,6 +7,9 @@ using CloudFlare.Client.Api.Result;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <summary>
+    /// Interface for interacting with members
+    /// </summary>
     public interface IMembers
     {
         /// <summary>
@@ -15,7 +18,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="newMember">Member to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The created member</returns>
         Task<CloudFlareResult<Member>> AddAsync(string accountId, NewMember newMember, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The deleted member</returns>
         Task<CloudFlareResult<Member>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="displayOptions">Display Options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested member</returns>
         Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="memberId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested member details</returns>
         Task<CloudFlareResult<Member>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="member">Modified member</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The updated member</returns>
         Task<CloudFlareResult<Member>> UpdateAsync(string accountId, Member member, CancellationToken cancellationToken = default);
     }
 }

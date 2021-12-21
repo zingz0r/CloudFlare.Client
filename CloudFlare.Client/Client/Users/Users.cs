@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users;
@@ -8,14 +7,21 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Users
 {
+    /// <inheritdoc />
     public class Users : ApiContextBase<IConnection>, IUsers
     {
-        public IMemberships Memberships { get; set; }
-
-        public Users(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Users"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Users(IConnection connection)
+            : base(connection)
         {
             Memberships = new Memberships(connection);
         }
+
+        /// <inheritdoc />
+        public IMemberships Memberships { get; set; }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<User>> GetDetailsAsync(CancellationToken cancellationToken = default)

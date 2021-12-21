@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts.Roles
 {
+    /// <summary>
+    /// Role
+    /// </summary>
     public class Role
     {
         /// <summary>

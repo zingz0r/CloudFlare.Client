@@ -10,7 +10,10 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum RatePlanScope
     {
+        /// <summary>
+        /// Zone
+        /// </summary>
         [EnumMember(Value = "zone")]
-        Zone,
+        Zone
     }
 }

@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Parameters.Data
 {
+    /// <summary>
+    /// Srv
+    /// </summary>
     public class Srv : IData
     {
         /// <summary>

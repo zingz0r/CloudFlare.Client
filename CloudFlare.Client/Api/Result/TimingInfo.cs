@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// Timing information
+    /// </summary>
     public class TimingInfo
     {
         /// <summary>

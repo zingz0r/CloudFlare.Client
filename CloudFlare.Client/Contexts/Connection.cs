@@ -14,11 +14,8 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Contexts
 {
-    public abstract class Connection : IConnection
+    internal abstract class Connection : IConnection
     {
-        protected HttpClient HttpClient { get; }
-        protected bool IsDisposed { get; private set; }
-
         private readonly JsonMediaTypeFormatter _formatter;
         private readonly JsonSerializerSettings _serializerSettings;
 
@@ -33,6 +30,10 @@ namespace CloudFlare.Client.Contexts
         }
 
         ~Connection() => Dispose(false);
+
+        protected HttpClient HttpClient { get; }
+
+        protected bool IsDisposed { get; private set; }
 
         public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken)
         {
@@ -63,12 +64,17 @@ namespace CloudFlare.Client.Contexts
 
                 var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
                 return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
-
             }
             catch (Exception ex)
             {
                 throw new PersistenceUnavailableException(ex);
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public async Task<CloudFlareResult<TResult>> PostAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
@@ -91,6 +97,22 @@ namespace CloudFlare.Client.Contexts
         {
             var response = await HttpClient.PutAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                HttpClient?.CancelPendingRequests();
+                HttpClient?.Dispose();
+            }
+
+            IsDisposed = true;
         }
 
         private static HttpClient CreateHttpClient(IAuthentication authentication, ConnectionInfo connectionInfo)
@@ -117,28 +139,6 @@ namespace CloudFlare.Client.Contexts
             authentication.AddToHeaders(client);
 
             return client;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                HttpClient?.CancelPendingRequests();
-                HttpClient?.Dispose();
-            }
-
-            IsDisposed = true;
         }
     }
 }

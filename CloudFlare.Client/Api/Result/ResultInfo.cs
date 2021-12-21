@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// Additional information about the result
+    /// </summary>
     public class ResultInfo
     {
         /// <summary>

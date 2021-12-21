@@ -1,6 +1,6 @@
 ﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
 {
-    public static class DnsRecordEndpoints
+    internal static class DnsRecordEndpoints
     {
         public const string Base = "dns_records";
         public const string Export = "export";

@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
+    /// <summary>
+    /// Ssl
+    /// </summary>
     public class Ssl
     {
         /// <summary>

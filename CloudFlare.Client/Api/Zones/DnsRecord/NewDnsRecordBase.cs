@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// New DNS record
+    /// </summary>
     public abstract class NewDnsRecordBase
     {
         /// <summary>
@@ -10,7 +13,7 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("type")]
         public DnsRecordType Type { get; set; }
-        
+
         /// <summary>
         /// Whether the record is receiving the performance and security benefits of CloudFlare
         /// </summary>

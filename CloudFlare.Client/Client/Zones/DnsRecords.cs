@@ -14,9 +14,15 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <inheritdoc />
     public class DnsRecords : ApiContextBase<IConnection>, IDnsRecords
     {
-        public DnsRecords(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DnsRecords"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public DnsRecords(IConnection connection)
+            : base(connection)
         {
         }
 
@@ -74,24 +80,20 @@ namespace CloudFlare.Client.Client.Zones
         {
             var form = new MultipartFormDataContent
             {
-                {
-                    new StringContent(proxied.ToString()), Filtering.Proxied
-                },
-                {
-                    new ByteArrayContent(await FileHelper.ReadAsync(fileInfo.FullName, cancellationToken), 0, Convert.ToInt32(fileInfo.Length)), "file", "upload.txt"
-                }
+                { new StringContent(proxied.ToString()), Filtering.Proxied },
+                { new ByteArrayContent(await FileHelper.ReadAsync(fileInfo.FullName, cancellationToken), 0, Convert.ToInt32(fileInfo.Length)), "file", "upload.txt" }
             };
 
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}";
             return await Connection.PostAsync<DnsRecordImport, MultipartFormDataContent>(requestUri, form, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<DnsRecordScan>> ScanAsync(string zoneId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Scan}";
             return await Connection.PostAsync<DnsRecordScan>(requestUri, null, cancellationToken).ConfigureAwait(false);
         }
-
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, ModifiedDnsRecord modifiedDnsRecord, CancellationToken cancellationToken = default)

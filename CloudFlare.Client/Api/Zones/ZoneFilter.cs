@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Zones
 {
+    /// <summary>
+    /// Zone filter
+    /// </summary>
     public class ZoneFilter
     {
         /// <summary>
@@ -10,7 +13,7 @@ namespace CloudFlare.Client.Api.Zones
         public string Name { get; set; }
 
         /// <summary>
-        /// Status of the zone<
+        /// Status of the zone
         /// </summary>
         public ZoneStatus? Status { get; set; }
 

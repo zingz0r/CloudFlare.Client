@@ -10,15 +10,27 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Frequency
     {
+        /// <summary>
+        /// Weekly frequency
+        /// </summary>
         [EnumMember(Value = "weekly")]
         Weekly,
 
+        /// <summary>
+        /// Monthly frequency
+        /// </summary>
         [EnumMember(Value = "monthly")]
         Monthly,
 
+        /// <summary>
+        /// Quarterly frequency
+        /// </summary>
         [EnumMember(Value = "quarterly")]
         Quarterly,
 
+        /// <summary>
+        /// Yearly frequency
+        /// </summary>
         [EnumMember(Value = "yearly")]
         Yearly
     }

@@ -11,9 +11,15 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <inheritdoc />
     public class CustomHostnames : ApiContextBase<IConnection>, ICustomHostnames
     {
-        public CustomHostnames(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomHostnames"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public CustomHostnames(IConnection connection)
+            : base(connection)
         {
         }
 

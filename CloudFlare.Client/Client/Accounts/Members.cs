@@ -11,9 +11,15 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <inheritdoc />
     public class Members : ApiContextBase<IConnection>, IMembers
     {
-        public Members(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Members"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Members(IConnection connection)
+            : base(connection)
         {
         }
 
@@ -24,14 +30,12 @@ namespace CloudFlare.Client.Client.Accounts
             return await Connection.PostAsync<Member, NewMember>(requestUri, newMember, cancellationToken).ConfigureAwait(false);
         }
 
-
         /// <inheritdoc />
         public async Task<CloudFlareResult<Member>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";
             return await Connection.DeleteAsync<Member>(requestUri, cancellationToken).ConfigureAwait(false);
         }
-
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)

@@ -6,6 +6,9 @@ using CloudFlare.Client.Api.Result;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <summary>
+    /// Interface for interacting with roles
+    /// </summary>
     public interface IRoles
     {
         /// <summary>
@@ -13,7 +16,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested role</returns>
         Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -22,7 +25,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="roleId">Role identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested role details</returns>
         Task<CloudFlareResult<Role>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default);
     }
 }

@@ -12,9 +12,15 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Users
 {
+    /// <inheritdoc />
     public class Memberships : ApiContextBase<IConnection>, IMemberships
     {
-        public Memberships(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Memberships"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Memberships(IConnection connection)
+            : base(connection)
         {
         }
 
@@ -59,9 +65,7 @@ namespace CloudFlare.Client.Client.Users
         {
             var data = new Dictionary<string, Status>
             {
-                {
-                    Filtering.Status, status
-                }
+                { Filtering.Status, status }
             };
 
             var requestUri = $"{MembershipEndpoints.Base}/{membershipId}";

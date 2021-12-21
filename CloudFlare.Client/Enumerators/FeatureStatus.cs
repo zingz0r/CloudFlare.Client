@@ -10,9 +10,15 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum FeatureStatus
     {
+        /// <summary>
+        /// Feature enabled
+        /// </summary>
         [EnumMember(Value = "on")]
         On,
 
+        /// <summary>
+        /// Feature disabled
+        /// </summary>
         [EnumMember(Value = "off")]
         Off
     }

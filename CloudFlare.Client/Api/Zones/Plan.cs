@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones
 {
+    /// <summary>
+    /// Plan
+    /// </summary>
     public class Plan
     {
         /// <summary>
@@ -52,6 +55,5 @@ namespace CloudFlare.Client.Api.Zones
         /// </summary>
         [JsonProperty("can_subscribe")]
         public bool? CanSubscribe { get; set; }
-
     }
 }

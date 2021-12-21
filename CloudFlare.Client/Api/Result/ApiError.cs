@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// API errors
+    /// </summary>
     public class ApiError
     {
         /// <summary>

@@ -3,13 +3,39 @@ using System.Net;
 
 namespace CloudFlare.Client.Contexts
 {
+    /// <summary>
+    /// Connection information
+    /// </summary>
     public class ConnectionInfo
     {
-        public Uri Address { get; set; } = new("https://api.cloudflare.com/client/v4/", UriKind.Absolute);
+        /// <summary>
+        /// Address of the CloudFlare API
+        /// </summary>
+        public Uri Address { get; set; } = new Uri("https://api.cloudflare.com/client/v4/", UriKind.Absolute);
+
+        /// <summary>
+        /// Timeout
+        /// </summary>
         public TimeSpan? Timeout { get; set; }
+
+        /// <summary>
+        /// Allow auto redirection
+        /// </summary>
         public bool AllowAutoRedirect { get; set; } = false;
+
+        /// <summary>
+        /// Expect header for an HTTP request contains Continue.
+        /// </summary>
         public bool ExpectContinue { get; set; } = false;
+
+        /// <summary>
+        /// Use proxy
+        /// </summary>
         public bool UseProxy { get; set; } = true;
+
+        /// <summary>
+        /// Proxy
+        /// </summary>
         public IWebProxy Proxy { get; set; } = null;
     }
 }

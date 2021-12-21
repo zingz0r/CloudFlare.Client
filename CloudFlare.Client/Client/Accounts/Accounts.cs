@@ -11,18 +11,29 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <inheritdoc />
     public class Accounts : ApiContextBase<IConnection>, IAccounts
     {
-        public IMembers Members { get; }
-        public IRoles Roles { get; }
-        public ISubscriptions Subscriptions { get; }
-
-        public Accounts(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Accounts"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Accounts(IConnection connection)
+            : base(connection)
         {
             Members = new Members(connection);
             Roles = new Roles(connection);
             Subscriptions = new Subscriptions(connection);
         }
+
+        /// <inheritdoc />
+        public IMembers Members { get; }
+
+        /// <inheritdoc />
+        public IRoles Roles { get; }
+
+        /// <inheritdoc />
+        public ISubscriptions Subscriptions { get; }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<IReadOnlyList<Account>>> GetAsync(DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)

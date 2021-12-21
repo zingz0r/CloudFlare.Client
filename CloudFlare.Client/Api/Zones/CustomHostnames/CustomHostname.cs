@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
+    /// <summary>
+    /// Custom hostname
+    /// </summary>
     public class CustomHostname
     {
         /// <summary>
@@ -38,7 +41,7 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         public string CustomOriginServer { get; set; }
 
         /// <summary>
-        /// 
+        /// Status
         /// </summary>
         [JsonProperty("status")]
         public Status Status { get; set; }

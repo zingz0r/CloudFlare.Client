@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CloudFlare.Client.Api.Parameters.Data;
-using CloudFlare.Client.Attributes;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Extensions;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// New DNS record
+    /// </summary>
     public class NewDnsRecord : NewDnsRecordBase
     {
         /// <summary>
@@ -27,7 +30,7 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("priority")]
         public int? Priority { get; set; }
-        
+
         /// <summary>
         /// DNS record type
         /// </summary>
@@ -38,6 +41,7 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
             {
                 return base.Type;
             }
+
             set
             {
                 value.EnsureIsNotDataType();
@@ -46,6 +50,11 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         }
     }
 
+    /// <summary>
+    /// New DNS record
+    /// </summary>
+    /// <typeparam name="T">Data type</typeparam>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Reviewed.")]
     public class NewDnsRecord<T> : NewDnsRecordBase
         where T : class, IData
     {
@@ -65,6 +74,7 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
             {
                 return base.Type;
             }
+
             set
             {
                 value.EnsureIsDataType();

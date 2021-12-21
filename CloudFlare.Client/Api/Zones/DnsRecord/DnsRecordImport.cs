@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// Dns record import
+    /// </summary>
     public class DnsRecordImport
     {
         /// <summary>

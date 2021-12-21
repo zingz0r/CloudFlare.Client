@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// Modified DNS record
+    /// </summary>
     public class ModifiedDnsRecord
     {
         /// <summary>

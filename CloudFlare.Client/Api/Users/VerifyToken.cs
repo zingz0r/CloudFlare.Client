@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Users
 {
+    /// <summary>
+    /// Verify token
+    /// </summary>
     public class VerifyToken
     {
         /// <summary>
