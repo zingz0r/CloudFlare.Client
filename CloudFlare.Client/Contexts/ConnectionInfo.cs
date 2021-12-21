@@ -9,9 +9,18 @@ namespace CloudFlare.Client.Contexts
     public class ConnectionInfo
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionInfo"/> class
+        /// </summary>
+        /// <param name="uri">CloudFlare API uri</param>
+        public ConnectionInfo(string uri = "https://api.cloudflare.com/client/v4/")
+        {
+            Address = new Uri(uri, UriKind.Absolute);
+        }
+
+        /// <summary>
         /// Address of the CloudFlare API
         /// </summary>
-        public Uri Address { get; set; } = new Uri("https://api.cloudflare.com/client/v4/", UriKind.Absolute);
+        public Uri Address { get; set; }
 
         /// <summary>
         /// Timeout
