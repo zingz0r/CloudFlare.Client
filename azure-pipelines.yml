@@ -1,3 +1,15 @@
+trigger:
+  branches:
+    include:
+    - master
+  tags:
+    include:
+    - '*'  
+pr:
+  branches:
+    include:
+    - '*'  
+
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
@@ -21,7 +33,7 @@ stages:
           SonarCloud: 'SonarCloud'
           organization: 'zingz0r-github'
           scannerMode: 'MSBuild'
-          projectKey: 'CloudFlare.Client'
+          projectKey: 'zingz0r_CloudFlare.Client'
           projectName: 'CloudFlare.Client'
           projectVersion: '$(Build.BuildNumber)'
           extraProperties: |
