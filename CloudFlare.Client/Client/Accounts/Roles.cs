@@ -8,9 +8,15 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <inheritdoc />
     public class Roles : ApiContextBase<IConnection>, IRoles
     {
-        public Roles(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Roles"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Roles(IConnection connection)
+            : base(connection)
         {
         }
 

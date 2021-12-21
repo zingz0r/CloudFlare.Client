@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
+    /// <summary>
+    /// Deleted subscription
+    /// </summary>
     public class DeletedSubscription
     {
         /// <summary>

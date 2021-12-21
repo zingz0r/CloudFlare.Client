@@ -8,6 +8,9 @@ using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Users
 {
+    /// <summary>
+    /// Interface for interacting with memberships
+    /// </summary>
     public interface IMemberships
     {
         /// <summary>
@@ -15,7 +18,7 @@ namespace CloudFlare.Client.Client.Users
         /// </summary>
         /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The deleted membership</returns>
         Task<CloudFlareResult<Membership>> DeleteAsync(string membershipId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace CloudFlare.Client.Client.Users
         /// <param name="filter">Membership's filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested membership</returns>
         Task<CloudFlareResult<IReadOnlyList<Membership>>> GetAsync(MembershipFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace CloudFlare.Client.Client.Users
         /// </summary>
         /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested membership details</returns>
         Task<CloudFlareResult<Membership>> GetDetailsAsync(string membershipId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace CloudFlare.Client.Client.Users
         /// <param name="membershipId">Membership identifier tag</param>
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The updated membership</returns>
         Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, Status status, CancellationToken cancellationToken = default);
     }
 }

@@ -8,12 +8,12 @@ internal static class DnsRecordTypeExtensions
 {
     internal static void EnsureIsDataType(this DnsRecordType dnsRecordType)
     {
-        if(!dnsRecordType.IsDataType())
-        { 
+        if (!dnsRecordType.IsDataType())
+        {
             throw new NotSupportedException($"{dnsRecordType} is not data type");
         }
     }
-    
+
     internal static void EnsureIsNotDataType(this DnsRecordType dnsRecordType)
     {
         if (dnsRecordType.IsDataType())

@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts
 {
+    /// <summary>
+    /// Additional account settings
+    /// </summary>
     public class AdditionalAccountSettings
     {
         /// <summary>
@@ -12,7 +15,7 @@ namespace CloudFlare.Client.Api.Accounts
         public bool EnforceTwoFactorAuthentication { get; set; }
 
         /// <summary>
-        /// Access approval expiry date 
+        /// Access approval expiry date
         /// </summary>
         [JsonProperty("access_approval_expiry")]
         public DateTime? AccessApprovalExpiry { get; set; }

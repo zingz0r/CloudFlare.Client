@@ -2,11 +2,11 @@
 
 namespace CloudFlare.Client.Contexts
 {
-    public class ApiConnection : Connection
+    internal class ApiConnection : Connection
     {
-        public ApiConnection(IAuthentication authentication, ConnectionInfo connectionInfo) : base(authentication, connectionInfo)
+        public ApiConnection(IAuthentication authentication, ConnectionInfo connectionInfo)
+            : base(authentication, connectionInfo)
         {
-
         }
     }
 }

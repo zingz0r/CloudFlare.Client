@@ -10,9 +10,15 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ZoneType
     {
+        /// <summary>
+        /// Full
+        /// </summary>
         [EnumMember(Value = "full")]
         Full,
 
+        /// <summary>
+        /// Partial
+        /// </summary>
         [EnumMember(Value = "partial")]
         Partial
     }

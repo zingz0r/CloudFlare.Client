@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
+    /// <summary>
+    /// Subscription
+    /// </summary>
     public class Subscription
     {
         /// <summary>

@@ -10,9 +10,15 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum OwnerType
     {
+        /// <summary>
+        /// User
+        /// </summary>
         [EnumMember(Value = "user")]
         User,
 
+        /// <summary>
+        /// Organization
+        /// </summary>
         [EnumMember(Value = "organization")]
         Organization
     }

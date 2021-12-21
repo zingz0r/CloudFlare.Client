@@ -10,10 +10,21 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TokenStatus
     {
+        /// <summary>
+        /// Active
+        /// </summary>
         [EnumMember(Value = "active")]
         Active,
+
+        /// <summary>
+        /// Disabled
+        /// </summary>
         [EnumMember(Value = "disabled")]
         Disabled,
+
+        /// <summary>
+        /// Expired
+        /// </summary>
         [EnumMember(Value = "expired")]
         Expired
     }

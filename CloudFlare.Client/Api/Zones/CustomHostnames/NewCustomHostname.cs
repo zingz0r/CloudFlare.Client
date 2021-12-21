@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
+    /// <summary>
+    /// New custom hostname
+    /// </summary>
     public class NewCustomHostname
     {
         /// <summary>

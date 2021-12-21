@@ -10,10 +10,21 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Protocol
     {
+        /// <summary>
+        /// TCP
+        /// </summary>
         [EnumMember(Value = "_tcp")]
         Tcp,
+
+        /// <summary>
+        /// UDP
+        /// </summary>
         [EnumMember(Value = "_udp")]
         Udp,
+
+        /// <summary>
+        /// TLS
+        /// </summary>
         [EnumMember(Value = "_tls")]
         Tls
     }

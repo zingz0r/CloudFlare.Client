@@ -10,9 +10,15 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum OrderType
     {
+        /// <summary>
+        /// Ascending
+        /// </summary>
         [EnumMember(Value = "asc")]
         Asc,
 
+        /// <summary>
+        /// Descending
+        /// </summary>
         [EnumMember(Value = "desc")]
         Desc
     }

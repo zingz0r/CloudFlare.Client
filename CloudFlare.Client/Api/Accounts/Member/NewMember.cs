@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts.Member
 {
+    /// <summary>
+    /// New member
+    /// </summary>
     public class NewMember
     {
         /// <summary>

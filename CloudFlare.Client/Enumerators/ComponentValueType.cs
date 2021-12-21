@@ -10,6 +10,9 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ComponentValueType
     {
+        /// <summary>
+        /// Page rules
+        /// </summary>
         [EnumMember(Value = "page_rules")]
         PageRules
     }

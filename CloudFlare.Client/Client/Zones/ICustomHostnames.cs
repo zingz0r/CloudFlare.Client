@@ -7,6 +7,9 @@ using CloudFlare.Client.Api.Zones.CustomHostnames;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <summary>
+    /// Interface for interacting with custom hostnames
+    /// </summary>
     public interface ICustomHostnames
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="customHostname">Custom hostname to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The created custom hostname</returns>
         Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, NewCustomHostname customHostname, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The deleted custom hostname</returns>
         Task<CloudFlareResult<CustomHostname>> DeleteAsync(string zoneId, string customHostnameId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -38,16 +41,16 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="filter">Custom Hostname filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested custom hostname</returns>
         Task<CloudFlareResult<IReadOnlyList<CustomHostname>>> GetAsync(string zoneId, CustomHostnameFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all details of the specified custom hostname
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
-        /// <param name="customHostnameId"></param>
+        /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested custom hostname details</returns>
         Task<CloudFlareResult<CustomHostname>> GetDetailsAsync(string zoneId, string customHostnameId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="customHostnameId">Custom hostname identifier</param>
         /// <param name="modifiedCustomHostname">SSL settings used when creating the custom hostname</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The updated custom hostname</returns>
         Task<CloudFlareResult<CustomHostname>> UpdateAsync(string zoneId, string customHostnameId, ModifiedCustomHostname modifiedCustomHostname, CancellationToken cancellationToken = default);
     }
 }

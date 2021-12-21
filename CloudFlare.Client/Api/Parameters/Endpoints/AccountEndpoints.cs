@@ -1,6 +1,6 @@
 ﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
 {
-    public static class AccountEndpoints
+    internal static class AccountEndpoints
     {
         public const string Base = "accounts";
         public const string Members = "members";

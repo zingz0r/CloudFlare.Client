@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// Dns record filter
+    /// </summary>
     public class DnsRecordFilter
     {
         /// <summary>

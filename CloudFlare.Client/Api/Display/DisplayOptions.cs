@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Display
 {
+    /// <summary>
+    /// Display options
+    /// </summary>
     public class DisplayOptions
     {
         /// <summary>

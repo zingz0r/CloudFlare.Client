@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones
 {
+    /// <summary>
+    /// Owner
+    /// </summary>
     public class Owner
     {
         /// <summary>
@@ -22,6 +25,5 @@ namespace CloudFlare.Client.Api.Zones
         /// </summary>
         [JsonProperty("type")]
         public OwnerType Type { get; set; }
-
     }
 }
