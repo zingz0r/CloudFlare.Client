@@ -1,6 +1,8 @@
-﻿
-namespace CloudFlare.Client.Api.Display
+﻿namespace CloudFlare.Client.Api.Display
 {
+    /// <summary>
+    /// Unorderable display options
+    /// </summary>
     public class UnOrderableDisplayOptions
     {
         /// <summary>

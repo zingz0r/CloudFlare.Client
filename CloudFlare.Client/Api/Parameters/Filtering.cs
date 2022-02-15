@@ -24,7 +24,7 @@
         /// Description representation on CloudFlare
         /// </summary>
         public const string Description = "description";
-        
+
         /// <summary>
         /// Direction representation on CloudFlare
         /// </summary>
@@ -34,7 +34,7 @@
         /// DnsRecordType representation on CloudFlare
         /// </summary>
         public const string DnsRecordType = "type";
-        
+
         /// <summary>
         /// Expression representation on CloudFlare
         /// </summary>
@@ -69,7 +69,7 @@
         /// Page representation on CloudFlare
         /// </summary>
         public const string Page = "page";
-        
+
         /// <summary>
         /// Paused representation on CloudFlare
         /// </summary>
@@ -89,7 +89,7 @@
         /// Ref representation on CloudFlare
         /// </summary>
         public const string Ref = "ref";
-        
+
         /// <summary>
         /// Ssl representation on CloudFlare
         /// </summary>

@@ -23,6 +23,11 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <value>The implementation of the dns records interaction</value>
         public IDnsRecords DnsRecords { get; }
+
+        /// <summary>
+        /// Filters
+        /// </summary>
+        /// <value>The implementation of the filters interaction</value>
         public IFilters Filters { get; }
 
         /// <summary>
