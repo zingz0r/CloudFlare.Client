@@ -31,6 +31,12 @@ namespace CloudFlare.Client.Client.Zones
         public IFilters Filters { get; }
 
         /// <summary>
+        /// Firewall Rules
+        /// </summary>
+        /// <value>The implementation of the firewall rules interaction</value>
+        public IFirewallRules FirewallRules { get; }
+
+        /// <summary>
         /// Create a new zone
         /// </summary>
         /// <param name="newZone">The new zone to add</param>
