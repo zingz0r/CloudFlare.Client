@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
+    /// <summary>
+    /// Modified custom hostname
+    /// </summary>
     public class ModifiedCustomHostname
     {
         /// <summary>

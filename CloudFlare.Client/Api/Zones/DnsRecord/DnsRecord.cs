@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
+    /// <summary>
+    /// Dns record
+    /// </summary>
     public class DnsRecord
     {
         /// <summary>

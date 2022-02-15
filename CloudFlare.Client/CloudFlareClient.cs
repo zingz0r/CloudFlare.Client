@@ -7,18 +7,13 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client
 {
+    /// <inheritdoc />
     public class CloudFlareClient : ICloudFlareClient
     {
-        protected bool IsDisposed { get; private set; }
-
-        public IAccounts Accounts { get; }
-        public IUsers Users { get; }
-        public IZones Zones { get; }
-
         private readonly IConnection _connection;
 
         /// <summary>
-        /// Initialize CloudFlare Client
+        /// Initializes a new instance of the <see cref="CloudFlareClient"/> class
         /// </summary>
         /// <param name="authentication">Authentication which can be ApiKey and Token based</param>
         /// <param name="connectionInfo">Connection info</param>
@@ -34,37 +29,63 @@ namespace CloudFlare.Client
         }
 
         /// <summary>
-        /// Initialize CloudFlare Client
+        /// Initializes a new instance of the <see cref="CloudFlareClient"/> class
         /// </summary>
         /// <param name="emailAddress">Email address</param>
         /// <param name="apiKey">CloudFlare API Key</param>
         /// <param name="connectionInfo">Connection info</param>
-        public CloudFlareClient(string emailAddress, string apiKey, ConnectionInfo connectionInfo = null) : this(new ApiKeyAuthentication(emailAddress, apiKey), connectionInfo) { }
+        public CloudFlareClient(string emailAddress, string apiKey, ConnectionInfo connectionInfo = null)
+            : this(new ApiKeyAuthentication(emailAddress, apiKey), connectionInfo)
+        {
+        }
 
         /// <summary>
-        /// Initialize CloudFlare Client
+        /// Initializes a new instance of the <see cref="CloudFlareClient"/> class
         /// </summary>
         /// <param name="apiToken">Authentication with api token</param>
         /// <param name="connectionInfo">Connection info</param>
-        public CloudFlareClient(string apiToken, ConnectionInfo connectionInfo = null) : this(new ApiTokenAuthentication(apiToken), connectionInfo) { }
+        public CloudFlareClient(string apiToken, ConnectionInfo connectionInfo = null)
+            : this(new ApiTokenAuthentication(apiToken), connectionInfo)
+        {
+        }
 
         /// <summary>
-        /// Destruct CloudFlare Client
+        /// Finalizes an instance of the <see cref="CloudFlareClient"/> class.
         /// </summary>
         ~CloudFlareClient()
         {
             Dispose(false);
         }
 
+        /// <inheritdoc />
+        public IAccounts Accounts { get; }
+
+        /// <inheritdoc />
+        public IUsers Users { get; }
+
+        /// <inheritdoc />
+        public IZones Zones { get; }
+
+        /// <summary>
+        /// Whether the <see cref="CloudFlareClient"/> is disposed
+        /// </summary>
+        protected bool IsDisposed { get; private set; }
+
+        /// <summary>
+        /// Dispose the <see cref="CloudFlareClient"/>
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Dispose the <see cref="CloudFlareClient"/>
+        /// </summary>
+        /// <param name="disposing">Dispose the connection</param>
         protected virtual void Dispose(bool disposing)
         {
-
             if (IsDisposed)
             {
                 return;

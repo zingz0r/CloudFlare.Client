@@ -8,9 +8,15 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Accounts
 {
+    /// <inheritdoc />
     public class Subscriptions : ApiContextBase<IConnection>, ISubscriptions
     {
-        public Subscriptions(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Subscriptions"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Subscriptions(IConnection connection)
+            : base(connection)
         {
         }
 
@@ -21,6 +27,7 @@ namespace CloudFlare.Client.Client.Accounts
             return await Connection.PostAsync(requestUri, subscription, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async Task<CloudFlareResult<DeletedSubscription>> DeleteAsync(string accountId, string subscriptionId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Subscriptions}/{subscriptionId}";

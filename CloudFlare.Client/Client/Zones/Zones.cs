@@ -11,18 +11,29 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <inheritdoc />
     public class Zones : ApiContextBase<IConnection>, IZones
     {
-        public ICustomHostnames CustomHostnames { get; }
-        public IDnsRecords DnsRecords { get; }
-        public IFilters Filters { get; }
-
-        public Zones(IConnection connection) : base(connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Zones"/> class
+        /// </summary>
+        /// <param name="connection">Connection settings</param>
+        public Zones(IConnection connection)
+            : base(connection)
         {
             CustomHostnames = new CustomHostnames(connection);
             DnsRecords = new DnsRecords(connection);
-            Filters = new Filters(connection);
+			Filters = new Filters(connection);
         }
+
+        /// <inheritdoc />
+        public ICustomHostnames CustomHostnames { get; }
+
+        /// <inheritdoc />
+        public IDnsRecords DnsRecords { get; }
+		
+        /// <inheritdoc />
+		public IFilters Filters { get; }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default)

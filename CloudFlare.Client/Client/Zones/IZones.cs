@@ -7,9 +7,21 @@ using CloudFlare.Client.Api.Zones;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <summary>
+    /// Interface for interacting with zones
+    /// </summary>
     public interface IZones
     {
+        /// <summary>
+        /// Custom hostnames
+        /// </summary>
+        /// <value>The implementation of the custom hostnames interaction</value>
         public ICustomHostnames CustomHostnames { get; }
+
+        /// <summary>
+        /// Dns records
+        /// </summary>
+        /// <value>The implementation of the dns records interaction</value>
         public IDnsRecords DnsRecords { get; }
         public IFilters Filters { get; }
 
@@ -18,7 +30,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="newZone">The new zone to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The created zone</returns>
         Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -26,7 +38,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The checked zone</returns>
         Task<CloudFlareResult<Zone>> CheckActivationAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -34,16 +46,16 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The deleted zone</returns>
         Task<CloudFlareResult<Zone>> DeleteAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// List, search, sort, and filter zones
         /// </summary>
-        /// <param name="displayOptions">Display options</param>
         /// <param name="filter">Zones filtering options</param>
+        /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested zones</returns>
         Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested zone details</returns>
         Task<CloudFlareResult<Zone>> GetDetailsAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -60,16 +72,16 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="purgeEverything">A flag that indicates all resources in CloudFlare's cache should be removed. Note: This may have dramatic affects on your origin server load after performing this action.</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The purged zone cache result</returns>
         Task<CloudFlareResult<Zone>> PurgeAllFilesAsync(string zoneId, bool purgeEverything, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Change key zone property with new value 
+        /// Change key zone property with new value
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="modifiedZone">The modified zone values</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The updated zone</returns>
         Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default);
     }
 }

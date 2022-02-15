@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// Error details
+    /// </summary>
     public class ErrorDetails
     {
         /// <summary>

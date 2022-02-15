@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// Additional information about the result
+    /// </summary>
     public class ResultInfo
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Total count of the pages
         /// </summary>
-        [JsonProperty("total_page")]
+        [JsonProperty("total_pages")]
         public int TotalPage { get; set; }
 
         /// <summary>

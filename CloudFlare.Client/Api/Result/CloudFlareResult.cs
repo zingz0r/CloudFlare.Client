@@ -3,8 +3,31 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Result
 {
+    /// <summary>
+    /// Stores data of the result from CloudFlare
+    /// </summary>
+    /// <typeparam name="T">Type of the result</typeparam>
     public class CloudFlareResult<T>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFlareResult{T}"/> class
+        /// </summary>
+        /// <param name="result">Result</param>
+        /// <param name="resultInfo">Result info</param>
+        /// <param name="success">Success</param>
+        /// <param name="messages">Messages</param>
+        /// <param name="errors">Errors</param>
+        /// <param name="timing">Timing</param>
+        public CloudFlareResult(T result, ResultInfo resultInfo, bool success, IReadOnlyList<ErrorDetails> messages, IReadOnlyList<ApiError> errors, TimingInfo timing)
+        {
+            Result = result;
+            ResultInfo = resultInfo;
+            Success = success;
+            Messages = messages;
+            Errors = errors;
+            Timing = timing;
+        }
+
         /// <summary>
         /// Generic result property
         /// </summary>
@@ -14,7 +37,7 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Additional pagination info
         /// </summary>
-        [JsonProperty("resultinfo")]
+        [JsonProperty("result_info")]
         public ResultInfo ResultInfo { get; }
 
         /// <summary>
@@ -40,24 +63,5 @@ namespace CloudFlare.Client.Api.Result
         /// </summary>
         [JsonProperty("timing")]
         public TimingInfo Timing { get; }
-
-        /// <summary>
-        /// Constructor for CloudFlareResult
-        /// </summary>
-        /// <param name="result">Result</param>
-        /// <param name="resultInfo">Result info</param>
-        /// <param name="success">Success</param>
-        /// <param name="messages">Messages</param>
-        /// <param name="errors">Errors</param>
-        /// <param name="timing">Timing</param>
-        public CloudFlareResult(T result, ResultInfo resultInfo, bool success, IReadOnlyList<ErrorDetails> messages, IReadOnlyList<ApiError> errors, TimingInfo timing)
-        {
-            Result = result;
-            ResultInfo = resultInfo;
-            Success = success;
-            Messages = messages;
-            Errors = errors;
-            Timing = timing;
-        }
     }
 }

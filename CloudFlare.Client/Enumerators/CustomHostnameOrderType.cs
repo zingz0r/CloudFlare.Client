@@ -10,9 +10,15 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum CustomHostnameOrderType
     {
+        /// <summary>
+        /// SSL
+        /// </summary>
         [EnumMember(Value = "ssl")]
         Ssl,
 
+        /// <summary>
+        /// SSL Status
+        /// </summary>
         [EnumMember(Value = "ssl_status")]
         SslStatus
     }

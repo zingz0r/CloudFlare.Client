@@ -120,7 +120,7 @@ namespace CloudFlare.Client.Test.Zones
             var editCustomHostname = await client.Zones.CustomHostnames.UpdateAsync(zone.Id, customHostname.Id, modified);
 
             editCustomHostname.Result.Should().BeEquivalentTo(customHostname, opt => opt.Excluding(y => y.Ssl.Settings.Tls13));
-            editCustomHostname.Result.Ssl.Settings.Tls13.Should().BeEquivalentTo(FeatureStatus.Off);
+            editCustomHostname.Result.Ssl.Settings.Tls13.Should().Be(FeatureStatus.Off);
         }
 
         [Fact]

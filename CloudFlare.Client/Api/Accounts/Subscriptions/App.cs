@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
+    /// <summary>
+    /// App
+    /// </summary>
     public class App
     {
         /// <summary>

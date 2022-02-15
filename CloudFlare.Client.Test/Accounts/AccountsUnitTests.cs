@@ -70,32 +70,32 @@ namespace CloudFlare.Client.Test.Accounts
         [Fact]
         public async Task UpdateAccountAsync()
         {
-            var account = AccountTestData.Accounts.First();
+            var expectedAccount = AccountTestData.Accounts.First();
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingPut())
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{expectedAccount.Id}").UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
                 {
                     var body = JsonConvert.DeserializeObject<Account>(x.Body);
-                    var acc = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
+                    var account = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
 
-                    acc.Id = body.Id;
-                    acc.Name = body.Name;
-                    acc.Settings = body.Settings;
+                    account.Id = body.Id;
+                    account.Name = body.Name;
+                    account.Settings = body.Settings;
 
-                    return WireMockResponseHelper.CreateTestResponse(acc);
+                    return WireMockResponseHelper.CreateTestResponse(account);
                 }));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var updatedAccount = await client.Accounts.UpdateAsync(account.Id, "New Name", new AdditionalAccountSettings
+            var updatedAccount = await client.Accounts.UpdateAsync(expectedAccount.Id, "New Name", new AdditionalAccountSettings
             {
                 EnforceTwoFactorAuthentication = true
             });
 
             updatedAccount.Result.Name.Should().Be("New Name");
             updatedAccount.Result.Settings.EnforceTwoFactorAuthentication.Should().BeTrue();
-            updatedAccount.Result.Should().BeEquivalentTo(account, opt => opt.Excluding(x => x.Name).Excluding(x => x.Settings.EnforceTwoFactorAuthentication));
+            updatedAccount.Result.Should().BeEquivalentTo(expectedAccount, opt => opt.Excluding(x => x.Name).Excluding(x => x.Settings.EnforceTwoFactorAuthentication));
         }
     }
 }

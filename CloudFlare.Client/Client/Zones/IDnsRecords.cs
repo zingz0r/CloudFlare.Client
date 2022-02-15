@@ -8,6 +8,9 @@ using CloudFlare.Client.Api.Zones.DnsRecord;
 
 namespace CloudFlare.Client.Client.Zones
 {
+    /// <summary>
+    /// Interface for interacting with DNS records
+    /// </summary>
     public interface IDnsRecords
     {
         /// <summary>
@@ -16,8 +19,8 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="newDnsRecord">New DNS record to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
-        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecord newDnsRecord, CancellationToken cancellationToken = default);
+        /// <returns>The created DNS record</returns>
+        Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecordBase newDnsRecord, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete DNS record
@@ -25,7 +28,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The deleted DNS record</returns>
         Task<CloudFlareResult<DnsRecord>> DeleteAsync(string zoneId, string identifier, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The exported DNS record</returns>
         Task<CloudFlareResult<string>> ExportAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="filter">DNS Records filtering options</param>
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested DNS records</returns>
         Task<CloudFlareResult<IReadOnlyList<DnsRecord>>> GetAsync(string zoneId, DnsRecordFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The requested DNS record details</returns>
         Task<CloudFlareResult<DnsRecord>> GetDetailsAsync(string zoneId, string identifier, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="fileInfo">FileInfo of the file</param>
         /// <param name="proxied">Whether the record is receiving the performance and security benefits of CloudFlare</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The imported DNS record</returns>
         Task<CloudFlareResult<DnsRecordImport>> ImportAsync(string zoneId, FileInfo fileInfo, bool? proxied, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The result of the DNS record scan</returns>
         Task<CloudFlareResult<DnsRecordScan>> ScanAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="identifier">Identifier of the record</param>
         /// <param name="modifiedDnsRecord">Modified DNS Record</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The updated DNS record</returns>
         Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, ModifiedDnsRecord modifiedDnsRecord, CancellationToken cancellationToken = default);
     }
 }

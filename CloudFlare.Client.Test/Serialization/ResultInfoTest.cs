@@ -13,7 +13,7 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new ResultInfo();
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "page", "total_page", "per_page", "count", "total_count" });
+            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "page", "total_pages", "per_page", "count", "total_count" });
         }
     }
 }

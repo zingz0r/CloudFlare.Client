@@ -10,6 +10,9 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum DomainValidationType
     {
+        /// <summary>
+        /// DV type
+        /// </summary>
         [EnumMember(Value = "dv")]
         Dv
     }

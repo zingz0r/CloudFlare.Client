@@ -19,6 +19,7 @@ namespace CloudFlare.Client.Test.TestData
                 Name = "tothnet.hu",
                 Proxiable = true,
                 Proxied = false,
+                Priority = 10,
                 Ttl = 120,
                 Type = DnsRecordType.A,
                 ZoneId = "023e105f4ecef8ad9ca31a8372d0c353",

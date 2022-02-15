@@ -10,10 +10,21 @@ namespace CloudFlare.Client.Enumerators
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Status
     {
+        /// <summary>
+        /// Accepted
+        /// </summary>
         [EnumMember(Value = "accepted")]
         Accepted,
+
+        /// <summary>
+        /// Pending
+        /// </summary>
         [EnumMember(Value = "pending")]
         Pending,
+
+        /// <summary>
+        /// Rejected
+        /// </summary>
         [EnumMember(Value = "rejected")]
         Rejected
     }

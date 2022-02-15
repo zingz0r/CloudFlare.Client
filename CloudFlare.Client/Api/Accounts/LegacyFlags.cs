@@ -2,6 +2,9 @@
 
 namespace CloudFlare.Client.Api.Accounts
 {
+    /// <summary>
+    /// Legacy flags
+    /// </summary>
     public class LegacyFlags
     {
         /// <summary>
