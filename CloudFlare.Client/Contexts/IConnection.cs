@@ -29,6 +29,17 @@ namespace CloudFlare.Client.Contexts
         Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(string requestUri, CancellationToken cancellationToken);
 
         /// <summary>
+        /// DELETE request
+        /// </summary>
+        /// <param name="requestUri">Request Uri</param>
+        /// <param name="content">Request body content</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <typeparam name="TResult">Type of the result</typeparam>
+        /// <typeparam name="TContent">Type of the body content</typeparam>
+        /// <returns><see cref="CloudFlareResult{T}"/></returns>
+        Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken);
+
+        /// <summary>
         /// PATCH request
         /// </summary>
         /// <param name="requestUri">Request Uri</param>
