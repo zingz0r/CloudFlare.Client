@@ -21,28 +21,28 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<FirewallRule>>> GetFirewallRulesAsync(string zoneId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<IEnumerable<FirewallRule>>> GetAsync(string zoneId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.FirewallRules}";
             return await Connection.GetAsync<IEnumerable<FirewallRule>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<FirewallRule>> GetFirewallRuleAsync(string zoneId, string id, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<FirewallRule>> GetAsync(string zoneId, string id, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.FirewallRules}?id={id}";
             return await Connection.GetAsync<FirewallRule>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<IEnumerable<FirewallRule>>> CreateFirewallRulesAsync(string zoneId, IEnumerable<FirewallRule> rules, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<IEnumerable<FirewallRule>>> CreateAsync(string zoneId, IEnumerable<FirewallRule> rules, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.FirewallRules}";
             return await Connection.PostAsync(requestUri, rules, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<FirewallRule>> DeleteFirewallRuleAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<FirewallRule>> DeleteAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.FirewallRules}/{ruleId}";
             return await Connection.DeleteAsync<FirewallRule>(requestUri, cancellationToken).ConfigureAwait(false);
