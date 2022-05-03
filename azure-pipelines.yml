@@ -78,11 +78,11 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: UseDotNet@2
-        displayName: 'Use .NET 6 SDK'
-        inputs:
-          packageType: 'sdk'
-          version: '6.0.x'
-          performMultiLevelLookup: true
+      displayName: 'Use .NET 6 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '6.0.x'
+        performMultiLevelLookup: true
     - task: SonarCloudPrepare@1
       displayName: Prepare SonarCloud
       inputs:
