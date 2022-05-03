@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: buildStage
-  displayName: 'Build 🏗️ & Test 🧪'
+  displayName: '🏗️ Build & 🧪 Test'
   jobs: 
     - job: buildAndTest
       displayName: 'Build and Test'
@@ -69,7 +69,7 @@ stages:
           artifactName: CloudFlareClientArtifact
 
 - stage: qualityStage
-  displayName: 'Quality Gate 🔍'
+  displayName: '🔍 Quality Gate'
   dependsOn: []
   jobs: 
   - job: qualityCheck
@@ -108,7 +108,7 @@ stages:
       displayName: "Publish Code Analysis Results"
 
 - stage: deploy
-  displayName: 'Deploy 🚚'
+  displayName: '🚚 Deploy'
   dependsOn:
     - buildStage
     - qualityStage
@@ -129,7 +129,7 @@ stages:
       displayName: 'Pack Release'
       inputs:
         command: pack
-        packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
+        packagesToPack: 'CloudFlareClientArtifact/CloudFlare.Client/CloudFlare.Client.csproj'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
         arguments: '--no-build --configuration $(buildConfiguration)'
         versioningScheme: 'byEnvVar'
@@ -138,7 +138,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy Files'
       inputs:
-        SourceFolder: 'CloudFlare.Client/bin'
+        SourceFolder: 'CloudFlareClientArtifact/CloudFlare.Client/bin'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishBuildArtifacts@1
