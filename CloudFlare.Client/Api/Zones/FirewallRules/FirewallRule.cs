@@ -27,7 +27,7 @@ namespace CloudFlare.Client.Api.Zones.FirewallRules
         /// Filter
         /// </summary>
         [JsonProperty("filter")]
-        public IEnumerable<Filter> Filter { get; set; }
+        public Filter Filter { get; set; }
 
         /// <summary>
         /// List of products to bypass for a request when the bypass action is used.

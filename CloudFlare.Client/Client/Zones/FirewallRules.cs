@@ -28,10 +28,10 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<FirewallRule>> GetAsync(string zoneId, string id, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<IReadOnlyList<FirewallRule>>> GetAsync(string zoneId, string id, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.FirewallRules}?id={id}";
-            return await Connection.GetAsync<FirewallRule>(requestUri, cancellationToken).ConfigureAwait(false);
+            return await Connection.GetAsync<IReadOnlyList<FirewallRule>>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
