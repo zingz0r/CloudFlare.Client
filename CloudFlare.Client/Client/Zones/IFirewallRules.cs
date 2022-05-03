@@ -38,7 +38,8 @@ namespace CloudFlare.Client.Client.Zones
         Task<CloudFlareResult<IEnumerable<FirewallRule>>> CreateAsync(string zoneId, IEnumerable<FirewallRule> rules, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete Firewall Rule By Id
+        /// Delete Firewall Rule By Id.
+        /// Note: DELETE does not delete any filter related to the firewall rule. To delete the filter, it’s necessary to call the /filters API.
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="ruleId">Firewall rule identifier</param>
