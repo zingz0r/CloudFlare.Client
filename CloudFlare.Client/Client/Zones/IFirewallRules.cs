@@ -17,7 +17,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Firewall rules</returns>
-        Task<CloudFlareResult<IEnumerable<FirewallRule>>> GetAsync(string zoneId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IReadOnlyList<FirewallRule>>> GetAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Firewall Rule By Id
