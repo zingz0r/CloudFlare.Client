@@ -72,27 +72,27 @@ stages:
   displayName: Quality Gate
   jobs: 
   - job: qualityCheck
-        displayName: SonarCloud
-        pool:
-          vmImage: $(vmImageName)
-        steps:
-        - task: SonarCloudPrepare@1
-          displayName: Prepare SonarCloud
-          inputs:
-            SonarCloud: 'SonarCloud'
-            organization: 'zingz0r-github'
-            scannerMode: 'MSBuild'
-            projectKey: 'zingz0r_CloudFlare.Client'
-            projectName: 'CloudFlare.Client'
-            projectVersion: '$(Build.BuildNumber)'
-            extraProperties: |
-              sonar.exclusions=**/obj/**,**/*.dll
-              sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
-              sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-        - task: SonarCloudAnalyze@1
-          displayName: "Analyze Code with SonarCloud"
-        - task: SonarCloudPublish@1
-          displayName: "Publish Code Analysis Results"
+    displayName: 'SonarCloud'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: SonarCloudPrepare@1
+      displayName: Prepare SonarCloud
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'zingz0r-github'
+        scannerMode: 'MSBuild'
+        projectKey: 'zingz0r_CloudFlare.Client'
+        projectName: 'CloudFlare.Client'
+        projectVersion: '$(Build.BuildNumber)'
+        extraProperties: |
+          sonar.exclusions=**/obj/**,**/*.dll
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+    - task: SonarCloudAnalyze@1
+      displayName: "Analyze Code with SonarCloud"
+    - task: SonarCloudPublish@1
+      displayName: "Publish Code Analysis Results"
 
 - stage: deploy
   displayName: 'Deploy'
