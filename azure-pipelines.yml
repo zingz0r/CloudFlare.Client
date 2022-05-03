@@ -97,11 +97,11 @@ stages:
           sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
           sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
     - task: DotNetCoreCLI@2
-        displayName: 'Build'
-        inputs:
-          command: build
-          projects: '**/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
+      displayName: 'Build'
+      inputs:
+        command: build
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
     - task: SonarCloudAnalyze@1
       displayName: "Analyze Code with SonarCloud"
     - task: SonarCloudPublish@1
