@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: buildStage
-  displayName: 'Build and Test'
+  displayName: 'Build 🏗️ & Test 🧪'
   jobs: 
     - job: buildAndTest
       displayName: 'Build and Test'
@@ -26,7 +26,7 @@ stages:
         vmImage: $(vmImageName)
       steps:      
       - task: UseDotNet@2
-        displayName: 'Use .NET 6 SDK'
+        displayName: 'Use .Net 6 SDK'
         inputs:
           packageType: 'sdk'
           version: '6.0.x'
@@ -69,7 +69,7 @@ stages:
           artifactName: CloudFlareClientArtifact
 
 - stage: qualityStage
-  displayName: Quality Gate
+  displayName: 'Quality Gate 🔍'
   dependsOn: []
   jobs: 
   - job: qualityCheck
@@ -78,7 +78,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: UseDotNet@2
-      displayName: 'Use .NET 6 SDK'
+      displayName: 'Use .Net 6 SDK'
       inputs:
         packageType: 'sdk'
         version: '6.0.x'
@@ -108,7 +108,7 @@ stages:
       displayName: "Publish Code Analysis Results"
 
 - stage: deploy
-  displayName: 'Deploy'
+  displayName: 'Deploy 🚚'
   dependsOn:
     - buildStage
     - qualityStage
@@ -117,7 +117,7 @@ stages:
   - job: deployNugetOrg
     displayName: 'Deploy to NuGet'
     pool:
-      vmImage: ${vmImageName}
+      vmImage: $(vmImageName)
     steps:
     - checkout: none
     - task: DownloadBuildArtifacts@0
