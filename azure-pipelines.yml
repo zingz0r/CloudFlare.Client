@@ -70,19 +70,19 @@ stages:
 
 - stage: qualityStage
   displayName: '🔍 Quality Gate'
-  dependsOn: []
+  dependsOn: buildStage
   jobs: 
   - job: qualityCheck
     displayName: 'SonarCloud'
     pool:
       vmImage: $(vmImageName)
     steps:
-    - task: UseDotNet@2
-      displayName: 'Use .Net 6 SDK'
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifacts'
       inputs:
-        packageType: 'sdk'
-        version: '6.0.x'
-        performMultiLevelLookup: true
+        artifactName: CloudFlareClientArtifact
+        downloadPath: $(System.DefaultWorkingDirectory) 
     - task: SonarCloudPrepare@1
       displayName: Prepare SonarCloud
       inputs:
@@ -96,14 +96,9 @@ stages:
           sonar.exclusions=**/obj/**,**/*.dll
           sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
           sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-    - task: DotNetCoreCLI@2
-      displayName: 'Build'
-      inputs:
-        command: build
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
     - task: SonarCloudAnalyze@1
       displayName: "Analyze Code with SonarCloud"
+
     - task: SonarCloudPublish@1
       displayName: "Publish Code Analysis Results"
 
