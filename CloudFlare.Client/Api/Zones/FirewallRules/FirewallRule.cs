@@ -27,7 +27,7 @@ namespace CloudFlare.Client.Api.Zones.FirewallRules
         /// Filter
         /// </summary>
         [JsonProperty("filter")]
-        public IEnumerable<Filter> Filter { get; set; }
+        public Filter Filter { get; set; }
 
         /// <summary>
         /// List of products to bypass for a request when the bypass action is used.
@@ -39,7 +39,7 @@ namespace CloudFlare.Client.Api.Zones.FirewallRules
         /// The priority of the rule to allow control of processing order. A lower number indicates high priority. If not provided, any rules with a priority will be sequenced before those without.
         /// </summary>
         [JsonProperty("priority")]
-        public string Priority { get; set; }
+        public int Priority { get; set; }
 
         /// <summary>
         /// Whether this firewall rule is currently paused.
@@ -63,12 +63,12 @@ namespace CloudFlare.Client.Api.Zones.FirewallRules
         /// Created On
         /// </summary>
         [JsonProperty("created_on")]
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Modified on
         /// </summary>
         [JsonProperty("modified_on")]
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
     }
 }

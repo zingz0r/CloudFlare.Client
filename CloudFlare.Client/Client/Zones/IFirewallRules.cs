@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones.FirewallRules;
 
@@ -15,9 +16,10 @@ namespace CloudFlare.Client.Client.Zones
         /// Get Firewall Rules
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
+        /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Firewall rules</returns>
-        Task<CloudFlareResult<IEnumerable<FirewallRule>>> GetFirewallRulesAsync(string zoneId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IReadOnlyList<FirewallRule>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Firewall Rule By Id
@@ -26,7 +28,7 @@ namespace CloudFlare.Client.Client.Zones
         /// /// <param name="ruleId">Firewall rule identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Firewall rule</returns>
-        Task<CloudFlareResult<FirewallRule>> GetFirewallRuleAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IReadOnlyList<FirewallRule>>> GetAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create Firewall Rules
@@ -35,15 +37,16 @@ namespace CloudFlare.Client.Client.Zones
         /// /// <param name="rules">List of firewall rules</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Created firewall rules</returns>
-        Task<CloudFlareResult<IEnumerable<FirewallRule>>> CreateFirewallRulesAsync(string zoneId, IEnumerable<FirewallRule> rules, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IEnumerable<FirewallRule>>> CreateAsync(string zoneId, IEnumerable<FirewallRule> rules, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete Firewall Rule By Id
+        /// Delete Firewall Rule By Id.
+        /// Note: DELETE does not delete any filter related to the firewall rule. To delete the filter, it’s necessary to call the /filters API.
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="ruleId">Firewall rule identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Deleted firewall rule</returns>
-        Task<CloudFlareResult<FirewallRule>> DeleteFirewallRuleAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<FirewallRule>> DeleteAsync(string zoneId, string ruleId, CancellationToken cancellationToken = default);
     }
 }
