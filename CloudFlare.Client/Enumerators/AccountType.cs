@@ -14,6 +14,12 @@ namespace CloudFlare.Client.Enumerators
         /// Standard
         /// </summary>
         [EnumMember(Value = "standard")]
-        Standard
+        Standard,
+
+        /// <summary>
+        /// Enterprise
+        /// </summary>
+        [EnumMember(Value = "enterprise")]
+        Enterprise
     }
 }
