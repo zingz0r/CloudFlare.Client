@@ -54,7 +54,7 @@ namespace CloudFlare.Client.Client.Zones
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}";
             if (builder.ParameterCollection.HasKeys())
             {
-                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
+                requestUri = $"{requestUri}?{builder.ParameterCollection}";
             }
 
             return await Connection.GetAsync<IReadOnlyList<CustomHostname>>(requestUri, cancellationToken).ConfigureAwait(false);
