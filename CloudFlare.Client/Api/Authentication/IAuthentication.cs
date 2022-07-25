@@ -11,6 +11,6 @@ namespace CloudFlare.Client.Api.Authentication
         /// Adds authentication to the HTTP headers
         /// </summary>
         /// <param name="client">Http client</param>
-        internal void AddToHeaders(HttpClient client);
+        void AddToHeaders(HttpClient client);
     }
 }
