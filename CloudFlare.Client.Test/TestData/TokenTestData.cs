@@ -7,7 +7,7 @@ namespace CloudFlare.Client.Test.TestData
 {
     public static class TokenTestData
     {
-        public static List<VerifyToken> Tokens = new()
+        public static readonly List<VerifyToken> Tokens = new()
         {
             new VerifyToken
             {
