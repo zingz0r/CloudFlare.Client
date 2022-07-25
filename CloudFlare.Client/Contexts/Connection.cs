@@ -135,14 +135,7 @@ namespace CloudFlare.Client.Contexts
 
         private static HttpClient CreateHttpClient(IAuthentication authentication, ConnectionInfo connectionInfo)
         {
-            var handler = new HttpClientHandler
-            {
-                AllowAutoRedirect = connectionInfo.AllowAutoRedirect,
-                UseProxy = connectionInfo.UseProxy,
-                Proxy = connectionInfo.Proxy
-            };
-
-            var client = new HttpClient(handler, true)
+            var client = new HttpClient(CreateHttpClientHandler(connectionInfo), true)
             {
                 BaseAddress = connectionInfo.Address
             };
@@ -157,6 +150,19 @@ namespace CloudFlare.Client.Contexts
             authentication.AddToHeaders(client);
 
             return client;
+        }
+
+        private static HttpMessageHandler CreateHttpClientHandler(ConnectionInfo connectionInfo)
+        {
+            try
+            {
+                return new HttpClientHandler { AllowAutoRedirect = connectionInfo.AllowAutoRedirect, UseProxy = connectionInfo.UseProxy, Proxy = connectionInfo.Proxy };
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // UseProxy, Proxy is not supported on some platforms
+                return new HttpClientHandler { AllowAutoRedirect = connectionInfo.AllowAutoRedirect };
+            }
         }
     }
 }
