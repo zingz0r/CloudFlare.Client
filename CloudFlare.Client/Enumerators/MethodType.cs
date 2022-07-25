@@ -23,9 +23,9 @@ namespace CloudFlare.Client.Enumerators
         Email,
 
         /// <summary>
-        /// CNAME
+        /// TXT
         /// </summary>
-        [EnumMember(Value = "cname")]
-        Cname
+        [EnumMember(Value = "txt")]
+        Txt
     }
 }

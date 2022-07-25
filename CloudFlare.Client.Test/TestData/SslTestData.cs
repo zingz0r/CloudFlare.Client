@@ -12,7 +12,7 @@ namespace CloudFlare.Client.Test.TestData
             {
                 Cname = "app",
                 CnameTarget = "target",
-                Method = MethodType.Cname,
+                Method = MethodType.Txt,
                 Status = "pending_validation",
                 Type = DomainValidationType.Dv,
                 Settings = new AdditionalCustomHostnameSslSettings
