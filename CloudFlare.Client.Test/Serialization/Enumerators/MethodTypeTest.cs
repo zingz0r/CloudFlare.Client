@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Test.Serialization.Enumerators
         [Fact]
         public void TestSerialization()
         {
-            JsonHelper.GetSerializedEnums<MethodType>().Should().BeEquivalentTo(new SortedSet<string> { "http", "email", "cname" });
+            JsonHelper.GetSerializedEnums<MethodType>().Should().BeEquivalentTo(new SortedSet<string> { "http", "email", "cname", "txt" });
         }
     }
 }
