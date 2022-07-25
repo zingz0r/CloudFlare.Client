@@ -26,6 +26,12 @@ namespace CloudFlare.Client.Enumerators
         /// CNAME
         /// </summary>
         [EnumMember(Value = "cname")]
-        Cname
+        Cname,
+
+        /// <summary>
+        /// TXT
+        /// </summary>
+        [EnumMember(Value = "txt")]
+        Txt
     }
 }

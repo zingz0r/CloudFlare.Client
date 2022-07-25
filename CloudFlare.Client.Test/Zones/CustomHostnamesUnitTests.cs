@@ -58,7 +58,7 @@ namespace CloudFlare.Client.Test.Zones
 
             _wireMockServer
                 .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}/")
+                    .WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{CustomHostnameEndpoints.Base}")
                     .WithParam(Filtering.Page)
                     .WithParam(Filtering.PerPage)
                     .WithParam(Filtering.Direction)
