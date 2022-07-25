@@ -68,6 +68,24 @@ namespace CloudFlare.Client.Test.Accounts
         }
 
         [Fact]
+        public async Task TestGetAccountDetailsOnEnterpriseAsync()
+        {
+            var account = AccountTestData.Accounts.Last();
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{account.Id}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(account)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var accountDetails = await client.Accounts.GetDetailsAsync(account.Id);
+
+            accountDetails.Result.Should().BeEquivalentTo(account);
+            accountDetails.Result.Type.Should().Be(AccountType.Enterprise);
+        }
+
+        [Fact]
         public async Task UpdateAccountAsync()
         {
             var expectedAccount = AccountTestData.Accounts.First();
