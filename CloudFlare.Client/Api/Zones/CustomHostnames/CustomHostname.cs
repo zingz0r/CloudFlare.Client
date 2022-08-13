@@ -50,7 +50,7 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// Verification errors
         /// </summary>
         [JsonProperty("verification_errors")]
-        public IReadOnlyList<string> VerificationErrors { get; }
+        public IReadOnlyList<string> VerificationErrors { get; set; }
 
         /// <summary>
         /// Ownership verification
