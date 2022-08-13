@@ -44,7 +44,7 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// Status
         /// </summary>
         [JsonProperty("status")]
-        public Status Status { get; set; }
+        public CustomHostnameStatus Status { get; set; }
 
         /// <summary>
         /// Verification errors
