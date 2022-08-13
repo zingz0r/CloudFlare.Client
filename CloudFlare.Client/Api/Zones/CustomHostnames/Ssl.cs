@@ -9,6 +9,12 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
     public class Ssl
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        /// <summary>
         /// Status of the hostname's SSL certificates
         /// </summary>
         [JsonProperty("status")]
@@ -27,6 +33,30 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         public DomainValidationType Type { get; set; }
 
         /// <summary>
+        /// ValidationRecords
+        /// </summary>
+        [JsonProperty("validation_records")]
+        public CustomHostnameSslValidationRecord[] ValidationRecords { get; set; }
+
+        /// <summary>
+        /// ValidationErrors
+        /// </summary>
+        [JsonProperty("validation_errors")]
+        public CustomHostnameSslValidationError[] ValidationErrors { get; set; }
+
+        /// <summary>
+        /// Hosts
+        /// </summary>
+        [JsonProperty("hosts")]
+        public string[] Hosts { get; set; }
+
+        /// <summary>
+        /// Certificates
+        /// </summary>
+        [JsonProperty("certificates")]
+        public SslCertificate[] Certificates { get; set; }
+
+        /// <summary>
         /// The value that must be returned when the CNAME (cname) is queried during domain validation
         /// </summary>
         [JsonProperty("cname_target")]
@@ -37,6 +67,24 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// </summary>
         [JsonProperty("cname")]
         public string Cname { get; set; }
+
+        /// <summary>
+        /// CertificateAuthority
+        /// </summary>
+        [JsonProperty("certificate_authority")]
+        public string CertificateAuthority { get; set; }
+
+        /// <summary>
+        /// BundleMethod
+        /// </summary>
+        [JsonProperty("bundle_method")]
+        public string BundleMethod { get; set; }
+
+        /// <summary>
+        /// Wildcard
+        /// </summary>
+        [JsonProperty("wildcard")]
+        public bool Wildcard { get; set; }
 
         /// <summary>
         /// Additional SSL specific settings
