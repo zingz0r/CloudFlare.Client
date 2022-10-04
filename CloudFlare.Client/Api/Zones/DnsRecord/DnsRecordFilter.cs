@@ -25,6 +25,6 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// Whether to match all search requirements or at least one
         /// </summary>
-        public bool? Match { get; set; }
+        public DnsRecordFilterMatchType? Match { get; set; }
     }
 }
