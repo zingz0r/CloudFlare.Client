@@ -9,49 +9,49 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
     public class SslCertificate
     {
         /// <summary>
-        /// Id
+        /// Custom hostname SSL identifier tag
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// IssuedOn
+        /// The time on which the custom certificate was created
         /// </summary>
         [JsonProperty("issued_on")]
         public DateTime? IssuedOn { get; set; }
 
         /// <summary>
-        /// ExpiresOn
+        /// The time the custom certificate expires on
         /// </summary>
         [JsonProperty("expires_on")]
         public DateTime? ExpiresOn { get; set; }
 
         /// <summary>
-        /// UploadedOn
+        /// The time the custom certificate was uploaded
         /// </summary>
         [JsonProperty("uploaded_on")]
         public DateTime? UploadedOn { get; set; }
 
         /// <summary>
-        /// Issuer
+        /// The issuer on a custom uploaded certificate
         /// </summary>
         [JsonProperty("issuer")]
         public string Issuer { get; set; }
 
         /// <summary>
-        /// SerialNumber
+        /// The serial number on a custom uploaded certificate
         /// </summary>
         [JsonProperty("serial_number")]
         public string SerialNumber { get; set; }
 
         /// <summary>
-        /// Signature
+        /// The signature on a custom uploaded certificate
         /// </summary>
         [JsonProperty("signature")]
         public string Signature { get; set; }
 
         /// <summary>
-        /// FingerprintSha256
+        /// The SHA256 fingerprint on a custom uploaded certificate
         /// </summary>
         [JsonProperty("fingerprint_sha256")]
         public string FingerprintSha256 { get; set; }
