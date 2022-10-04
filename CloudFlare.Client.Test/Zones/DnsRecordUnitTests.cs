@@ -81,7 +81,7 @@ namespace CloudFlare.Client.Test.Zones
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(x => 
+                    .WithBody(x =>
                     {
                         var dnsRecord = DnsRecordTestData.DnsRecords.First().DeepClone();
                         dnsRecord.Type = newRecord.Type;
@@ -103,7 +103,7 @@ namespace CloudFlare.Client.Test.Zones
             created.Result.Priority.Should().Be(newRecord.Data.Priority);
         }
 
-        
+
         [Fact]
         public async Task TestExportDnsRecordsAsync()
         {
@@ -228,16 +228,15 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var deleteCustomHostname = await client.Zones.DnsRecords.DeleteAsync(zone.Id, record.Id);
+            var delete = await client.Zones.DnsRecords.DeleteAsync(zone.Id, record.Id);
 
-            deleteCustomHostname.Result.Should().BeEquivalentTo(expected);
+            delete.Result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public async Task TestImportDnsRecordAsync()
         {
             var zone = ZoneTestData.Zones.First();
-            var record = DnsRecordTestData.DnsRecords.First();
             var file = FileHelper.CreateTempFile("test.txt");
 
             _wireMockServer
@@ -247,10 +246,10 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var deleteCustomHostname = await client.Zones.DnsRecords.ImportAsync(zone.Id, file, false);
+            var import = await client.Zones.DnsRecords.ImportAsync(zone.Id, file, false);
             file.Delete();
 
-            deleteCustomHostname.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecordImports.First());
+            import.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecordImports.First());
         }
     }
 }

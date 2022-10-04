@@ -81,7 +81,7 @@ namespace CloudFlare.Client.Client.Zones
             var form = new MultipartFormDataContent
             {
                 { new StringContent(proxied.ToString()), Filtering.Proxied },
-                { new ByteArrayContent(await FileHelper.ReadAsync(fileInfo.FullName, cancellationToken), 0, Convert.ToInt32(fileInfo.Length)), "file", "upload.txt" }
+                { new ByteArrayContent(await FileHelper.ReadAsync(fileInfo.FullName, cancellationToken), 0, Convert.ToInt32(fileInfo.Length)), "file", fileInfo.Name }
             };
 
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}";
