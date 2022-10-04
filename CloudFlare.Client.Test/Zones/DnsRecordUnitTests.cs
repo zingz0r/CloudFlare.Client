@@ -125,7 +125,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestGetDnsRecordsAsync()
         {
             var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
-            var dnsRecordFilter = new DnsRecordFilter { Content = "127.0.0.1", Match = DnsRecordFilterMatchType.All, Name = "tothnet.hu", Type = DnsRecordType.A };
+            var dnsRecordFilter = new DnsRecordFilter { Content = "127.0.0.1", Match = MatchType.All, Name = "tothnet.hu", Type = DnsRecordType.A };
 
             var zone = ZoneTestData.Zones.First();
 
