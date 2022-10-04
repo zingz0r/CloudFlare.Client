@@ -15,7 +15,7 @@ namespace CloudFlare.Client.Test.TestData
                 Code = "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
                 User = UserTestData.Users.First(),
                 Roles = RoleTestData.Roles,
-                Status = Status.Accepted
+                Status = MembershipStatus.Accepted
             }
         };
     }
