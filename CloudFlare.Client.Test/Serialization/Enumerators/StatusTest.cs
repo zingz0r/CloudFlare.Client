@@ -11,7 +11,7 @@ namespace CloudFlare.Client.Test.Serialization.Enumerators
         [Fact]
         public void TestSerialization()
         {
-            JsonHelper.GetSerializedEnums<Status>().Should().BeEquivalentTo(new SortedSet<string> { "accepted", "pending", "rejected" });
+            JsonHelper.GetSerializedEnums<MembershipStatus>().Should().BeEquivalentTo(new SortedSet<string> { "accepted", "pending", "rejected" });
         }
     }
 }

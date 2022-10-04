@@ -15,7 +15,7 @@ namespace CloudFlare.Client.Test.Serialization
 
             JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string>
             {
-                "status", "method", "type", "cname_target", "cname", "settings"
+                "id", "status", "method", "type", "validation_records", "validation_errors", "hosts", "certificates", "cname_target", "cname", "certificate_authority", "bundle_method", "wildcard", "settings"
             });
         }
     }

@@ -45,6 +45,6 @@ namespace CloudFlare.Client.Client.Users
         /// <param name="status">Whether to accept or reject this account invitation</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The updated membership</returns>
-        Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, Status status, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Membership>> UpdateAsync(string membershipId, MembershipStatus status, CancellationToken cancellationToken = default);
     }
 }
