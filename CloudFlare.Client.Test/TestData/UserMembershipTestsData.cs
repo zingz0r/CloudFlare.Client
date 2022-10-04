@@ -16,7 +16,7 @@ namespace CloudFlare.Client.Test.TestData
                 Id = "4536bcfad5faccb111b47003c79917fa",
                 Permissions = PermissionTestData.Permissions,
                 Roles = new List<string> { "Account Administrator" },
-                Status = Status.Accepted
+                Status = MembershipStatus.Accepted
             }
         };
     }

@@ -32,7 +32,7 @@ namespace CloudFlare.Client.Test.Users
         public async Task TestGetUserMembershipsAsync()
         {
             var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
-            var membershipFilter = new MembershipFilter { AccountName = "tothnet", MembershipOrder = MembershipOrder.Status, Status = Status.Accepted };
+            var membershipFilter = new MembershipFilter { AccountName = "tothnet", MembershipOrder = MembershipOrder.Status, Status = MembershipStatus.Accepted };
 
             _wireMockServer
                 .Given(Request.Create()
@@ -90,9 +90,9 @@ namespace CloudFlare.Client.Test.Users
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(membership.Id, Status.Pending);
+            var updateUserMembershipStatus = await client.Users.Memberships.UpdateAsync(membership.Id, MembershipStatus.Pending);
             updateUserMembershipStatus.Result.Should().BeEquivalentTo(membership, opt => opt.Excluding(x => x.Status));
-            updateUserMembershipStatus.Result.Status.Should().Be(Status.Pending);
+            updateUserMembershipStatus.Result.Status.Should().Be(MembershipStatus.Pending);
         }
 
         [Fact]

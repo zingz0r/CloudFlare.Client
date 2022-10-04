@@ -26,7 +26,7 @@ namespace CloudFlare.Client.Api.Users.Memberships
         /// A member's status in the account
         /// </summary>
         [JsonProperty("status")]
-        public Status Status { get; set; }
+        public MembershipStatus Status { get; set; }
 
         /// <summary>
         /// Membership entity object (Account/User)
