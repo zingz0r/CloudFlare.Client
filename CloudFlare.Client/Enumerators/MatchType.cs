@@ -9,7 +9,7 @@ namespace CloudFlare.Client.Enumerators
     /// Represents how to match filters
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum DnsRecordFilterMatchType
+    public enum MatchType
     {
         /// <summary>
         /// All
