@@ -8,7 +8,7 @@ namespace CloudFlare.Client.Enumerators
     /// Status of this membership
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum Status
+    public enum MembershipStatus
     {
         /// <summary>
         /// Accepted

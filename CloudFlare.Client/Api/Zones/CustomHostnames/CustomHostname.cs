@@ -44,13 +44,13 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// Status
         /// </summary>
         [JsonProperty("status")]
-        public Status Status { get; set; }
+        public CustomHostnameStatus Status { get; set; }
 
         /// <summary>
         /// Verification errors
         /// </summary>
         [JsonProperty("verification_errors")]
-        public IReadOnlyList<string> VerificationErrors { get; }
+        public IReadOnlyList<string> VerificationErrors { get; set; }
 
         /// <summary>
         /// Ownership verification

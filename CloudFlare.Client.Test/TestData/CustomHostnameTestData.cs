@@ -20,7 +20,7 @@ namespace CloudFlare.Client.Test.TestData
                 CustomOriginServer = "origin",
                 OwnershipVerification = new OwnershipVerification { Name = "name", Type = "type", Value = Guid.NewGuid() },
                 OwnershipVerificationHttp = new OwnershipVerificationHttp { HttpBody = Guid.NewGuid(), HttpUrl = new Uri("http://www.tothnet.hu") },
-                Status = Status.Pending
+                Status = CustomHostnameStatus.Pending
             }
         };
     }

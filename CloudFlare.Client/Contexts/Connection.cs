@@ -102,7 +102,10 @@ namespace CloudFlare.Client.Contexts
 
         public async Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
         {
-            var response = await HttpClient.PostAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
+            var response = content is HttpContent httpContent
+                ? await HttpClient.PostAsync(requestUri, httpContent, cancellationToken).ConfigureAwait(false)
+                : await HttpClient.PostAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
+
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 
@@ -139,6 +142,7 @@ namespace CloudFlare.Client.Contexts
             {
                 BaseAddress = connectionInfo.Address
             };
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("CloudFlareClient", "1.0.0"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(HttpContentTypesHelper.Json));
             client.DefaultRequestHeaders.ExpectContinue = connectionInfo.ExpectContinue;
 
