@@ -37,6 +37,12 @@ namespace CloudFlare.Client.Client.Zones
         public IFirewallRules FirewallRules { get; }
 
         /// <summary>
+        /// SSL/TLS Settings for Edge Certificates
+        /// </summary>
+        /// <value>The implementation of the SSL/TLS edge certificate settings interaction</value>
+        public IZoneSettings ZoneSettings { get; }
+
+        /// <summary>
         /// Create a new zone
         /// </summary>
         /// <param name="newZone">The new zone to add</param>
