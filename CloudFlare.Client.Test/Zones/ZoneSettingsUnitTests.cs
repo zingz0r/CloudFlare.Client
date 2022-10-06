@@ -31,7 +31,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestUpdateAlwaysUseHttpsAsync()
         {
             var zone = ZoneTestData.Zones.First();
-            FeatureStatus alwaysUseHttps = ZoneSettingsTestData.Values.First();
+            FeatureStatus alwaysUseHttps = ZoneSettingsTestData.AlwaysUseHttpsValues.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneSettingsEndpoints.AlwaysUseHttps}").UsingPatch())
@@ -49,7 +49,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestGetAlwaysUseHttpsAsync()
         {
             var zone = ZoneTestData.Zones.First();
-            FeatureStatus alwaysUseHttps = ZoneSettingsTestData.Values.First();
+            FeatureStatus alwaysUseHttps = ZoneSettingsTestData.AlwaysUseHttpsValues.First();
 
             _wireMockServer
                 .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneSettingsEndpoints.AlwaysUseHttps}").UsingGet())
