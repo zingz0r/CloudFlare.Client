@@ -62,5 +62,42 @@ namespace CloudFlare.Client.Test.Zones
 
             alwaysUseHttpsUnderTest.Result.Should().Be(alwaysUseHttps);
         }
+
+        [Fact]
+        public async Task TestUpdateMinifySettingAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var minify = ZoneSettingsTestData.MinifySettings.First();
+            var minifyUpdateResult = ZoneSettingsTestData.MinifySettings.Last();
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneSettingsEndpoints.Minify}").UsingPatch())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(minifyUpdateResult)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var alwaysUseHttpsUnderTest = await client.Zones.ZoneSettings.UpdateMinifySettingAsync(zone.Id, minify);
+
+            alwaysUseHttpsUnderTest.Result.Should().BeEquivalentTo(minifyUpdateResult);
+        }
+
+        [Fact]
+        public async Task TestGetMinifySettingAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var minify = ZoneSettingsTestData.MinifySettings.First();
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneSettingsEndpoints.Minify}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(minify)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var alwaysUseHttpsUnderTest = await client.Zones.ZoneSettings.GetMinifySettingAsync(zone.Id);
+
+            alwaysUseHttpsUnderTest.Result.Should().BeEquivalentTo(minify);
+        }
     }
 }
