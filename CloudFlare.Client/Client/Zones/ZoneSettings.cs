@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
 
@@ -34,6 +35,20 @@ namespace CloudFlare.Client.Client.Zones
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneSettingsEndpoints.AlwaysUseHttps}";
             return await Connection.PatchAsync<FeatureStatus>(requestUri, status, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<MinifySetting>> GetMinifySettingAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneSettingsEndpoints.Minify}";
+            return await Connection.GetAsync<MinifySetting>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<MinifySetting>> UpdateMinifySettingAsync(string zoneId, MinifySetting setting, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneSettingsEndpoints.Minify}";
+            return await Connection.PatchAsync<MinifySetting>(requestUri, setting, cancellationToken).ConfigureAwait(false);
         }
     }
 }
