@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
@@ -25,15 +22,15 @@ namespace CloudFlare.Client.Client.Zones
         /// <inheritdoc />
         public async Task<CloudFlareResult<FeatureStatus>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default)
         {
-            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneSettingsEndpoints.AlwaysUseHttps}";
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}";
             return await Connection.GetAsync<FeatureStatus>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<FeatureStatus>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, FeatureStatus status, CancellationToken cancellationToken = default)
         {
-            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneSettingsEndpoints.AlwaysUseHttps}";
-            return await Connection.PatchAsync<FeatureStatus>(requestUri, status, cancellationToken).ConfigureAwait(false);
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}";
+            return await Connection.PatchAsync(requestUri, status, cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using CloudFlare.Client.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

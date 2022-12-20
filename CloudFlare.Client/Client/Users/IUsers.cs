@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users;
 

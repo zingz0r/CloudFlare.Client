@@ -11,20 +11,20 @@ namespace CloudFlare.Client.Client.Zones
     public interface IZoneSettings
     {
         /// <summary>
-        /// Retrieves whether or not the SSL/TLS Edget Certificate requires HTTPS or not
+        /// Retrieves whether or not the SSL/TLS Edge Certificate requires HTTPS or not
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Value of setting. "on" if required, "off" if not</returns>
+        /// <returns><see cref="FeatureStatus"/></returns>
         Task<CloudFlareResult<FeatureStatus>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Updates whether or not the SSL/TLS Edget Certificate requires HTTPS or not
+        /// Updates whether or not the SSL/TLS Edge Certificate requires HTTPS or not
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="status">Enum for turning on/off requirement for always using SSL</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Value of setting. "on" if required, "off" if not</returns>
+        /// <returns><see cref="FeatureStatus"/></returns>
         Task<CloudFlareResult<FeatureStatus>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, FeatureStatus status, CancellationToken cancellationToken = default);
     }
 }
