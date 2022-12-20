@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Extensions;
