@@ -26,14 +26,16 @@ namespace CloudFlare.Client.Test.Zones
         }
 
         [Theory]
-        [InlineData(FeatureStatus.On)]
-        [InlineData(FeatureStatus.Off)]
-        public async Task TestUpdateAlwaysUseHttpsAsync(FeatureStatus status)
+        [InlineData(SslSetting.Flexible)]
+        [InlineData(SslSetting.Full)]
+        [InlineData(SslSetting.Strict)]
+        [InlineData(SslSetting.Off)]
+        public async Task TestUpdateAlwaysUseHttpsAsync(SslSetting status)
         {
             var zone = ZoneTestData.Zones.First();
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}").UsingPatch())
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingPatch())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(status)));
 
@@ -45,14 +47,16 @@ namespace CloudFlare.Client.Test.Zones
         }
 
         [Theory]
-        [InlineData(FeatureStatus.On)]
-        [InlineData(FeatureStatus.Off)]
-        public async Task TestGetAlwaysUseHttpsAsync(FeatureStatus status)
+        [InlineData(SslSetting.Flexible)]
+        [InlineData(SslSetting.Full)]
+        [InlineData(SslSetting.Strict)]
+        [InlineData(SslSetting.Off)]
+        public async Task TestGetAlwaysUseHttpsAsync(SslSetting status)
         {
             var zone = ZoneTestData.Zones.First();
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}").UsingGet())
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(status)));
 
