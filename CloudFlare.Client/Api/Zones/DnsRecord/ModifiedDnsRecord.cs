@@ -37,5 +37,12 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("proxied")]
         public bool? Proxied { get; set; }
+
+        /// <summary>
+        /// Used with some records like MX and SRV to determine priority.
+        /// If you do not supply a priority for an MX record, a default value of 0 will be set
+        /// </summary>
+        [JsonProperty("priority")]
+        public int? Priority { get; set; }
     }
 }

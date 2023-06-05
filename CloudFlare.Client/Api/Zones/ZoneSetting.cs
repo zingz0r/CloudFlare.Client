@@ -25,7 +25,7 @@ namespace CloudFlare.Client.Api.Zones
         /// The last time this setting was modified.
         /// </summary>
         [JsonProperty("modified_on")]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// The status of the SSL certificate.
