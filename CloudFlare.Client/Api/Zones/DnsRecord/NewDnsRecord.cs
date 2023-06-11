@@ -24,6 +24,12 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         public string Content { get; set; }
 
         /// <summary>
+        /// DNS record comment
+        /// </summary>
+        [JsonProperty("comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
         /// Used with some records like MX and SRV to determine priority.
         /// If you do not supply a priority for an MX record, a default value of 0 will be set
         /// </summary>
