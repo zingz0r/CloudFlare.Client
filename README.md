@@ -13,7 +13,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/dashboard?id=zingz0r_CloudFlare.Client) 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=zingz0r_CloudFlare.Client)
 
-> **_Info:_**  The library currently targets LTS .Net Core and .Net Standard platforms
+> **_Info:_**  The library currently targets the .Net Standard platforms
 
 ## Usage
 
