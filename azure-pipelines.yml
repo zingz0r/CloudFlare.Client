@@ -91,7 +91,7 @@ stages:
         inputs:
           codeCoverageTool: 'Cobertura'
           failIfCoverageEmpty: true
-          summaryFileLocation: '$(Agent.TempDirectory)/**/TestResults/*.cobertura.xml'
+          summaryFileLocation: '$(Agent.TempDirectory)/**/TestResults/**/*.cobertura.xml'
 
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
