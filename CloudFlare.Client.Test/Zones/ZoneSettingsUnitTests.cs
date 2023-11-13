@@ -35,7 +35,10 @@ namespace CloudFlare.Client.Test.Zones
             var zone = ZoneTestData.Zones.First();
             var zoneSetting = new ZoneSetting<FeatureStatus>
             {
-                Id = Guid.NewGuid().ToString(), Value = setting, ModifiedDate = DateTime.UtcNow, ValidationErrors = Array.Empty<ErrorDetails>(),
+                Id = Guid.NewGuid().ToString(),
+                Value = setting,
+                ModifiedDate = DateTime.UtcNow,
+                ValidationErrors = Array.Empty<ErrorDetails>()
             };
 
             _wireMockServer
@@ -58,7 +61,10 @@ namespace CloudFlare.Client.Test.Zones
             var zone = ZoneTestData.Zones.First();
             var zoneSetting = new ZoneSetting<FeatureStatus>
             {
-                Id = Guid.NewGuid().ToString(), Value = setting, ModifiedDate = DateTime.UtcNow, ValidationErrors = Array.Empty<ErrorDetails>(),
+                Id = Guid.NewGuid().ToString(),
+                Value = setting,
+                ModifiedDate = DateTime.UtcNow,
+                ValidationErrors = Array.Empty<ErrorDetails>()
             };
 
             _wireMockServer
