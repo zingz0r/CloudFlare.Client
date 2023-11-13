@@ -58,7 +58,7 @@ namespace CloudFlare.Client.Test.Zones
         }
 
         [Fact]
-        public async Task TestCreateDataDnsRecordAsync()
+        public async Task TestCreateSrvDataDnsRecordAsync()
         {
             var zone = ZoneTestData.Zones.First();
             var newRecord = new NewDnsRecord<Srv>
@@ -103,6 +103,47 @@ namespace CloudFlare.Client.Test.Zones
             created.Result.Priority.Should().Be(newRecord.Data.Priority);
         }
 
+        [Fact]
+        public async Task TestCreateTlsaDataDnsRecordAsync()
+        {
+            var zone = ZoneTestData.Zones.First();
+            var newRecord = new NewDnsRecord<TlsA>
+            {
+                Type = DnsRecordType.TlsA,
+                Data = new()
+                {
+                    Certificate = "G7xPqBbk8UqCrcm2D5QsDkym3zPQd6wyf3mZ4kU24DtWzfCSh945M6qcqHwseaBbmR",
+                    MatchingType = 0,
+                    Selector = 0,
+                    Usage = 1
+                },
+                Proxied = false,
+                Ttl = 12,
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{DnsRecordEndpoints.Base}").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(x =>
+                    {
+                        var dnsRecord = DnsRecordTestData.DnsRecords.First().DeepClone();
+                        dnsRecord.Type = newRecord.Type;
+                        dnsRecord.Data = newRecord.Data;
+                        return WireMockResponseHelper.CreateTestResponse(dnsRecord);
+                    }));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var created = await client.Zones.DnsRecords.AddAsync(zone.Id, newRecord);
+
+            created.Result.Should().BeEquivalentTo(DnsRecordTestData.DnsRecords.First(),
+                c => c.Excluding(p => p.Data)
+                      .Excluding(p => p.Type)
+                      .Excluding(p => p.Priority));
+
+            JsonConvert.DeserializeObject<TlsA>(created.Result.Data.ToString()).Should().BeEquivalentTo(newRecord.Data);
+            created.Result.Type.Should().Be(newRecord.Type);
+        }
 
         [Fact]
         public async Task TestExportDnsRecordsAsync()
