@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
@@ -35,6 +36,6 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// Emails
         /// </summary>
         [JsonProperty("emails")]
-        public string[] Emails { get; set; }
+        public IReadOnlyList<string> Emails { get; set; }
     }
 }

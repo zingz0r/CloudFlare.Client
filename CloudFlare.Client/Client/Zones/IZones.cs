@@ -40,7 +40,7 @@ namespace CloudFlare.Client.Client.Zones
         /// SSL/TLS Settings for Edge Certificates
         /// </summary>
         /// <value>The implementation of the SSL/TLS edge certificate settings interaction</value>
-        public IZoneSettings ZoneSettings { get; }
+        public IZoneSettings Settings { get; }
 
         /// <summary>
         /// Create a new zone
