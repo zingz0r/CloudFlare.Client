@@ -28,7 +28,7 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<ZoneSetting>> GetSslSettingsAsync(string zoneId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<ZoneSetting>> GetSslSettingAsync(string zoneId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}";
             return await Connection.GetAsync<ZoneSetting>(requestUri, cancellationToken).ConfigureAwait(false);

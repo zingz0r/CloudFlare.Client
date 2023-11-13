@@ -71,7 +71,7 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var result = await client.Zones.ZoneSettings.GetSslSettingsAsync(zone.Id);
+            var result = await client.Zones.ZoneSettings.GetSslSettingAsync(zone.Id);
 
             result.Result.Should().BeEquivalentTo(zoneSetting);
         }

@@ -25,7 +25,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns><see cref="ZoneSetting"/></returns>
-        Task<CloudFlareResult<ZoneSetting>> GetSslSettingsAsync(string zoneId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<ZoneSetting>> GetSslSettingAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates whether or not the SSL/TLS Edge Certificate requires HTTPS or not
