@@ -47,6 +47,7 @@ stages:
           performMultiLevelLookup: true
 
       - task: NuGetCommand@2
+        displayName: "Restore NuGet packages"
         inputs:
           command: 'restore'
           restoreSolution: '**/*.sln'
@@ -70,7 +71,8 @@ stages:
           EmailAddress: $(EmailAddress)
         inputs:
           testAssemblyVer2: |
-            **\*.Test.dll
+            **\bin\**\*Tests.dll
+            **\bin\**\*Test.dll
             !**\*TestAdapter.dll
             !**\obj\**
           codeCoverageEnabled: true
