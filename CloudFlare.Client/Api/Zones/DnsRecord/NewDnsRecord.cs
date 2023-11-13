@@ -64,6 +64,20 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         where T : class, IData
     {
         /// <summary>
+        /// Name of the record
+        /// <para>
+        /// The name of the record is not mandatory for every new
+        /// dns record that includes data.
+        /// </para>
+        /// <para>
+        /// So far, only TlsA record needs a name, and Srv does not
+        /// (srv's record name is in the data object).
+        /// </para>
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
         /// Data of the record
         /// </summary>
         [JsonProperty("data")]

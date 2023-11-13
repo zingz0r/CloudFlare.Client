@@ -117,6 +117,7 @@ namespace CloudFlare.Client.Enumerators
         /// <summary>
         /// TLSA record
         /// </summary>
+        [DataTypeDnsRecord]
         [EnumMember(Value = "TLSA")]
         TlsA,
 
