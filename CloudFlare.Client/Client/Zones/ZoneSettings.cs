@@ -47,5 +47,19 @@ namespace CloudFlare.Client.Client.Zones
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}";
             return await Connection.PatchAsync(requestUri, new ZoneSetting<SslSetting> { Value = sslSetting }, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<ZoneSetting<TlsVersion>>> GetMinimumTlsVersionSettingAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.MinimumTlsVersion}";
+            return await Connection.GetAsync<ZoneSetting<TlsVersion>>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<ZoneSetting<TlsVersion>>> UpdateMinimumTlsVersionSettingAsync(string zoneId, TlsVersion tlsVersion, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.MinimumTlsVersion}";
+            return await Connection.PatchAsync(requestUri, new ZoneSetting<TlsVersion> { Value = tlsVersion }, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

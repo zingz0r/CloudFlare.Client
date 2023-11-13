@@ -38,7 +38,7 @@ namespace CloudFlare.Client.Test.Zones
                 Id = Guid.NewGuid().ToString(),
                 Value = setting,
                 ModifiedDate = DateTime.UtcNow,
-                ValidationErrors = Array.Empty<ErrorDetails>(),
+                ValidationErrors = Array.Empty<ErrorDetails>()
             };
 
             _wireMockServer
@@ -64,7 +64,7 @@ namespace CloudFlare.Client.Test.Zones
                 Id = Guid.NewGuid().ToString(),
                 Value = setting,
                 ModifiedDate = DateTime.UtcNow,
-                ValidationErrors = Array.Empty<ErrorDetails>(),
+                ValidationErrors = Array.Empty<ErrorDetails>()
             };
 
             _wireMockServer
@@ -135,6 +135,64 @@ namespace CloudFlare.Client.Test.Zones
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
             var result = await client.Zones.Settings.UpdateSslSettingAsync(zone.Id, setting);
+
+            result.Result.Should().BeEquivalentTo(zoneSetting);
+        }
+
+        [Theory]
+        [InlineData(TlsVersion.Tls10)]
+        [InlineData(TlsVersion.Tls11)]
+        [InlineData(TlsVersion.Tls12)]
+        [InlineData(TlsVersion.Tls13)]
+        public async Task TestGetMinimumTlsVersionSettingAsync(TlsVersion version)
+        {
+            var zone = ZoneTestData.Zones.First();
+            var zoneSetting = new ZoneSetting<TlsVersion>
+            {
+                Id = Guid.NewGuid().ToString(),
+                Value = version,
+                ModifiedDate = DateTime.UtcNow,
+                ValidationErrors = Array.Empty<ErrorDetails>(),
+                Editable = true
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.MinimumTlsVersion}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(zoneSetting)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var result = await client.Zones.Settings.GetMinimumTlsVersionSettingAsync(zone.Id);
+
+            result.Result.Should().BeEquivalentTo(zoneSetting);
+        }
+
+        [Theory]
+        [InlineData(TlsVersion.Tls10)]
+        [InlineData(TlsVersion.Tls11)]
+        [InlineData(TlsVersion.Tls12)]
+        [InlineData(TlsVersion.Tls13)]
+        public async Task TestUpdateMinimumTlsVersionSettingAsync(TlsVersion version)
+        {
+            var zone = ZoneTestData.Zones.First();
+            var zoneSetting = new ZoneSetting<TlsVersion>
+            {
+                Id = Guid.NewGuid().ToString(),
+                Value = version,
+                ModifiedDate = DateTime.UtcNow,
+                ValidationErrors = Array.Empty<ErrorDetails>(),
+                Editable = true
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.MinimumTlsVersion}").UsingPatch())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(zoneSetting)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var result = await client.Zones.Settings.UpdateMinimumTlsVersionSettingAsync(zone.Id, version);
 
             result.Result.Should().BeEquivalentTo(zoneSetting);
         }
