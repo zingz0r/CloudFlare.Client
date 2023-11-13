@@ -41,39 +41,9 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var result = await client.Zones.ZoneSettings.GetAlwaysUseHttpsSettingAsync(zone.Id);
+            var result = await client.Zones.Settings.GetAlwaysUseHttpsSettingAsync(zone.Id);
 
             result.Result.Should().Be(status);
-        }
-
-        [Theory]
-        [InlineData(SslSetting.Flexible)]
-        [InlineData(SslSetting.Full)]
-        [InlineData(SslSetting.Strict)]
-        [InlineData(SslSetting.Off)]
-        public async Task TestGetSslSettingsAsync(SslSetting status)
-        {
-            var zone = ZoneTestData.Zones.First();
-            var zoneSetting = new ZoneSetting
-            {
-                Id =  Guid.NewGuid().ToString(),
-                Value = status,
-                ModifiedDate = DateTime.UtcNow,
-                CertificateStatus = "active",
-                ValidationErrors = Array.Empty<ErrorDetails>(),
-                Editable = true
-            };
-
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(zoneSetting)));
-
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
-
-            var result = await client.Zones.ZoneSettings.GetSslSettingAsync(zone.Id);
-
-            result.Result.Should().BeEquivalentTo(zoneSetting);
         }
 
         [Theory]
@@ -90,9 +60,39 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var result = await client.Zones.ZoneSettings.UpdateAlwaysUseHttpsSettingAsync(zone.Id, status);
+            var result = await client.Zones.Settings.UpdateAlwaysUseHttpsSettingAsync(zone.Id, status);
 
             result.Result.Should().Be(status);
+        }
+
+        [Theory]
+        [InlineData(SslSetting.Flexible)]
+        [InlineData(SslSetting.Full)]
+        [InlineData(SslSetting.Strict)]
+        [InlineData(SslSetting.Off)]
+        public async Task TestGetSslSettingsAsync(SslSetting status)
+        {
+            var zone = ZoneTestData.Zones.First();
+            var zoneSetting = new ZoneSetting<SslSetting>
+            {
+                Id = Guid.NewGuid().ToString(),
+                Value = status,
+                ModifiedDate = DateTime.UtcNow,
+                CertificateStatus = "active",
+                ValidationErrors = Array.Empty<ErrorDetails>(),
+                Editable = true
+            };
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(zoneSetting)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var result = await client.Zones.Settings.GetSslSettingAsync(zone.Id);
+
+            result.Result.Should().BeEquivalentTo(zoneSetting);
         }
 
         [Theory]
@@ -103,7 +103,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestUpdateSslSettingsAsync(SslSetting status)
         {
             var zone = ZoneTestData.Zones.First();
-            var zoneSetting = new ZoneSetting
+            var zoneSetting = new ZoneSetting<SslSetting>
             {
                 Id = Guid.NewGuid().ToString(),
                 Value = status,
@@ -120,7 +120,7 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var result = await client.Zones.ZoneSettings.UpdateSslSettingAsync(zone.Id, status);
+            var result = await client.Zones.Settings.UpdateSslSettingAsync(zone.Id, status);
 
             result.Result.Should().BeEquivalentTo(zoneSetting);
         }

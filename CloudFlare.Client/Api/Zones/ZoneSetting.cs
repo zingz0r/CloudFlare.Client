@@ -9,19 +9,19 @@ namespace CloudFlare.Client.Api.Zones
     /// <summary>
     /// Represents the SSL setting response.
     /// </summary>
-    public class ZoneSetting
+    public class ZoneSetting<T>
     {
         /// <summary>
-        /// The ID of the SSL setting.
+        /// The ID of the setting.
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// The value of the SSL setting.
+        /// The value of the setting.
         /// </summary>
         [JsonProperty("value")]
-        public SslSetting Value { get; set; }
+        public T Value { get; set; }
 
         /// <summary>
         /// The last time this setting was modified.
@@ -30,7 +30,7 @@ namespace CloudFlare.Client.Api.Zones
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
-        /// The status of the SSL certificate.
+        /// The status of the certificate.
         /// </summary>
         [JsonProperty("certificate_status")]
         public string CertificateStatus { get; set; }
