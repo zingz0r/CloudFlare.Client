@@ -82,9 +82,11 @@ stages:
   
       - task: SonarCloudAnalyze@1
         displayName: "Analyze Code with SonarCloud"
+        condition: and(succeeded(), eq(variables['System.PullRequest.SourceRepositoryName'], variables['Build.Repository.Name']))
 
       - task: SonarCloudPublish@1
         displayName: "Publish Code Analysis Results"
+        condition: and(succeeded(), eq(variables['System.PullRequest.SourceRepositoryName'], variables['Build.Repository.Name']))
 
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish Code Coverage Report'
