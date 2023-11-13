@@ -13,7 +13,7 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new ModifiedDnsRecord();
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "name", "content", "ttl", "proxied", "type" });
+            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "name", "content", "ttl", "proxied", "type", "priority" });
         }
     }
 }
