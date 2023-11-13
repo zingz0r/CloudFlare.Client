@@ -42,10 +42,8 @@ stages:
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       
       - task: UseDotNet@2
-        displayName: 'Install .NET 6 SDK'
+        displayName: 'Install .NET SDK'
         inputs:
-          packageType: 'sdk'
-          version: '6.0.x'
           performMultiLevelLookup: true
 
       - task: DotNetCoreCLI@2
