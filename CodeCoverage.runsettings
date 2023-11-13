@@ -8,7 +8,6 @@
                     <CodeCoverage>
             <SymbolSearchPaths>
                    <Path>C:\Users\User\Documents\Visual Studio 2012\Projects\ProjectX\bin\Debug</Path>
-                   <Path>\\mybuildshare\builds\ProjectX</Path>
             </SymbolSearchPaths>
                         <ModulePaths>
                             <Include>

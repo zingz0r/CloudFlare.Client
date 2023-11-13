@@ -85,13 +85,13 @@ stages:
 
       - task: SonarCloudPublish@1
         displayName: "Publish Code Analysis Results"
-      
+
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish Code Coverage Report'
         inputs:
-          codeCoverageTool: 'cobertura'
+          codeCoverageTool: 'Cobertura'
           failIfCoverageEmpty: true
-          summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.**.cobertura.xml'
+          summaryFileLocation: '$(Agent.TempDirectory)/**/TestResults/*.cobertura.xml'
 
       - task: DotNetCoreCLI@2
         displayName: 'Pack Release'
