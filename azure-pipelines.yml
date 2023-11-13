@@ -40,14 +40,7 @@ stages:
             sonar.exclusions=**/obj/**,**/*.dll
             sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-      
-      - task: UseDotNet@2
-        displayName: 'Install .net core 3.1'
-        inputs:
-          packageType: sdk
-          version: '3.1.x'
-          installationPath: $(Agent.ToolsDirectory)/dotnet
-      
+
       - task: UseDotNet@2
         displayName: 'Install .NET SDK'
         inputs:
