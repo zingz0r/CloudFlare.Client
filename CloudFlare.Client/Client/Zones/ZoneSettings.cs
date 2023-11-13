@@ -21,17 +21,31 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<ZoneSetting>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<FeatureStatus>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}";
+            return await Connection.GetAsync<FeatureStatus>(requestUri, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<ZoneSetting>> GetSslSettingsAsync(string zoneId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}";
             return await Connection.GetAsync<ZoneSetting>(requestUri, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<ZoneSetting>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, ZoneSetting status, CancellationToken cancellationToken = default)
+        public async Task<CloudFlareResult<FeatureStatus>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, FeatureStatus status, CancellationToken cancellationToken = default)
+        {
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}";
+            return await Connection.PatchAsync(requestUri, status, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CloudFlareResult<ZoneSetting>> UpdateSslSettingAsync(string zoneId, SslSetting sslSetting, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}";
-            return await Connection.PatchAsync(requestUri, status, cancellationToken).ConfigureAwait(false);
+            return await Connection.PatchAsync(requestUri, new ZoneSetting { Value = sslSetting }, cancellationToken).ConfigureAwait(false);
         }
     }
 }

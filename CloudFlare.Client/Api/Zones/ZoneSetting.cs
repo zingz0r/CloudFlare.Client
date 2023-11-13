@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
@@ -37,7 +39,7 @@ namespace CloudFlare.Client.Api.Zones
         /// Any validation errors related to the SSL certificate.
         /// </summary>
         [JsonProperty("validation_errors")]
-        public string[] ValidationErrors { get; set; }
+        public IReadOnlyList<ErrorDetails> ValidationErrors { get; set; }
 
         /// <summary>
         /// Indicates whether this setting can be modified.

@@ -1,4 +1,6 @@
-﻿using CloudFlare.Client.Enumerators;
+﻿using System.Collections.Generic;
+using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
@@ -42,13 +44,13 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// Certificate's validation errors
         /// </summary>
         [JsonProperty("validation_errors")]
-        public CustomHostnameSslValidationError[] ValidationErrors { get; set; }
+        public IReadOnlyList<ErrorDetails> ValidationErrors { get; set; }
 
         /// <summary>
         /// The valid hosts for the certificate
         /// </summary>
         [JsonProperty("hosts")]
-        public string[] Hosts { get; set; }
+        public IReadOnlyList<string> Hosts { get; set; }
 
         /// <summary>
         /// Certificates

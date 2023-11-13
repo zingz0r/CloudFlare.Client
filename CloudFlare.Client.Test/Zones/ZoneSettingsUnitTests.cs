@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Api.Parameters.Endpoints;
-using CloudFlare.Client.Client.Zones;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.Helpers;
@@ -26,24 +26,22 @@ namespace CloudFlare.Client.Test.Zones
         }
 
         [Theory]
-        [InlineData(SslSetting.Flexible)]
-        [InlineData(SslSetting.Full)]
-        [InlineData(SslSetting.Strict)]
-        [InlineData(SslSetting.Off)]
-        public async Task TestUpdateAlwaysUseHttpsAsync(SslSetting status)
+        [InlineData(FeatureStatus.On)]
+        [InlineData(FeatureStatus.Off)]
+        public async Task TestGetAlwaysUseHttpsAsync(FeatureStatus status)
         {
             var zone = ZoneTestData.Zones.First();
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingPatch())
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(status)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var alwaysUseHttpsUnderTest = await client.Zones.ZoneSettings.UpdateAlwaysUseHttpsSettingAsync(zone.Id, status);
+            var result = await client.Zones.ZoneSettings.GetAlwaysUseHttpsSettingAsync(zone.Id);
 
-            alwaysUseHttpsUnderTest.Result.Should().Be(status);
+            result.Result.Should().Be(status);
         }
 
         [Theory]
@@ -51,7 +49,7 @@ namespace CloudFlare.Client.Test.Zones
         [InlineData(SslSetting.Full)]
         [InlineData(SslSetting.Strict)]
         [InlineData(SslSetting.Off)]
-        public async Task TestGetAlwaysUseHttpsAsync(SslSetting status)
+        public async Task TestGetSslSettingsAsync(SslSetting status)
         {
             var zone = ZoneTestData.Zones.First();
 
@@ -62,9 +60,49 @@ namespace CloudFlare.Client.Test.Zones
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var alwaysUseHttpsUnderTest = await client.Zones.ZoneSettings.GetAlwaysUseHttpsSettingAsync(zone.Id);
+            var result = await client.Zones.ZoneSettings.GetSslSettingsAsync(zone.Id);
 
-            alwaysUseHttpsUnderTest.Result.Should().Be(status);
+            result.Result.Should().Be(status);
+        }
+
+        [Theory]
+        [InlineData(FeatureStatus.On)]
+        [InlineData(FeatureStatus.Off)]
+        public async Task TestUpdateAlwaysUseHttpsAsync(FeatureStatus status)
+        {
+            var zone = ZoneTestData.Zones.First();
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.AlwaysUseHttps}").UsingPatch())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(status)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var result = await client.Zones.ZoneSettings.UpdateAlwaysUseHttpsSettingAsync(zone.Id, status);
+
+            result.Result.Should().Be(status);
+        }
+
+        [Theory]
+        [InlineData(SslSetting.Flexible)]
+        [InlineData(SslSetting.Full)]
+        [InlineData(SslSetting.Strict)]
+        [InlineData(SslSetting.Off)]
+        public async Task TestUpdateSslSettingsAsync(SslSetting status)
+        {
+            var zone = ZoneTestData.Zones.First();
+
+            _wireMockServer
+                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{SettingsEndpoints.Base}/{SettingsEndpoints.Ssl}").UsingPatch())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(status)));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+            
+            var result = await client.Zones.ZoneSettings.UpdateSslSettingAsync(zone.Id, status);
+
+            result.Result.Should().Be(status);
         }
     }
 }

@@ -11,13 +11,13 @@ namespace CloudFlare.Client.Enumerators
     public enum SslSetting
     {
         /// <summary>
-        /// Encrypts traffic between the browser and Cloudflare
+        /// SSL between the visitor and CloudFlare
         /// </summary>
         [EnumMember(Value = "flexible")]
         Flexible,
 
         /// <summary>
-        /// No encryption applied
+        /// No encription between the visitor and CloudFlare, and no SSL between CloudFlare and your web server (all HTTP traffic)
         /// </summary>
         [EnumMember(Value = "off")]
         Off,
@@ -29,7 +29,7 @@ namespace CloudFlare.Client.Enumerators
         Full,
 
         /// <summary>
-        /// Encrypts end-to-end, but requires a trusted CA or Cloudflare Origin CA certificate on the server
+        /// Encrypts end-to-end, but requires a trusted CA or CloudFlare Origin CA certificate on the server
         /// </summary>
         [EnumMember(Value = "strict")]
         Strict,

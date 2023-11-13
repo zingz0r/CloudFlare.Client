@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CloudFlare.Client.Api.Zones.CustomHostnames;
+using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
@@ -11,7 +11,7 @@ public class CustomHostnameSslValidationErrorTest
     [Fact]
     public void TestSerialization()
     {
-        var sut = new CustomHostnameSslValidationError();
+        var sut = new ErrorDetails();
 
         JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "message" });
     }

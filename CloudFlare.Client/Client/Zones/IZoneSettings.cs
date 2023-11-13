@@ -16,8 +16,16 @@ namespace CloudFlare.Client.Client.Zones
         /// </summary>
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns><see cref="FeatureStatus"/></returns>
+        Task<CloudFlareResult<FeatureStatus>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Retrieves the zone SSL settings
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns><see cref="ZoneSetting"/></returns>
-        Task<CloudFlareResult<ZoneSetting>> GetAlwaysUseHttpsSettingAsync(string zoneId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<ZoneSetting>> GetSslSettingsAsync(string zoneId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates whether or not the SSL/TLS Edge Certificate requires HTTPS or not
@@ -25,7 +33,16 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="zoneId">Zone identifier</param>
         /// <param name="status">Enum for turning on/off requirement for always using SSL</param>
         /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns><see cref="FeatureStatus"/></returns>
+        Task<CloudFlareResult<FeatureStatus>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, FeatureStatus status, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates the zone SSL settings
+        /// </summary>
+        /// <param name="zoneId">Zone identifier</param>
+        /// <param name="sslSetting">Enum for ssl setting</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns><see cref="ZoneSetting"/></returns>
-        Task<CloudFlareResult<ZoneSetting>> UpdateAlwaysUseHttpsSettingAsync(string zoneId, ZoneSetting status, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<ZoneSetting>> UpdateSslSettingAsync(string zoneId, SslSetting sslSetting, CancellationToken cancellationToken = default);
     }
 }
