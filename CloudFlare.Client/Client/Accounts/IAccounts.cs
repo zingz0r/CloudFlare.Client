@@ -31,6 +31,12 @@ namespace CloudFlare.Client.Client.Accounts
         public IRoles Roles { get; }
 
         /// <summary>
+        /// Turnstile widgets
+        /// </summary>
+        /// <value>The implementation of the turnstile widgets</value>
+        public ITurnStileWidgets TurnStileWidgets { get; }
+
+        /// <summary>
         /// List all accounts you have ownership or verified access to
         /// </summary>
         /// <param name="displayOptions">Display options</param>
