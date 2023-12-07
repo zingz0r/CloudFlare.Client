@@ -1,133 +1,126 @@
 trigger:
   branches:
     include:
-    - master
+      - master
   tags:
     include:
-    - '*'  
+      - "*"
 pr:
   branches:
     include:
-    - '*'  
+      - "*"
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  vmImageName: 'windows-latest'
+  solution: "**/*.sln"
+  buildPlatform: "Any CPU"
+  buildConfiguration: "Release"
+  vmImageName: "windows-latest"
 
 stages:
-- stage: pipeline
-  displayName: CloudFlare.Client
-  jobs: 
-    - job: pipeline
-      displayName: CI/CD Pipeline
-      pool:
-        vmImage: $(vmImageName)
-      
-      steps:
-    
-      - task: SonarCloudPrepare@1
-        displayName: Prepare SonarCloud
-        inputs:
-          SonarCloud: 'SonarCloud'
-          organization: 'zingz0r-github'
-          scannerMode: 'MSBuild'
-          projectKey: 'zingz0r_CloudFlare.Client'
-          projectName: 'CloudFlare.Client'
-          projectVersion: '$(Build.BuildNumber)'
-          extraProperties: |
-            sonar.exclusions=**/obj/**,**/*.dll
-            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.**.opencover.xml
-            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+  - stage: pipeline
+    displayName: CloudFlare.Client
+    jobs:
+      - job: pipeline
+        displayName: CI/CD Pipeline
+        pool:
+          vmImage: $(vmImageName)
 
-      - task: UseDotNet@2
-        displayName: 'Install .NET SDK'
-        inputs:
-          performMultiLevelLookup: true
+        steps:
+          - task: SonarCloudPrepare@1
+            displayName: "Prepare analysis on SonarCloud"
+            condition: ne(variables['Build.Reason'], 'PullRequest')
+            inputs:
+              SonarCloud: "SonarCloud"
+              organization: "zingz0r-github"
+              scannerMode: "MSBuild"
+              projectKey: "zingz0r_CloudFlare.Client"
+              projectName: "CloudFlare.Client"
+              projectVersion: "$(Build.BuildNumber)"
+              extraProperties: |
+                sonar.exclusions=**/obj/**,**/*.dll
+                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/TestResults.trx
+                sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/**/coverage.opencover.xml
 
-      - task: NuGetCommand@2
-        displayName: "Restore NuGet packages"
-        inputs:
-          command: 'restore'
-          restoreSolution: '**/*.sln'
-          feedsToUse: 'select'
-          vstsFeed: 'd5f72524-9a3d-4cca-ac65-8688b67830d4/f7ea4fd7-43dc-4f24-a491-8f013b20ab55'
-          verbosityRestore: 'Normal'
+          - task: SonarCloudPrepare@1
+            displayName: "Prepare analysis on SonarCloud for PR"
+            condition: eq(variables['Build.Reason'], 'PullRequest')
+            inputs:
+              SonarCloud: "SonarCloud"
+              organization: "zingz0r-github"
+              scannerMode: "MSBuild"
+              projectKey: "zingz0r_CloudFlare.Client"
+              projectName: "CloudFlare.Client"
+              projectVersion: "$(Build.BuildNumber)"
+              extraProperties: |
+                sonar.pullrequest.key=$(System.PullRequest.pullRequestNumber)
+                sonar.pullrequest.branch=$(System.PullRequest.SourceBranch)
+                sonar.pullrequest.base=$(System.PullRequest.TargetBranch)
+                sonar.exclusions=**/obj/**,**/*.dll
+                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/TestResults.trx
+                sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/**/coverage.opencover.xml
 
-      - task: VSBuild@1
-        displayName: "Build"
-        inputs:
-          solution: "CloudFlare.Client.sln"
-          platform: "$(BuildPlatform)"
-          configuration: "$(BuildConfiguration)"
-          msbuildArgs: "-restore"
-          msbuildArchitecture: "$(BuildPlatform)"
+          - task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+              command: build
+              projects: "**/*.csproj"
+              arguments: "--configuration $(buildConfiguration)"
 
-      - task: VSTest@2
-        displayName: "Run tests"
-        env:
-          ApiKey: $(ApiKey)
-          EmailAddress: $(EmailAddress)
-        inputs:
-          testAssemblyVer2: |
-            **\bin\**\*Tests.dll
-            **\bin\**\*Test.dll
-            !**\*TestAdapter.dll
-            !**\obj\**
-          codeCoverageEnabled: true
-          otherConsoleOptions: /InIsolation
-          diagnosticsEnabled: True
-          runSettingsFile: "CodeCoverage.runsettings"
-  
-      - task: SonarCloudAnalyze@1
-        displayName: "Analyze Code with SonarCloud"
-        condition: and(succeeded(), eq(variables['System.PullRequest.SourceRepositoryName'], variables['Build.Repository.Name']))
+          - task: DotNetCoreCLI@2
+            displayName: "Test"
+            env:
+              ApiKey: $(ApiKey)
+              EmailAddress: $(EmailAddress)
+            inputs:
+              command: test
+              projects: "**/*Test.csproj"
+              arguments: '--logger "trx;logfilename=TestResults.trx" --no-build --configuration $(buildConfiguration) --collect "XPlat Code Coverage;Format=opencover,cobertura'
+              publishTestResults: true
 
-      - task: SonarCloudPublish@1
-        displayName: "Publish Code Analysis Results"
-        condition: and(succeeded(), eq(variables['System.PullRequest.SourceRepositoryName'], variables['Build.Repository.Name']))
+          - task: SonarCloudAnalyze@1
+            displayName: "Analyze Code with SonarCloud"
 
-      - task: PublishCodeCoverageResults@1
-        displayName: 'Publish Code Coverage Report'
-        inputs:
-          codeCoverageTool: 'Cobertura'
-          failIfCoverageEmpty: true
-          summaryFileLocation: '$(Agent.TempDirectory)/**/TestResults/**/*.cobertura.xml'
+          - task: SonarCloudPublish@1
+            displayName: "Publish Code Analysis Results"
 
-      - task: DotNetCoreCLI@2
-        displayName: 'Pack Release'
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-        inputs:
-          command: pack
-          packagesToPack: 'CloudFlare.Client/CloudFlare.Client.csproj'
-          packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
-          arguments: '--no-build  --configuration $(buildConfiguration)'
-          versioningScheme: 'byEnvVar'
-          versionEnvVar: Build.SourceBranchName
-          verbosityPack: Diagnostic
+          - task: PublishCodeCoverageResults@1
+            displayName: "Publish Code Coverage Report"
+            inputs:
+              codeCoverageTool: "Cobertura"
+              summaryFileLocation: $(Build.SourcesDirectory)/coverage.cobertura.xml
 
-      - task: CopyFiles@2
-        displayName: Copy Files
-        inputs:
-          SourceFolder: 'CloudFlare.Client/bin'
-          Contents: '**'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      
-      - task: PublishBuildArtifacts@1
-        displayName: Publish To Artifactory
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+          - task: DotNetCoreCLI@2
+            displayName: "Pack Release"
+            condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+            inputs:
+              command: pack
+              packagesToPack: "CloudFlare.Client/CloudFlare.Client.csproj"
+              packDirectory: "$(Build.ArtifactStagingDirectory)/packages"
+              arguments: "--no-build  --configuration $(buildConfiguration)"
+              versioningScheme: "byEnvVar"
+              versionEnvVar: Build.SourceBranchName
+              verbosityPack: Diagnostic
 
-      - task: NuGetCommand@2
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-        displayName: 'Deploy Release to nuget.org'
-        inputs:
-          command: 'push'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/packages/*.nupkg'
-          nuGetFeedType: 'external'
-          publishFeedCredentials: 'nuget.org'
-          verbosityPush: Detailed
+          - task: CopyFiles@2
+            displayName: Copy Files
+            inputs:
+              SourceFolder: "CloudFlare.Client/bin"
+              Contents: "**"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
+          - task: PublishBuildArtifacts@1
+            displayName: Publish To Artifactory
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"
+
+          - task: NuGetCommand@2
+            condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+            displayName: "Deploy Release to nuget.org"
+            inputs:
+              command: "push"
+              packagesToPush: "$(Build.ArtifactStagingDirectory)/packages/*.nupkg"
+              nuGetFeedType: "external"
+              publishFeedCredentials: "nuget.org"
+              verbosityPush: Detailed
