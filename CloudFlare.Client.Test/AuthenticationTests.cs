@@ -14,6 +14,7 @@ using WireMock.Server;
 using WireMock.Types;
 using Xunit;
 
+
 namespace CloudFlare.Client.Test
 {
     public class AuthenticationTests
