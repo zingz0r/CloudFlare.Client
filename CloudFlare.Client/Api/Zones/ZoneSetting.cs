@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CloudFlare.Client.Api.Result;
-using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones

@@ -24,6 +24,7 @@ namespace CloudFlare.Client.Client.Accounts
             Members = new Members(connection);
             Roles = new Roles(connection);
             Subscriptions = new Subscriptions(connection);
+            TurnStileWidgets = new TurnStileWidgets(connection);
         }
 
         /// <inheritdoc />
@@ -34,6 +35,9 @@ namespace CloudFlare.Client.Client.Accounts
 
         /// <inheritdoc />
         public ISubscriptions Subscriptions { get; }
+
+        /// <inheritdoc />
+        public ITurnStileWidgets TurnStileWidgets { get; }
 
         /// <inheritdoc />
         public async Task<CloudFlareResult<IReadOnlyList<Account>>> GetAsync(DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
