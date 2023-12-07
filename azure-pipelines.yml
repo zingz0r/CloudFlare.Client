@@ -52,7 +52,7 @@ stages:
               projectName: "CloudFlare.Client"
               projectVersion: "$(Build.BuildNumber)"
               extraProperties: |
-                sonar.pullrequest.key=$(System.PullRequest.PullRequestId)
+                sonar.pullrequest.key=$(System.PullRequest.pullRequestNumber)
                 sonar.pullrequest.branch=$(System.PullRequest.SourceBranch)
                 sonar.pullrequest.base=$(System.PullRequest.TargetBranch)
                 sonar.exclusions=**/obj/**,**/*.dll
