@@ -94,5 +94,11 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("data")]
         public object Data { get; set; }
+
+        /// <summary>
+        /// Comment of the record
+        /// </summary>
+        [JsonProperty("comment")]
+        public string Comment { get; set; }
     }
 }
