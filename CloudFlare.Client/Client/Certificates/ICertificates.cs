@@ -4,14 +4,13 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Certificates;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
-using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Certificates
 {
     /// <summary>
     /// Interface for interacting with certificates
     /// </summary>
-    public interface ICertificates
+    public interface ICertificates : IGetApi<string, UnOrderableDisplayOptions, Certificate>
     {
         /// <summary>
         /// Get all certificates
@@ -20,7 +19,7 @@ namespace CloudFlare.Client.Client.Certificates
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A list of all certificates</returns>
-        Task<CloudFlareResult<IReadOnlyList<Certificate>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
+        new Task<CloudFlareResult<IReadOnlyList<Certificate>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get a certificate

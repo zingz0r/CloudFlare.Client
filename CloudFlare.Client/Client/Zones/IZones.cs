@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Client.Zones
     /// <summary>
     /// Interface for interacting with zones
     /// </summary>
-    public interface IZones
+    public interface IZones : IGetApi<ZoneFilter, DisplayOptions, Zone>
     {
         /// <summary>
         /// Custom hostnames
@@ -79,7 +79,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="displayOptions">Display options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The requested zones</returns>
-        Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
+        new Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all details of the specified zone
