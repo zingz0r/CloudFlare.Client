@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
+using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
+using CloudFlare.Client.Extensions;
 using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
@@ -76,6 +79,107 @@ namespace CloudFlare.Client.Test.Zones
             var zones = await client.Zones.GetAsync(zoneFilter, displayOptions);
 
             zones.Result.Should().BeEquivalentTo(ZoneTestData.Zones);
+        }
+
+        [Fact]
+        public async Task TestGetAllZonesAsync()
+        {
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 1, Order = OrderType.Asc };
+            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
+            var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
+            var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
+
+            _wireMockServer
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/")
+                    .WithParam(Filtering.Page, "1")
+                    .WithParam(Filtering.PerPage, "1")
+                    .WithParam(Filtering.Order, "asc")
+                    .UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(
+                        new List<Zone> { zoneA },
+                        new ResultInfo
+                        {
+                            Page = 1,
+                            PerPage = 1,
+                            TotalPage = 2,
+                            TotalCount = 2,
+                            Count = 1
+                        })));
+
+            _wireMockServer
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/")
+                    .WithParam(Filtering.Page, "2")
+                    .WithParam(Filtering.PerPage, "1")
+                    .WithParam(Filtering.Order, "asc")
+                    .UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(
+                        new List<Zone> { zoneB },
+                        new ResultInfo
+                        {
+                            Page = 2,
+                            PerPage = 1,
+                            TotalPage = 2,
+                            TotalCount = 2,
+                            Count = 1
+                        })));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var zones = await client.Zones.GetAllAsync(zoneFilter, displayOptions);
+
+            zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
+        }
+
+        [Fact]
+        public async Task TestGetAllZonesWithoutDisplayOptionsAsync()
+        {
+            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
+            var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
+            var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
+
+            _wireMockServer
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/")
+                    .WithParam(Filtering.Page, "1")
+                    .UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(
+                        new List<Zone> { zoneA },
+                        new ResultInfo
+                        {
+                            Page = 1,
+                            PerPage = 1,
+                            TotalPage = 2,
+                            TotalCount = 2,
+                            Count = 1
+                        })));
+
+            _wireMockServer
+                .Given(Request.Create()
+                    .WithPath($"/{ZoneEndpoints.Base}/")
+                    .WithParam(Filtering.Page, "2")
+                    .UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(200)
+                    .WithBody(WireMockResponseHelper.CreateTestResponse(
+                        new List<Zone> { zoneB },
+                        new ResultInfo
+                        {
+                            Page = 2,
+                            PerPage = 1,
+                            TotalPage = 2,
+                            TotalCount = 2,
+                            Count = 1
+                        })));
+
+            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+            var zones = await client.Zones.GetAllAsync(zoneFilter);
+
+            zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
         }
 
         [Fact]

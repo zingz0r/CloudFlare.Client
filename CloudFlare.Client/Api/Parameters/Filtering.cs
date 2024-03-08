@@ -99,5 +99,10 @@
         /// Status representation on CloudFlare
         /// </summary>
         public const string Status = "status";
+
+        /// <summary>
+        /// ZoneId representation on CloudFlare
+        /// </summary>
+        public const string ZoneId = "zone_id";
     }
 }

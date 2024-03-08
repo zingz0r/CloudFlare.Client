@@ -16,5 +16,16 @@ namespace CloudFlare.Client.Test.Helpers
                 CommonTestData.ApiErrors,
                 CommonTestData.TimingInfo));
         }
+
+        public static string CreateTestResponse<T>(T item, ResultInfo resultInfo)
+        {
+            return JsonConvert.SerializeObject(new CloudFlareResult<T>(
+                item,
+                resultInfo,
+                true,
+                CommonTestData.ErrorDetails,
+                CommonTestData.ApiErrors,
+                CommonTestData.TimingInfo));
+        }
     }
 }

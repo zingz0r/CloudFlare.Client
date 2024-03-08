@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Client.Accounts
     /// <summary>
     /// Interface for interacting with members
     /// </summary>
-    public interface IMembers
+    public interface IMembers : IGetApi<string, DisplayOptions, Member>
     {
         /// <summary>
         /// Add a user to the list of members for this account
@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="displayOptions">Display Options</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The requested member</returns>
-        Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
+        new Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get information about a specific member of an account
