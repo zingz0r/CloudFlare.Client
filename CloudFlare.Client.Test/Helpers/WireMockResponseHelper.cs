@@ -1,6 +1,6 @@
-﻿using CloudFlare.Client.Api.Result;
+﻿using System.Text.Json;
+using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Test.TestData;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Test.Helpers
 {
@@ -8,7 +8,7 @@ namespace CloudFlare.Client.Test.Helpers
     {
         public static string CreateTestResponse<T>(T item)
         {
-            return JsonConvert.SerializeObject(new CloudFlareResult<T>(
+            return JsonSerializer.Serialize(new CloudFlareResult<T>(
                 item,
                 CommonTestData.ResultInfo,
                 true,

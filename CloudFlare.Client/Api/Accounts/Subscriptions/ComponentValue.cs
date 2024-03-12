@@ -1,5 +1,5 @@
-﻿using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
@@ -11,25 +11,25 @@ namespace CloudFlare.Client.Api.Accounts.Subscriptions
         /// <summary>
         /// The name of the component
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public ComponentValueType Name { get; set; }
 
         /// <summary>
         /// The value of the component
         /// </summary>
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public long Value { get; set; }
 
         /// <summary>
         /// The default value of the component
         /// </summary>
-        [JsonProperty("default")]
+        [JsonPropertyName("default")]
         public long Default { get; set; }
 
         /// <summary>
         /// The price of the component
         /// </summary>
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public long Price { get; set; }
     }
 }

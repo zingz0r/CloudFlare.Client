@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using CloudFlare.Client.Api.Zones.WorkerRoute;
 using FluentAssertions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Serialization
@@ -15,11 +15,11 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new WorkerRoute();
 
-            var serialized = JsonConvert.SerializeObject(sut);
+            var serialized = JsonSerializer.Serialize(sut);
 
-            var json = JObject.Parse(serialized);
+            var json = JsonObject.Parse(serialized) as IDictionary<string, JsonNode>;
 
-            var keys = json.Properties().Select(p => p.Name).ToList();
+            var keys = json.Keys.ToList();
 
             keys.Should().BeEquivalentTo(new SortedSet<string>
             {

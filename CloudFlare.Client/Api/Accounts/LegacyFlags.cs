@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Accounts
 {
@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Api.Accounts
         /// <summary>
         /// Enterprise zone quota
         /// </summary>
-        [JsonProperty("enterprise_zone_quota")]
+        [JsonPropertyName("enterprise_zone_quota")]
         public EnterpriseZoneQuota EnterpriseZoneQuota { get; set; }
     }
 }

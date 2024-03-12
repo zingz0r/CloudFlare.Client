@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Parameters.Data
 {
@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Api.Parameters.Data
         /// <summary>
         /// The certificate.
         /// </summary>
-        [JsonProperty("certificate")]
+        [JsonPropertyName("certificate")]
         public string Certificate { get; set; }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace CloudFlare.Client.Api.Parameters.Data
         /// Value must be &gt;= 0 and &lt;= 255
         /// </para>
         /// </summary>
-        [JsonProperty("matching_type")]
+        [JsonPropertyName("matching_type")]
         public int MatchingType { get; set; }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace CloudFlare.Client.Api.Parameters.Data
         /// Value must be &gt;= 0 and &lt;= 255
         /// </para>
         /// </summary>
-        [JsonProperty("selector")]
+        [JsonPropertyName("selector")]
         public int Selector { get; set; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace CloudFlare.Client.Api.Parameters.Data
         /// Value must be &gt;= 0 and &lt;= 255
         /// </para>
         /// </summary>
-        [JsonProperty("usage")]
+        [JsonPropertyName("usage")]
         public int Usage { get; set; }
     }
 }

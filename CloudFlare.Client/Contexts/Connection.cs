@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Authentication;
@@ -10,19 +12,16 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Extensions;
 using CloudFlare.Client.Helpers;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Contexts
 {
     internal abstract class Connection : IConnection
     {
-        private readonly JsonMediaTypeFormatter _formatter;
-        private readonly JsonSerializerSettings _serializerSettings;
+        private readonly JsonSerializerOptions _serializerOptions;
 
         protected Connection(IAuthentication authentication, ConnectionInfo connectionInfo)
         {
-            _serializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-            _formatter = new JsonMediaTypeFormatter { SerializerSettings = _serializerSettings };
+            _serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
             HttpClient = CreateHttpClient(authentication, connectionInfo);
 
@@ -53,7 +52,7 @@ namespace CloudFlare.Client.Contexts
             {
                 var request = new HttpRequestMessage(HttpMethod.Delete, requestUri)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(content, _serializerSettings), Encoding.UTF8, HttpContentTypesHelper.Json)
+                    Content = new StringContent(JsonSerializer.Serialize(content, _serializerOptions), Encoding.UTF8, HttpContentTypesHelper.Json)
                 };
 
                 var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -77,7 +76,7 @@ namespace CloudFlare.Client.Contexts
                 var method = new HttpMethod("PATCH");
                 var request = new HttpRequestMessage(method, requestUri)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(content, _serializerSettings), Encoding.UTF8, HttpContentTypesHelper.Json)
+                    Content = new StringContent(JsonSerializer.Serialize(content, _serializerOptions), Encoding.UTF8, HttpContentTypesHelper.Json)
                 };
 
                 var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -104,7 +103,7 @@ namespace CloudFlare.Client.Contexts
         {
             var response = content is HttpContent httpContent
                 ? await HttpClient.PostAsync(requestUri, httpContent, cancellationToken).ConfigureAwait(false)
-                : await HttpClient.PostAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
+                : await HttpClient.PostAsJsonAsync(requestUri, content, _serializerOptions, cancellationToken).ConfigureAwait(false);
 
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
@@ -116,7 +115,7 @@ namespace CloudFlare.Client.Contexts
 
         public async Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
         {
-            var response = await HttpClient.PutAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
+            var response = await HttpClient.PutAsJsonAsync(requestUri, content, _serializerOptions, cancellationToken).ConfigureAwait(false);
             return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
         }
 

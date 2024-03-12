@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Api.Accounts.Subscriptions
         /// <summary>
         /// The app installation identifier
         /// </summary>
-        [JsonProperty("install_id")]
+        [JsonPropertyName("install_id")]
         public string InstallId { get; set; }
     }
 }

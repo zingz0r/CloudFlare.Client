@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
@@ -13,67 +13,67 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// <summary>
         /// SSL identifier tag
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Status of the hostname's SSL certificates
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
         /// <summary>
         /// Domain control validation (DCV) method used for this hostname
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public MethodType Method { get; set; }
 
         /// <summary>
         /// Level of validation to be used for this hostname. Domain validation (dv) must be used
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public DomainValidationType Type { get; set; }
 
         /// <summary>
         /// Certificate's required validation records
         /// </summary>
-        [JsonProperty("validation_records")]
+        [JsonPropertyName("validation_records")]
         public CustomHostnameSslValidationRecord[] ValidationRecords { get; set; }
 
         /// <summary>
         /// Certificate's validation errors
         /// </summary>
-        [JsonProperty("validation_errors")]
+        [JsonPropertyName("validation_errors")]
         public IReadOnlyList<ErrorDetails> ValidationErrors { get; set; }
 
         /// <summary>
         /// The valid hosts for the certificate
         /// </summary>
-        [JsonProperty("hosts")]
+        [JsonPropertyName("hosts")]
         public IReadOnlyList<string> Hosts { get; set; }
 
         /// <summary>
         /// Certificates
         /// </summary>
-        [JsonProperty("certificates")]
+        [JsonPropertyName("certificates")]
         public SslCertificate[] Certificates { get; set; }
 
         /// <summary>
         /// The value that must be returned when the CNAME (cname) is queried during domain validation
         /// </summary>
-        [JsonProperty("cname_target")]
+        [JsonPropertyName("cname_target")]
         public string CnameTarget { get; set; }
 
         /// <summary>
         /// The CNAME that the certificate authority (CA) will resolve during the domain validation
         /// </summary>
-        [JsonProperty("cname")]
+        [JsonPropertyName("cname")]
         public string Cname { get; set; }
 
         /// <summary>
         /// The Certificate Authority that has issued this certificate
         /// </summary>
-        [JsonProperty("certificate_authority")]
+        [JsonPropertyName("certificate_authority")]
         public string CertificateAuthority { get; set; }
 
         /// <summary>
@@ -81,19 +81,19 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// An optimal bundle uses the shortest chain and newest intermediates.
         /// And the force bundle verifies the chain, but does not otherwise modify it.
         /// </summary>
-        [JsonProperty("bundle_method")]
+        [JsonPropertyName("bundle_method")]
         public string BundleMethod { get; set; }
 
         /// <summary>
         /// Indicates whether the certificate covers a wildcard
         /// </summary>
-        [JsonProperty("wildcard")]
+        [JsonPropertyName("wildcard")]
         public bool Wildcard { get; set; }
 
         /// <summary>
         /// Additional SSL specific settings
         /// </summary>
-        [JsonProperty("settings")]
+        [JsonPropertyName("settings")]
         public AdditionalCustomHostnameSslSettings Settings { get; set; }
     }
 }

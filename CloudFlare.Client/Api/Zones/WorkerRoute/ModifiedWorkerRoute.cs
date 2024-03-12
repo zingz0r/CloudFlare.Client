@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.WorkerRoute
 {
@@ -13,7 +13,7 @@ namespace CloudFlare.Client.Api.Zones.WorkerRoute
         /// <example>
         /// example.net/*
         /// </example>
-        [JsonProperty("pattern")]
+        [JsonPropertyName("pattern")]
         public string Pattern { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace CloudFlare.Client.Api.Zones.WorkerRoute
         /// <example>
         /// this-is_my_script-01
         /// </example>
-        [JsonProperty("script")]
+        [JsonPropertyName("script")]
         public string Script { get; set; }
     }
 }

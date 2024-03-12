@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Accounts
 {
@@ -10,19 +10,19 @@ namespace CloudFlare.Client.Api.Accounts
         /// <summary>
         /// Maximum quota
         /// </summary>
-        [JsonProperty("maximum")]
+        [JsonPropertyName("maximum")]
         public long Maximum { get; set; }
 
         /// <summary>
         /// Current quota
         /// </summary>
-        [JsonProperty("current")]
+        [JsonPropertyName("current")]
         public long Current { get; set; }
 
         /// <summary>
         /// Available quota
         /// </summary>
-        [JsonProperty("available")]
+        [JsonPropertyName("available")]
         public long Available { get; set; }
     }
 }

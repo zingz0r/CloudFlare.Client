@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Result
 {
@@ -10,13 +10,13 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Integer error code
         /// </summary>
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
         /// <summary>
         /// Error message
         /// </summary>
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
     }
 }

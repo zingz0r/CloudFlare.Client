@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api
 {
@@ -10,13 +10,13 @@ namespace CloudFlare.Client.Api
         /// <summary>
         /// Permission read property
         /// </summary>
-        [JsonProperty("read")]
+        [JsonPropertyName("read")]
         public bool Read { get; set; }
 
         /// <summary>
         /// Permission Write property
         /// </summary>
-        [JsonProperty("write")]
+        [JsonPropertyName("write")]
         public bool Write { get; set; }
     }
 }

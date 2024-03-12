@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Accounts
 {
@@ -12,37 +12,37 @@ namespace CloudFlare.Client.Api.Accounts
         /// <summary>
         /// Account id
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Account name
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Additional account settings
         /// </summary>
-        [JsonProperty("settings")]
+        [JsonPropertyName("settings")]
         public AdditionalAccountSettings Settings { get; set; }
 
         /// <summary>
         /// Account Type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public AccountType Type { get; set; }
 
         /// <summary>
         /// Account creation date
         /// </summary>
-        [JsonProperty("created_on")]
+        [JsonPropertyName("created_on")]
         public DateTime CreatedOn { get; set; }
 
         /// <summary>
         /// Legacy flags
         /// </summary>
-        [JsonProperty("legacy_flags")]
+        [JsonPropertyName("legacy_flags")]
         public LegacyFlags LegacyFlags { get; set; }
     }
 }

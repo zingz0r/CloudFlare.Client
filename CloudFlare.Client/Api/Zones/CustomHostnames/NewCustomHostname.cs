@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
@@ -10,13 +10,13 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// <summary>
         /// The custom hostname that will point to your hostname via CNAME
         /// </summary>
-        [JsonProperty("hostname")]
+        [JsonPropertyName("hostname")]
         public string Hostname { get; set; }
 
         /// <summary>
         /// SSL settings used when creating the custom hostname
         /// </summary>
-        [JsonProperty("ssl")]
+        [JsonPropertyName("ssl")]
         public Ssl Ssl { get; set; }
     }
 }

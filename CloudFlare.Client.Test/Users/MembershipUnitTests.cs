@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -10,7 +11,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -81,7 +81,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonConvert.DeserializeObject<Membership>(x.Body);
+                        var body = JsonSerializer.Deserialize<Membership>(x.Body);
                         var response = UserMembershipTestsData.Memberships.First(y => y.Id == x.PathSegments[1]).DeepClone();
 
                         response.Status = body.Status;

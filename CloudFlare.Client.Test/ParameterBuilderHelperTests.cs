@@ -1,9 +1,9 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Web;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Helpers;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace CloudFlare.Client.Test
@@ -19,7 +19,7 @@ namespace CloudFlare.Client.Test
         [InlineData("key", ZoneStatus.Deactivated)]
         public void TestParameterBuilder(string key, object value)
         {
-            var expected = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
+            var expected = HttpUtility.UrlDecode(JsonSerializer.Serialize(value).Replace("\"", ""));
 
             var builder = new ParameterBuilderHelper();
 

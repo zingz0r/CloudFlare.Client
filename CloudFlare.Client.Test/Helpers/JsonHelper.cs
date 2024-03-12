@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CloudFlare.Client.Test.Helpers
@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Test.Helpers
     {
         public static IEnumerable<string> GetSerializedKeys<T>(T content)
         {
-            var serialized = JsonConvert.SerializeObject(content);
+            var serialized = JsonSerializer.Serialize(content);
 
             var json = JObject.Parse(serialized);
 
@@ -23,7 +23,7 @@ namespace CloudFlare.Client.Test.Helpers
 
             foreach (var enumValue in Enum.GetValues(typeof(T)))
             {
-                result.Add(JsonConvert.SerializeObject(enumValue).Replace("\"", string.Empty));
+                result.Add(JsonSerializer.Serialize(enumValue).Replace("\"", string.Empty));
             }
 
             return result;

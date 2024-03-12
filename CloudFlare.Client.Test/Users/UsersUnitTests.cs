@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Users;
@@ -7,7 +8,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -53,7 +53,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonConvert.DeserializeObject<User>(x.Body);
+                        var body = JsonSerializer.Deserialize<User>(x.Body);
                         return WireMockResponseHelper.CreateTestResponse(body);
                     }));
 

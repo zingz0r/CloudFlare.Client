@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using CloudFlare.Client.Api.Accounts.Subscriptions;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -15,7 +15,7 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new Subscription();
 
-            var serialized = JsonConvert.SerializeObject(sut);
+            var serialized = JsonSerializer.Serialize(sut);
 
             var json = JObject.Parse(serialized);
 

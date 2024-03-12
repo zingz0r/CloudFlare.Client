@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
@@ -11,13 +11,13 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// <summary>
         /// Http uri
         /// </summary>
-        [JsonProperty("http_url")]
+        [JsonPropertyName("http_url")]
         public Uri HttpUrl { get; set; }
 
         /// <summary>
         /// Http body
         /// </summary>
-        [JsonProperty("http_body")]
+        [JsonPropertyName("http_body")]
         public Guid HttpBody { get; set; }
     }
 }

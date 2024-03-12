@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Subscriptions;
 using CloudFlare.Client.Api.Parameters.Endpoints;
@@ -7,7 +8,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -73,7 +73,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonConvert.DeserializeObject<Subscription>(x.Body);
+                        var body = JsonSerializer.Deserialize<Subscription>(x.Body);
                         var response = SubscriptionTestData.Subscriptions.First().DeepClone();
                         response.Price = body.Price;
 

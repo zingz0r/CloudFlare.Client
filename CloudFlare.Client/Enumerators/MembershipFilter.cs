@@ -1,13 +1,12 @@
 ﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Enumerators
 {
     /// <summary>
     /// Order memberships by
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum MembershipOrder
     {
         /// <summary>

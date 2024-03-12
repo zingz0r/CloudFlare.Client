@@ -1,13 +1,12 @@
 ﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Enumerators
 {
     /// <summary>
     /// Represents possible feature statuses
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum FeatureStatus
     {
         /// <summary>

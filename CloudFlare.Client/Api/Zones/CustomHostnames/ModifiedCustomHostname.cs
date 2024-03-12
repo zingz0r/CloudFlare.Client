@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.CustomHostnames
 {
@@ -12,20 +12,20 @@ namespace CloudFlare.Client.Api.Zones.CustomHostnames
         /// <summary>
         /// SSL settings used when creating the custom hostname
         /// </summary>
-        [JsonProperty("ssl")]
+        [JsonPropertyName("ssl")]
         [DataMember(EmitDefaultValue = false)]
         public Ssl Ssl { get; set; }
 
         /// <summary>
         /// Custom metadata
         /// </summary>
-        [JsonProperty("custom_metadata")]
+        [JsonPropertyName("custom_metadata")]
         public IReadOnlyDictionary<string, string> CustomMetadata { get; set; }
 
         /// <summary>
         /// Custom origin server
         /// </summary>
-        [JsonProperty("custom_origin_server")]
+        [JsonPropertyName("custom_origin_server")]
         public string CustomOriginServer { get; set; }
     }
 }

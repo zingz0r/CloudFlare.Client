@@ -1,5 +1,5 @@
-﻿using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Api.Zones
 {
@@ -11,49 +11,49 @@ namespace CloudFlare.Client.Api.Zones
         /// <summary>
         /// Plan id
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Plan name
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// The price of the subscription that is be billed
         /// </summary>
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public int? Price { get; set; }
 
         /// <summary>
         /// The monetary unit in which pricing information is displayed
         /// </summary>
-        [JsonProperty("currency")]
+        [JsonPropertyName("currency")]
         public string Currency { get; set; }
 
         /// <summary>
         /// How often the subscription is renewed automatically
         /// </summary>
-        [JsonProperty("frequency")]
+        [JsonPropertyName("frequency")]
         public Frequency? Frequency { get; set; }
 
         /// <summary>
         /// Legacy id
         /// </summary>
-        [JsonProperty("legacy_id")]
+        [JsonPropertyName("legacy_id")]
         public LegacyType? LegacyId { get; set; }
 
         /// <summary>
         /// Whether it is subscribed
         /// </summary>
-        [JsonProperty("is_subscribed")]
+        [JsonPropertyName("is_subscribed")]
         public bool? IsSubscribed { get; set; }
 
         /// <summary>
         /// Whether it can be subscribed
         /// </summary>
-        [JsonProperty("can_subscribe")]
+        [JsonPropertyName("can_subscribe")]
         public bool? CanSubscribe { get; set; }
     }
 }

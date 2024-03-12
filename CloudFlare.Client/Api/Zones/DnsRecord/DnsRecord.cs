@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
@@ -12,87 +12,87 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// DNS record identifier
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// DNS record type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public DnsRecordType Type { get; set; }
 
         /// <summary>
         /// Name of the record
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Content of the record
         /// </summary>
-        [JsonProperty("content")]
+        [JsonPropertyName("content")]
         public string Content { get; set; }
 
         /// <summary>
         /// Whether the proxy could be enabled for the record
         /// </summary>
-        [JsonProperty("proxiable")]
+        [JsonPropertyName("proxiable")]
         public bool Proxiable { get; set; }
 
         /// <summary>
         /// Whether the record is receiving the performance and security benefits of CloudFlare
         /// </summary>
-        [JsonProperty("proxied")]
+        [JsonPropertyName("proxied")]
         public bool? Proxied { get; set; }
 
         /// <summary>
         /// Used with some records like MX and SRV to determine priority.
         /// If you do not supply a priority for an MX record, a default value of 0 will be set
         /// </summary>
-        [JsonProperty("priority")]
+        [JsonPropertyName("priority")]
         public int? Priority { get; set; }
 
         /// <summary>
         /// Time to live (TTL) of the DNS entry for the IP address returned by this load balancer.
         /// This only applies to gray-clouded (unproxied) load balancers.
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int? Ttl { get; set; }
 
         /// <summary>
         /// Whether a registrar lock in place for this domain
         /// </summary>
-        [JsonProperty("locked")]
+        [JsonPropertyName("locked")]
         public bool Locked { get; set; }
 
         /// <summary>
         /// Identifier of the zone
         /// </summary>
-        [JsonProperty("zone_id")]
+        [JsonPropertyName("zone_id")]
         public string ZoneId { get; set; }
 
         /// <summary>
         /// Name of the zone
         /// </summary>
-        [JsonProperty("zone_name")]
+        [JsonPropertyName("zone_name")]
         public string ZoneName { get; set; }
 
         /// <summary>
         /// Record creation date
         /// </summary>
-        [JsonProperty("created_on")]
+        [JsonPropertyName("created_on")]
         public DateTime? CreatedDate { get; set; }
 
         /// <summary>
         /// Last modification date
         /// </summary>
-        [JsonProperty("modified_on")]
+        [JsonPropertyName("modified_on")]
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// Additional data
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public object Data { get; set; }
     }
 }
