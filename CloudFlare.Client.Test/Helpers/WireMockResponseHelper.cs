@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Test.TestData;
 
 namespace CloudFlare.Client.Test.Helpers
@@ -14,7 +15,7 @@ namespace CloudFlare.Client.Test.Helpers
                 true,
                 CommonTestData.ErrorDetails,
                 CommonTestData.ApiErrors,
-                CommonTestData.TimingInfo));
+                CommonTestData.TimingInfo), typeof(CloudFlareResult<T>), CloudFlareJsonSerializerContext.Default);
         }
     }
 }

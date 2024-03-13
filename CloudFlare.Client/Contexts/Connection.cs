@@ -21,7 +21,11 @@ namespace CloudFlare.Client.Contexts
 
         protected Connection(IAuthentication authentication, ConnectionInfo connectionInfo)
         {
-            _serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+            _serializerOptions = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                TypeInfoResolver = CloudFlareJsonSerializerContext.Default,
+            };
 
             HttpClient = CreateHttpClient(authentication, connectionInfo);
 

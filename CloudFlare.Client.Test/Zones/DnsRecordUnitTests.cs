@@ -98,7 +98,7 @@ namespace CloudFlare.Client.Test.Zones
                 c => c.Excluding(p => p.Data)
                 .Excluding(p => p.Type)
                 .Excluding(p => p.Priority));
-            JsonSerializer.Deserialize<Srv>(created.Result.Data.ToString()).Should().BeEquivalentTo(newRecord.Data);
+            JsonSerializer.Deserialize<Srv>(created.Result.Data.ToString(), CloudFlareJsonSerializerContext.Default.Srv).Should().BeEquivalentTo(newRecord.Data);
             created.Result.Type.Should().Be(newRecord.Type);
             created.Result.Priority.Should().Be(newRecord.Data.Priority);
         }
@@ -141,7 +141,7 @@ namespace CloudFlare.Client.Test.Zones
                       .Excluding(p => p.Type)
                       .Excluding(p => p.Priority));
 
-            JsonSerializer.Deserialize<TlsA>(created.Result.Data.ToString()).Should().BeEquivalentTo(newRecord.Data);
+            JsonSerializer.Deserialize<TlsA>(created.Result.Data.ToString(), CloudFlareJsonSerializerContext.Default.TlsA).Should().BeEquivalentTo(newRecord.Data);
             created.Result.Type.Should().Be(newRecord.Type);
         }
 
@@ -240,7 +240,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<ModifiedDnsRecord>(x.Body);
+                        var body = JsonSerializer.Deserialize<ModifiedDnsRecord>(x.Body, CloudFlareJsonSerializerContext.Default.ModifiedDnsRecord);
                         var response = DnsRecordTestData.DnsRecords.First(y => y.Id == x.PathSegments[3]).DeepClone();
                         response.Name = body.Name;
 

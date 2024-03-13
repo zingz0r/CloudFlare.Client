@@ -103,7 +103,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<TurnstileWidget>(x.Body!);
+                        var body = JsonSerializer.Deserialize<TurnstileWidget>(x.Body!, CloudFlareJsonSerializerContext.Default.TurnstileWidget);
                         var response = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
                         response.Mode = body.Mode;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using CloudFlare.Client.Api.Zones.WorkerRoute;
+using CloudFlare.Client.Contexts;
 using FluentAssertions;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new WorkerRoute();
 
-            var serialized = JsonSerializer.Serialize(sut);
+            var serialized = JsonSerializer.Serialize(sut, CloudFlareJsonSerializerContext.Default.WorkerRoute);
 
             var json = JsonObject.Parse(serialized) as IDictionary<string, JsonNode>;
 

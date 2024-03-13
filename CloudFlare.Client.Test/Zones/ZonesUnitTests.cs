@@ -106,7 +106,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<ModifiedZone>(x.Body!);
+                        var body = JsonSerializer.Deserialize<ModifiedZone>(x.Body!, CloudFlareJsonSerializerContext.Default.ModifiedZone);
                         var response = ZoneTestData.Zones.First(y => y.Id == x.PathSegments[1]).DeepClone();
 
                         if (body.Paused != null)

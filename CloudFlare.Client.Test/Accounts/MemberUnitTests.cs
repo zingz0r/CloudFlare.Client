@@ -126,7 +126,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<Member>(x.Body);
+                        var body = JsonSerializer.Deserialize<Member>(x.Body, CloudFlareJsonSerializerContext.Default.Member);
                         var response = AccountMembershipTestData.Members.First(y => y.Id == x.PathSegments[3]).DeepClone();
 
                         response.Code = body.Code;

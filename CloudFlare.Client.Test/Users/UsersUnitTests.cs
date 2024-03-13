@@ -53,7 +53,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<User>(x.Body);
+                        var body = JsonSerializer.Deserialize<User>(x.Body, CloudFlareJsonSerializerContext.Default.User);
                         return WireMockResponseHelper.CreateTestResponse(body);
                     }));
 

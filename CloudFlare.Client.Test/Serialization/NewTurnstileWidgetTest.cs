@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using CloudFlare.Client.Api.Accounts.TurnstileWidgets;
+using CloudFlare.Client.Contexts;
 using FluentAssertions;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace CloudFlare.Client.Test.Serialization
@@ -15,11 +16,11 @@ namespace CloudFlare.Client.Test.Serialization
         {
             var sut = new NewTurnstileWidget();
 
-            var serialized = JsonSerializer.Serialize(sut);
+            var serialized = JsonSerializer.Serialize(sut, CloudFlareJsonSerializerContext.Default.NewTurnstileWidget);
 
-            var json = JObject.Parse(serialized);
+            var json = JsonObject.Parse(serialized) as IDictionary<string, JsonNode>;
 
-            var keys = json.Properties().Select(p => p.Name).ToList();
+            var keys = json.Keys.ToList();
 
             keys.Should().BeEquivalentTo(new SortedSet<string>
             {

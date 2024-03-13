@@ -94,7 +94,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{expectedAccount.Id}").UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
                 {
-                    var body = JsonSerializer.Deserialize<Account>(x.Body);
+                    var body = JsonSerializer.Deserialize<Account>(x.Body, CloudFlareJsonSerializerContext.Default.Account);
                     var account = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
 
                     account.Id = body.Id;

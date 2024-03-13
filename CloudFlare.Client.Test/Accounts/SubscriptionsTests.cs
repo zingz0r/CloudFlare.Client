@@ -73,7 +73,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<Subscription>(x.Body);
+                        var body = JsonSerializer.Deserialize<Subscription>(x.Body, CloudFlareJsonSerializerContext.Default.Subscription);
                         var response = SubscriptionTestData.Subscriptions.First().DeepClone();
                         response.Price = body.Price;
 

@@ -108,7 +108,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<NewCustomHostname>(x.Body);
+                        var body = JsonSerializer.Deserialize<NewCustomHostname>(x.Body, CloudFlareJsonSerializerContext.Default.NewCustomHostname);
                         var response = CustomHostnameTestData.CustomHostnames.First(y => y.Id == x.PathSegments[3]).DeepClone();
                         response.Ssl = body.Ssl;
 

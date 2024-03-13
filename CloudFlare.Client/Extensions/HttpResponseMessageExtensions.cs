@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Exceptions;
 
 namespace CloudFlare.Client.Extensions
@@ -24,12 +25,12 @@ namespace CloudFlare.Client.Extensions
                 {
                     case HttpStatusCode.Forbidden:
                     case HttpStatusCode.Unauthorized:
-                        var errorResult = JsonSerializer.Deserialize<CloudFlareResult<object>>(content);
+                        var errorResult = JsonSerializer.Deserialize<CloudFlareResult<object>>(content, CloudFlareJsonSerializerContext.Default.CloudFlareResultObject);
                         throw new AuthenticationException(string.Join(Environment.NewLine, errorResult.Errors.Select(x => x.Message)));
                     default:
                         if (content.IsValidJson())
                         {
-                            return JsonSerializer.Deserialize<CloudFlareResult<T>>(content);
+                            return JsonSerializer.Deserialize(content, typeof(CloudFlareResult<T>), CloudFlareJsonSerializerContext.Default) as CloudFlareResult<T>;
                         }
                         else
                         {

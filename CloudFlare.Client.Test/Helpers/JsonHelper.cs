@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
+using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Test.Helpers
 {
@@ -10,11 +11,11 @@ namespace CloudFlare.Client.Test.Helpers
     {
         public static IEnumerable<string> GetSerializedKeys<T>(T content)
         {
-            var serialized = JsonSerializer.Serialize(content);
+            var serialized = JsonSerializer.Serialize(content, typeof(T), CloudFlareJsonSerializerContext.Default);
 
-            var json = JObject.Parse(serialized);
+            var json = JsonObject.Parse(serialized) as IDictionary<string, JsonNode>;
 
-            return json.Properties().Select(p => p.Name).ToList();
+            return json.Keys.ToList();
         }
 
         public static ISet<string> GetSerializedEnums<T>()
@@ -23,7 +24,7 @@ namespace CloudFlare.Client.Test.Helpers
 
             foreach (var enumValue in Enum.GetValues(typeof(T)))
             {
-                result.Add(JsonSerializer.Serialize(enumValue).Replace("\"", string.Empty));
+                result.Add(JsonSerializer.Serialize(enumValue, typeof(T), CloudFlareJsonSerializerContext.Default).Replace("\"", string.Empty));
             }
 
             return result;

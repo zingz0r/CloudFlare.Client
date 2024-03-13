@@ -99,7 +99,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonSerializer.Deserialize<ModifiedWorkerRoute>(x.Body);
+                    var body = JsonSerializer.Deserialize<ModifiedWorkerRoute>(x.Body, CloudFlareJsonSerializerContext.Default.ModifiedWorkerRoute);
                     var response = WorkerRouteTestData.WorkerRoutes.First(y => y.Id == x.PathSegments[4]).DeepClone();
                     response.Pattern = body.Pattern;
 

@@ -81,7 +81,7 @@ namespace CloudFlare.Client.Test.Users
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonSerializer.Deserialize<Membership>(x.Body);
+                        var body = JsonSerializer.Deserialize<Membership>(x.Body, CloudFlareJsonSerializerContext.Default.Membership);
                         var response = UserMembershipTestsData.Memberships.First(y => y.Id == x.PathSegments[1]).DeepClone();
 
                         response.Status = body.Status;
