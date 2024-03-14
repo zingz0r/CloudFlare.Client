@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -10,7 +11,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -108,7 +108,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(x =>
                     {
-                        var body = JsonConvert.DeserializeObject<NewCustomHostname>(x.Body);
+                        var body = JsonSerializer.Deserialize<NewCustomHostname>(x.Body, CloudFlareJsonSerializerContext.Default.NewCustomHostname);
                         var response = CustomHostnameTestData.CustomHostnames.First(y => y.Id == x.PathSegments[3]).DeepClone();
                         response.Ssl = body.Ssl;
 

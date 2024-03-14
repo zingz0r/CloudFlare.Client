@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.Filters
 {
@@ -10,31 +10,31 @@ namespace CloudFlare.Client.Api.Zones.Filters
         /// <summary>
         /// A note that you can use to describe the purpose of the filter
         /// </summary>
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Filter expression
         /// </summary>
-        [JsonProperty("expression")]
+        [JsonPropertyName("expression")]
         public string Expression { get; set; }
 
         /// <summary>
         /// Filter identifier
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Whether this filter is currently paused
         /// </summary>
-        [JsonProperty("paused")]
+        [JsonPropertyName("paused")]
         public bool Paused { get; set; }
 
         /// <summary>
         /// Short reference tag to quickly select related rules.
         /// </summary>
-        [JsonProperty("ref")]
+        [JsonPropertyName("ref")]
         public string Ref { get; set; }
     }
 }

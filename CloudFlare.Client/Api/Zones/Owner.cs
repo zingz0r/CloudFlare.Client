@@ -1,5 +1,5 @@
-﻿using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Api.Zones
 {
@@ -11,19 +11,19 @@ namespace CloudFlare.Client.Api.Zones
         /// <summary>
         /// Unique identifier
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Email address
         /// </summary>
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
         /// <summary>
         /// Type of the owner
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public OwnerType Type { get; set; }
     }
 }

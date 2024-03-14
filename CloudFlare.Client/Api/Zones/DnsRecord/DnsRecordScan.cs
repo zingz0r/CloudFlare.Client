@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
@@ -11,19 +11,19 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// Records added
         /// </summary>
-        [JsonProperty("recs_added")]
+        [JsonPropertyName("recs_added")]
         public long RecordsAdded { get; set; }
 
         /// <summary>
         /// Records added by type
         /// </summary>
-        [JsonProperty("recs_added_by_type")]
+        [JsonPropertyName("recs_added_by_type")]
         public IReadOnlyDictionary<string, long> RecordsAddedByType { get; set; }
 
         /// <summary>
         /// Total records parsed
         /// </summary>
-        [JsonProperty("total_records_parsed")]
+        [JsonPropertyName("total_records_parsed")]
         public long TotalRecordsParsed { get; set; }
     }
 }

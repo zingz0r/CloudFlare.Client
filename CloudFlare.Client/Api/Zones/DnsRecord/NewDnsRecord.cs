@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Extensions;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
@@ -14,32 +14,32 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// Name of the record
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Content of the record
         /// </summary>
-        [JsonProperty("content")]
+        [JsonPropertyName("content")]
         public string Content { get; set; }
 
         /// <summary>
         /// DNS record comment
         /// </summary>
-        [JsonProperty("comment")]
+        [JsonPropertyName("comment")]
         public string Comment { get; set; }
 
         /// <summary>
         /// Used with some records like MX and SRV to determine priority.
         /// If you do not supply a priority for an MX record, a default value of 0 will be set
         /// </summary>
-        [JsonProperty("priority")]
+        [JsonPropertyName("priority")]
         public int? Priority { get; set; }
 
         /// <summary>
         /// DNS record type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public new DnsRecordType Type
         {
             get
@@ -74,19 +74,19 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// (srv's record name is in the data object).
         /// </para>
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Data of the record
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public T Data { get; set; }
 
         /// <summary>
         /// DNS record type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public new DnsRecordType Type
         {
             get

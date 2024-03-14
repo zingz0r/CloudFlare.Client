@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
@@ -10,13 +10,13 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// Number of the imported records
         /// </summary>
-        [JsonProperty("recs_added")]
+        [JsonPropertyName("recs_added")]
         public int RecordsAdded { get; set; }
 
         /// <summary>
         /// Number of total parsed records
         /// </summary>
-        [JsonProperty("total_records_parsed")]
+        [JsonPropertyName("total_records_parsed")]
         public int TotalRecordsParsed { get; set; }
     }
 }

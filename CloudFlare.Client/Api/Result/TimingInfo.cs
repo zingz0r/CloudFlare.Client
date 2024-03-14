@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Result
 {
@@ -11,19 +11,19 @@ namespace CloudFlare.Client.Api.Result
         /// <summary>
         /// Start date and time of the execution
         /// </summary>
-        [JsonProperty("start_time")]
+        [JsonPropertyName("start_time")]
         public DateTime StartDateTime { get; set; }
 
         /// <summary>
         /// End date and time of the execution
         /// </summary>
-        [JsonProperty("end_time")]
+        [JsonPropertyName("end_time")]
         public DateTime EndDateTime { get; set; }
 
         /// <summary>
         /// Process time of the execution
         /// </summary>
-        [JsonProperty("process_time")]
+        [JsonPropertyName("process_time")]
         public int ProcessTime { get; set; }
     }
 }

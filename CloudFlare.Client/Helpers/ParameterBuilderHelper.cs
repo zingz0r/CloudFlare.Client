@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text.Json;
 using System.Web;
-using Newtonsoft.Json;
+using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Helpers
 {
@@ -33,7 +34,7 @@ namespace CloudFlare.Client.Helpers
                 ((value is string str && !string.IsNullOrEmpty(str)) || value is not string) &&
                 !string.IsNullOrEmpty(key))
             {
-                ParameterCollection[key] = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", string.Empty));
+                ParameterCollection[key] = HttpUtility.UrlDecode(JsonSerializer.Serialize(value, typeof(T), CloudFlareJsonSerializerContext.Default).Replace("\"", string.Empty));
             }
 
             return this;

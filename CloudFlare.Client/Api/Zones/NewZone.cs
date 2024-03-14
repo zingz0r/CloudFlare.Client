@@ -1,6 +1,6 @@
-﻿using CloudFlare.Client.Api.Accounts;
+﻿using System.Text.Json.Serialization;
+using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones
 {
@@ -12,25 +12,25 @@ namespace CloudFlare.Client.Api.Zones
         /// <summary>
         /// The domain name
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Information about the account the zone belongs to
         /// </summary>
-        [JsonProperty("account")]
+        [JsonPropertyName("account")]
         public Account Account { get; set; }
 
         /// <summary>
         /// A full zone implies that DNS is hosted with CloudFlare. A partial zone is typically a partner-hosted zone or a CNAME setup.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ZoneType Type { get; set; }
 
         /// <summary>
         /// Whether you want automatically attempt to fetch existing DNS records
         /// </summary>
-        [JsonProperty("jump_start")]
+        [JsonPropertyName("jump_start")]
         public bool JumpStart { get; set; }
     }
 }

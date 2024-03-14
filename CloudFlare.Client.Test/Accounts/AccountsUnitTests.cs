@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Display;
@@ -10,7 +11,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -94,7 +94,7 @@ namespace CloudFlare.Client.Test.Accounts
                 .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{expectedAccount.Id}").UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<Account>(x.Body);
+                    var body = JsonSerializer.Deserialize<Account>(x.Body, CloudFlareJsonSerializerContext.Default.Account);
                     var account = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
 
                     account.Id = body.Id;

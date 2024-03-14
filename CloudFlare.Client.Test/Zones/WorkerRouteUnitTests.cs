@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.WorkerRoute;
@@ -7,7 +8,6 @@ using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
 using Force.DeepCloner;
-using Newtonsoft.Json;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -99,7 +99,7 @@ namespace CloudFlare.Client.Test.Zones
                 .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<ModifiedWorkerRoute>(x.Body);
+                    var body = JsonSerializer.Deserialize<ModifiedWorkerRoute>(x.Body, CloudFlareJsonSerializerContext.Default.ModifiedWorkerRoute);
                     var response = WorkerRouteTestData.WorkerRoutes.First(y => y.Id == x.PathSegments[4]).DeepClone();
                     response.Pattern = body.Pattern;
 

@@ -1,5 +1,5 @@
-﻿using CloudFlare.Client.Enumerators;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
 {
@@ -11,38 +11,38 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// <summary>
         /// DNS record type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public DnsRecordType? Type { get; set; }
 
         /// <summary>
         /// Name of the record
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Content of the record
         /// </summary>
-        [JsonProperty("content")]
+        [JsonPropertyName("content")]
         public string Content { get; set; }
 
         /// <summary>
         /// Time to live for DNS record. Value of 1 is 'automatic'
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int? Ttl { get; set; }
 
         /// <summary>
         /// Whether the record is receiving the performance and security benefits of CloudFlare
         /// </summary>
-        [JsonProperty("proxied")]
+        [JsonPropertyName("proxied")]
         public bool? Proxied { get; set; }
 
         /// <summary>
         /// Used with some records like MX and SRV to determine priority.
         /// If you do not supply a priority for an MX record, a default value of 0 will be set
         /// </summary>
-        [JsonProperty("priority")]
+        [JsonPropertyName("priority")]
         public int? Priority { get; set; }
     }
 }

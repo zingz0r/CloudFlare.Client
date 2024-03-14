@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CloudFlare.Client.Api.Accounts.Subscriptions
 {
@@ -10,7 +10,7 @@ namespace CloudFlare.Client.Api.Accounts.Subscriptions
         /// <summary>
         /// The deleted subscription id
         /// </summary>
-        [JsonProperty("subscription_id")]
+        [JsonPropertyName("subscription_id")]
         public string SubscriptionId { get; set; }
     }
 }
