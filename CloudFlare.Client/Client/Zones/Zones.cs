@@ -107,6 +107,15 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
+        public async Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<CachePurgeFile> files, CancellationToken cancellationToken = default)
+        {
+            var content = new Dictionary<string, IReadOnlyList<CachePurgeFile>> { { Outgoing.Files, files } };
+
+            var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}";
+            return await Connection.PostAsync<Zone, Dictionary<string, IReadOnlyList<CachePurgeFile>>>(requestUri, content, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CloudFlare.Client.Api.Zones;
+using CloudFlare.Client.Client.Zones;
 using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Test.TestData
@@ -79,6 +80,26 @@ namespace CloudFlare.Client.Test.TestData
                     LegacyId = LegacyType.Free,
                     Currency = "USD",
                     Price = 0,
+                }
+            }
+        };
+
+        public static List<CachePurgeFile> CachePurgeFiles { get; set; } = new()
+        {
+            new CachePurgeFile
+            {
+                Url = "https://example.com/"
+            },
+            new CachePurgeFile
+            {
+                Url = "https://example.com/my-page?q=apple"
+            },   
+            new CachePurgeFile
+            {
+                Url = "https://example.com/my-page?q=apple",
+                Headers = new Dictionary<string, string>
+                {
+                    { "Origin", "https://example2.com" }
                 }
             }
         };
