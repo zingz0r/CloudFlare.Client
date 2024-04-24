@@ -108,6 +108,17 @@ namespace CloudFlare.Client.Client.Zones
         }
 
         /// <inheritdoc />
+        public Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<string> files, CancellationToken cancellationToken = default)
+        {
+            return PurgeFilesAsync(
+                zoneId,
+                files
+                    .Select(url => new CachePurgeFile { Url = url, Headers = new Dictionary<string, string>() })
+                    .ToList(),
+                cancellationToken);
+        }
+
+        /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<CachePurgeFile> files, CancellationToken cancellationToken = default)
         {
             var content = new Dictionary<string, IReadOnlyList<CachePurgeFile>>
