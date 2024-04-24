@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
@@ -109,8 +110,23 @@ namespace CloudFlare.Client.Client.Zones
         /// <inheritdoc />
         public async Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<CachePurgeFile> files, CancellationToken cancellationToken = default)
         {
-            var content = new Dictionary<string, IReadOnlyList<CachePurgeFile>> { { Outgoing.Files, files } };
-
+            var content = new Dictionary<string, IReadOnlyList<CachePurgeFile>>
+            {
+                {
+                    Outgoing.Files,
+                    files
+                        .Select(file => new CachePurgeFile
+                        {
+                            Url = file.Url,
+                            Headers = file.Headers == null ?
+                                new Dictionary<string, string>() :
+                                file.Headers
+                                    .Where(header => header.Value != null)
+                                    .ToDictionary(header => header.Key, header => header.Value)
+                        })
+                        .ToList()
+                }
+            };
             var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}";
             return await Connection.PostAsync<Zone, Dictionary<string, IReadOnlyList<CachePurgeFile>>>(requestUri, content, cancellationToken).ConfigureAwait(false);
         }
