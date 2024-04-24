@@ -105,7 +105,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="files">The files that should be purged</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The purged zone cache result</returns>
-        Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<string> files, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IEnumerable<string> files, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Purge specified files from CloudFlare's cache
@@ -114,7 +114,7 @@ namespace CloudFlare.Client.Client.Zones
         /// <param name="files">The files that should be purged</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The purged zone cache result</returns>
-        Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IReadOnlyList<CachePurgeFile> files, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<Zone>> PurgeFilesAsync(string zoneId, IEnumerable<CachePurgeFile> files, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Change key zone property with new value
