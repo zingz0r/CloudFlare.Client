@@ -27,8 +27,7 @@ namespace CloudFlare.Client.Client.Accounts
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="roleId">Role identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <param name="displayOptions">Display Options</param>
         /// <returns>The requested role details</returns>
-        Task<CloudFlareResult<Role>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default, DisplayOptions displayOptions = null);
+        Task<CloudFlareResult<Role>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default);
     }
 }

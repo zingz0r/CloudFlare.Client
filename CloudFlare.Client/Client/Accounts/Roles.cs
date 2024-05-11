@@ -40,18 +40,9 @@ namespace CloudFlare.Client.Client.Accounts
         }
 
         /// <inheritdoc />
-        public async Task<CloudFlareResult<Role>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default, DisplayOptions displayOptions = null)
+        public async Task<CloudFlareResult<Role>> GetDetailsAsync(string accountId, string roleId, CancellationToken cancellationToken = default)
         {
             var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}/{roleId}";
-            var builder = new ParameterBuilderHelper()
-                .InsertValue(Filtering.Page, displayOptions?.Page)
-                .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
-                .InsertValue(Filtering.Direction, displayOptions?.Order);
-            if (builder.ParameterCollection.HasKeys())
-            {
-                requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-            }
-
             return await Connection.GetAsync<Role>(requestUri, cancellationToken).ConfigureAwait(false);
         }
     }
