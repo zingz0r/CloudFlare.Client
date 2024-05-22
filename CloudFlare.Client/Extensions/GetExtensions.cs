@@ -79,11 +79,16 @@ public static class GetExtensions
                 return firstPage;
             }
 
-            var timing = new TimingInfo
+            TimingInfo timing = null;
+
+            if (firstPage.Timing != null)
             {
-                StartDateTime = firstPage.Timing.StartDateTime,
-                ProcessTime = firstPage.Timing.ProcessTime
-            };
+                timing = new TimingInfo
+                {
+                    StartDateTime = firstPage.Timing.StartDateTime,
+                    ProcessTime = firstPage.Timing.ProcessTime
+                };
+            }
 
             var result = new List<TResult>(firstPage.ResultInfo.Count);
             result.AddRange(firstPage.Result);
@@ -94,8 +99,22 @@ public static class GetExtensions
 
                 var page = await fetch(displayOptions, cancellationToken).ConfigureAwait(false);
 
-                timing.ProcessTime += page.Timing.ProcessTime;
-                timing.EndDateTime = page.Timing.EndDateTime;
+                if (page.Timing != null)
+                {
+                    if (timing == null)
+                    {
+                        timing = new TimingInfo
+                        {
+                            StartDateTime = page.Timing.StartDateTime,
+                            ProcessTime = page.Timing.ProcessTime
+                        };
+                    }
+                    else
+                    {
+                        timing.ProcessTime += page.Timing.ProcessTime;
+                        timing.EndDateTime = page.Timing.EndDateTime;
+                    }
+                }
 
                 if (!page.Success)
                 {
