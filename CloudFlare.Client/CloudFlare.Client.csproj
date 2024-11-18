@@ -1,33 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
-    <Authors>Tamás Tóth</Authors>
-    <Company>TothNET</Company>
+    <Authors>Stefan Cremers</Authors>
+    <Company>CloudAlert</Company>
     <Description>.NET library for communication with the Cloudflare service API.</Description>
-    <Copyright>Copyright © 2019 - CC BY-NC-ND 4.0</Copyright>
-    <PackageProjectUrl>https://github.com/zingz0r/CloudFlare.Client</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/zingz0r/CloudFlare.Client</RepositoryUrl>
+    <Copyright>Copyright © 2024 -  Steffaanus</Copyright>
+    <PackageProjectUrl>https://github.com/Steffaanus/CloudFlare.Client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Steffaanus/CloudFlare.Client</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>CloudFlare, DNS, DDNS,</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>6.3.1.0</AssemblyVersion>
+    <FileVersion>6.3.1.0</FileVersion>
+    <Version>6.3.1</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/zingz0r/CloudFlare.Client/master/CloudFlare.Client/Resources/nuget_logo.png</PackageIconUrl>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>default</LangVersion>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <CodeAnalysisRuleSet>StyleCop/stylecop.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <UserSecretsId>b3bce73e-990d-4690-9b8f-2c2c97f0fec3</UserSecretsId>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
