@@ -12,9 +12,9 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>6.3.1.0</AssemblyVersion>
-    <FileVersion>6.3.1.0</FileVersion>
-    <Version>6.3.1</Version>
+    <AssemblyVersion>6.3.2.0</AssemblyVersion>
+    <FileVersion>6.3.2.0</FileVersion>
+    <Version>6.3.2</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>nuget_logo.png</PackageIcon>
