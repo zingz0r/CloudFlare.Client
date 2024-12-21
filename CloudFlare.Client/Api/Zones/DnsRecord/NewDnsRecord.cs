@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Extensions;
@@ -22,6 +23,12 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("comment")]
         public string Comment { get; set; }
+
+        /// <summary>
+        /// DNS record tags
+        /// </summary>
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        public IList<string> Tags { get; set; }
 
         /// <summary>
         /// Content of the record

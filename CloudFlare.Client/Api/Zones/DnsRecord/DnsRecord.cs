@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
@@ -38,6 +39,12 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("content")]
         public string Content { get; set; }
+
+        /// <summary>
+        /// DNS record tags
+        /// </summary>
+        [JsonProperty("tags")]
+        public IList<string> Tags { get; set; }
 
         /// <summary>
         /// Whether the proxy could be enabled for the record
@@ -94,6 +101,18 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("modified_on")]
         public DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// Last modification date of the comment
+        /// </summary>
+        [JsonProperty("comment_modified_on")]
+        public DateTime? CommentModifiedDate { get; set; }
+
+        /// <summary>
+        /// Last modification date of the tags property
+        /// </summary>
+        [JsonProperty("tags_modified_on")]
+        public DateTime? TagsModifiedDate { get; set; }
 
         /// <summary>
         /// Additional data
