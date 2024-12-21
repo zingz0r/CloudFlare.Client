@@ -184,7 +184,7 @@ namespace CloudFlare.Client.Test.Zones
         public async Task TestPurgeFilesAsync()
         {
             var zone = ZoneTestData.Zones.First();
-            var files = ZoneTestData.CachePurgeFiles;
+            var files = CachePurgeFileTestData.CachePurgeFiles;
             var expected = new Zone { Id = zone.Id };
 
             _wireMockServer
