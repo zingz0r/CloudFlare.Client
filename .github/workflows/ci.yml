@@ -3,12 +3,12 @@ name: CI Pipeline
 
 on:
   workflow_dispatch:
-  pull_request_target: # Runs for PRs, including from forks
+  pull_request_target:
     branches:
       - '*'
   push:
     branches:
-      - master # This ensures the workflow also runs on master pushes
+      - master
 
 env:
   solution: '**/*.sln'
