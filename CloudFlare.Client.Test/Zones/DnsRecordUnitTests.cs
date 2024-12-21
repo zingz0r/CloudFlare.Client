@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -39,6 +40,8 @@ namespace CloudFlare.Client.Test.Zones
             {
                 Name = dnsRecord.Name,
                 Content = dnsRecord.Content,
+                Comment = dnsRecord.Comment,
+                Tags = dnsRecord.Tags,
                 Priority = dnsRecord.Priority,
                 Proxied = dnsRecord.Proxied,
                 Ttl = dnsRecord.Ttl,
@@ -233,6 +236,8 @@ namespace CloudFlare.Client.Test.Zones
             var modified = new ModifiedDnsRecord
             {
                 Name = "new.tothnet.hu",
+                Comment = "new comment",
+                Tags = new[] { "1", "2" }
             };
 
             _wireMockServer
@@ -243,6 +248,8 @@ namespace CloudFlare.Client.Test.Zones
                         var body = JsonConvert.DeserializeObject<ModifiedDnsRecord>(x.Body);
                         var response = DnsRecordTestData.DnsRecords.First(y => y.Id == x.PathSegments[3]).DeepClone();
                         response.Name = body.Name;
+                        response.Comment = body.Comment;
+                        response.Tags = body.Tags;
 
                         return WireMockResponseHelper.CreateTestResponse(response);
                     }));
@@ -251,8 +258,14 @@ namespace CloudFlare.Client.Test.Zones
 
             var update = await client.Zones.DnsRecords.UpdateAsync(zone.Id, record.Id, modified);
 
-            update.Result.Should().BeEquivalentTo(record, opt => opt.Excluding(x => x.Name));
+            update.Result.Should().BeEquivalentTo(record, opt => opt
+                .Excluding(x => x.Name)
+                .Excluding(x => x.Comment)
+                .Excluding(x => x.Tags));
             update.Result.Name.Should().BeEquivalentTo("new.tothnet.hu");
+            update.Result.Comment.Should().BeEquivalentTo("new comment");
+            update.Result.Tags.Count.Should().Be(2);
+            update.Result.Tags.Should().BeEquivalentTo("1", "2");
         }
 
         [Fact]

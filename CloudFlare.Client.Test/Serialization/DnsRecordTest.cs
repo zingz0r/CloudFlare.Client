@@ -14,9 +14,9 @@ namespace CloudFlare.Client.Test.Serialization
             var sut = new DnsRecord();
 
             JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> {
-                "id", "type", "name", "content", "proxiable", "proxied",
+                "id", "type", "name", "content", "comment", "tags", "proxiable", "proxied",
                 "priority", "ttl", "locked", "zone_id", "zone_name",
-                "created_on", "modified_on", "data"
+                "created_on", "modified_on", "comment_modified_on", "tags_modified_on", "data"
             });
         }
     }
