@@ -41,8 +41,8 @@ jobs:
           dotnet test --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
         continue-on-error: false
 
-      - name: Publish Code Coverage Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: coverage.cobertura.xml
+      - name: SonqrQube Analyze
+      - uses: sonarsource/sonarcloud-github-action@4.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ROOT_CERT: ${{ secrets.SONAR_ROOT_CERT }}
