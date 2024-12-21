@@ -33,6 +33,39 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu' 
+
+      - name: Cache SonarQube Cloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarQube Cloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarQube Cloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+      - name: Start SonarQube Analysis
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"CloudFlare.Client" /o:"zingz0r-github" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="bin/**,obj/**" /d:sonar.tests="CloudFlare.Client.Test/" /d:sonar.cs.opencover.reportsPaths="TestResults/**/coverage.opencover.xml"
+
       - name: Build
         run: dotnet build -restore --configuration ${{ env.buildConfiguration }}
 
@@ -41,15 +74,7 @@ jobs:
           dotnet test --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
         continue-on-error: false
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4.2.1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=zingz0r-github
-            -Dsonar.projectKey=CloudFlare.Client
-            -Dsonar.tests=CloudFlare.Client.Test/
-            -Dsonar.exclusions=bin/**,obj/**
-            -Dsonar.cs.opencover.reportsPaths=TestResults/**/coverage.opencover.xml
-            -Dsonar.verbose=true
+      - name: Finish SonarQube Analysis
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
