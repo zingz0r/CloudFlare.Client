@@ -1,4 +1,5 @@
-﻿using CloudFlare.Client.Enumerators;
+﻿using System.Collections.Generic;
+using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Api.Zones.DnsRecord
@@ -25,6 +26,18 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         /// </summary>
         [JsonProperty("content")]
         public string Content { get; set; }
+
+        /// <summary>
+        /// DNS record comment
+        /// </summary>
+        [JsonProperty("comment", NullValueHandling = NullValueHandling.Ignore)]
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// DNS record tags
+        /// </summary>
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        public IList<string> Tags { get; set; }
 
         /// <summary>
         /// Time to live for DNS record. Value of 1 is 'automatic'

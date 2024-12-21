@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CloudFlare.Client.Api.Display;
+using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Test.Helpers;
@@ -27,15 +29,19 @@ namespace CloudFlare.Client.Test.Accounts
         public async Task TestGetRolesAsync()
         {
             var accountId = AccountTestData.Accounts.First().Id;
+            var displayOptions = new DisplayOptions { Page = 1, PerPage = 30 };
 
             _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}").UsingGet())
+                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}")
+                    .WithParam(Filtering.Page)
+                    .WithParam(Filtering.PerPage)
+                    .UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(200)
                     .WithBody(WireMockResponseHelper.CreateTestResponse(RoleTestData.Roles)));
 
             using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var roles = await client.Accounts.Roles.GetAsync(accountId);
+            var roles = await client.Accounts.Roles.GetAsync(accountId, default, displayOptions);
 
             roles.Result.Should().BeEquivalentTo(RoleTestData.Roles);
         }

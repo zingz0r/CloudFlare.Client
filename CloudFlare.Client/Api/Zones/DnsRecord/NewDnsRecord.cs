@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CloudFlare.Client.Api.Parameters.Data;
 using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Extensions;
@@ -18,16 +19,22 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         public string Name { get; set; }
 
         /// <summary>
-        /// Content of the record
-        /// </summary>
-        [JsonProperty("content")]
-        public string Content { get; set; }
-
-        /// <summary>
         /// DNS record comment
         /// </summary>
         [JsonProperty("comment")]
         public string Comment { get; set; }
+
+        /// <summary>
+        /// DNS record tags
+        /// </summary>
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        public IList<string> Tags { get; set; }
+
+        /// <summary>
+        /// Content of the record
+        /// </summary>
+        [JsonProperty("content")]
+        public string Content { get; set; }
 
         /// <summary>
         /// Used with some records like MX and SRV to determine priority.
