@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.TurnstileWidgets;
 using CloudFlare.Client.Api.Parameters.Endpoints;

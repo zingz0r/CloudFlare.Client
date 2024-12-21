@@ -4,7 +4,6 @@ using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Contexts;
-using CloudFlare.Client.Enumerators;
 using CloudFlare.Client.Test.Helpers;
 using CloudFlare.Client.Test.TestData;
 using FluentAssertions;
