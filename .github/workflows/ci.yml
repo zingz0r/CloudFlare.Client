@@ -36,9 +36,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          dotnet test --logger "trx;logfilename=TestResults.trx" --no-build \
-            --configuration ${{ env.buildConfiguration }} \
-            --collect "XPlat Code Coverage;Format=opencover,cobertura"
+          dotnet test --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
         continue-on-error: false
 
       - name: Publish Code Coverage Report
