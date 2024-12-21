@@ -8,7 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions?query=branch%3Amaster)
-[![Azure DevOps tests](https://img.shields.io/azure-devops/tests/zingzor/CloudFlare.Client/1/master.svg)](https://zingzor.visualstudio.com/CloudFlare.Client/_build/latest?definitionId=1&branchName=master)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=coverage)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=CloudFlare.Client)
