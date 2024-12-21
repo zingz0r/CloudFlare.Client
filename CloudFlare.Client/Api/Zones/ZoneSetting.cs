@@ -8,6 +8,7 @@ namespace CloudFlare.Client.Api.Zones
     /// <summary>
     /// Represents the SSL setting response.
     /// </summary>
+    /// <typeparam name="T">The type of the setting value.</typeparam>
     public class ZoneSetting<T>
     {
         /// <summary>

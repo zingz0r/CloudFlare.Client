@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Roles;
+using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Result;
 
 namespace CloudFlare.Client.Client.Accounts
@@ -16,8 +17,9 @@ namespace CloudFlare.Client.Client.Accounts
         /// </summary>
         /// <param name="accountId">Account identifier tag</param>
         /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="displayOptions">Display Options</param>
         /// <returns>The requested role</returns>
-        Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
+        Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default, DisplayOptions displayOptions = null);
 
         /// <summary>
         /// Get information about a specific role for an account
