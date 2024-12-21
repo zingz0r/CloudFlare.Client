@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions?query=branch%3Amaster)
+[![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=coverage)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=CloudFlare.Client)
