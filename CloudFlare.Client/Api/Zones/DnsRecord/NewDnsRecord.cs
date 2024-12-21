@@ -30,6 +30,7 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
         public IList<string> Tags { get; set; }
 
+        /// <summary>
         /// Content of the record
         /// </summary>
         [JsonProperty("content")]

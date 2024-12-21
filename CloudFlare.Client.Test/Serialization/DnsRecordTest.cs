@@ -15,7 +15,7 @@ namespace CloudFlare.Client.Test.Serialization
 
             JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> {
                 "id", "type", "name", "comment", "content", "proxiable", "proxied",
-                "priority", "ttl", "locked", "zone_id", "zone_name",
+                "priority", "ttl", "locked", "zone_id", "zone_name", "tags",
                 "created_on", "modified_on", "comment_modified_on", "tags_modified_on", "data"
             });
         }

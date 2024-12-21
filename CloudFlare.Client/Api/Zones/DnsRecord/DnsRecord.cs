@@ -41,12 +41,6 @@ namespace CloudFlare.Client.Api.Zones.DnsRecord
         public string Content { get; set; }
 
         /// <summary>
-        /// DNS record comment
-        /// </summary>
-        [JsonProperty("comment")]
-        public string Comment { get; set; }
-
-        /// <summary>
         /// DNS record tags
         /// </summary>
         [JsonProperty("tags")]
