@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Client.Zones;
+namespace CloudFlare.Client.Api.Zones;
 
 /// <summary>
-/// CachePurgeFile
+/// Represents a file to be purged from CloudFlare's cache.
 /// </summary>
 public class CachePurgeFile
 {

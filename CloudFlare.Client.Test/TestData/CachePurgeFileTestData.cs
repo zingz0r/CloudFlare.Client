@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CloudFlare.Client.Client.Zones;
+using CloudFlare.Client.Api.Zones;
 
 namespace CloudFlare.Client.Test.TestData
 {
