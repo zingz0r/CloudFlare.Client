@@ -82,7 +82,7 @@ jobs:
             $sonarArgs += "/d:sonar.pullrequest.base=`"${{ github.event.pull_request.base.ref }}`""
           }
           else {
-            $sonarArgs += "/d:sonar.branch=`${{ github.head.ref }}`""
+            $sonarArgs += "/d:sonar.branch=`${{ github.head_ref }}`""
           }
 
           & $sonarArgs
