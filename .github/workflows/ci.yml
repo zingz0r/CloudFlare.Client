@@ -64,7 +64,7 @@ jobs:
       - name: Start SonarQube Analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"CloudFlare.Client" /o:"zingz0r-github" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="bin/**,obj/**" /d:sonar.tests="CloudFlare.Client.Test/" /d:sonar.cs.opencover.reportsPaths="TestResults/**/coverage.opencover.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"CloudFlare.Client" /o:"zingz0r-github" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="bin/**,obj/**" /d:sonar.tests="CloudFlare.Client.Test/" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
       - name: Build
         run: dotnet build -restore --configuration ${{ env.buildConfiguration }}
