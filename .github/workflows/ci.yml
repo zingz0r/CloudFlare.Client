@@ -41,7 +41,15 @@ jobs:
           dotnet test --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
         continue-on-error: false
 
-      - name: Official SonarQube Scan
+      - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=zingz0r-github
+            -Dsonar.projectKey=CloudFlare.Client
+            -Dsonar.tests=CloudFlare.Client.Test/
+            -Dsonar.exclusions=bin/**,obj/**
+            -Dsonar.cs.opencover.reportsPaths=TestResults/**/coverage.opencover.xml
+            -Dsonar.verbose=true
