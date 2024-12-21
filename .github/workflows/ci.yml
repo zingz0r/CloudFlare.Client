@@ -42,6 +42,6 @@ jobs:
         continue-on-error: false
 
       - name: SonqrQube Analyze
-      - uses: sonarsource/sonarcloud-github-action@4.0.0
+        uses: sonarsource/sonarcloud-github-action@4.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
