@@ -65,7 +65,6 @@ jobs:
         shell: powershell
         run: |
           $sonarArgs = @(
-            ".\.sonar\scanner\dotnet-sonarscanner begin"
             "/k:`"CloudFlare.Client`""
             "/o:`"zingz0r-github`""
             "/d:sonar.token=`"${{ secrets.SONAR_TOKEN }}`""
@@ -85,7 +84,7 @@ jobs:
             $sonarArgs += "/d:sonar.branch=`"${{ github.ref_name }}`""
           }
 
-          & $sonarArgs
+          & .\.sonar\scanner\dotnet-sonarscanner begin @sonarArgs
 
       - name: Build
         run: dotnet build -restore --configuration ${{ env.buildConfiguration }}
