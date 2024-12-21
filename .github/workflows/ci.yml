@@ -45,4 +45,3 @@ jobs:
       - uses: sonarsource/sonarcloud-github-action@4.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_ROOT_CERT: ${{ secrets.SONAR_ROOT_CERT }}
