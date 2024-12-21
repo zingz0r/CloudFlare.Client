@@ -32,6 +32,12 @@ namespace CloudFlare.Client.Enumerators
         /// Pro
         /// </summary>
         [EnumMember(Value = "pro")]
-        Pro
+        Pro,
+
+        /// <summary>
+        /// Pro Plus
+        /// </summary>
+        [EnumMember(Value = "pro_plus")]
+        ProPlus
     }
 }
