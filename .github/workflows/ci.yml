@@ -64,7 +64,25 @@ jobs:
       - name: Start SonarQube Analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"CloudFlare.Client" /o:"zingz0r-github" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.pullrequest.key="${{ github.event.pull_request.number }}" /d:sonar.pullrequest.branch="${{ github.event.pull_request.head.ref }}" /d:sonar.pullrequest.base="${{ github.event.pull_request.base.ref }}" /d:sonar.exclusions="bin/**,obj/**" /d:sonar.tests="CloudFlare.Client.Test/" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          $sonarArgs = @(
+            ".\.sonar\scanner\dotnet-sonarscanner begin"
+            "/k:`"CloudFlare.Client`""
+            "/o:`"zingz0r-github`""
+            "/d:sonar.token=`"${{ secrets.SONAR_TOKEN }}`""
+            "/d:sonar.host.url=`"https://sonarcloud.io`""
+            "/d:sonar.exclusions=`"bin/**,obj/**`""
+            "/d:sonar.tests=`"CloudFlare.Client.Test/`""
+            "/d:sonar.cs.vstest.reportsPaths=`"**/*.trx`""
+            "/d:sonar.cs.opencover.reportsPaths=`"**/coverage.opencover.xml`""
+          )
+
+          if ($env:GITHUB_EVENT_NAME -eq "pull_request") {
+            $sonarArgs += "/d:sonar.pullrequest.key=`"${{ github.event.pull_request.number }}`""
+            $sonarArgs += "/d:sonar.pullrequest.branch=`"${{ github.event.pull_request.head.ref }}`""
+            $sonarArgs += "/d:sonar.pullrequest.base=`"${{ github.event.pull_request.base.ref }}`""
+          }
+
+          & $sonarArgs
 
       - name: Build
         run: dotnet build -restore --configuration ${{ env.buildConfiguration }}
