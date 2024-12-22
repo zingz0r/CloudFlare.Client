@@ -75,7 +75,7 @@ jobs:
             "/d:sonar.cs.opencover.reportsPaths=`"**/coverage.opencover.xml`""
           )
 
-          if ("${{ github.event_name }}" -eq "pull_request") {
+          if ("${{ github.event_name }}" -eq "pull_request_target") {
             $sonarArgs += "/d:sonar.pullrequest.key=`"${{ github.event.pull_request.number }}`""
             $sonarArgs += "/d:sonar.pullrequest.branch=`"${{ github.event.pull_request.head.ref }}`""
             $sonarArgs += "/d:sonar.pullrequest.base=`"${{ github.event.pull_request.base.ref }}`""
