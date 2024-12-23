@@ -1,5 +1,5 @@
 version: "1.0"
-linter: jetbrains/qodana-cdnet:2024.3-eap
+linter: jetbrains/qodana-cdnet:latest
 profile:
   name: qodana.recommended
 include:
