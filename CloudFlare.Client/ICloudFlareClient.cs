@@ -1,5 +1,6 @@
 ﻿using System;
 using CloudFlare.Client.Client.Accounts;
+using CloudFlare.Client.Client.Certificates;
 using CloudFlare.Client.Client.Users;
 using CloudFlare.Client.Client.Zones;
 
@@ -27,5 +28,11 @@ namespace CloudFlare.Client
         /// </summary>
         /// <value>The implementation of the zones interaction</value>
         IZones Zones { get; }
+
+        /// <summary>
+        /// Certificates
+        /// </summary>
+        /// <value>The implementation of the certificates interaction</value>
+        ICertificates Certificates { get; }
     }
 }
