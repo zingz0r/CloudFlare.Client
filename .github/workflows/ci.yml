@@ -68,7 +68,7 @@ jobs:
             "/k:`"CloudFlare.Client`""
             "/o:`"zingz0r-github`""
             "/d:sonar.token=`"${{ secrets.SONAR_TOKEN }}`""
-            "/d:sonar.host.url=`"https://sonarcloud.io`""
+            "/d:sonar.host.url=`"${{ secrets.SONAR_HOST_URL }}`""
             "/d:sonar.scanner.scanAll=`"false`""
             "/d:sonar.scanner.metadataFilePath=`"${{ github.workspace }}/.sonar/report-task.txt`""
             "/d:sonar.exclusions=`"CloudFlare.Client/bin/**/*,CloudFlare.Client/obj/**/*,CloudFlare.Client.Test/bin/**/*,CloudFlare.Client.Test/obj/**/*`""
