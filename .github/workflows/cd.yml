@@ -71,3 +71,9 @@ jobs:
             /p:PatchVersion=${{ steps.get-version.outputs.PATCH }} `
             /p:PreReleaseLabel=${{ steps.get-version.outputs.PRERELEASE }} `
             /p:BuildMetadata=${{ steps.get-version.outputs.BUILDMETADATA }}
+
+      - name: Publish NuGet packages
+        run: |
+          foreach($file in (Get-ChildItem "${{ github.workspace }}" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
