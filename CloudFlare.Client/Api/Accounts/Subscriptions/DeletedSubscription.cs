@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Accounts.Subscriptions
+namespace CloudFlare.Client.Api.Accounts.Subscriptions;
+
+/// <summary>
+/// Deleted subscription
+/// </summary>
+public class DeletedSubscription
 {
     /// <summary>
-    /// Deleted subscription
+    /// The deleted subscription id
     /// </summary>
-    public class DeletedSubscription
-    {
-        /// <summary>
-        /// The deleted subscription id
-        /// </summary>
-        [JsonProperty("subscription_id")]
-        public string SubscriptionId { get; set; }
-    }
+    [JsonProperty("subscription_id")]
+    public string SubscriptionId { get; set; }
 }

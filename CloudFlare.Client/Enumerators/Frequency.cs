@@ -2,36 +2,35 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the frequency types
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum Frequency
 {
     /// <summary>
-    /// Represents the frequency types
+    /// Weekly frequency
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum Frequency
-    {
-        /// <summary>
-        /// Weekly frequency
-        /// </summary>
-        [EnumMember(Value = "weekly")]
-        Weekly,
+    [EnumMember(Value = "weekly")]
+    Weekly,
 
-        /// <summary>
-        /// Monthly frequency
-        /// </summary>
-        [EnumMember(Value = "monthly")]
-        Monthly,
+    /// <summary>
+    /// Monthly frequency
+    /// </summary>
+    [EnumMember(Value = "monthly")]
+    Monthly,
 
-        /// <summary>
-        /// Quarterly frequency
-        /// </summary>
-        [EnumMember(Value = "quarterly")]
-        Quarterly,
+    /// <summary>
+    /// Quarterly frequency
+    /// </summary>
+    [EnumMember(Value = "quarterly")]
+    Quarterly,
 
-        /// <summary>
-        /// Yearly frequency
-        /// </summary>
-        [EnumMember(Value = "yearly")]
-        Yearly
-    }
+    /// <summary>
+    /// Yearly frequency
+    /// </summary>
+    [EnumMember(Value = "yearly")]
+    Yearly
 }

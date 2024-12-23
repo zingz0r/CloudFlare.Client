@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class NewDnsRecordTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new NewDnsRecord();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "name", "comment", "content", "ttl", "proxied", "type", "priority" });
-        }
+public class NewDnsRecordTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new NewDnsRecord();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "name", "comment", "content", "ttl", "proxied", "type", "priority" });
     }
 }

@@ -2,24 +2,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the owner types
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum OwnerType
 {
     /// <summary>
-    /// Represents the owner types
+    /// User
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum OwnerType
-    {
-        /// <summary>
-        /// User
-        /// </summary>
-        [EnumMember(Value = "user")]
-        User,
+    [EnumMember(Value = "user")]
+    User,
 
-        /// <summary>
-        /// Organization
-        /// </summary>
-        [EnumMember(Value = "organization")]
-        Organization
-    }
+    /// <summary>
+    /// Organization
+    /// </summary>
+    [EnumMember(Value = "organization")]
+    Organization
 }

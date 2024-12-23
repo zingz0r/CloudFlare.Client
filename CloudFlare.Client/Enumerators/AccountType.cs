@@ -2,24 +2,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the account types
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum AccountType
 {
     /// <summary>
-    /// Represents the account types
+    /// Standard
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum AccountType
-    {
-        /// <summary>
-        /// Standard
-        /// </summary>
-        [EnumMember(Value = "standard")]
-        Standard,
+    [EnumMember(Value = "standard")]
+    Standard,
 
-        /// <summary>
-        /// Enterprise
-        /// </summary>
-        [EnumMember(Value = "enterprise")]
-        Enterprise
-    }
+    /// <summary>
+    /// Enterprise
+    /// </summary>
+    [EnumMember(Value = "enterprise")]
+    Enterprise
 }

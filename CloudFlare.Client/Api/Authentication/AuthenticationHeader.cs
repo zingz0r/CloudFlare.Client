@@ -1,8 +1,7 @@
-﻿namespace CloudFlare.Client.Api.Authentication
+﻿namespace CloudFlare.Client.Api.Authentication;
+
+internal static class AuthenticationHeader
 {
-    internal static class AuthenticationHeader
-    {
-        public const string EmailHeader = "X-Auth-Email";
-        public const string KeyHeader = "X-Auth-Key";
-    }
+    public const string EmailHeader = "X-Auth-Email";
+    public const string KeyHeader = "X-Auth-Key";
 }

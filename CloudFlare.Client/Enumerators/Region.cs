@@ -2,18 +2,17 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the regions
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum Region
 {
     /// <summary>
-    /// Represents the regions
+    /// World
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum Region
-    {
-        /// <summary>
-        /// World
-        /// </summary>
-        [EnumMember(Value = "world")]
-        World
-    }
+    [EnumMember(Value = "world")]
+    World
 }

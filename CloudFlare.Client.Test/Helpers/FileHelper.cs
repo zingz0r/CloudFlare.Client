@@ -1,24 +1,23 @@
 ﻿using System.IO;
 
-namespace CloudFlare.Client.Test.Helpers
+namespace CloudFlare.Client.Test.Helpers;
+
+public static class FileHelper
 {
-    public static class FileHelper
+    public static FileInfo CreateTempFile(string fileName)
     {
-        public static FileInfo CreateTempFile(string fileName)
+        var fileInfo = new FileInfo(fileName);
+
+        FileStream fileStream = null;
+        try
         {
-            var fileInfo = new FileInfo(fileName);
-
-            FileStream fileStream = null;
-            try
-            {
-                fileStream = File.Create(Path.Combine(fileName));
-            }
-            finally
-            {
-                fileStream?.Dispose();
-            }
-
-            return fileInfo;
+            fileStream = File.Create(Path.Combine(fileName));
         }
+        finally
+        {
+            fileStream?.Dispose();
+        }
+
+        return fileInfo;
     }
 }

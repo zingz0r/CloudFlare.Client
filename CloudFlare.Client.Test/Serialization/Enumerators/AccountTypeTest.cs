@@ -4,14 +4,13 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class AccountTypeTest
 {
-    public class AccountTypeTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            JsonHelper.GetSerializedEnums<AccountType>().Should().BeEquivalentTo(new SortedSet<string> { "standard", "enterprise" });
-        }
+        JsonHelper.GetSerializedEnums<AccountType>().Should().BeEquivalentTo(new SortedSet<string> { "standard", "enterprise" });
     }
 }

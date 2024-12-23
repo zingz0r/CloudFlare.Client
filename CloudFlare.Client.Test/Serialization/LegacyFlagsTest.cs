@@ -4,17 +4,16 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
+namespace CloudFlare.Client.Test.Serialization;
+
+public class LegacyFlagsTest
 {
-    public class LegacyFlagsTest
+
+    [Fact]
+    public void TestSerialization()
     {
+        var sut = new LegacyFlags();
 
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new LegacyFlags();
-
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "enterprise_zone_quota" });
-        }
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "enterprise_zone_quota" });
     }
 }

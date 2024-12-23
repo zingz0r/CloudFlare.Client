@@ -4,19 +4,18 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class PermissionTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new Permission();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string>
-            {
-                "read", "write"
-            });
-        }
+public class PermissionTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new Permission();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string>
+        {
+            "read", "write"
+        });
     }
 }
