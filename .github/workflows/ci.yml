@@ -63,6 +63,8 @@ jobs:
 
       - name: Start SonarQube Analysis
         shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $sonarArgs = @(
             "/k:`"CloudFlare.Client`""
@@ -96,6 +98,8 @@ jobs:
 
       - name: Finish SonarQube Analysis
         shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
