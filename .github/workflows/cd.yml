@@ -1,0 +1,52 @@
+# .github/workflows/ci.yml
+name: '♻️ CD'
+
+on:
+  release:
+    types:
+      - created
+
+env:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+jobs:
+  pipeline:
+    name: Publish
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+
+      - name: Extract release version
+        id: get-version
+        run: |
+          VERSION=${{ github.event.release.tag_name }}
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+          echo "::set-output name=MAJOR::$MAJOR"
+          echo "::set-output name=MINOR::$MINOR"
+          echo "::set-output name=PATCH::$PATCH"
+
+      - name: Build
+        run: dotnet build --configuration ${{ env.buildConfiguration }} /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} /p:PatchVersion=${{ steps.get-version.outputs.PATCH }}
+
+      - name: Run Tests
+        run: dotnet test --no-build --configuration ${{ env.buildConfiguration }} 
+        continue-on-error: false
+
+      - name: Pack
+        run: dotnet pack --no-build --configuration ${{ env.buildConfiguration }} .\CloudFlare.Client.sln /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} /p:PatchVersion=${{ steps.get-version.outputs.PATCH }}
+        continue-on-error: false
