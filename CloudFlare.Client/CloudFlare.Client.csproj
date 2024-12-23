@@ -15,6 +15,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
     <Authors>Tamás Tóth</Authors>
     <Company>TothNET</Company>
     <Description>.NET library for communication with the Cloudflare service API.</Description>
@@ -27,9 +28,16 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MajorVersion Condition="'$(MajorVersion)' == ''">1</MajorVersion>
+    <MinorVersion Condition="'$(MinorVersion)' == ''">0</MinorVersion>
+    <PatchVersion Condition="'$(PatchVersion)' == ''">0</PatchVersion>
+    <AssemblyVersion>$(MajorVersion).0.0.0</AssemblyVersion>
+    <InformationalVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).0</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <FileVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion)</FileVersion>
+    <PackageVersion>$(FileVersion)</PackageVersion>
   </PropertyGroup>
   <PropertyGroup>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -50,7 +58,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="True" />
-    <None Include="..\CloudFlare.Client\Resources\nuget_logo.png" Pack="False" />
+    <None Include="..\LICENSE" Pack="True" PackagePath="" />
+    <None Include="..\CloudFlare.Client\Resources\nuget_logo.png" Pack="True" PackagePath="" />
   </ItemGroup>
 </Project>
