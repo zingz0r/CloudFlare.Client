@@ -1,4 +1,4 @@
-# .github/workflows/ci.yml
+# .github/workflows/cd.yml
 name: '♻️ CD'
 
 on:
@@ -29,24 +29,45 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Extract release version
+      - name: Extract Release Version
         id: get-version
         run: |
-          VERSION=${{ github.event.release.tag_name }}
-          MAJOR=$(echo "$VERSION" | cut -d. -f1)
-          MINOR=$(echo "$VERSION" | cut -d. -f2)
-          PATCH=$(echo "$VERSION" | cut -d. -f3)
-          echo "::set-output name=MAJOR::$MAJOR"
-          echo "::set-output name=MINOR::$MINOR"
-          echo "::set-output name=PATCH::$PATCH"
+          $regex = '^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+          $version = "${{ github.event.release.tag_name }}"
+
+          if ($version -match $regex) {
+            $major = $matches['major']
+            $minor = $matches['minor']
+            $patch = $matches['patch']
+            $prerelease = $matches['prerelease']
+            $buildmetadata = $matches['buildmetadata']
+
+            Write-Output "::set-output name=MAJOR::$major"
+            Write-Output "::set-output name=MINOR::$minor"
+            Write-Output "::set-output name=PATCH::$patch"
+            Write-Output "::set-output name=PRERELEASE::$prerelease"
+            Write-Output "::set-output name=BUILDMETADATA::$buildmetadata"
+          } else {
+            throw "Invalid Semantic Versioning format: $version"
+          }
 
       - name: Build
-        run: dotnet build --configuration ${{ env.buildConfiguration }} /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} /p:PatchVersion=${{ steps.get-version.outputs.PATCH }}
+        run: |
+          dotnet build --configuration ${{ env.buildConfiguration }} `
+            /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} `
+            /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} `
+            /p:PatchVersion=${{ steps.get-version.outputs.PATCH }} `
+            /p:PreReleaseLabel=${{ steps.get-version.outputs.PRERELEASE }} `
+            /p:BuildMetadata=${{ steps.get-version.outputs.BUILDMETADATA }}
 
       - name: Run Tests
         run: dotnet test --no-build --configuration ${{ env.buildConfiguration }} 
-        continue-on-error: false
 
       - name: Pack
-        run: dotnet pack --no-build --configuration ${{ env.buildConfiguration }} .\CloudFlare.Client.sln /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} /p:PatchVersion=${{ steps.get-version.outputs.PATCH }}
-        continue-on-error: false
+        run: |
+            dotnet pack --no-build --configuration ${{ env.buildConfiguration }} .\CloudFlare.Client.sln `
+            /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} `
+            /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} `
+            /p:PatchVersion=${{ steps.get-version.outputs.PATCH }} `
+            /p:PreReleaseLabel=${{ steps.get-version.outputs.PRERELEASE }} `
+            /p:BuildMetadata=${{ steps.get-version.outputs.BUILDMETADATA }}
