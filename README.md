@@ -32,7 +32,7 @@
         Console.WriteLine(zone.Name);
     }
 ```
-
+ 
 For real example check out this dns updater project: [CloudFlare DNS Updater Service](https://github.com/zingz0r/CloudFlareDnsUpdater)
 
 ## Implemented functionality
