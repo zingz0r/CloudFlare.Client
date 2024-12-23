@@ -2,18 +2,17 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the Rate Plan Scopes
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum RatePlanScope
 {
     /// <summary>
-    /// Represents the Rate Plan Scopes
+    /// Zone
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum RatePlanScope
-    {
-        /// <summary>
-        /// Zone
-        /// </summary>
-        [EnumMember(Value = "zone")]
-        Zone
-    }
+    [EnumMember(Value = "zone")]
+    Zone
 }

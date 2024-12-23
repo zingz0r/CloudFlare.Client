@@ -2,18 +2,17 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents domain validation types
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum DomainValidationType
 {
     /// <summary>
-    /// Represents domain validation types
+    /// DV type
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum DomainValidationType
-    {
-        /// <summary>
-        /// DV type
-        /// </summary>
-        [EnumMember(Value = "dv")]
-        Dv
-    }
+    [EnumMember(Value = "dv")]
+    Dv
 }

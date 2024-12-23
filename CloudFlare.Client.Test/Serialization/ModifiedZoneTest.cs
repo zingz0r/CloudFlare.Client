@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class ModifiedZoneTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new ModifiedZone();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "vanity_name_servers", "paused", "plan" });
-        }
+public class ModifiedZoneTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new ModifiedZone();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "vanity_name_servers", "paused", "plan" });
     }
 }

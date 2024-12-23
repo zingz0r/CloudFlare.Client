@@ -1,7 +1,6 @@
-﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
+﻿namespace CloudFlare.Client.Api.Parameters.Endpoints;
+
+internal static class CustomHostnameEndpoints
 {
-    internal static class CustomHostnameEndpoints
-    {
-        public const string Base = "custom_hostnames";
-    }
+    public const string Base = "custom_hostnames";
 }

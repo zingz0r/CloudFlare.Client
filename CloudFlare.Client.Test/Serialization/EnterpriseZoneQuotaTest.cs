@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class EnterpriseZoneQuotaTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new EnterpriseZoneQuota();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "maximum", "current", "available" });
-        }
+public class EnterpriseZoneQuotaTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new EnterpriseZoneQuota();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "maximum", "current", "available" });
     }
 }

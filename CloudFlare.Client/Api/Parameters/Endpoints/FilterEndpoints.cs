@@ -1,7 +1,6 @@
-﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
+﻿namespace CloudFlare.Client.Api.Parameters.Endpoints;
+
+internal static class FilterEndpoints
 {
-    internal static class FilterEndpoints
-    {
-        public const string Base = "filters";
-    }
+    public const string Base = "filters";
 }

@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class DeletedSubscriptionTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new DeletedSubscription();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "subscription_id" });
-        }
+public class DeletedSubscriptionTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new DeletedSubscription();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "subscription_id" });
     }
 }

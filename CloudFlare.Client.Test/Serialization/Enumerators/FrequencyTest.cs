@@ -4,14 +4,13 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class FrequencyTest
 {
-    public class FrequencyTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            JsonHelper.GetSerializedEnums<Frequency>().Should().BeEquivalentTo(new SortedSet<string> { "weekly", "monthly", "quarterly", "yearly" });
-        }
+        JsonHelper.GetSerializedEnums<Frequency>().Should().BeEquivalentTo(new SortedSet<string> { "weekly", "monthly", "quarterly", "yearly" });
     }
 }

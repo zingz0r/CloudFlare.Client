@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class TimingInfoTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new TimingInfo();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "start_time", "end_time", "process_time" });
-        }
+public class TimingInfoTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new TimingInfo();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "start_time", "end_time", "process_time" });
     }
 }

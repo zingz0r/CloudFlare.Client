@@ -2,54 +2,53 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the state that the subscription is in
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum SubscriptionState
 {
     /// <summary>
-    /// Represents the state that the subscription is in
+    /// Trial
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum SubscriptionState
-    {
-        /// <summary>
-        /// Trial
-        /// </summary>
-        [EnumMember(Value = "Trial")]
-        Trial,
+    [EnumMember(Value = "Trial")]
+    Trial,
 
-        /// <summary>
-        /// Provisioned
-        /// </summary>
-        [EnumMember(Value = "Provisioned")]
-        Provisioned,
+    /// <summary>
+    /// Provisioned
+    /// </summary>
+    [EnumMember(Value = "Provisioned")]
+    Provisioned,
 
-        /// <summary>
-        /// Paid
-        /// </summary>
-        [EnumMember(Value = "Paid")]
-        Paid,
+    /// <summary>
+    /// Paid
+    /// </summary>
+    [EnumMember(Value = "Paid")]
+    Paid,
 
-        /// <summary>
-        /// Awaiting payment
-        /// </summary>
-        [EnumMember(Value = "AwaitingPayment")]
-        AwaitingPayment,
+    /// <summary>
+    /// Awaiting payment
+    /// </summary>
+    [EnumMember(Value = "AwaitingPayment")]
+    AwaitingPayment,
 
-        /// <summary>
-        /// Cancelled
-        /// </summary>
-        [EnumMember(Value = "Cancelled")]
-        Cancelled,
+    /// <summary>
+    /// Cancelled
+    /// </summary>
+    [EnumMember(Value = "Cancelled")]
+    Cancelled,
 
-        /// <summary>
-        /// Failed
-        /// </summary>
-        [EnumMember(Value = "Failed")]
-        Failed,
+    /// <summary>
+    /// Failed
+    /// </summary>
+    [EnumMember(Value = "Failed")]
+    Failed,
 
-        /// <summary>
-        /// Expired
-        /// </summary>
-        [EnumMember(Value = "Expired")]
-        Expired
-    }
+    /// <summary>
+    /// Expired
+    /// </summary>
+    [EnumMember(Value = "Expired")]
+    Expired
 }

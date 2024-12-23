@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using CloudFlare.Client.Api.Zones.WorkerRoute;
 
-namespace CloudFlare.Client.Test.TestData
+namespace CloudFlare.Client.Test.TestData;
+
+public static class WorkerRouteTestData
 {
-    public static class WorkerRouteTestData
+    public static List<WorkerRoute> WorkerRoutes { get; set; } = new()
     {
-        public static List<WorkerRoute> WorkerRoutes { get; set; } = new()
+        new WorkerRoute
         {
-            new WorkerRoute
-            {
-                Pattern = "example.net/*",
-                Script = "maintenance",
-                Id = "635cd51af7194948821174ded7327331",
-            }
-        };
-    }
+            Pattern = "example.net/*",
+            Script = "maintenance",
+            Id = "635cd51af7194948821174ded7327331",
+        }
+    };
 }

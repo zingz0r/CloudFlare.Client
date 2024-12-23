@@ -3,29 +3,28 @@ using CloudFlare.Client.Api.Accounts.Roles;
 using CloudFlare.Client.Enumerators;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Api.Accounts.Member
+namespace CloudFlare.Client.Api.Accounts.Member;
+
+/// <summary>
+/// New member
+/// </summary>
+public class NewMember
 {
     /// <summary>
-    /// New member
+    /// Your contact email address
     /// </summary>
-    public class NewMember
-    {
-        /// <summary>
-        /// Your contact email address
-        /// </summary>
-        [JsonProperty("email")]
-        public string EmailAddress { get; set; }
+    [JsonProperty("email")]
+    public string EmailAddress { get; set; }
 
-        /// <summary>
-        /// A member's status in the account
-        /// </summary>
-        [JsonProperty("status")]
-        public MembershipStatus Status { get; set; }
+    /// <summary>
+    /// A member's status in the account
+    /// </summary>
+    [JsonProperty("status")]
+    public MembershipStatus Status { get; set; }
 
-        /// <summary>
-        /// Array of roles associated with this member
-        /// </summary>
-        [JsonProperty("roles")]
-        public IReadOnlyList<Role> Roles { get; set; }
-    }
+    /// <summary>
+    /// Array of roles associated with this member
+    /// </summary>
+    [JsonProperty("roles")]
+    public IReadOnlyList<Role> Roles { get; set; }
 }

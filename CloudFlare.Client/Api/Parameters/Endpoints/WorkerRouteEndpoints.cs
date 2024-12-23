@@ -1,7 +1,6 @@
-﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
+﻿namespace CloudFlare.Client.Api.Parameters.Endpoints;
+
+internal static class WorkerRouteEndpoints
 {
-    internal static class WorkerRouteEndpoints
-    {
-        public const string Base = "workers/routes";
-    }
+    public const string Base = "workers/routes";
 }

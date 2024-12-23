@@ -14,151 +14,150 @@ using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Accounts
+namespace CloudFlare.Client.Test.Accounts;
+
+public class TurnstileWidgetsTests
 {
-    public class TurnstileWidgetsTests
+    private readonly WireMockServer _wireMockServer;
+    private readonly ConnectionInfo _connectionInfo;
+
+    public TurnstileWidgetsTests()
     {
-        private readonly WireMockServer _wireMockServer;
-        private readonly ConnectionInfo _connectionInfo;
+        _wireMockServer = WireMockServer.Start();
+        _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+    }
 
-        public TurnstileWidgetsTests()
+    [Fact]
+    public async Task TestAddAccountTurnstileWidgetsAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
+        var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
+        var newTurnstileWidget = new NewTurnstileWidget()
         {
-            _wireMockServer = WireMockServer.Start();
-            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
-        }
+            BotFightMode = turnstileWidget.BotFightMode,
+            Name = turnstileWidget.Name,
+            ClearanceLevel = turnstileWidget.ClearanceLevel,
+            Domains = turnstileWidget.Domains,
+            Mode = turnstileWidget.Mode,
+            OffLabel = turnstileWidget.OffLabel,
+            Region = turnstileWidget.Region
+        };
 
-        [Fact]
-        public async Task TestAddAccountTurnstileWidgetsAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
-            var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
-            var newTurnstileWidget = new NewTurnstileWidget()
-            {
-                BotFightMode = turnstileWidget.BotFightMode,
-                Name = turnstileWidget.Name,
-                ClearanceLevel = turnstileWidget.ClearanceLevel,
-                Domains = turnstileWidget.Domains,
-                Mode = turnstileWidget.Mode,
-                OffLabel = turnstileWidget.OffLabel,
-                Region = turnstileWidget.Region
-            };
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}").UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}").UsingPost())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var addTurnstileWidget = await client.Accounts.TurnStileWidgets.AddAsync(accountId, newTurnstileWidget);
 
-            var addTurnstileWidget = await client.Accounts.TurnStileWidgets.AddAsync(accountId, newTurnstileWidget);
+        addTurnstileWidget.Result.Should().BeEquivalentTo(turnstileWidget);
+    }
 
-            addTurnstileWidget.Result.Should().BeEquivalentTo(turnstileWidget);
-        }
+    [Fact]
+    public async Task TestGetAccountTurnstileWidgetsTestsAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
 
-        [Fact]
-        public async Task TestGetAccountTurnstileWidgetsTestsAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}").UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(TurnstileWidgetTestData.TurnstileWidgets)));
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}").UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(TurnstileWidgetTestData.TurnstileWidgets)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var turnstileWidgets = await client.Accounts.TurnStileWidgets.GetAsync(accountId);
 
-            var turnstileWidgets = await client.Accounts.TurnStileWidgets.GetAsync(accountId);
-
-            turnstileWidgets.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets);
-        }
+        turnstileWidgets.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets);
+    }
 
 
-        [Fact]
-        public async Task TestGetAccountSubscriptionDetailsAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
-            var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
+    [Fact]
+    public async Task TestGetAccountSubscriptionDetailsAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
+        var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var turnstileWidgetDetails = await client.Accounts.TurnStileWidgets.GetDetailsAsync(accountId, turnstileWidget.Id);
+        var turnstileWidgetDetails = await client.Accounts.TurnStileWidgets.GetDetailsAsync(accountId, turnstileWidget.Id);
 
-            turnstileWidgetDetails.Result.Should().BeEquivalentTo(turnstileWidget);
-        }
+        turnstileWidgetDetails.Result.Should().BeEquivalentTo(turnstileWidget);
+    }
 
-        [Fact]
-        public async Task TestModifyAccountTurnstileWidgetsAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
-            var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
-            turnstileWidget.Mode = WidgetMode.NonInteractive;
+    [Fact]
+    public async Task TestModifyAccountTurnstileWidgetsAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
+        var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
+        turnstileWidget.Mode = WidgetMode.NonInteractive;
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingPut())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(x =>
-                    {
-                        var body = JsonConvert.DeserializeObject<TurnstileWidget>(x.Body!);
-                        var response = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
-                        response.Mode = body.Mode;
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingPut())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(x =>
+                {
+                    var body = JsonConvert.DeserializeObject<TurnstileWidget>(x.Body!);
+                    var response = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
+                    response.Mode = body.Mode;
 
-                        return WireMockResponseHelper.CreateTestResponse(response);
-                    }));
+                    return WireMockResponseHelper.CreateTestResponse(response);
+                }));
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var modifiedTurnstileWidget = await client.Accounts.TurnStileWidgets.UpdateAsync(accountId, turnstileWidget);
+        var modifiedTurnstileWidget = await client.Accounts.TurnStileWidgets.UpdateAsync(accountId, turnstileWidget);
 
-            modifiedTurnstileWidget.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets.First(), opt => opt.Excluding(x => x.Mode));
-            modifiedTurnstileWidget.Result.Mode.Should().Be(WidgetMode.NonInteractive);
-        }
+        modifiedTurnstileWidget.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets.First(), opt => opt.Excluding(x => x.Mode));
+        modifiedTurnstileWidget.Result.Mode.Should().Be(WidgetMode.NonInteractive);
+    }
 
-        [Fact]
-        public async Task TestDeleteAccountTurnstileWidgetsAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
-            var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
+    [Fact]
+    public async Task TestDeleteAccountTurnstileWidgetsAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
+        var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingDelete())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}").UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(turnstileWidget)));
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var deletedTurnstileWidget = await client.Accounts.TurnStileWidgets.DeleteAsync(accountId, turnstileWidget.Id);
+        var deletedTurnstileWidget = await client.Accounts.TurnStileWidgets.DeleteAsync(accountId, turnstileWidget.Id);
 
-            deletedTurnstileWidget.Result.Should().BeEquivalentTo(turnstileWidget);
-        }
+        deletedTurnstileWidget.Result.Should().BeEquivalentTo(turnstileWidget);
+    }
 
-        [Fact]
-        public async Task TestRotateAccountTurnstileWidgetSecretAsync()
-        {
-            var accountId = AccountTestData.Accounts.First().Id;
-            var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
+    [Fact]
+    public async Task TestRotateAccountTurnstileWidgetSecretAsync()
+    {
+        var accountId = AccountTestData.Accounts.First().Id;
+        var turnstileWidget = TurnstileWidgetTestData.TurnstileWidgets.First();
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}/{AccountEndpoints.RotateSecret}").UsingPost())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(x =>
-                    {
-                        var response = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
-                        response.Secret = "0x4AAF00AAAdABn0R22H12uz7sh92kja2hd";
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}/{AccountEndpoints.RotateSecret}").UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(x =>
+                {
+                    var response = TurnstileWidgetTestData.TurnstileWidgets.First().DeepClone();
+                    response.Secret = "0x4AAF00AAAdABn0R22H12uz7sh92kja2hd";
 
-                        return WireMockResponseHelper.CreateTestResponse(response);
-                    }));
+                    return WireMockResponseHelper.CreateTestResponse(response);
+                }));
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var rotatedSecretTurnstileWidget = await client.Accounts.TurnStileWidgets.RotateSecretAsync(accountId, turnstileWidget.Id, false);
+        var rotatedSecretTurnstileWidget = await client.Accounts.TurnStileWidgets.RotateSecretAsync(accountId, turnstileWidget.Id, false);
 
-            rotatedSecretTurnstileWidget.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets.First(), opt => opt.Excluding(x => x.Secret));
-            rotatedSecretTurnstileWidget.Result.Secret.Should().NotBeEquivalentTo(turnstileWidget.Secret);
-        }
+        rotatedSecretTurnstileWidget.Result.Should().BeEquivalentTo(TurnstileWidgetTestData.TurnstileWidgets.First(), opt => opt.Excluding(x => x.Secret));
+        rotatedSecretTurnstileWidget.Result.Secret.Should().NotBeEquivalentTo(turnstileWidget.Secret);
     }
 }

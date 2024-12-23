@@ -1,8 +1,7 @@
-﻿namespace CloudFlare.Client.Api.Parameters.Endpoints
+﻿namespace CloudFlare.Client.Api.Parameters.Endpoints;
+
+internal static class TokenEndpoints
 {
-    internal static class TokenEndpoints
-    {
-        public const string Base = "tokens";
-        public const string Verify = "verify";
-    }
+    public const string Base = "tokens";
+    public const string Verify = "verify";
 }

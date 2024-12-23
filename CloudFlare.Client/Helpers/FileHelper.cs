@@ -2,23 +2,22 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CloudFlare.Client.Helpers
+namespace CloudFlare.Client.Helpers;
+
+internal static class FileHelper
 {
-    internal static class FileHelper
+    internal static async Task<byte[]> ReadAsync(string path, CancellationToken cancellationToken)
     {
-        internal static async Task<byte[]> ReadAsync(string path, CancellationToken cancellationToken)
-        {
-            using var sourceStream = File.Open(path, FileMode.Open);
-            var result = new byte[sourceStream.Length];
+        using var sourceStream = File.Open(path, FileMode.Open);
+        var result = new byte[sourceStream.Length];
 
 #if NETSTANDARD2_0
             await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length, cancellationToken).ConfigureAwait(false);
 #else
-            using var memoryStream = new MemoryStream(result, 0, result.Length, true, true);
-            await sourceStream.ReadAsync(memoryStream.GetBuffer(), cancellationToken).ConfigureAwait(false);
+        using var memoryStream = new MemoryStream(result, 0, result.Length, true, true);
+        await sourceStream.ReadAsync(memoryStream.GetBuffer(), cancellationToken).ConfigureAwait(false);
 #endif
 
-            return result;
-        }
+        return result;
     }
 }
