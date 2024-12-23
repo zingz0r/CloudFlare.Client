@@ -4,14 +4,13 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class ComponentValueTypeTest
 {
-    public class ComponentValueTypeTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            JsonHelper.GetSerializedEnums<ComponentValueType>().Should().BeEquivalentTo(new SortedSet<string> { "page_rules" });
-        }
+        JsonHelper.GetSerializedEnums<ComponentValueType>().Should().BeEquivalentTo(new SortedSet<string> { "page_rules" });
     }
 }

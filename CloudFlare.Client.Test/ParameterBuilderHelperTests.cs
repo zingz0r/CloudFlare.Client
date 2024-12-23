@@ -6,45 +6,44 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace CloudFlare.Client.Test
+namespace CloudFlare.Client.Test;
+
+public class ParameterBuilderHelperTests
 {
-    public class ParameterBuilderHelperTests
+    [Theory]
+    [InlineData("key", 1)]
+    [InlineData("key", "hello")]
+    [InlineData("key", 3.0)]
+    [InlineData("key", true)]
+    [InlineData("key", 'c')]
+    [InlineData("key", ZoneStatus.Deactivated)]
+    public void TestParameterBuilder(string key, object value)
     {
-        [Theory]
-        [InlineData("key", 1)]
-        [InlineData("key", "hello")]
-        [InlineData("key", 3.0)]
-        [InlineData("key", true)]
-        [InlineData("key", 'c')]
-        [InlineData("key", ZoneStatus.Deactivated)]
-        public void TestParameterBuilder(string key, object value)
-        {
-            var expected = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
+        var expected = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
 
-            var builder = new ParameterBuilderHelper();
+        var builder = new ParameterBuilderHelper();
 
-            builder.InsertValue(key, value);
+        builder.InsertValue(key, value);
 
-            builder.ParameterCollection.AllKeys.Length.Should().Be(1);
-            builder.ParameterCollection.AllKeys.First().Should().Be(key);
+        builder.ParameterCollection.AllKeys.Length.Should().Be(1);
+        builder.ParameterCollection.AllKeys.First().Should().Be(key);
 
-            builder.ParameterCollection.GetValues(0).Should().BeEquivalentTo(expected);
-        }
+        builder.ParameterCollection.GetValues(0).Should().BeEquivalentTo(expected);
+    }
 
-        [Theory]
-        [InlineData("", 1)]
-        [InlineData(null, 1)]
-        [InlineData("", 3.0)]
-        [InlineData(null, 3.0)]
-        [InlineData("key", null)]
-        [InlineData("key", "")]
-        public void TestParameterBuilderWithDefaults(string key, object value)
-        {
-            var builder = new ParameterBuilderHelper();
+    [Theory]
+    [InlineData("", 1)]
+    [InlineData(null, 1)]
+    [InlineData("", 3.0)]
+    [InlineData(null, 3.0)]
+    [InlineData("key", null)]
+    [InlineData("key", "")]
+    public void TestParameterBuilderWithDefaults(string key, object value)
+    {
+        var builder = new ParameterBuilderHelper();
 
-            builder.InsertValue(key, value);
+        builder.InsertValue(key, value);
 
-            builder.ParameterCollection.AllKeys.Should().BeEmpty();
-        }
+        builder.ParameterCollection.AllKeys.Should().BeEmpty();
     }
 }

@@ -4,14 +4,13 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class RegionTest
 {
-    public class RegionTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            JsonHelper.GetSerializedEnums<Region>().Should().BeEquivalentTo(new SortedSet<string> { "world" });
-        }
+        JsonHelper.GetSerializedEnums<Region>().Should().BeEquivalentTo(new SortedSet<string> { "world" });
     }
 }

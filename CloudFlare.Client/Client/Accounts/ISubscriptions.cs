@@ -4,46 +4,45 @@ using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Subscriptions;
 using CloudFlare.Client.Api.Result;
 
-namespace CloudFlare.Client.Client.Accounts
+namespace CloudFlare.Client.Client.Accounts;
+
+/// <summary>
+/// Interface for interacting with subscriptions
+/// </summary>
+public interface ISubscriptions
 {
     /// <summary>
-    /// Interface for interacting with subscriptions
+    /// Creates an account subscription
     /// </summary>
-    public interface ISubscriptions
-    {
-        /// <summary>
-        /// Creates an account subscription
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
-        /// <param name="subscription">New subscription details</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The created subscription</returns>
-        Task<CloudFlareResult<Subscription>> AddAsync(string accountId, Subscription subscription, CancellationToken cancellationToken = default);
+    /// <param name="accountId">Account identifier tag</param>
+    /// <param name="subscription">New subscription details</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The created subscription</returns>
+    Task<CloudFlareResult<Subscription>> AddAsync(string accountId, Subscription subscription, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Removes an account subscription
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
-        /// <param name="subscriptionId">Subscription identifier tag</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The deleted subscription</returns>
-        Task<CloudFlareResult<DeletedSubscription>> DeleteAsync(string accountId, string subscriptionId, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Removes an account subscription
+    /// </summary>
+    /// <param name="accountId">Account identifier tag</param>
+    /// <param name="subscriptionId">Subscription identifier tag</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The deleted subscription</returns>
+    Task<CloudFlareResult<DeletedSubscription>> DeleteAsync(string accountId, string subscriptionId, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Lists all an account's subscriptions
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The requested subscription</returns>
-        Task<CloudFlareResult<IReadOnlyList<Subscription>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Lists all an account's subscriptions
+    /// </summary>
+    /// <param name="accountId">Account identifier tag</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The requested subscription</returns>
+    Task<CloudFlareResult<IReadOnlyList<Subscription>>> GetAsync(string accountId, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Updates an account subscription
-        /// </summary>
-        /// <param name="accountId">Account identifier tag</param>
-        /// <param name="subscription">Modified subscription details</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The updated subscription</returns>
-        Task<CloudFlareResult<Subscription>> UpdateAsync(string accountId, Subscription subscription, CancellationToken cancellationToken = default);
-    }
+    /// <summary>
+    /// Updates an account subscription
+    /// </summary>
+    /// <param name="accountId">Account identifier tag</param>
+    /// <param name="subscription">Modified subscription details</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated subscription</returns>
+    Task<CloudFlareResult<Subscription>> UpdateAsync(string accountId, Subscription subscription, CancellationToken cancellationToken = default);
 }

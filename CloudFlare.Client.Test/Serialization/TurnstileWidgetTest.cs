@@ -6,26 +6,25 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
+namespace CloudFlare.Client.Test.Serialization;
+
+public class TurnstileWidgetTest
 {
-    public class TurnstileWidgetTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
+        var sut = new TurnstileWidget();
+
+        var serialized = JsonConvert.SerializeObject(sut);
+
+        var json = JObject.Parse(serialized);
+
+        var keys = json.Properties().Select(p => p.Name).ToList();
+
+        keys.Should().BeEquivalentTo(new SortedSet<string>
         {
-            var sut = new TurnstileWidget();
-
-            var serialized = JsonConvert.SerializeObject(sut);
-
-            var json = JObject.Parse(serialized);
-
-            var keys = json.Properties().Select(p => p.Name).ToList();
-
-            keys.Should().BeEquivalentTo(new SortedSet<string>
-            {
-                "sitekey", "bot_fight_mode", "clearance_level", "created_on", "domains", "mode",
-                "modified_on", "name", "offlabel", "region", "secret"
-            });
-        }
+            "sitekey", "bot_fight_mode", "clearance_level", "created_on", "domains", "mode",
+            "modified_on", "name", "offlabel", "region", "secret"
+        });
     }
 }

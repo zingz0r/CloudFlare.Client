@@ -4,16 +4,15 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
-{
-    public class ErrorDetailsTest
-    {
-        [Fact]
-        public void TestSerialization()
-        {
-            var sut = new ErrorDetails();
+namespace CloudFlare.Client.Test.Serialization;
 
-            JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "code", "message" });
-        }
+public class ErrorDetailsTest
+{
+    [Fact]
+    public void TestSerialization()
+    {
+        var sut = new ErrorDetails();
+
+        JsonHelper.GetSerializedKeys(sut).Should().BeEquivalentTo(new SortedSet<string> { "code", "message" });
     }
 }

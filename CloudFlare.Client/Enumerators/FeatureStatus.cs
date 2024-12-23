@@ -2,24 +2,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents possible feature statuses
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum FeatureStatus
 {
     /// <summary>
-    /// Represents possible feature statuses
+    /// Feature enabled
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum FeatureStatus
-    {
-        /// <summary>
-        /// Feature enabled
-        /// </summary>
-        [EnumMember(Value = "on")]
-        On,
+    [EnumMember(Value = "on")]
+    On,
 
-        /// <summary>
-        /// Feature disabled
-        /// </summary>
-        [EnumMember(Value = "off")]
-        Off
-    }
+    /// <summary>
+    /// Feature disabled
+    /// </summary>
+    [EnumMember(Value = "off")]
+    Off
 }

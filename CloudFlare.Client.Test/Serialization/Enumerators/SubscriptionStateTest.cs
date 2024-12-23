@@ -4,17 +4,16 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class SubscriptionStateTest
 {
-    public class SubscriptionStateTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
+        JsonHelper.GetSerializedEnums<SubscriptionState>().Should().BeEquivalentTo(new SortedSet<string>
         {
-            JsonHelper.GetSerializedEnums<SubscriptionState>().Should().BeEquivalentTo(new SortedSet<string>
-            {
-                "Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired"
-            });
-        }
+            "Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired"
+        });
     }
 }

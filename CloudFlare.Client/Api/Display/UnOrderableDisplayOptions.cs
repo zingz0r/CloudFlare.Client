@@ -1,18 +1,17 @@
-﻿namespace CloudFlare.Client.Api.Display
+﻿namespace CloudFlare.Client.Api.Display;
+
+/// <summary>
+/// Unorderable display options
+/// </summary>
+public class UnOrderableDisplayOptions
 {
     /// <summary>
-    /// Unorderable display options
+    /// Page number of paginated result
     /// </summary>
-    public class UnOrderableDisplayOptions
-    {
-        /// <summary>
-        /// Page number of paginated result
-        /// </summary>
-        public int? Page { get; set; }
+    public int? Page { get; set; }
 
-        /// <summary>
-        /// Number of elements per pages
-        /// </summary>
-        public int? PerPage { get; set; }
-    }
+    /// <summary>
+    /// Number of elements per pages
+    /// </summary>
+    public int? PerPage { get; set; }
 }

@@ -3,52 +3,52 @@ using System.Collections.Generic;
 using CloudFlare.Client.Api.Zones.DnsRecord;
 using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Test.TestData
+namespace CloudFlare.Client.Test.TestData;
+
+public static class DnsRecordTestData
 {
-    public static class DnsRecordTestData
+    public static List<DnsRecord> DnsRecords { get; set; } = new()
     {
-        public static List<DnsRecord> DnsRecords { get; set; } = new()
+        new DnsRecord
         {
-            new DnsRecord
-            {
-                Content = "1.1.1.1",
-                CreatedDate = DateTime.UtcNow,
-                Id = "372e67954025e0ba6aaa6d586b9e0b59",
-                Locked = false,
-                ModifiedDate = DateTime.UtcNow,
-                Name = "tothnet.hu",
-                Comment = "comment",
-                Tags = new[] { "A", "B" },
-                Proxiable = true,
-                Proxied = false,
-                Priority = 10,
-                Ttl = 120,
-                Type = DnsRecordType.A,
-                ZoneId = "023e105f4ecef8ad9ca31a8372d0c353",
-                ZoneName = "tothnet.hu"
-            }
-        };
+            Content = "1.1.1.1",
+            CreatedDate = DateTime.UtcNow,
+            Id = "372e67954025e0ba6aaa6d586b9e0b59",
+            Locked = false,
+            ModifiedDate = DateTime.UtcNow,
+            Name = "tothnet.hu",
+            Comment = "comment",
+            Tags = new[] { "A", "B" },
+            Proxiable = true,
+            Proxied = false,
+            Priority = 10,
+            Ttl = 120,
+            Type = DnsRecordType.A,
+            ZoneId = "023e105f4ecef8ad9ca31a8372d0c353",
+            ZoneName = "tothnet.hu"
+        }
+    };
 
-        public static List<DnsRecordScan> DnsRecordScans { get; set; } = new()
+    public static List<DnsRecordScan> DnsRecordScans { get; set; } = new()
+    {
+        new DnsRecordScan
         {
-            new DnsRecordScan
-            {
-                RecordsAdded = 200,
-                RecordsAddedByType = new Dictionary<string, long> { { "tothnet.hu", 200 } },
-                TotalRecordsParsed = 2000
-            }
-        };
+            RecordsAdded = 200,
+            RecordsAddedByType = new Dictionary<string, long> { { "tothnet.hu", 200 } },
+            TotalRecordsParsed = 2000
+        }
+    };
 
-        public static List<DnsRecordImport> DnsRecordImports { get; set; } = new()
+    public static List<DnsRecordImport> DnsRecordImports { get; set; } = new()
+    {
+        new DnsRecordImport
         {
-            new DnsRecordImport
-            {
-                RecordsAdded = 10,
-                TotalRecordsParsed = 10
-            }
-        };
+            RecordsAdded = 10,
+            TotalRecordsParsed = 10
+        }
+    };
 
-        public static string Export { get; set; } = @"
+    public static string Export { get; set; } = @"
         ;;
         ;; Domain:     tothnet.hu.
         ;; Exported:   2021-01-14 11:24:11
@@ -101,5 +101,4 @@ namespace CloudFlare.Client.Test.TestData
         tothnet.hu.	1	IN	TXT	""v=spf1 mx mx:mail.tothnet.hu a:mail01d.mail.t-online.hu a:mail00d.mail.t-online.hu a:mail02d.mail.t-online.hu a:mail01k.mail.t-online.hu a:mail00k.mail.t-online.hu a:mail-outd.mail.t-online.hu -all""
         _dmarc.tothnet.hu.	1	IN	TXT	""v=DMARC1; p=quarantine; pct=20;""
         ";
-    }
 }

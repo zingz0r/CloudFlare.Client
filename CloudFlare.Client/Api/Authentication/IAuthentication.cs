@@ -1,16 +1,15 @@
 ﻿using System.Net.Http;
 
-namespace CloudFlare.Client.Api.Authentication
+namespace CloudFlare.Client.Api.Authentication;
+
+/// <summary>
+/// Interface of authentication
+/// </summary>
+public interface IAuthentication
 {
     /// <summary>
-    /// Interface of authentication
+    /// Adds authentication to the HTTP headers
     /// </summary>
-    public interface IAuthentication
-    {
-        /// <summary>
-        /// Adds authentication to the HTTP headers
-        /// </summary>
-        /// <param name="client">Http client</param>
-        void AddToHeaders(HttpClient client);
-    }
+    /// <param name="client">Http client</param>
+    void AddToHeaders(HttpClient client);
 }

@@ -2,24 +2,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Represents the custom hostname types
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum CustomHostnameOrderType
 {
     /// <summary>
-    /// Represents the custom hostname types
+    /// SSL
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum CustomHostnameOrderType
-    {
-        /// <summary>
-        /// SSL
-        /// </summary>
-        [EnumMember(Value = "ssl")]
-        Ssl,
+    [EnumMember(Value = "ssl")]
+    Ssl,
 
-        /// <summary>
-        /// SSL Status
-        /// </summary>
-        [EnumMember(Value = "ssl_status")]
-        SslStatus
-    }
+    /// <summary>
+    /// SSL Status
+    /// </summary>
+    [EnumMember(Value = "ssl_status")]
+    SslStatus
 }

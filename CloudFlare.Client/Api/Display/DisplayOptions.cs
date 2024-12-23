@@ -1,15 +1,14 @@
 ﻿using CloudFlare.Client.Enumerators;
 
-namespace CloudFlare.Client.Api.Display
+namespace CloudFlare.Client.Api.Display;
+
+/// <summary>
+/// Display options
+/// </summary>
+public class DisplayOptions : UnOrderableDisplayOptions
 {
     /// <summary>
-    /// Display options
+    /// Direction to order
     /// </summary>
-    public class DisplayOptions : UnOrderableDisplayOptions
-    {
-        /// <summary>
-        /// Direction to order
-        /// </summary>
-        public OrderType? Order { get; set; }
-    }
+    public OrderType? Order { get; set; }
 }

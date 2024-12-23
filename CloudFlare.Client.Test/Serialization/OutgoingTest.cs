@@ -2,14 +2,13 @@
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization
+namespace CloudFlare.Client.Test.Serialization;
+
+public class OutgoingTest
 {
-    public class OutgoingTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            Outgoing.PurgeEverything.Should().Be("purge_everything");
-        }
+        Outgoing.PurgeEverything.Should().Be("purge_everything");
     }
 }

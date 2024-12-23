@@ -4,14 +4,13 @@ using CloudFlare.Client.Test.Helpers;
 using FluentAssertions;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Serialization.Enumerators
+namespace CloudFlare.Client.Test.Serialization.Enumerators;
+
+public class ZoneTypeTest
 {
-    public class ZoneTypeTest
+    [Fact]
+    public void TestSerialization()
     {
-        [Fact]
-        public void TestSerialization()
-        {
-            JsonHelper.GetSerializedEnums<ZoneType>().Should().BeEquivalentTo(new SortedSet<string> { "full", "partial" });
-        }
+        JsonHelper.GetSerializedEnums<ZoneType>().Should().BeEquivalentTo(new SortedSet<string> { "full", "partial" });
     }
 }
