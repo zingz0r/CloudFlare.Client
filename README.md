@@ -8,9 +8,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=coverage)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=CloudFlare.Client)
+[![Coverage](https://sonarqube.tothnet.hu/api/project_badges/measure?project=CloudFlare.Client&metric=coverage&token=sqb_206557140e74a9cca493b6f5b0f2dbd5d9ecc277)](https://sonarqube.tothnet.hu/dashboard?id=CloudFlare.Client)
+[![Quality Gate Status](https://sonarqube.tothnet.hu/api/project_badges/measure?project=CloudFlare.Client&metric=alert_status&token=sqb_206557140e74a9cca493b6f5b0f2dbd5d9ecc277)](https://sonarqube.tothnet.hu/dashboard?id=CloudFlare.Client)
+[![Maintainability Rating](https://sonarqube.tothnet.hu/api/project_badges/measure?project=CloudFlare.Client&metric=sqale_rating&token=sqb_206557140e74a9cca493b6f5b0f2dbd5d9ecc277)](https://sonarqube.tothnet.hu/dashboard?id=CloudFlare.Client)
 
 > **_Info:_**  The library currently targets the .Net Standard platforms
 
