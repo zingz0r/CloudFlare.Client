@@ -34,7 +34,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build
-        run: dotnet build --configuration ${{ env.buildConfiguration }}
+        run: dotnet build src/CloudFlare.Client.sln --configuration ${{ env.buildConfiguration }}
 
       - name: Run Tests
-        run: dotnet test --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
+        run: dotnet test src/CloudFlare.Client.sln --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
