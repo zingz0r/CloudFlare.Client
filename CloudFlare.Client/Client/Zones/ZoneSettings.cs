@@ -8,7 +8,7 @@ using CloudFlare.Client.Enumerators;
 
 namespace CloudFlare.Client.Client.Zones;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Zones.IZoneSettings" />
 public class ZoneSettings : ApiContextBase<IConnection>, IZoneSettings
 {
     /// <summary>

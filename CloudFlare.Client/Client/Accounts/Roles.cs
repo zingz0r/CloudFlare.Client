@@ -11,7 +11,7 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Accounts;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Accounts.IRoles" />
 public class Roles : ApiContextBase<IConnection>, IRoles
 {
     /// <summary>

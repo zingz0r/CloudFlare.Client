@@ -12,7 +12,7 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Users;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Users.IMemberships" />
 public class Memberships : ApiContextBase<IConnection>, IMemberships
 {
     /// <summary>

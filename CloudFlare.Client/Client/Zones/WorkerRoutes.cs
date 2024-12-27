@@ -8,7 +8,7 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Zones;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Zones.IWorkerRoutes" />
 public class WorkerRoutes : ApiContextBase<IConnection>, IWorkerRoutes
 {
     /// <summary>

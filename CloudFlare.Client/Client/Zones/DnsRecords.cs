@@ -14,7 +14,7 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Zones.IDnsRecords" />
 public class DnsRecords : ApiContextBase<IConnection>, IDnsRecords
 {
     /// <summary>

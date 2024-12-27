@@ -12,7 +12,7 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Zones.IZones" />
 public class Zones : ApiContextBase<IConnection>, IZones
 {
     /// <summary>
