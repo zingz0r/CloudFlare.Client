@@ -71868,7 +71868,7 @@
       "versionControlProvenance": [
         {
           "repositoryUri": "https://github.com/zingz0r/CloudFlare.Client.git",
-          "revisionId": "cefd974ab1a81199fb7db52b850aabfddb0da40f",
+          "revisionId": "348af6b9f1625af45849c02baeb1c082a15f31f5",
           "branch": "feature/quodana",
           "properties": {
             "repoUrl": "https://github.com/zingz0r/CloudFlare.Client.git",
@@ -72269,9 +72269,9 @@
       "results": [],
       "automationDetails": {
         "id": "QDNETC/qodana/2024-12-27",
-        "guid": "78bb7fff-eca1-4f3b-8763-6f8fd82b260c",
+        "guid": "f075085c-6e09-4034-a199-9092dded39a2",
         "properties": {
-          "jobUrl": "https://github.com/zingz0r/CloudFlare.Client/actions/runs/12520286893"
+          "jobUrl": "https://github.com/zingz0r/CloudFlare.Client/actions/runs/12520322663"
         }
       },
       "newlineSequences": [

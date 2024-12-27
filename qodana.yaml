@@ -6,5 +6,5 @@ include:
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
 dotnet:
-  solution: CloudFlare.Client.sln
+  project: CloudFlare.Client\CloudFlare.Client.csproj
 failThreshold: 1
