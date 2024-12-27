@@ -4,6 +4,7 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
+  - name: VulnerableLibrariesGlobal
 dotnet:
     solution: CloudFlare.Client.sln
-    configuration: Release
+failThreshold: 1
