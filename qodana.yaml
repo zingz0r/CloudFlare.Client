@@ -9,6 +9,6 @@ dotnet:
     solution: CloudFlare.Client.sln
 failThreshold: 1
 inspections:
-  - group: ALL
+  - inspection: TestProjects
     ignore:
-      - "scope#file:CloudFlare.Client.Test/**"
+      - "CloudFlare.Client.Test/**"
