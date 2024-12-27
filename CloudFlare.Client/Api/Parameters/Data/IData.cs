@@ -3,6 +3,4 @@
 /// <summary>
 /// Data type
 /// </summary>
-public interface IData
-{
-}
+public interface IData;

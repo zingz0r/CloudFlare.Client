@@ -59,7 +59,7 @@ public class TurnStileWidgets : ApiContextBase<IConnection>, ITurnStileWidgets
             Domains = turnstileWidget.Domains,
             Mode = turnstileWidget.Mode,
             Name = turnstileWidget.Name,
-            OffLabel = turnstileWidget.OffLabel,
+            OffLabel = turnstileWidget.OffLabel
         };
 
         var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}";

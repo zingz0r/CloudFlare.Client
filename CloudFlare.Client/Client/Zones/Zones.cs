@@ -51,7 +51,7 @@ public class Zones : ApiContextBase<IConnection>, IZones
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}";
+        const string requestUri = $"{ZoneEndpoints.Base}";
         return await Connection.PostAsync<Zone, NewZone>(requestUri, newZone, cancellationToken).ConfigureAwait(false);
     }
 

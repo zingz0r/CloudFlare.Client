@@ -6,9 +6,12 @@ include:
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
 exclude:
-  - name: all
-    paths:
-      - CloudFlare.Client.Test
+  - name: AutoPropertyCanBeMadeGetOnly.Global
+  - name: MemberCanBePrivate.Global
+  - name: ClassNeverInstantiated.Global
+  - name: UnusedAutoPropertyAccessor.Global
+  - name: UnusedMemberInSuper.Global
+  - name: UnusedMember.Global
 dotnet:
-    solution: CloudFlare.Client.sln
+    project: CloudFlare.Client/CloudFlare.Client.csproj
 failThreshold: 1

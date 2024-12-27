@@ -19,7 +19,7 @@ public interface IRoles
     /// <param name="cancellationToken">Cancellation token</param>
     /// <param name="displayOptions">Display Options</param>
     /// <returns>The requested role</returns>
-    Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default, DisplayOptions displayOptions = null);
+    Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get information about a specific role for an account

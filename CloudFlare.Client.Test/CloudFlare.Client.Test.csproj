@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <LangVersion>10.0</LangVersion>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector">

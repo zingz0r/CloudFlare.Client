@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -41,7 +42,7 @@ public class RolesUnitTests
 
         using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-        var roles = await client.Accounts.Roles.GetAsync(accountId, default, displayOptions);
+        var roles = await client.Accounts.Roles.GetAsync(accountId, displayOptions, CancellationToken.None);
 
         roles.Result.Should().BeEquivalentTo(RoleTestData.Roles);
     }

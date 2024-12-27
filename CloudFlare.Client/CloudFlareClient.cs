@@ -10,7 +10,7 @@ namespace CloudFlare.Client;
 /// <inheritdoc />
 public class CloudFlareClient : ICloudFlareClient
 {
-    private readonly IConnection _connection;
+    private readonly ApiConnection _connection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CloudFlareClient"/> class
