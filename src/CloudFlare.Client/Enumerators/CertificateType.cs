@@ -2,30 +2,29 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CloudFlare.Client.Enumerators
+namespace CloudFlare.Client.Enumerators;
+
+/// <summary>
+/// Signature type desired on certificate.
+/// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
+public enum CertificateType
 {
     /// <summary>
-    /// Signature type desired on certificate.
+    /// Origin RSA.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum CertificateType
-    {
-        /// <summary>
-        /// Origin RSA.
-        /// </summary>
-        [EnumMember(Value = "origin-rsa")]
-        OriginRsa,
+    [EnumMember(Value = "origin-rsa")]
+    OriginRsa,
 
-        /// <summary>
-        /// Origin ECC.
-        /// </summary>
-        [EnumMember(Value = "origin-ecc")]
-        OriginEcc,
+    /// <summary>
+    /// Origin ECC.
+    /// </summary>
+    [EnumMember(Value = "origin-ecc")]
+    OriginEcc,
 
-        /// <summary>
-        /// Custom RSA.
-        /// </summary>
-        [EnumMember(Value = "custom-rsa")]
-        KeylessCertificate
-    }
+    /// <summary>
+    /// Custom RSA.
+    /// </summary>
+    [EnumMember(Value = "custom-rsa")]
+    KeylessCertificate
 }
