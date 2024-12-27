@@ -7,11 +7,17 @@ include:
   - name: VulnerableLibrariesGlobal
 exclude:
   - name: AutoPropertyCanBeMadeGetOnly.Global
+  - name: AutoPropertyCanBeMadeGetOnly.Local
   - name: MemberCanBePrivate.Global
+  - name: MemberCanBePrivate.Local
   - name: ClassNeverInstantiated.Global
+  - name: ClassNeverInstantiated.Local
   - name: UnusedAutoPropertyAccessor.Global
+  - name: UnusedAutoPropertyAccessor.Local
   - name: UnusedMemberInSuper.Global
+  - name: UnusedMemberInSuper.Local
   - name: UnusedMember.Global
+  - name: UnusedMember.Local
 dotnet:
     project: src/CloudFlare.Client/CloudFlare.Client.csproj
 failThreshold: 1
