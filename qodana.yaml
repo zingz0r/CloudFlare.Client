@@ -9,6 +9,7 @@ exclude:
   - name: AutoPropertyCanBeMadeGetOnly.Global
   - name: MemberCanBePrivate.Global
   - name: ClassNeverInstantiated.Global
+  - name: UnusedAutoPropertyAccessor.Global
   - name: UnusedMemberInSuper.Global
   - name: UnusedMember.Global
 dotnet:
