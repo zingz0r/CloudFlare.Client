@@ -26,6 +26,7 @@ jobs:
         uses: JetBrains/qodana-action@v2024.3
         with:
           pr-mode: false
+          cache-default-branch-only: true
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_590242153 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
