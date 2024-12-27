@@ -32,5 +32,5 @@ public enum SslSetting
     /// Encrypts end-to-end, but requires a trusted CA or CloudFlare Origin CA certificate on the server
     /// </summary>
     [EnumMember(Value = "strict")]
-    Strict,
+    Strict
 }

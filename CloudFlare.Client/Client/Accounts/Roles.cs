@@ -24,7 +24,7 @@ public class Roles : ApiContextBase<IConnection>, IRoles
     }
 
     /// <inheritdoc />
-    public async Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, CancellationToken cancellationToken = default, DisplayOptions displayOptions = null)
+    public async Task<CloudFlareResult<IReadOnlyList<Role>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
         var requestUri =
             $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Roles}";

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -142,7 +143,9 @@ internal abstract class Connection : IConnection
         {
             BaseAddress = connectionInfo.Address
         };
-        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("CloudFlareClient", "1.0.0"));
+
+        var version = typeof(CloudFlareClient).Assembly.GetName().Version;
+        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(nameof(CloudFlareClient), version.ToString()));
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(HttpContentTypesHelper.Json));
         client.DefaultRequestHeaders.ExpectContinue = connectionInfo.ExpectContinue;
 
@@ -156,7 +159,7 @@ internal abstract class Connection : IConnection
         return client;
     }
 
-    private static HttpMessageHandler CreateHttpClientHandler(ConnectionInfo connectionInfo)
+    private static HttpClientHandler CreateHttpClientHandler(ConnectionInfo connectionInfo)
     {
         try
         {

@@ -3,6 +3,4 @@
 namespace CloudFlare.Client.Attributes;
 
 [AttributeUsage(AttributeTargets.Field)]
-internal class DataTypeDnsRecordAttribute : Attribute
-{
-}
+internal class DataTypeDnsRecordAttribute : Attribute;

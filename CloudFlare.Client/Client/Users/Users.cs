@@ -26,21 +26,21 @@ public class Users : ApiContextBase<IConnection>, IUsers
     /// <inheritdoc />
     public async Task<CloudFlareResult<User>> GetDetailsAsync(CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{UserEndpoints.Base}";
+        const string requestUri = $"{UserEndpoints.Base}";
         return await Connection.GetAsync<User>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{UserEndpoints.Base}";
+        const string requestUri = $"{UserEndpoints.Base}";
         return await Connection.PatchAsync(requestUri, editedUser, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<VerifyToken>> VerifyAsync(CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{UserEndpoints.Base}/{TokenEndpoints.Base}/{TokenEndpoints.Verify}";
+        const string requestUri = $"{UserEndpoints.Base}/{TokenEndpoints.Base}/{TokenEndpoints.Verify}";
         return await Connection.GetAsync<VerifyToken>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 }

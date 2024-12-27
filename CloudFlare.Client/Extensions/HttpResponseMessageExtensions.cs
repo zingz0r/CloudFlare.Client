@@ -31,16 +31,14 @@ internal static class HttpResponseMessageExtensions
                     {
                         return JsonConvert.DeserializeObject<CloudFlareResult<T>>(content);
                     }
-                    else
-                    {
-                        if (typeof(T) != typeof(string))
-                        {
-                            throw new PersistenceUnavailableException("Unexpected result from CloudFlare");
-                        }
 
-                        dynamic cast = content.Replace("\\n", Environment.NewLine);
-                        return new CloudFlareResult<T>((T)cast, new ResultInfo(), true, new List<ErrorDetails>(), new List<ApiError>(), new TimingInfo());
+                    if (typeof(T) != typeof(string))
+                    {
+                        throw new PersistenceUnavailableException("Unexpected result from CloudFlare");
                     }
+
+                    dynamic cast = content.Replace("\\n", Environment.NewLine);
+                    return new CloudFlareResult<T>((T)cast, new ResultInfo(), true, new List<ErrorDetails>(), new List<ApiError>(), new TimingInfo());
             }
         }
         catch (Exception ex)
