@@ -8,7 +8,5 @@ include:
 dotnet:
     solution: CloudFlare.Client.sln
 failThreshold: 1
-inspections:
-  - inspection: TestProjects
-    ignore:
-      - "CloudFlare.Client.Test/**"
+modulesToAnalyze:
+  - name: CloudFlare.Client
