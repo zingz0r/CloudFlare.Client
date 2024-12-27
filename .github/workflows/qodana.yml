@@ -29,3 +29,8 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_590242153 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
+
+      - name: Upload sarif file for GitHub Advanced Security Dashboard
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json

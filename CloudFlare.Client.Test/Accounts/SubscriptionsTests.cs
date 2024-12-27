@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Subscriptions;
 using CloudFlare.Client.Api.Parameters.Endpoints;
@@ -73,7 +74,7 @@ public class SubscriptionsTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<Subscription>(x.Body);
+                    var body = JsonConvert.DeserializeObject<Subscription>(x.Body ?? throw new InvalidOperationException());
                     var response = SubscriptionTestData.Subscriptions.First().DeepClone();
                     response.Price = body.Price;
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts.Member;
 using CloudFlare.Client.Api.Display;
@@ -126,7 +127,7 @@ public class MemberUnitTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<Member>(x.Body);
+                    var body = JsonConvert.DeserializeObject<Member>(x.Body ?? throw new InvalidOperationException());
                     var response = AccountMembershipTestData.Members.First(y => y.Id == x.PathSegments[3]).DeepClone();
 
                     response.Code = body.Code;

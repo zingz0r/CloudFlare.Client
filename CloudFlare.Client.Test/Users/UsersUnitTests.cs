@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Users;
@@ -53,7 +54,7 @@ public class UsersUnitTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<User>(x.Body);
+                    var body = JsonConvert.DeserializeObject<User>(x.Body ?? throw new InvalidOperationException());
                     return WireMockResponseHelper.CreateTestResponse(body);
                 }));
 

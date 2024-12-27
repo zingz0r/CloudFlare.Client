@@ -9,7 +9,7 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Accounts;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Accounts.ITurnStileWidgets" />
 public class TurnStileWidgets : ApiContextBase<IConnection>, ITurnStileWidgets
 {
     /// <summary>

@@ -7,7 +7,7 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Client.Users;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Users.IUsers" />
 public class Users : ApiContextBase<IConnection>, IUsers
 {
     /// <summary>
