@@ -5,6 +5,12 @@ profile:
 include:
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
+exclude:
+  - name: AutoPropertyCanBeMadeGetOnly.Global
+  - name: MemberCanBePrivate.Global
+  - name: ClassNeverInstantiated.Global
+  - name: UnusedMemberInSuper.Global
+  - name: UnusedMember.Global
 dotnet:
-  project: CloudFlare.Client/CloudFlare.Client.csproj
+    project: CloudFlare.Client/CloudFlare.Client.csproj
 failThreshold: 1
