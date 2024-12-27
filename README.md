@@ -9,6 +9,7 @@
 
 [![♻️ CI](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
 [![♻️ CD](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml)
+[![🧠 Qodana: Static Code Analysis](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/qodana_code_quality.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/qodana_code_quality.yml)
 
 > **_Info:_**  The library currently targets the .Net Standard platforms
 
