@@ -7,10 +7,12 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=coverage)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/dashboard?id=CloudFlare.Client) 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=CloudFlare.Client&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=CloudFlare.Client)
+[![♻️ CI](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
+[![♻️ CD](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
 
 > **_Info:_**  The library currently targets the .Net Standard platforms
 
