@@ -11,7 +11,7 @@ using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Client.Zones;
 
-/// <inheritdoc />
+/// <inheritdoc cref="CloudFlare.Client.Client.Zones.IFirewallRules" />
 public class FirewallRules : ApiContextBase<IConnection>, IFirewallRules
 {
     /// <summary>

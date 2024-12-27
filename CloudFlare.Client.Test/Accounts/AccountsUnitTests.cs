@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Accounts;
 using CloudFlare.Client.Api.Display;
@@ -94,7 +95,7 @@ public class AccountsUnitTests
             .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/{expectedAccount.Id}").UsingPut())
             .RespondWith(Response.Create().WithStatusCode(200).WithBody(x =>
             {
-                var body = JsonConvert.DeserializeObject<Account>(x.Body);
+                var body = JsonConvert.DeserializeObject<Account>(x.Body ?? throw new InvalidOperationException());
                 var account = AccountTestData.Accounts.First(y => y.Id == body.Id).DeepClone();
 
                 account.Id = body.Id;

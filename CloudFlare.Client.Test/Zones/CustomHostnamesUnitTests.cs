@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -108,7 +109,7 @@ public class CustomHostnamesUnitTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<NewCustomHostname>(x.Body);
+                    var body = JsonConvert.DeserializeObject<NewCustomHostname>(x.Body ?? throw new InvalidOperationException());
                     var response = CustomHostnameTestData.CustomHostnames.First(y => y.Id == x.PathSegments[3]).DeepClone();
                     response.Ssl = body.Ssl;
 

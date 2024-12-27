@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Display;
 using CloudFlare.Client.Api.Parameters;
@@ -244,7 +245,7 @@ public class DnsRecordUnitTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<ModifiedDnsRecord>(x.Body);
+                    var body = JsonConvert.DeserializeObject<ModifiedDnsRecord>(x.Body ?? throw new InvalidOperationException());
                     var response = DnsRecordTestData.DnsRecords.First(y => y.Id == x.PathSegments[3]).DeepClone();
                     response.Name = body.Name;
                     response.Comment = body.Comment;

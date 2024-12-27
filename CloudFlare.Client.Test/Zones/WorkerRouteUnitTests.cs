@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Zones.WorkerRoute;
@@ -99,7 +100,7 @@ public class WorkerRouteUnitTests
             .RespondWith(Response.Create().WithStatusCode(200)
                 .WithBody(x =>
                 {
-                    var body = JsonConvert.DeserializeObject<ModifiedWorkerRoute>(x.Body);
+                    var body = JsonConvert.DeserializeObject<ModifiedWorkerRoute>(x.Body ?? throw new InvalidOperationException());
                     var response = WorkerRouteTestData.WorkerRoutes.First(y => y.Id == x.PathSegments[4]).DeepClone();
                     response.Pattern = body.Pattern;
 
