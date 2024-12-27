@@ -5,10 +5,10 @@ profile:
 include:
   - name: CheckDependencyLicenses
   - name: VulnerableLibrariesGlobal
-dotnet:
-    project: CloudFlare.Client.sln
-failThreshold: 1
 exclude:
-  - name: All
+  - name: all
     paths:
       - CloudFlare.Client.Test
+dotnet:
+  solution: CloudFlare.Client.sln
+failThreshold: 1
