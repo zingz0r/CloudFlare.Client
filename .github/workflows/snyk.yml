@@ -27,7 +27,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore src/CloudFlare.Client.sln
 
       - name: Snyk Opensource Scan
         uses: snyk/actions/dotnet@master

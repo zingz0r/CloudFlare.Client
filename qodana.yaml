@@ -13,5 +13,5 @@ exclude:
   - name: UnusedMemberInSuper.Global
   - name: UnusedMember.Global
 dotnet:
-    project: CloudFlare.Client/CloudFlare.Client.csproj
+    project: src/CloudFlare.Client/CloudFlare.Client.csproj
 failThreshold: 1
