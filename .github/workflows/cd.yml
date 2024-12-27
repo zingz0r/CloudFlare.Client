@@ -1,4 +1,3 @@
-# .github/workflows/cd.yml
 name: '♻️ CD'
 
 on:
@@ -7,7 +6,6 @@ on:
       - created
 
 env:
-  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
