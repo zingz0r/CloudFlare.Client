@@ -21,7 +21,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath="" />
-    <None Include="..\CloudFlare.Client\Resources\nuget_logo.png" Pack="true" PackagePath="" />
+    <None Include="$(RepositoryRootPath)\LICENSE" Pack="true" PackagePath="" />
+    <None Include="Resources\nuget_logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
