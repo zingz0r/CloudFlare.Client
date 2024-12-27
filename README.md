@@ -9,7 +9,10 @@
 
 [![♻️ CI](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
 [![♻️ CD](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml)
-[![🧠 Qodana: Static Code Analysis](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/qodana_code_quality.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/qodana_code_quality.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=zingz0r_CloudFlare.Client&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=zingz0r_CloudFlare.Client)
 
 > **_Info:_**  The library currently targets the .Net Standard platforms
 
