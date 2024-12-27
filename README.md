@@ -7,7 +7,8 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/zingz0r/Cloudflare.Client.svg)](https://github.com/zingz0r/CloudFlare.Client/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![CI Pipeline](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
+[![♻️ CI](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/ci.yml?query=branch%3Amaster)
+[![♻️ CD](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml/badge.svg)](https://github.com/zingz0r/CloudFlare.Client/actions/workflows/cd.yml)
 
 > **_Info:_**  The library currently targets the .Net Standard platforms
 
