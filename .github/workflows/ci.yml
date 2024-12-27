@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: '♻️ CI'
 
 on:
@@ -9,9 +8,10 @@ on:
   push:
     branches:
       - master
+  schedule:
+    - cron: '33 3 * * 3'
 
 env:
-  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 

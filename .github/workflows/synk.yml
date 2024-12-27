@@ -1,0 +1,61 @@
+name: '🐕‍🦺 Snyk: Vulnerability Analysis'
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+    - master
+  schedule:
+    - cron: '33 3 * * 3'
+  workflow_dispatch:
+  
+env:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Snyk Opensource Scan
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk/opensource.sarif --all-projects --exclude=CloudFlare.Client.Test
+
+      - name: Snyk Code Scan
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk/code.sarif
+          command: code test
+
+      - name: Snyk Monitor
+        uses: snyk/actions/dotnet@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --all-projects --exclude=CloudFlare.Client.Test
+          command: monitor
+
+      - name: Upload sarif file for GitHub Advanced Security Dashboard
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk
+        if: ${{ always() }}
