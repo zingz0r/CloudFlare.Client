@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -13,7 +14,7 @@ internal class CertificateExpiresOnConverter : DateTimeConverterBase
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        if (reader.Value is null || !DateTime.TryParseExact(reader.Value.ToString(), Format, null, System.Globalization.DateTimeStyles.None, out var date))
+        if (reader.Value is null || !DateTime.TryParseExact(reader.Value.ToString(), Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
             throw new JsonSerializationException("Invalid date format");
         }
