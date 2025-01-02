@@ -1,6 +1,7 @@
 ﻿using System;
 using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Client.Client.Accounts;
+using CloudFlare.Client.Client.Certificates;
 using CloudFlare.Client.Client.Users;
 using CloudFlare.Client.Client.Zones;
 using CloudFlare.Client.Contexts;
@@ -24,6 +25,7 @@ public class CloudFlareClient : ICloudFlareClient
         _connection = new ApiConnection(authentication, connectionInfo ?? new ConnectionInfo());
 
         Accounts = new Accounts(_connection);
+        Certificates = new Certificates(_connection);
         Users = new Users(_connection);
         Zones = new Zones(_connection);
     }
@@ -60,6 +62,9 @@ public class CloudFlareClient : ICloudFlareClient
     /// <inheritdoc />
     public IAccounts Accounts { get; }
 
+    /// <inheritdoc />
+    public ICertificates Certificates { get; }
+    
     /// <inheritdoc />
     public IUsers Users { get; }
 
