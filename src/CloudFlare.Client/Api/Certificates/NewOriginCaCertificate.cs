@@ -8,13 +8,13 @@ namespace CloudFlare.Client.Api.Certificates;
 /// <summary>
 /// Certificate
 /// </summary>
-public class NewCertificate
+public class NewOriginCaCertificate
 {
     /// <summary>
     /// The Certificate Signing Request (CSR). Must be newline-encoded.
     /// </summary>
     [JsonProperty("csr")]
-    public string CertificateSigningRequest { get; set; }
+    public string Csr { get; set; }
 
     /// <summary>
     /// List of hostnames or wildcard names (e.g., *.example.com) bound to the certificate.
@@ -26,7 +26,7 @@ public class NewCertificate
     /// Signature type desired on certificate.
     /// </summary>
     [JsonProperty("request_type")]
-    public CertificateType RequestType { get; set; }
+    public CertificateRequestType RequestRequestType { get; set; }
 
     /// <summary>
     /// The number of days for which the certificate should be valid.

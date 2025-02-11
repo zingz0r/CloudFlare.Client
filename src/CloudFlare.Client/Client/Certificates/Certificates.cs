@@ -23,8 +23,15 @@ public class Certificates : ApiContextBase<IConnection>, ICertificates
     {
     }
 
+    
     /// <inheritdoc />
-    public async Task<CloudFlareResult<IReadOnlyList<Certificate>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
+    public Task<CloudFlareResult<OriginCaCertificate>> AddAsync(NewOriginCaCertificate newCertificate, CancellationToken cancellationToken = default)
+    {
+        return Connection.PostAsync<OriginCaCertificate, NewOriginCaCertificate>(CertificateEndpoints.Base, newCertificate, cancellationToken);
+    }
+    
+    /// <inheritdoc />
+    public async Task<CloudFlareResult<IReadOnlyList<OriginCaCertificate>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
         var builder = new ParameterBuilderHelper()
             .InsertValue(Filtering.Page, displayOptions?.Page)
@@ -38,28 +45,21 @@ public class Certificates : ApiContextBase<IConnection>, ICertificates
             requestUri = $"{requestUri}/?{builder.ParameterCollection}";
         }
 
-        return await Connection.GetAsync<IReadOnlyList<Certificate>>(requestUri, cancellationToken).ConfigureAwait(false);
+        return await Connection.GetAsync<IReadOnlyList<OriginCaCertificate>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public Task<CloudFlareResult<Certificate>> GetDetailsAsync(string certificateId, CancellationToken cancellationToken = default)
+    public Task<CloudFlareResult<OriginCaCertificate>> GetDetailsAsync(string certificateId, CancellationToken cancellationToken = default)
     {
         var requestUri = $"{CertificateEndpoints.Base}/{certificateId}";
-        return Connection.GetAsync<Certificate>(requestUri, cancellationToken);
+        return Connection.GetAsync<OriginCaCertificate>(requestUri, cancellationToken);
     }
 
-    /// <inheritdoc />
-    public Task<CloudFlareResult<Certificate>> AddAsync(
-        NewCertificate newCertificate,
-        CancellationToken cancellationToken = default)
-    {
-        return Connection.PostAsync<Certificate, NewCertificate>(CertificateEndpoints.Base, newCertificate, cancellationToken);
-    }
 
     /// <inheritdoc />
-    public Task<CloudFlareResult<RevokedCertificate>> RevokeAsync(string certificateId, CancellationToken cancellationToken = default)
+    public Task<CloudFlareResult<OriginCaCertificate>> RevokeAsync(string certificateId, CancellationToken cancellationToken = default)
     {
         var requestUri = $"{CertificateEndpoints.Base}/{certificateId}";
-        return Connection.DeleteAsync<RevokedCertificate>(requestUri, cancellationToken);
+        return Connection.DeleteAsync<OriginCaCertificate>(requestUri, cancellationToken);
     }
 }

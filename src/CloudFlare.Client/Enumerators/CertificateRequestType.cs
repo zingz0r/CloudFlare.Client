@@ -8,7 +8,7 @@ namespace CloudFlare.Client.Enumerators;
 /// Signature type desired on certificate.
 /// </summary>
 [JsonConverter(typeof(StringEnumConverter))]
-public enum CertificateType
+public enum CertificateRequestType
 {
     /// <summary>
     /// Origin RSA.

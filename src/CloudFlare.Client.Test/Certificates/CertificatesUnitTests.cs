@@ -30,23 +30,25 @@ public class CertificatesUnitTests
     [Fact]
     public async Task TestCreateCertificateAsync()
     {
-        var certificates = CertificatesTestData.Certificates.First();
-        var certificate = new NewCertificate
+        var certificate = CertificatesTestData.Certificates.First();
+        var newcertificate = new NewOriginCaCertificate
         {
-            CertificateSigningRequest = "",
-            Hostnames = certificates.Hostnames
+            Csr = certificate.Csr,
+            Hostnames = certificate.Hostnames,
+            RequestedValidity = certificate.RequestedValidity,
+            RequestRequestType = certificate.RequestType
         };
 
         _wireMockServer
             .Given(Request.Create().WithPath($"/{CertificateEndpoints.Base}").UsingPost())
             .RespondWith(Response.Create().WithStatusCode(200)
-                .WithBody(WireMockResponseHelper.CreateTestResponse(certificates)));
+                .WithBody(WireMockResponseHelper.CreateTestResponse(certificate)));
 
         using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-        var addCertificate = await client.Certificates.AddAsync(certificate);
+        var addCertificate = await client.Certificates.AddAsync(newcertificate);
 
-        addCertificate.Result.Should().BeEquivalentTo(certificates);
+        addCertificate.Result.Should().BeEquivalentTo(certificate);
     }
 
     [Fact]
@@ -90,20 +92,17 @@ public class CertificatesUnitTests
     public async Task TestRevocationCertificateAsync()
     {
         var certificate = CertificatesTestData.Certificates.First();
-        var revokeCertificate = new RevokedCertificate
-        {
-            Id = certificate.Id
-        };
+        var expected = new OriginCaCertificate() { Id = certificate.Id };
 
         _wireMockServer
             .Given(Request.Create().WithPath($"/{CertificateEndpoints.Base}/{certificate.Id}").UsingDelete())
             .RespondWith(Response.Create().WithStatusCode(200)
-                .WithBody(WireMockResponseHelper.CreateTestResponse(certificate)));
+                .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
 
         using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
         var revocationCertificate = await client.Certificates.RevokeAsync(certificate.Id);
 
-        revocationCertificate.Result.Should().BeEquivalentTo(revokeCertificate);
+        revocationCertificate.Result.Should().BeEquivalentTo(expected);
     }
 }
