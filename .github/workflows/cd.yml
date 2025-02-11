@@ -59,7 +59,7 @@ jobs:
             /p:BuildMetadata=${{ steps.get-version.outputs.BUILDMETADATA }}
 
       - name: Run Tests
-        run: dotnet test --no-build --configuration ${{ env.buildConfiguration }} 
+        run: dotnet test src/CloudFlare.Client.sln --logger "trx;logfilename=TestResults.trx" --no-build --configuration ${{ env.buildConfiguration }} --collect "XPlat Code Coverage;Format=opencover,cobertura"
 
       - name: Pack
         run: |
