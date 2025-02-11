@@ -33,6 +33,7 @@ public class OriginCaCertificate
     /// When the certificate will expire.
     /// </summary>
     [JsonProperty("expires_on")]
+    [JsonConverter(typeof(DateTimeConverter), Constants.DateTimeFormat.CertificatesExpiresOn, true )]
     public DateTime? ExpiresOn { get; set; }
 
     /// <summary>

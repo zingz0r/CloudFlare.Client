@@ -31,11 +31,12 @@ public class Certificates : ApiContextBase<IConnection>, ICertificates
     }
     
     /// <inheritdoc />
-    public async Task<CloudFlareResult<IReadOnlyList<OriginCaCertificate>>> GetAsync(string zoneId, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
+    public async Task<CloudFlareResult<IReadOnlyList<OriginCaCertificate>>> GetAsync(string zoneId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
         var builder = new ParameterBuilderHelper()
             .InsertValue(Filtering.Page, displayOptions?.Page)
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
+            .InsertValue(Filtering.Order, displayOptions?.Order)
             .InsertValue(Filtering.ZoneId, zoneId);
 
         var requestUri = $"{CertificateEndpoints.Base}";
