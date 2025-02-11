@@ -63,7 +63,7 @@ jobs:
 
       - name: Pack
         run: |
-            dotnet pack src/CloudFlare.Client.sln --no-build --configuration ${{ env.buildConfiguration }} .\CloudFlare.Client.sln `
+            dotnet pack src/CloudFlare.Client/CloudFlare.Client.csproj --no-build --configuration ${{ env.buildConfiguration }} .\CloudFlare.Client.sln `
             /p:MajorVersion=${{ steps.get-version.outputs.MAJOR }} `
             /p:MinorVersion=${{ steps.get-version.outputs.MINOR }} `
             /p:PatchVersion=${{ steps.get-version.outputs.PATCH }} `
