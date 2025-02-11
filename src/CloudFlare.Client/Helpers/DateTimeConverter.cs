@@ -39,7 +39,7 @@ internal class DateTimeConverter(string format, bool removeColonsfromTz = false)
             
             if (removeColonsfromTz)
             {
-                json = Regex.Replace(json, "(\\+[0-9]{2}):([0-9]{2})", "$1$2", RegexOptions.None);
+                json = Regex.Replace(json, "(\\+[0-9]{2}):([0-9]{2})", "$1$2", RegexOptions.None, new TimeSpan(0,0,10));
             }
             
             writer.WriteValue(json);
