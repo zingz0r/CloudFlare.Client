@@ -1,5 +1,6 @@
 ﻿using System;
 using CloudFlare.Client.Client.Accounts;
+using CloudFlare.Client.Client.Certificates;
 using CloudFlare.Client.Client.Users;
 using CloudFlare.Client.Client.Zones;
 
@@ -16,6 +17,12 @@ public interface ICloudFlareClient : IDisposable
     /// <value>The implementation of the accounts interaction</value>
     IAccounts Accounts { get; }
 
+    /// <summary>
+    /// Certificates
+    /// </summary>
+    /// <value>The implementation of the certificates interaction</value>
+    ICertificates Certificates { get; }
+    
     /// <summary>
     /// Users
     /// </summary>
