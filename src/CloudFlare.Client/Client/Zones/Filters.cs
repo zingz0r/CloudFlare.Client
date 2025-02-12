@@ -28,7 +28,7 @@ public class Filters : ApiContextBase<IConnection>, IFilters
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<Filter>>> GetAsync(string zoneId, FilterRequestFilter filter = null, UnOrderableDisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilder()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.Id, filter?.Id)
             .InsertValue(Filtering.Paused, filter?.Paused)
             .InsertValue(Filtering.Expression, filter?.Expression)
@@ -37,7 +37,7 @@ public class Filters : ApiContextBase<IConnection>, IFilters
             .InsertValue(Filtering.Page, displayOptions?.Page)
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage);
 
-        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{FilterEndpoints.Base}").AddParameters(builder);
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{FilterEndpoints.Base}").AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<Filter>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
