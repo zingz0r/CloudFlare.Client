@@ -1,5 +1,4 @@
 ﻿using System;
-using CloudFlare.Client.Helpers;
 
 namespace CloudFlare.Client.Models;
 

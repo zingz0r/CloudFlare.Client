@@ -8,7 +8,6 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users.Memberships;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Helpers;
 using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Users;
