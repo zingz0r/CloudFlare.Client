@@ -5,7 +5,7 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace CloudFlare.Client.Test;
+namespace CloudFlare.Client.Test.Models;
 
 public class ParameterBuilderTests
 {
@@ -37,5 +37,18 @@ public class ParameterBuilderTests
         var parameters = new ParameterBuilder().InsertValue(key, value);
 
         parameters.ToString().Should().Be(string.Empty);
+    }
+
+    [Fact]
+    public void TestParameterBuilderWithMultipleParameters()
+    {
+        var parameters = new ParameterBuilder()
+                .InsertValue("number", 1)
+                .InsertValue("string", "hello")
+                .InsertValue("enum", ZoneStatus.Pending)
+                .InsertValue("bool", true)
+                .InsertValue("double", 1.0);
+
+        parameters.ToString().Should().Be("number=1&string=hello&enum=pending&bool=true&double=1.0");
     }
 }
