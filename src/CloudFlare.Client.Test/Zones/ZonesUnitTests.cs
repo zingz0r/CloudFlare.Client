@@ -19,270 +19,269 @@ using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 
-namespace CloudFlare.Client.Test.Zones
+namespace CloudFlare.Client.Test.Zones;
+
+public class ZonesUnitTests
 {
-    public class ZonesUnitTests
+    private readonly WireMockServer _wireMockServer;
+    private readonly ConnectionInfo _connectionInfo;
+
+    public ZonesUnitTests()
     {
-        private readonly WireMockServer _wireMockServer;
-        private readonly ConnectionInfo _connectionInfo;
+        _wireMockServer = WireMockServer.Start();
+        _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
+    }
 
-        public ZonesUnitTests()
+    [Fact]
+    public async Task TestCreateZoneAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
+        var newZone = new NewZone
         {
-            _wireMockServer = WireMockServer.Start();
-            _connectionInfo = new WireMockConnection(_wireMockServer.Urls.First()).ConnectionInfo;
-        }
+            Name = zone.Name,
+            Type = zone.Type,
+            Account = zone.Account,
+        };
 
-        [Fact]
-        public async Task TestCreateZoneAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-            var newZone = new NewZone
-            {
-                Name = zone.Name,
-                Type = zone.Type,
-                Account = zone.Account,
-            };
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}").UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}").UsingPost())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var addZone = await client.Zones.AddAsync(newZone);
 
-            var addZone = await client.Zones.AddAsync(newZone);
+        addZone.Result.Should().BeEquivalentTo(zone);
+    }
 
-            addZone.Result.Should().BeEquivalentTo(zone);
-        }
+    [Fact]
+    public async Task TestGetZonesAsync()
+    {
+        var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
+        var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active, Name = "tothnet.hu" };
 
-        [Fact]
-        public async Task TestGetZonesAsync()
-        {
-            var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
-            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active, Name = "tothnet.hu" };
+        _wireMockServer
+            .Given(Request.Create()
+                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithParam(Filtering.Page)
+                .WithParam(Filtering.PerPage)
+                .WithParam(Filtering.Order)
+                .WithParam(Filtering.Name)
+                .WithParam(Filtering.Status)
+                .WithParam(Filtering.Match)
+                .UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(ZoneTestData.Zones)));
 
-            _wireMockServer
-                .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/")
-                    .WithParam(Filtering.Page)
-                    .WithParam(Filtering.PerPage)
-                    .WithParam(Filtering.Order)
-                    .WithParam(Filtering.Name)
-                    .WithParam(Filtering.Status)
-                    .WithParam(Filtering.Match)
-                    .UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(ZoneTestData.Zones)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var zones = await client.Zones.GetAsync(zoneFilter, displayOptions);
 
-            var zones = await client.Zones.GetAsync(zoneFilter, displayOptions);
+        zones.Result.Should().BeEquivalentTo(ZoneTestData.Zones);
+    }
 
-            zones.Result.Should().BeEquivalentTo(ZoneTestData.Zones);
-        }
+    [Fact]
+    public async Task TestGetAllZonesAsync()
+    {
+        var displayOptions = new DisplayOptions { Page = 1, PerPage = 1, Order = OrderType.Asc };
+        var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
+        var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
+        var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
 
-        [Fact]
-        public async Task TestGetAllZonesAsync()
-        {
-            var displayOptions = new DisplayOptions { Page = 1, PerPage = 1, Order = OrderType.Asc };
-            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
-            var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
-            var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
-
-            _wireMockServer
-                .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/")
-                    .WithParam(Filtering.Page, "1")
-                    .WithParam(Filtering.PerPage, "1")
-                    .WithParam(Filtering.Order, "asc")
-                    .UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(
-                        new List<Zone> { zoneA },
-                        new ResultInfo
-                        {
-                            Page = 1,
-                            PerPage = 1,
-                            TotalPage = 2,
-                            TotalCount = 2,
-                            Count = 1
-                        })));
-
-            _wireMockServer
-                .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/")
-                    .WithParam(Filtering.Page, "2")
-                    .WithParam(Filtering.PerPage, "1")
-                    .WithParam(Filtering.Order, "asc")
-                    .UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(
-                        new List<Zone> { zoneB },
-                        new ResultInfo
-                        {
-                            Page = 2,
-                            PerPage = 1,
-                            TotalPage = 2,
-                            TotalCount = 2,
-                            Count = 1
-                        })));
-
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
-
-            var zones = await client.Zones.GetAllAsync(zoneFilter, displayOptions);
-
-            zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
-        }
-
-        [Fact]
-        public async Task TestGetAllZonesWithoutDisplayOptionsAsync()
-        {
-            var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
-            var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
-            var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
-
-            _wireMockServer
-                .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/")
-                    .WithParam(Filtering.Page, "1")
-                    .UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(
-                        new List<Zone> { zoneA },
-                        new ResultInfo
-                        {
-                            Page = 1,
-                            PerPage = 1,
-                            TotalPage = 2,
-                            TotalCount = 2,
-                            Count = 1
-                        })));
-
-            _wireMockServer
-                .Given(Request.Create()
-                    .WithPath($"/{ZoneEndpoints.Base}/")
-                    .WithParam(Filtering.Page, "2")
-                    .UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(
-                        new List<Zone> { zoneB },
-                        new ResultInfo
-                        {
-                            Page = 2,
-                            PerPage = 1,
-                            TotalPage = 2,
-                            TotalCount = 2,
-                            Count = 1
-                        })));
-
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
-
-            var zones = await client.Zones.GetAllAsync(zoneFilter);
-
-            zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
-        }
-
-        [Fact]
-        public async Task TestGetZoneDetailsAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
-
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
-
-            var zoneDetails = await client.Zones.GetDetailsAsync(zone.Id);
-
-            zoneDetails.Result.Should().BeEquivalentTo(zone);
-        }
-
-        [Fact]
-        public async Task TestEditZoneAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-            var modified = new ModifiedZone { Paused = true };
-
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingPatch())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(x =>
+        _wireMockServer
+            .Given(Request.Create()
+                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithParam(Filtering.Page, "1")
+                .WithParam(Filtering.PerPage, "1")
+                .WithParam(Filtering.Order, "asc")
+                .UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(
+                    new List<Zone> { zoneA },
+                    new ResultInfo
                     {
-                        var body = JsonConvert.DeserializeObject<ModifiedZone>(x.Body!);
-                        var response = ZoneTestData.Zones.First(y => y.Id == x.PathSegments[1]).DeepClone();
+                        Page = 1,
+                        PerPage = 1,
+                        TotalPage = 2,
+                        TotalCount = 2,
+                        Count = 1
+                    })));
 
-                        if (body.Paused != null)
-                        {
-                            response.Paused = body.Paused.Value;
-                        }
+        _wireMockServer
+            .Given(Request.Create()
+                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithParam(Filtering.Page, "2")
+                .WithParam(Filtering.PerPage, "1")
+                .WithParam(Filtering.Order, "asc")
+                .UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(
+                    new List<Zone> { zoneB },
+                    new ResultInfo
+                    {
+                        Page = 2,
+                        PerPage = 1,
+                        TotalPage = 2,
+                        TotalCount = 2,
+                        Count = 1
+                    })));
 
-                        return WireMockResponseHelper.CreateTestResponse(response);
-                    }));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var zones = await client.Zones.GetAllAsync(zoneFilter, displayOptions);
 
-            var editZone = await client.Zones.UpdateAsync(zone.Id, modified);
+        zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
+    }
 
-            editZone.Result.Should().BeEquivalentTo(zone, opt => opt.Excluding(y => y.Paused));
-            editZone.Result.Paused.Should().BeTrue();
-        }
+    [Fact]
+    public async Task TestGetAllZonesWithoutDisplayOptionsAsync()
+    {
+        var zoneFilter = new ZoneFilter { Match = false, Status = ZoneStatus.Active };
+        var zoneA = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c353" };
+        var zoneB = new Zone { Id = "023e105f4ecef8ad9ca31a8372d0c354" };
 
-        [Fact]
+        _wireMockServer
+            .Given(Request.Create()
+                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithParam(Filtering.Page, "1")
+                .UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(
+                    new List<Zone> { zoneA },
+                    new ResultInfo
+                    {
+                        Page = 1,
+                        PerPage = 1,
+                        TotalPage = 2,
+                        TotalCount = 2,
+                        Count = 1
+                    })));
 
-        public async Task TestDeleteZoneAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-            var expected = new Zone { Id = zone.Id };
+        _wireMockServer
+            .Given(Request.Create()
+                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithParam(Filtering.Page, "2")
+                .UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(
+                    new List<Zone> { zoneB },
+                    new ResultInfo
+                    {
+                        Page = 2,
+                        PerPage = 1,
+                        TotalPage = 2,
+                        TotalCount = 2,
+                        Count = 1
+                    })));
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingDelete())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var zones = await client.Zones.GetAllAsync(zoneFilter);
 
-            var deletedZone = await client.Zones.DeleteAsync(zone.Id);
+        zones.Result.Should().BeEquivalentTo(new List<Zone> { zoneA, zoneB });
+    }
 
-            deletedZone.Result.Should().BeEquivalentTo(expected);
-        }
+    [Fact]
+    public async Task TestGetZoneDetailsAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
 
-        [Fact]
-        public async Task TestZoneActivationCheckAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-            var expected = new Zone { Id = zone.Id };
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(zone)));
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneEndpoints.ActivationCheck}").UsingPut())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        var zoneDetails = await client.Zones.GetDetailsAsync(zone.Id);
 
-            var checkActivation = await client.Zones.CheckActivationAsync(zone.Id);
+        zoneDetails.Result.Should().BeEquivalentTo(zone);
+    }
 
-            checkActivation.Result.Should().BeEquivalentTo(expected);
-        }
+    [Fact]
+    public async Task TestEditZoneAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
+        var modified = new ModifiedZone { Paused = true };
 
-        [Fact]
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingPatch())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(x =>
+                {
+                    var body = JsonConvert.DeserializeObject<ModifiedZone>(x.Body!);
+                    var response = ZoneTestData.Zones.First(y => y.Id == x.PathSegments[1]).DeepClone();
 
-        public async Task TestPurgeAllFilesAsync()
-        {
-            var zone = ZoneTestData.Zones.First();
-            var expected = new Zone { Id = zone.Id };
+                    if (body.Paused != null)
+                    {
+                        response.Paused = body.Paused.Value;
+                    }
 
-            _wireMockServer
-                .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneEndpoints.PurgeCache}").UsingPost())
-                .RespondWith(Response.Create().WithStatusCode(200)
-                    .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+                    return WireMockResponseHelper.CreateTestResponse(response);
+                }));
 
-            using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
 
-            var purge = await client.Zones.PurgeAllFilesAsync(zone.Id, true);
+        var editZone = await client.Zones.UpdateAsync(zone.Id, modified);
 
-            purge.Result.Should().BeEquivalentTo(expected);
-        }
+        editZone.Result.Should().BeEquivalentTo(zone, opt => opt.Excluding(y => y.Paused));
+        editZone.Result.Paused.Should().BeTrue();
+    }
+
+    [Fact]
+
+    public async Task TestDeleteZoneAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
+        var expected = new Zone { Id = zone.Id };
+
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}").UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+        var deletedZone = await client.Zones.DeleteAsync(zone.Id);
+
+        deletedZone.Result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task TestZoneActivationCheckAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
+        var expected = new Zone { Id = zone.Id };
+
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneEndpoints.ActivationCheck}").UsingPut())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+        var checkActivation = await client.Zones.CheckActivationAsync(zone.Id);
+
+        checkActivation.Result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+
+    public async Task TestPurgeAllFilesAsync()
+    {
+        var zone = ZoneTestData.Zones.First();
+        var expected = new Zone { Id = zone.Id };
+
+        _wireMockServer
+            .Given(Request.Create().WithPath($"/{ZoneEndpoints.Base}/{zone.Id}/{ZoneEndpoints.PurgeCache}").UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(200)
+                .WithBody(WireMockResponseHelper.CreateTestResponse(expected)));
+
+        using var client = new CloudFlareClient(WireMockConnection.ApiKeyAuthentication, _connectionInfo);
+
+        var purge = await client.Zones.PurgeAllFilesAsync(zone.Id, true);
+
+        purge.Result.Should().BeEquivalentTo(expected);
     }
 }

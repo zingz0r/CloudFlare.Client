@@ -2,30 +2,29 @@
 using CloudFlare.Client.Test.TestData;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Test.Helpers
-{
-    public static class WireMockResponseHelper
-    {
-        public static string CreateTestResponse<T>(T item)
-        {
-            return JsonConvert.SerializeObject(new CloudFlareResult<T>(
-                item,
-                CommonTestData.ResultInfo,
-                true,
-                CommonTestData.ErrorDetails,
-                CommonTestData.ApiErrors,
-                CommonTestData.TimingInfo));
-        }
+namespace CloudFlare.Client.Test.Helpers;
 
-        public static string CreateTestResponse<T>(T item, ResultInfo resultInfo)
-        {
-            return JsonConvert.SerializeObject(new CloudFlareResult<T>(
-                item,
-                resultInfo,
-                true,
-                CommonTestData.ErrorDetails,
-                CommonTestData.ApiErrors,
-                CommonTestData.TimingInfo));
-        }
+public static class WireMockResponseHelper
+{
+    public static string CreateTestResponse<T>(T item)
+    {
+        return JsonConvert.SerializeObject(new CloudFlareResult<T>(
+            item,
+            CommonTestData.ResultInfo,
+            true,
+            CommonTestData.ErrorDetails,
+            CommonTestData.ApiErrors,
+            CommonTestData.TimingInfo));
+    }
+
+    public static string CreateTestResponse<T>(T item, ResultInfo resultInfo)
+    {
+        return JsonConvert.SerializeObject(new CloudFlareResult<T>(
+            item,
+            resultInfo,
+            true,
+            CommonTestData.ErrorDetails,
+            CommonTestData.ApiErrors,
+            CommonTestData.TimingInfo));
     }
 }
