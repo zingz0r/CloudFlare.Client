@@ -16,8 +16,8 @@ public class RelativeUri : Uri
     {
     }
 
-    internal RelativeUri AddParameters(ParameterBuilder parameterBuilder)
+    internal RelativeUri AddParameters(IParameterBuilder parameterBuilder)
     {
-        return !parameterBuilder.Any() ? this : new RelativeUri($"{this.OriginalString}?{parameterBuilder}");
+        return !parameterBuilder.Any() ? this : new RelativeUri($"{ OriginalString }?{ parameterBuilder.ToString() }");
     }
 }

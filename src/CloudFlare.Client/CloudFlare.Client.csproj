@@ -24,4 +24,8 @@
     <None Include="$(RepositoryRootPath)\LICENSE" Pack="true" PackagePath="" />
     <None Include="Resources\nuget_logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Since it is not strong named assembly it has to be marked like this to access internals in unit tests -->
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+  </ItemGroup>
 </Project>

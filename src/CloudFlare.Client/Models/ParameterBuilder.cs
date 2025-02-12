@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Models;
 
-internal class ParameterBuilder
+internal class ParameterBuilder : IParameterBuilder
 {
     private readonly NameValueCollection _parameterCollection;
     
@@ -24,7 +24,7 @@ internal class ParameterBuilder
     /// <param name="key">Parameter name</param>
     /// <param name="value">Value of the parameter</param>
     /// <returns>ParameterBuilderHelper</returns>
-    public ParameterBuilder InsertValue<T>(string key, T value)
+    public IParameterBuilder InsertValue<T>(string key, T value)
     {
         if (!EqualityComparer<T>.Default.Equals(value, default) &&
             ((value is string str && !string.IsNullOrEmpty(str)) || value is not string) &&
