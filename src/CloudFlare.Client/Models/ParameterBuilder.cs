@@ -3,22 +3,19 @@ using System.Collections.Specialized;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace CloudFlare.Client.Helpers;
+namespace CloudFlare.Client.Models;
 
-internal class ParameterBuilderHelper
+internal class ParameterBuilder
 {
+    private readonly NameValueCollection _parameterCollection;
+    
     /// <summary>
-    /// Initializes a new instance of the <see cref="ParameterBuilderHelper"/> class
+    /// Initializes a new instance of the <see cref="ParameterBuilder"/> class
     /// </summary>
-    public ParameterBuilderHelper()
+    public ParameterBuilder()
     {
-        ParameterCollection = HttpUtility.ParseQueryString(string.Empty);
+        _parameterCollection = HttpUtility.ParseQueryString(string.Empty);
     }
-
-    /// <summary>
-    /// Property that holds the parameters
-    /// </summary>
-    public NameValueCollection ParameterCollection { get; set; }
 
     /// <summary>
     /// Insert parameter in the collection
@@ -27,15 +24,25 @@ internal class ParameterBuilderHelper
     /// <param name="key">Parameter name</param>
     /// <param name="value">Value of the parameter</param>
     /// <returns>ParameterBuilderHelper</returns>
-    public ParameterBuilderHelper InsertValue<T>(string key, T value)
+    public ParameterBuilder InsertValue<T>(string key, T value)
     {
         if (!EqualityComparer<T>.Default.Equals(value, default) &&
             ((value is string str && !string.IsNullOrEmpty(str)) || value is not string) &&
             !string.IsNullOrEmpty(key))
         {
-            ParameterCollection[key] = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", string.Empty));
+            _parameterCollection[key] = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", string.Empty));
         }
 
         return this;
+    }
+
+    public bool Any()
+    {
+        return _parameterCollection.HasKeys();
+    }
+    
+    public override string ToString()
+    {
+        return _parameterCollection.ToString();
     }
 }

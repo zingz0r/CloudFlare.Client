@@ -10,6 +10,7 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Exceptions;
 using CloudFlare.Client.Extensions;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 using Newtonsoft.Json;
 
 namespace CloudFlare.Client.Contexts;
@@ -35,19 +36,19 @@ internal abstract class Connection : IConnection
 
     protected bool IsDisposed { get; private set; }
 
-    public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> GetAsync<TResult>(RelativeUri requestUri, CancellationToken cancellationToken)
     {
         var response = await HttpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
         return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
     }
 
-    public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(string requestUri, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(RelativeUri requestUri, CancellationToken cancellationToken)
     {
         var response = await HttpClient.DeleteAsync(requestUri, cancellationToken).ConfigureAwait(false);
         return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
     }
 
-    public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken)
     {
         try
         {
@@ -65,12 +66,12 @@ internal abstract class Connection : IConnection
         }
     }
 
-    public async Task<CloudFlareResult<TResult>> PatchAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PatchAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken)
     {
         return await PatchAsync<TResult, TResult>(requestUri, content, cancellationToken);
     }
 
-    public async Task<CloudFlareResult<TResult>> PatchAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PatchAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken)
     {
         try
         {
@@ -95,12 +96,12 @@ internal abstract class Connection : IConnection
         GC.SuppressFinalize(this);
     }
 
-    public async Task<CloudFlareResult<TResult>> PostAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PostAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken)
     {
         return await PostAsync<TResult, TResult>(requestUri, content, cancellationToken);
     }
 
-    public async Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken)
     {
         var response = content is HttpContent httpContent
             ? await HttpClient.PostAsync(requestUri, httpContent, cancellationToken).ConfigureAwait(false)
@@ -109,12 +110,12 @@ internal abstract class Connection : IConnection
         return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);
     }
 
-    public async Task<CloudFlareResult<TResult>> PutAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PutAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken)
     {
         return await PutAsync<TResult, TResult>(requestUri, content, cancellationToken);
     }
 
-    public async Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken)
+    public async Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken)
     {
         var response = await HttpClient.PutAsync(requestUri, content, _formatter, cancellationToken).ConfigureAwait(false);
         return await response.GetCloudFlareResultAsync<TResult>().ConfigureAwait(false);

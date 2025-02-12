@@ -36,7 +36,7 @@ public class AccountsUnitTests
         var displayOptions = new DisplayOptions { Page = 1, PerPage = 20, Order = OrderType.Asc };
 
         _wireMockServer
-            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}/")
+            .Given(Request.Create().WithPath($"/{AccountEndpoints.Base}")
                 .WithParam(Filtering.Page)
                 .WithParam(Filtering.PerPage)
                 .WithParam(Filtering.Direction)

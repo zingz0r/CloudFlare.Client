@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlare.Client.Api.Result;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Contexts;
 
@@ -17,7 +18,7 @@ public interface IConnection : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> GetAsync<TResult>(string requestUri, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> GetAsync<TResult>(RelativeUri requestUri, CancellationToken cancellationToken);
 
     /// <summary>
     /// DELETE request
@@ -26,7 +27,7 @@ public interface IConnection : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(string requestUri, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> DeleteAsync<TResult>(RelativeUri requestUri, CancellationToken cancellationToken);
 
     /// <summary>
     /// DELETE request
@@ -37,7 +38,7 @@ public interface IConnection : IDisposable
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <typeparam name="TContent">Type of the body content</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> DeleteAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken);
 
     /// <summary>
     /// PATCH request
@@ -47,7 +48,7 @@ public interface IConnection : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PatchAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PatchAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken);
 
     /// <summary>
     /// PATCH request
@@ -58,7 +59,7 @@ public interface IConnection : IDisposable
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <typeparam name="TContent">Type of the PATCH content</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PatchAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PatchAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken);
 
     /// <summary>
     /// POST request
@@ -68,7 +69,7 @@ public interface IConnection : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PostAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PostAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken);
 
     /// <summary>
     /// POST request
@@ -79,7 +80,7 @@ public interface IConnection : IDisposable
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <typeparam name="TContent">Type of the content</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PostAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken);
 
     /// <summary>
     /// PUT request
@@ -89,7 +90,7 @@ public interface IConnection : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PutAsync<TResult>(string requestUri, TResult content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PutAsync<TResult>(RelativeUri requestUri, TResult content, CancellationToken cancellationToken);
 
     /// <summary>
     /// PUT request
@@ -100,5 +101,5 @@ public interface IConnection : IDisposable
     /// <typeparam name="TResult">Type of the result</typeparam>
     /// <typeparam name="TContent">Type of the content</typeparam>
     /// <returns><see cref="CloudFlareResult{T}"/></returns>
-    Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(string requestUri, TContent content, CancellationToken cancellationToken);
+    Task<CloudFlareResult<TResult>> PutAsync<TResult, TContent>(RelativeUri requestUri, TContent content, CancellationToken cancellationToken);
 }

@@ -8,6 +8,7 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones.CustomHostnames;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Zones;
 
@@ -26,23 +27,21 @@ public class CustomHostnames : ApiContextBase<IConnection>, ICustomHostnames
     /// <inheritdoc />
     public async Task<CloudFlareResult<CustomHostname>> AddAsync(string zoneId, NewCustomHostname customHostname, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}");
         return await Connection.PostAsync<CustomHostname, NewCustomHostname>(requestUri, customHostname, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<CustomHostname>> DeleteAsync(string zoneId, string customHostnameId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}");
         return await Connection.DeleteAsync<CustomHostname>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<CustomHostname>>> GetAsync(string zoneId, CustomHostnameFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper();
-
-        builder
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.Id, filter?.CustomHostnameId)
             .InsertValue(Filtering.Hostname, filter?.Hostname)
             .InsertValue(Filtering.Order, filter?.OrderType)
@@ -51,26 +50,21 @@ public class CustomHostnames : ApiContextBase<IConnection>, ICustomHostnames
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
             .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}";
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}?{builder.ParameterCollection}";
-        }
-
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}").AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<CustomHostname>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<CustomHostname>> GetDetailsAsync(string zoneId, string customHostnameId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}");
         return await Connection.GetAsync<CustomHostname>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<CustomHostname>> UpdateAsync(string zoneId, string customHostnameId, ModifiedCustomHostname modifiedCustomHostname, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{CustomHostnameEndpoints.Base}/{customHostnameId}");
         return await Connection.PatchAsync<CustomHostname, ModifiedCustomHostname>(requestUri, modifiedCustomHostname, cancellationToken).ConfigureAwait(false);
     }
 }

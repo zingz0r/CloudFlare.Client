@@ -4,7 +4,7 @@ using CloudFlare.Client.Contexts;
 
 namespace CloudFlare.Client.Test;
 
-public class WireMockConnection
+public class WireMockConnection(string address)
 {
     public static string EmailAddress { get; } = "test@tothnet.hu";
 
@@ -16,13 +16,8 @@ public class WireMockConnection
 
     public static ApiTokenAuthentication ApiTokenAuthentication { get; } = new(Token);
 
-    public ConnectionInfo ConnectionInfo { get; }
-
-    public WireMockConnection(string address)
+    public ConnectionInfo ConnectionInfo { get; } = new()
     {
-        ConnectionInfo = new ConnectionInfo
-        {
-            Address = new Uri(address)
-        };
-    }
+        Address = new Uri(address)
+    };
 }

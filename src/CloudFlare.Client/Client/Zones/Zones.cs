@@ -9,6 +9,7 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Zones;
 
@@ -51,28 +52,28 @@ public class Zones : ApiContextBase<IConnection>, IZones
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> AddAsync(NewZone newZone, CancellationToken cancellationToken = default)
     {
-        const string requestUri = $"{ZoneEndpoints.Base}";
+        var requestUri = new RelativeUri(ZoneEndpoints.Base);
         return await Connection.PostAsync<Zone, NewZone>(requestUri, newZone, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> CheckActivationAsync(string zoneId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.ActivationCheck}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.ActivationCheck}");
         return await Connection.PutAsync<Zone, object>(requestUri, string.Empty, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> DeleteAsync(string zoneId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}");
         return await Connection.DeleteAsync<Zone>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<Zone>>> GetAsync(ZoneFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.AccountId, filter?.AccountId)
             .InsertValue(Filtering.AccountName, filter?.AccountName)
             .InsertValue(Filtering.Name, filter?.Name)
@@ -82,19 +83,14 @@ public class Zones : ApiContextBase<IConnection>, IZones
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
             .InsertValue(Filtering.Order, displayOptions?.Order);
 
-        var requestUri = $"{ZoneEndpoints.Base}";
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-        }
-
+        var requestUri = new RelativeUri(ZoneEndpoints.Base).AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<Zone>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> GetDetailsAsync(string zoneId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}");
         return await Connection.GetAsync<Zone>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
@@ -103,7 +99,7 @@ public class Zones : ApiContextBase<IConnection>, IZones
     {
         var content = new Dictionary<string, bool> { { Outgoing.PurgeEverything, purgeEverything } };
 
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}");
         return await Connection.PostAsync<Zone, Dictionary<string, bool>>(requestUri, content, cancellationToken).ConfigureAwait(false);
     }
 
@@ -132,14 +128,14 @@ public class Zones : ApiContextBase<IConnection>, IZones
 
         var content = new Dictionary<string, IReadOnlyList<CachePurgeFile>> { { Outgoing.Files, headers } };
 
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{ZoneEndpoints.PurgeCache}");
         return await Connection.PostAsync<Zone, Dictionary<string, IReadOnlyList<CachePurgeFile>>>(requestUri, content, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Zone>> UpdateAsync(string zoneId, ModifiedZone modifiedZone, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}");
         return await Connection.PatchAsync<Zone, ModifiedZone>(requestUri, modifiedZone, cancellationToken).ConfigureAwait(false);
     }
 }

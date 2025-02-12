@@ -4,6 +4,7 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Users;
 using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Users;
 
@@ -26,21 +27,21 @@ public class Users : ApiContextBase<IConnection>, IUsers
     /// <inheritdoc />
     public async Task<CloudFlareResult<User>> GetDetailsAsync(CancellationToken cancellationToken = default)
     {
-        const string requestUri = $"{UserEndpoints.Base}";
+        var requestUri = new RelativeUri(UserEndpoints.Base);
         return await Connection.GetAsync<User>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<User>> UpdateAsync(User editedUser, CancellationToken cancellationToken = default)
     {
-        const string requestUri = $"{UserEndpoints.Base}";
+        var requestUri = new RelativeUri(UserEndpoints.Base);
         return await Connection.PatchAsync(requestUri, editedUser, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<VerifyToken>> VerifyAsync(CancellationToken cancellationToken = default)
     {
-        const string requestUri = $"{UserEndpoints.Base}/{TokenEndpoints.Base}/{TokenEndpoints.Verify}";
+        var requestUri = new RelativeUri($"{UserEndpoints.Base}/{TokenEndpoints.Base}/{TokenEndpoints.Verify}");
         return await Connection.GetAsync<VerifyToken>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 }

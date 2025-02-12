@@ -60,7 +60,7 @@ public class ZonesUnitTests
 
         _wireMockServer
             .Given(Request.Create()
-                .WithPath($"/{ZoneEndpoints.Base}/")
+                .WithPath($"/{ZoneEndpoints.Base}")
                 .WithParam(Filtering.Page)
                 .WithParam(Filtering.PerPage)
                 .WithParam(Filtering.Order)

@@ -8,6 +8,7 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Accounts;
 
@@ -42,16 +43,12 @@ public class Accounts : ApiContextBase<IConnection>, IAccounts
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<Account>>> GetAsync(DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.Page, displayOptions?.Page)
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
             .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-        var requestUri = $"{AccountEndpoints.Base}";
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-        }
+        var requestUri = new RelativeUri(AccountEndpoints.Base).AddParameters(parameters);
 
         return await Connection.GetAsync<IReadOnlyList<Account>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
@@ -59,7 +56,7 @@ public class Accounts : ApiContextBase<IConnection>, IAccounts
     /// <inheritdoc />
     public async Task<CloudFlareResult<Account>> GetDetailsAsync(string accountId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}");
         return await Connection.GetAsync<Account>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
@@ -73,7 +70,7 @@ public class Accounts : ApiContextBase<IConnection>, IAccounts
             Settings = additionalAccountSettings
         };
 
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}");
         return await Connection.PutAsync(requestUri, account, cancellationToken).ConfigureAwait(false);
     }
 }

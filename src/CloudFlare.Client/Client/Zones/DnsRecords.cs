@@ -11,6 +11,7 @@ using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Api.Zones.DnsRecord;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Zones;
 
@@ -29,28 +30,28 @@ public class DnsRecords : ApiContextBase<IConnection>, IDnsRecords
     /// <inheritdoc />
     public async Task<CloudFlareResult<DnsRecord>> AddAsync(string zoneId, NewDnsRecordBase newDnsRecord, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}");
         return await Connection.PostAsync<DnsRecord, NewDnsRecordBase>(requestUri, newDnsRecord, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<DnsRecord>> DeleteAsync(string zoneId, string identifier, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}");
         return await Connection.DeleteAsync<DnsRecord>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<string>> ExportAsync(string zoneId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Export}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Export}");
         return await Connection.GetAsync<string>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<DnsRecord>>> GetAsync(string zoneId, DnsRecordFilter filter = null, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.DnsRecordType, filter?.Type)
             .InsertValue(Filtering.Name, filter?.Name)
             .InsertValue(Filtering.Content, filter?.Content)
@@ -59,19 +60,14 @@ public class DnsRecords : ApiContextBase<IConnection>, IDnsRecords
             .InsertValue(Filtering.Order, displayOptions?.Order)
             .InsertValue(Filtering.Match, filter?.Match);
 
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}";
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-        }
-
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}").AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<DnsRecord>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<DnsRecord>> GetDetailsAsync(string zoneId, string identifier, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}");
         return await Connection.GetAsync<DnsRecord>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
@@ -84,21 +80,21 @@ public class DnsRecords : ApiContextBase<IConnection>, IDnsRecords
             { new ByteArrayContent(await FileHelper.ReadAsync(fileInfo.FullName, cancellationToken), 0, Convert.ToInt32(fileInfo.Length)), "file", fileInfo.Name }
         };
 
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Import}");
         return await Connection.PostAsync<DnsRecordImport, MultipartFormDataContent>(requestUri, form, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<DnsRecordScan>> ScanAsync(string zoneId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Scan}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{DnsRecordEndpoints.Scan}");
         return await Connection.PostAsync<DnsRecordScan>(requestUri, null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<DnsRecord>> UpdateAsync(string zoneId, string identifier, ModifiedDnsRecord modifiedDnsRecord, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}";
+        var requestUri = new RelativeUri($"{ZoneEndpoints.Base}/{zoneId}/{DnsRecordEndpoints.Base}/{identifier}");
         return await Connection.PutAsync<DnsRecord, ModifiedDnsRecord>(requestUri, modifiedDnsRecord, cancellationToken).ConfigureAwait(false);
     }
 }

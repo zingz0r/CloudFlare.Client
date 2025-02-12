@@ -6,6 +6,7 @@ using CloudFlare.Client.Api.Parameters;
 using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Accounts;
 
@@ -24,28 +25,28 @@ public class TurnStileWidgets : ApiContextBase<IConnection>, ITurnStileWidgets
     /// <inheritdoc />
     public async Task<CloudFlareResult<TurnstileWidget>> AddAsync(string accountId, NewTurnstileWidget turnstileWidget, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}");
         return await Connection.PostAsync<TurnstileWidget, NewTurnstileWidget>(requestUri, turnstileWidget, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<TurnstileWidget>> DeleteAsync(string accountId, string turnstileWidgetId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}");
         return await Connection.DeleteAsync<TurnstileWidget>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<TurnstileWidget>>> GetAsync(string accountId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}");
         return await Connection.GetAsync<IReadOnlyList<TurnstileWidget>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<TurnstileWidget>> GetDetailsAsync(string accountId, string turnstileWidgetId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}");
         return await Connection.GetAsync<TurnstileWidget>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
@@ -62,7 +63,7 @@ public class TurnStileWidgets : ApiContextBase<IConnection>, ITurnStileWidgets
             OffLabel = turnstileWidget.OffLabel
         };
 
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidget.Id}");
         return await Connection.PutAsync<TurnstileWidget, UpdatedTurnstileWidget>(requestUri, updatedTurnstileWidget, cancellationToken).ConfigureAwait(false);
     }
 
@@ -71,7 +72,7 @@ public class TurnStileWidgets : ApiContextBase<IConnection>, ITurnStileWidgets
     {
         var body = new Dictionary<string, bool> { { Validation.InvalidateImmediately, invalidateImmediately } };
 
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}/{AccountEndpoints.RotateSecret}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.TurnstileWidgets}/{turnstileWidgetId}/{AccountEndpoints.RotateSecret}");
         return await Connection.PostAsync<TurnstileWidget, Dictionary<string, bool>>(requestUri, body, cancellationToken).ConfigureAwait(false);
     }
 }

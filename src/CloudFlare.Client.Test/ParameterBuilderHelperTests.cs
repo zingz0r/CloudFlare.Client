@@ -1,14 +1,13 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
 using CloudFlare.Client.Enumerators;
-using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace CloudFlare.Client.Test;
 
-public class ParameterBuilderHelperTests
+public class ParameterBuilderTests
 {
     [Theory]
     [InlineData("key", 1)]
@@ -19,16 +18,11 @@ public class ParameterBuilderHelperTests
     [InlineData("key", ZoneStatus.Deactivated)]
     public void TestParameterBuilder(string key, object value)
     {
-        var expected = HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""));
+        var expected = $"{key}={HttpUtility.UrlDecode(JsonConvert.SerializeObject(value).Replace("\"", ""))}";
 
-        var builder = new ParameterBuilderHelper();
+        var parameters = new ParameterBuilder().InsertValue(key, value);
 
-        builder.InsertValue(key, value);
-
-        builder.ParameterCollection.AllKeys.Length.Should().Be(1);
-        builder.ParameterCollection.AllKeys.First().Should().Be(key);
-
-        builder.ParameterCollection.GetValues(0).Should().BeEquivalentTo(expected);
+        parameters.ToString().Should().Be(expected);
     }
 
     [Theory]
@@ -40,10 +34,8 @@ public class ParameterBuilderHelperTests
     [InlineData("key", "")]
     public void TestParameterBuilderWithDefaults(string key, object value)
     {
-        var builder = new ParameterBuilderHelper();
+        var parameters = new ParameterBuilder().InsertValue(key, value);
 
-        builder.InsertValue(key, value);
-
-        builder.ParameterCollection.AllKeys.Should().BeEmpty();
+        parameters.ToString().Should().Be(string.Empty);
     }
 }

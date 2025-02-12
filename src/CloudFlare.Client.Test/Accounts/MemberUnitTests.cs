@@ -39,7 +39,7 @@ public class MemberUnitTests
 
         _wireMockServer
             .Given(Request.Create()
-                .WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/")
+                .WithPath($"/{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}")
                 .WithParam(Filtering.Page)
                 .WithParam(Filtering.PerPage)
                 .WithParam(Filtering.Direction)

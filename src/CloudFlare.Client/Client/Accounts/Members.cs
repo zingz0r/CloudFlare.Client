@@ -8,6 +8,7 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Accounts;
 
@@ -26,45 +27,40 @@ public class Members : ApiContextBase<IConnection>, IMembers
     /// <inheritdoc />
     public async Task<CloudFlareResult<Member>> AddAsync(string accountId, NewMember newMember, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}");
         return await Connection.PostAsync<Member, NewMember>(requestUri, newMember, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Member>> DeleteAsync(string accountId, string memberId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}");
         return await Connection.DeleteAsync<Member>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<Member>>> GetAsync(string accountId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.Page, displayOptions?.Page)
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
             .InsertValue(Filtering.Direction, displayOptions?.Order);
 
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}";
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-        }
-
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}").AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<Member>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Member>> GetDetailsAsync(string accountId, string memberId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{memberId}");
         return await Connection.GetAsync<Member>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<CloudFlareResult<Member>> UpdateAsync(string accountId, Member member, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{member.Id}";
+        var requestUri = new RelativeUri($"{AccountEndpoints.Base}/{accountId}/{AccountEndpoints.Members}/{member.Id}");
         return await Connection.PutAsync(requestUri, member, cancellationToken).ConfigureAwait(false);
     }
 }

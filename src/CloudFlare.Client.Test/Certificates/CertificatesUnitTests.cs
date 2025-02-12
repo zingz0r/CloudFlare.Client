@@ -59,7 +59,7 @@ public class CertificatesUnitTests
 
         _wireMockServer
             .Given(Request.Create()
-                .WithPath($"/{CertificateEndpoints.Base}/")
+                .WithPath($"/{CertificateEndpoints.Base}")
                 .WithParam(Filtering.ZoneId, zone.Id)
                 .UsingGet())
             .RespondWith(Response.Create().WithStatusCode(200)

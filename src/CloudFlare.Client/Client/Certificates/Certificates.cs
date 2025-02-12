@@ -8,6 +8,7 @@ using CloudFlare.Client.Api.Parameters.Endpoints;
 using CloudFlare.Client.Api.Result;
 using CloudFlare.Client.Contexts;
 using CloudFlare.Client.Helpers;
+using CloudFlare.Client.Models;
 
 namespace CloudFlare.Client.Client.Certificates;
 
@@ -27,32 +28,27 @@ public class Certificates : ApiContextBase<IConnection>, ICertificates
     /// <inheritdoc />
     public Task<CloudFlareResult<OriginCaCertificate>> AddAsync(NewOriginCaCertificate newCertificate, CancellationToken cancellationToken = default)
     {
-        return Connection.PostAsync<OriginCaCertificate, NewOriginCaCertificate>(CertificateEndpoints.Base, newCertificate, cancellationToken);
+        var requestUri = new RelativeUri(CertificateEndpoints.Base);
+        return Connection.PostAsync<OriginCaCertificate, NewOriginCaCertificate>(requestUri, newCertificate, cancellationToken);
     }
     
     /// <inheritdoc />
     public async Task<CloudFlareResult<IReadOnlyList<OriginCaCertificate>>> GetAsync(string zoneId, DisplayOptions displayOptions = null, CancellationToken cancellationToken = default)
     {
-        var builder = new ParameterBuilderHelper()
+        var parameters = new ParameterBuilder()
             .InsertValue(Filtering.Page, displayOptions?.Page)
             .InsertValue(Filtering.PerPage, displayOptions?.PerPage)
             .InsertValue(Filtering.Order, displayOptions?.Order)
             .InsertValue(Filtering.ZoneId, zoneId);
 
-        var requestUri = $"{CertificateEndpoints.Base}";
-
-        if (builder.ParameterCollection.HasKeys())
-        {
-            requestUri = $"{requestUri}/?{builder.ParameterCollection}";
-        }
-
+        var requestUri = new RelativeUri(CertificateEndpoints.Base).AddParameters(parameters);
         return await Connection.GetAsync<IReadOnlyList<OriginCaCertificate>>(requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public Task<CloudFlareResult<OriginCaCertificate>> GetDetailsAsync(string certificateId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{CertificateEndpoints.Base}/{certificateId}";
+        var requestUri = new RelativeUri($"{CertificateEndpoints.Base}/{certificateId}");
         return Connection.GetAsync<OriginCaCertificate>(requestUri, cancellationToken);
     }
 
@@ -60,7 +56,7 @@ public class Certificates : ApiContextBase<IConnection>, ICertificates
     /// <inheritdoc />
     public Task<CloudFlareResult<OriginCaCertificate>> RevokeAsync(string certificateId, CancellationToken cancellationToken = default)
     {
-        var requestUri = $"{CertificateEndpoints.Base}/{certificateId}";
+        var requestUri = new RelativeUri($"{CertificateEndpoints.Base}/{certificateId}");
         return Connection.DeleteAsync<OriginCaCertificate>(requestUri, cancellationToken);
     }
 }
